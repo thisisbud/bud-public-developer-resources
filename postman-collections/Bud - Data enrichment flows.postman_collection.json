@@ -1,0 +1,2100 @@
+{
+	"info": {
+		"_postman_id": "4023a6df-96e4-4ecc-a7c4-e87d5483b513",
+		"name": "Bud - Data enrichment flows",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "General",
+			"item": [
+				{
+					"name": "Obtain a new OAuth access token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Response has access_token\"] = jsonData.data.access_token;",
+									"tests[\"Response has token_type\"] = jsonData.data.token_type;",
+									"",
+									"pm.environment.set(\"auth_token\", jsonData.data.access_token);",
+									"pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{api_credentials_secret}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{api_credentials_id}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/oauth/token",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh OAuth2 token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Response has access_token\"] = jsonData.data.access_token;",
+									"tests[\"Response has token_type\"] = jsonData.data.token_type;",
+									"",
+									"pm.environment.set(\"auth_token\", jsonData.data.access_token);",
+									"pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "refresh_token",
+									"type": "text"
+								},
+								{
+									"key": "refresh_token",
+									"value": "{{refresh_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/oauth/token",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Create a  new Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"customer_id\", jsonData.data[0].customer_id);",
+									"pm.environment.set(\"customer_secret\", jsonData.data[0].customer_secret);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}v2/customers",
+							"host": [
+								"{{proxy_url}}v2"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer(s)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"customer_id\", jsonData.data[0].customer_id);",
+									"pm.environment.set(\"customer_secret\", jsonData.data[0].customer_secret);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"type": "text",
+								"value": "{{api_credentials_id}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"number_of_customers\": 1,\n  \"customer_context\": {\n    \"type\": \"personal\",\n    \"region\": \"GB\",\n    \"locale\": \"en-GB\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{proxy_url}}v2/customers",
+							"host": [
+								"{{proxy_url}}v2"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete an existing customer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}v1/customers/{{customer_id}}",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"customers",
+								"{{customer_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve customer context",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}v1/customers/{{customer_id}}/context",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"customers",
+								"{{customer_id}}",
+								"context"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update customer context",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"region\": \"US\",\n  \"locale\": \"en-US\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/customers/{{customer_id}}/context",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"customers",
+								"{{customer_id}}",
+								"context"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Enrich first party data",
+			"item": [
+				{
+					"name": "Ingest Transactions V1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"ingestion_task_id\", jsonData.data.task_id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/bud-transaction-v2+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwReV1\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-03-01\",\n\t    \"transaction_description\": \"flower\",\n\t    \"credit_debit_indicator\": \"outgoing_debit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"value\": \"15.00\",\n\t      \"currency\": \"GBP\"\n\t    }\n\t  }\n\t]\n  }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/ingest/transactions",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"ingest",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ingest Transactions V2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"ingestion_task_id\", jsonData.metadata.task_id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/bud-transaction-v3+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123V2\",\n\t    \"date_time\": \"2021-03-02T02:07:14Z\",\n\t    \"description\": \"Macbook Pro 16\\\" 512GB\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-2300.00\"\n\t  }\n\t]\n  }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proxy_url}}v2/ingest/transactions",
+							"host": [
+								"{{proxy_url}}v2"
+							],
+							"path": [
+								"ingest",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Transaction Ingestion Task Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}v1/ingest/transactions/{{ingestion_task_id}}",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"ingest",
+								"transactions",
+								"{{ingestion_task_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Enrichment Flows",
+			"item": [
+				{
+					"name": "Open Banking Aggregation TPP",
+					"item": [
+						{
+							"name": "Obtain a new OAuth access token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has access_token\"] = jsonData.data.access_token;",
+											"tests[\"Response has token_type\"] = jsonData.data.token_type;",
+											"",
+											"pm.environment.set(\"auth_token\", jsonData.data.access_token);",
+											"pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{api_credentials_secret}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{api_credentials_id}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/oauth/token",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"oauth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Providers",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/payments/providers?country=GBR,DEU",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"payments",
+										"providers"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "sandbox",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "GBR,DEU"
+										},
+										{
+											"key": "product",
+											"value": "domestic-single-payment,domestic-standing-order",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Auth Gateway URL",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"redirect_url\": \"https://my-agent-webapp.com/connected?my-parameter=xyz\"\n}"
+								},
+								"url": {
+									"raw": "{{proxy_url}}v2/open-banking/authorisation-gateway-url",
+									"host": [
+										"{{proxy_url}}v2"
+									],
+									"path": [
+										"open-banking",
+										"authorisation-gateway-url"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Accounts",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has data\"] = jsonData.data;",
+											"var firstElement = jsonData.data[0]",
+											"",
+											"pm.environment.set(\"bank_account_id\", firstElement.account_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/accounts",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"accounts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Transactions V2",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}financial/v2/transactions?date_from=2020-01-01&date_to=2023-10-10&page_size=100",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v2",
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "date_from",
+											"value": "2020-01-01"
+										},
+										{
+											"key": "date_to",
+											"value": "2023-10-10"
+										},
+										{
+											"key": "page_size",
+											"value": "100"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Balances over time",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}financial/beta/balances?from=2022-11-25&to=2023-02-01&granularity=annually",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"beta",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2022-11-25"
+										},
+										{
+											"key": "to",
+											"value": "2023-02-01"
+										},
+										{
+											"key": "granularity",
+											"value": "annually"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Balances over time by account",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}financial/beta/accounts/{{bank_account_id}}/balances?from=2021-11-25&to=2023-02-01&granularity=annually",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"beta",
+										"accounts",
+										"{{bank_account_id}}",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2021-11-25"
+										},
+										{
+											"key": "to",
+											"value": "2023-02-01"
+										},
+										{
+											"key": "granularity",
+											"value": "annually"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove provider data",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/provider/{{bank_name}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"provider",
+										"{{bank_name}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Open Banking Aggregation TSP",
+					"item": [
+						{
+							"name": "Obtain a new OAuth access token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has access_token\"] = jsonData.data.access_token;",
+											"tests[\"Response has token_type\"] = jsonData.data.token_type;",
+											"",
+											"pm.environment.set(\"auth_token\", jsonData.data.access_token);",
+											"pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{api_credentials_secret}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{api_credentials_id}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/oauth/token",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"oauth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Providers",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/payments/providers?country=GBR,DEU",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"payments",
+										"providers"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "sandbox",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "GBR,DEU"
+										},
+										{
+											"key": "product",
+											"value": "domestic-single-payment,domestic-standing-order",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Initiate Provider Authorisation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has connection_task_id\"] = jsonData.data.task_id;",
+											"",
+											"pm.environment.set(\"connection_task_id\", jsonData.data.task_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"provider\": \"{{bank_name}}\",\n  \"redirect_url\": \"https://my-agent-webapp.com/connected?my-parameter=xyz\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/authorisation-url",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"authorisation-url"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve auth URL",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/authorisation-url/{{connection_task_id}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"authorisation-url",
+										"{{connection_task_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Submit auth codes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has connection_task_id\"] = jsonData.data.task_id;",
+											"",
+											"pm.environment.set(\"connection_task_id\", jsonData.data.task_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"state\": \"{{connection_task_id}}\",\n  \"my-parameter\":\"xyz\",\n  \"code\": \"....\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/authorisation-codes",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"authorisation-codes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve connection status",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/connect/{{connection_task_id}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"connect",
+										"{{connection_task_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Accounts",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has data\"] = jsonData.data;",
+											"var firstElement = jsonData.data[0]",
+											"",
+											"pm.environment.set(\"bank_account_id\", firstElement.account_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/accounts",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"accounts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Transactions V2",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}financial/v2/transactions?date_from=2020-01-01&date_to=2023-10-10&page_size=100",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v2",
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "date_from",
+											"value": "2020-01-01"
+										},
+										{
+											"key": "date_to",
+											"value": "2023-10-10"
+										},
+										{
+											"key": "page_size",
+											"value": "100"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Balances over time",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}financial/beta/balances?from=2022-11-25&to=2023-02-01&granularity=annually",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"beta",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2022-11-25"
+										},
+										{
+											"key": "to",
+											"value": "2023-02-01"
+										},
+										{
+											"key": "granularity",
+											"value": "annually"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Balances over time by account",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}financial/beta/accounts/{{bank_account_id}}/balances?from=2021-11-25&to=2023-02-01&granularity=annually",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"beta",
+										"accounts",
+										"{{bank_account_id}}",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2021-11-25"
+										},
+										{
+											"key": "to",
+											"value": "2023-02-01"
+										},
+										{
+											"key": "granularity",
+											"value": "annually"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove provider data",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/provider/{{bank_name}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"provider",
+										"{{bank_name}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Manage OB Connection",
+			"item": [
+				{
+					"name": "Initiate Refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Response has taskID\"] = jsonData.data.task_id;",
+									"",
+									"pm.environment.set(\"refresh_task_id\", jsonData.data.task_id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "default"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "default"
+							},
+							{
+								"key": "X-Customer-Secret",
+								"value": "{{customer_secret}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"provider\": \"{{bank_name}}\"\n}"
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/open-banking/refresh",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"open-banking",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve refresh status",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"type": "text",
+								"value": "{{api_credentials_id}}"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/open-banking/refresh/{{refresh_task_id}}",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"open-banking",
+								"refresh",
+								"{{refresh_task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Customer Consents",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Response has data\"] = jsonData.data;",
+									"var firstElement = jsonData.data[0]",
+									"",
+									"pm.environment.set(\"consent_id\", firstElement.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"type": "text",
+								"value": "{{api_credentials_id}}"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/open-banking/account-access-consents?status=all",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"open-banking",
+								"account-access-consents"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "all"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reconfirm consent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "default"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "default"
+							},
+							{
+								"key": "X-Customer-Secret",
+								"value": "{{customer_secret}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"provider\": \"{{bank_name}}\"\n}"
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/open-banking/account-access-consents/{{consent_id}}/reconfirm",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"open-banking",
+								"account-access-consents",
+								"{{consent_id}}",
+								"reconfirm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Initiate Revoke Consent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Response has taskID\"] = jsonData.data.task_id;",
+									"",
+									"pm.environment.set(\"revoke_task_id\", jsonData.data.task_id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "default"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "default"
+							},
+							{
+								"key": "X-Customer-Secret",
+								"value": "{{customer_secret}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"provider\": \"{{bank_name}}\"\n}"
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/open-banking/refresh",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"open-banking",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Revoke consent status",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"type": "text",
+								"value": "{{api_credentials_id}}"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/open-banking/account-access-consent/revoke/{{revoke_task_id}}",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"open-banking",
+								"account-access-consent",
+								"revoke",
+								"{{revoke_task_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

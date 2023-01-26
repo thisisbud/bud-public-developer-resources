@@ -1,0 +1,3437 @@
+{
+	"info": {
+		"_postman_id": "cdb1347b-f12d-4071-84eb-f59b29457303",
+		"name": "Bud - API Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authenticate",
+			"item": [
+				{
+					"name": "Obtain a new OAuth access token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Response has access_token\"] = jsonData.data.access_token;",
+									"tests[\"Response has token_type\"] = jsonData.data.token_type;",
+									"",
+									"pm.environment.set(\"auth_token\", jsonData.data.access_token);",
+									"pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{api_credentials_secret}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{api_credentials_id}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/oauth/token",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh OAuth2 token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Response has access_token\"] = jsonData.data.access_token;",
+									"tests[\"Response has token_type\"] = jsonData.data.token_type;",
+									"",
+									"pm.environment.set(\"auth_token\", jsonData.data.access_token);",
+									"pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "refresh_token",
+									"type": "text"
+								},
+								{
+									"key": "refresh_token",
+									"value": "{{refresh_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/oauth/token",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Create a  new Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"customer_id\", jsonData.data.customer_id);",
+									"pm.environment.set(\"customer_secret\", jsonData.data.customer_secret);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/customers",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer(s)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"customer_id\", jsonData.data[0].customer_id);",
+									"pm.environment.set(\"customer_secret\", jsonData.data[0].customer_secret);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"type": "text",
+								"value": "{{api_credentials_id}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"number_of_customers\": 5\n}"
+						},
+						"url": {
+							"raw": "{{proxy_url}}v2/customers",
+							"host": [
+								"{{proxy_url}}v2"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete an existing customer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{proxy_url}}/v1/customers/{{customer_id}}",
+							"host": [
+								"{{proxy_url}}"
+							],
+							"path": [
+								"v1",
+								"customers",
+								"{{customer_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve customer context",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}v1/customers/{{customer_id}}/context",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"customers",
+								"{{customer_id}}",
+								"context"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update customer context",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"region\": \"US\",\n  \"locale\": \"en-US\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proxy_url}}v1/customers/{{customer_id}}/context",
+							"host": [
+								"{{proxy_url}}v1"
+							],
+							"path": [
+								"customers",
+								"{{customer_id}}",
+								"context"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Open banking Aggregation API",
+			"item": [
+				{
+					"name": "Create OB Connection - TPP",
+					"item": [
+						{
+							"name": "List Providers",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/payments/providers?country=GBR,DEU",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"payments",
+										"providers"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "sandbox",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "GBR,DEU"
+										},
+										{
+											"key": "product",
+											"value": "domestic-single-payment,domestic-standing-order",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Auth Gateway URL V2",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"redirect_url\": \"https://my-agent-webapp.com/connected?my-parameter=xyz\"\n}"
+								},
+								"url": {
+									"raw": "{{proxy_url}}v2/open-banking/authorisation-gateway-url",
+									"host": [
+										"{{proxy_url}}v2"
+									],
+									"path": [
+										"open-banking",
+										"authorisation-gateway-url"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create OB Connection - TSP",
+					"item": [
+						{
+							"name": "List Providers",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/payments/providers?country=GBR,DEU",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"payments",
+										"providers"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "sandbox",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "GBR,DEU"
+										},
+										{
+											"key": "product",
+											"value": "domestic-single-payment,domestic-standing-order",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Initiate Provider Authorisation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has connection_task_id\"] = jsonData.data.task_id;",
+											"",
+											"pm.environment.set(\"connection_task_id\", jsonData.data.task_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"provider\": \"{{bank_name}}\",\n  \"redirect_url\": \"https://my-agent-webapp.com/connected?my-parameter=xyz\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/authorisation-url",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"authorisation-url"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve auth URL",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/authorisation-url/{{connection_task_id}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"authorisation-url",
+										"{{connection_task_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Submit auth codes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has connection_task_id\"] = jsonData.data.task_id;",
+											"",
+											"pm.environment.set(\"connection_task_id\", jsonData.data.task_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"state\": \"{{connection_task_id}}\",\n  \"my-parameter\":\"xyz\",\n  \"code\": \"....\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/authorisation-codes",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"authorisation-codes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve connection status Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/connect/{{connection_task_id}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"connect",
+										"{{connection_task_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Manage OB Connection",
+					"item": [
+						{
+							"name": "Initiate Refresh",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has taskID\"] = jsonData.data.task_id;",
+											"",
+											"pm.environment.set(\"refresh_task_id\", jsonData.data.task_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"provider\": \"{{bank_name}}\"\n}"
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/refresh",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve refresh status",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/refresh/{{refresh_task_id}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"refresh",
+										"{{refresh_task_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Customer Consents",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has data\"] = jsonData.data;",
+											"var firstElement = jsonData.data[0]",
+											"",
+											"pm.environment.set(\"consent_id\", firstElement.id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/account-access-consents?status=all",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"account-access-consents"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "all"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reconfirm consent",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"provider\": \"{{bank_name}}\"\n}"
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/account-access-consents/{{consent_id}}/reconfirm",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"account-access-consents",
+										"{{consent_id}}",
+										"reconfirm"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Initiate Revoke Consent",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has taskID\"] = jsonData.data.task_id;",
+											"",
+											"pm.environment.set(\"revoke_task_id\", jsonData.data.task_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"provider\": \"{{bank_name}}\"\n}"
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/refresh",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Revoke consent status",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/account-access-consent/revoke/{{revoke_task_id}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"account-access-consent",
+										"revoke",
+										"{{revoke_task_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Manage OB Data",
+					"item": [
+						{
+							"name": "List Accounts",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has data\"] = jsonData.data;",
+											"var firstElement = jsonData.data[0]",
+											"",
+											"pm.environment.set(\"bank_account_id\", firstElement.account_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/accounts",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"accounts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Transactions",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									},
+									{
+										"key": "X-From",
+										"value": "2020-01-01",
+										"type": "text"
+									},
+									{
+										"key": "X-To",
+										"value": "2021-05-01",
+										"type": "text"
+									},
+									{
+										"key": "X-Account-Id",
+										"value": "{{bank_account_id}}",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "X-Category-Id",
+										"value": "Not ready yet",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "X-Description",
+										"value": "Not ready yet",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "X-Transaction-Id",
+										"value": "Not ready yet",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/transactions",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove provider data",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/provider/{{bank_name}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"provider",
+										"{{bank_name}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Financial Data API",
+			"item": [
+				{
+					"name": "Manage Financial Data",
+					"item": [
+						{
+							"name": "List Transactions V2",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}financial/v2/transactions?date_from=2020-01-01&date_to=2023-10-10&page_size=100",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v2",
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "date_from",
+											"value": "2020-01-01"
+										},
+										{
+											"key": "date_to",
+											"value": "2023-10-10"
+										},
+										{
+											"key": "page_size",
+											"value": "100"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Balances over time (Beta)",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}financial/beta/balances?from=2022-11-25&to=2023-02-01&granularity=annually",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"beta",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2022-11-25"
+										},
+										{
+											"key": "to",
+											"value": "2023-02-01"
+										},
+										{
+											"key": "granularity",
+											"value": "annually"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Balances over time by account (Beta)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}financial/beta/accounts/{{bank_account_id}}/balances?from=2021-11-25&to=2023-02-01&granularity=annually",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"beta",
+										"accounts",
+										"{{bank_account_id}}",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2021-11-25"
+										},
+										{
+											"key": "to",
+											"value": "2023-02-01"
+										},
+										{
+											"key": "granularity",
+											"value": "annually"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Ingest & Enrich API",
+			"item": [
+				{
+					"name": "Categories",
+					"item": [
+						{
+							"name": "List Categories",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/categories/double-cat",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"categories",
+										"double-cat"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Ingest Data",
+					"item": [
+						{
+							"name": "Ingest Accounts",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"taskId\", jsonData.data.task_id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/bud-transaction-v2+json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"accounts\": [\n      {\n        \"provider\": \"Barclays\",\n        \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n        \"currency\": \"GBP\",\n        \"account_type\": \"Personal\",\n        \"account_sub_type\": \"CurrentAccount\",\n        \"details\": [\n          {\n            \"scheme_name\": \"UK.OBIE.SortCodeAccountNumber\",\n            \"identification\": \"98765432165444\",\n            \"secondary_identification\": \"00021\",\n            \"name\": \"Mr Kevin\"\n          }\n        ],\n        \"balances\": [\n          {\n            \"amount\": {\n              \"value\": \"7.00\",\n              \"currency\": \"GBP\"\n            },\n            \"credit_debit_indicator\": \"outgoing_debit\",\n            \"credit_line\": [\n              {\n                \"included\": true,\n                \"amount\": {\n                  \"value\": \"200.00\",\n                  \"currency\": \"GBP\"\n                },\n                \"type\": \"Credit\"\n              }\n            ],\n            \"date\": \"2020-12-01\",\n            \"time\": \"00:00:00\",\n            \"type\": \"InterimBooked\"\n          }\n        ]\n      }\n    ]\n  }\n ]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/ingest/accounts",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"ingest",
+										"accounts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Account Ingestion Task Status",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/bud-transaction-v2+json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"customer_id\": \"8e10757f-4f18-41d6-a5a7-a7ae56bccdd7\",\n    \"customer_secret\": \"531d99d9f2bfe1d2bf07f010cfeb0c81c65527ced517d4a9b9465baf14a75b8e\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Plaid\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRq\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-09-01T00:00:00.000Z\",\n\t    \"transaction_description\": \"BINANCE BCC3B1DEED FT\",\n\t    \"credit_debit_indicator\": \"incoming_credit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"schema\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"amount\": \"10000.0\",\n\t      \"curency\": \"GBP\"\n\t    }\n\t  }\n\t]\n  }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/ingest/accounts/{{taskId}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"ingest",
+										"accounts",
+										"{{taskId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ingest Transactions",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"ingestion_task_id\", jsonData.data.task_id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/bud-transaction-v2+json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRe\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-03-01\",\n\t    \"transaction_description\": \"WEEKLY DELIVEROO\",\n\t    \"credit_debit_indicator\": \"outgoing_debit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"value\": \"15.00\",\n\t      \"currency\": \"GBP\"\n\t    }\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRq\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-03-08\",\n\t    \"transaction_description\": \"WEEKLY DELIVEROO\",\n\t    \"credit_debit_indicator\": \"outgoing_debit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"value\": \"15.00\",\n\t      \"currency\": \"GBP\"\n\t    }\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRw\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-03-15\",\n\t    \"transaction_description\": \"WEEKLY DELIVEROO\",\n\t    \"credit_debit_indicator\": \"outgoing_debit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"value\": \"15.00\",\n\t      \"currency\": \"GBP\"\n\t    }\n\t  }\n\t]\n  }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/ingest/transactions",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"ingest",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ingest Transactions V2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"ingestion_task_id\", jsonData.metadata.task_id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/bud-transaction-v3+json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123V2\",\n\t    \"date_time\": \"2021-03-02T02:07:14Z\",\n\t    \"description\": \"Macbook Pro 16\\\" 512GB\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-2300.00\"\n\t  }\n\t]\n  }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}v2/ingest/transactions",
+									"host": [
+										"{{proxy_url}}v2"
+									],
+									"path": [
+										"ingest",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Transaction Ingestion Task Status",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/bud-transaction-v2+json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"customer_id\": \"8e10757f-4f18-41d6-a5a7-a7ae56bccdd7\",\n    \"customer_secret\": \"531d99d9f2bfe1d2bf07f010cfeb0c81c65527ced517d4a9b9465baf14a75b8e\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Plaid\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRq\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-09-01T00:00:00.000Z\",\n\t    \"transaction_description\": \"BINANCE BCC3B1DEED FT\",\n\t    \"credit_debit_indicator\": \"incoming_credit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"schema\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"amount\": \"10000.0\",\n\t      \"curency\": \"GBP\"\n\t    }\n\t  }\n\t]\n  }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/ingest/transactions/{{ingestion_task_id}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"ingest",
+										"transactions",
+										"{{ingestion_task_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Enrich Transactions",
+					"item": [
+						{
+							"name": "Determine Category Tags",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"account_id\": \"5f44d9d6-8de0-4bc7-8db2-c26aea40ed62\",\n        \"transaction_id\": \"7affc586-5600-4434-ac5f-1a845260d7d9\",\n        \"transaction_type\": \"DEB\",\n        \"date\": \"2018-01-01\",\n        \"time\": \"13:56:00\",\n        \"transaction_description\": \"Pret a Manger Old St\",\n        \"creditor\": {\n            \"name\": \"PRET A MANGER\",\n            \"address\": \"1 Old Street, London\",\n            \"scheme\": \"SortCodeAccountNumber\",\n            \"identifier\": \"20202080009000\"\n        },\n        \"debtor\": {\n            \"name\": \"This is a sample transaction\",\n            \"address\": \"1 Old Street, London\",\n            \"scheme\": \"SortCodeAccountNumber\",\n            \"identifier\": \"08080021325698\"\n        },\n        \"credit_debit_indicator\": \"Debit\",\n        \"amount\": {\n            \"value\": \"7.75\",\n            \"currency\": \"GBP\",\n            \"local_currency\": \"USD\",\n            \"local_value\": \"10.00\"\n        }\n    }\n]"
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/categorise/double-cat",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"categorise",
+										"double-cat"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "TrueLayer Transaction Format",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Customer-Id",
+												"type": "text",
+												"value": "{{customer_id}}"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/truelayer+json",
+												"type": "text"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"type": "text",
+												"value": "{{customer_secret}}"
+											},
+											{
+												"key": "X-Client-Id",
+												"type": "text",
+												"value": "{{api_credentials_id}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n    {\n        \"transaction_id\": \"7affc586-5600-4434-ac5f-1a845260d7d9\",\n        \"transaction_type\": \"DEBIT\",\n        \"timestamp\": \"2018-01-01T13:56:00\",\n        \"description\": \"Pret a Manger Old St\",\n        \"transaction_category\": \"PURCAHSE\",\n        \"amount\": 7.75,\n        \"currency\": \"GBP\",\n        \"meta\": {}\n    }\n]\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{proxy_url}}v1/categorise/double-cat",
+											"host": [
+												"{{proxy_url}}v1"
+											],
+											"path": [
+												"categorise",
+												"double-cat"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 12 Mar 2020 10:53:35 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "X-Request-Id",
+											"value": "fbc312cb3a96015d7c092a6b65a0e79d"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"operation_id\": \"categorise_double_cat_post\",\n    \"data\": [\n        {\n            \"account_id\": \"\",\n            \"transaction_id\": \"7affc586-5600-4434-ac5f-1a845260d7d9\",\n            \"transaction_type\": \"DEBIT\",\n            \"date\": \"2018-01-01\",\n            \"time\": \"13:56:00\",\n            \"transaction_description\": \"Pret a Manger Old St\",\n            \"credit_debit_indicator\": \"Debit\",\n            \"amount\": {\n                \"currency\": \"GBP\",\n                \"local_currency\": \"GBP\",\n                \"local_value\": \"7.75\",\n                \"value\": \"7.75\"\n            },\n            \"enrichment\": {\n                \"categoriser\": {\n                    \"categories\": [\n                        {\n                            \"category_name\": \"eating_out\",\n                            \"confidence\": \"1.0000\"\n                        }\n                    ],\n                    \"subcategories\": [\n                        {\n                            \"subcategory_name\": \"cafes_and_lunch\",\n                            \"confidence\": \"1.0000\"\n                        }\n                    ]\n                }\n            }\n        }\n    ],\n    \"metadata\": {\n        \"results\": 1\n    }\n}"
+								},
+								{
+									"name": "Bud Transaction Format",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Customer-Id",
+												"type": "text",
+												"value": "{{customer_id}}"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"type": "text",
+												"value": "{{customer_secret}}"
+											},
+											{
+												"key": "X-Client-Id",
+												"type": "text",
+												"value": "{{api_credentials_id}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n    {\n        \"account_id\": \"5f44d9d6-8de0-4bc7-8db2-c26aea40ed62\",\n        \"transaction_id\": \"7affc586-5600-4434-ac5f-1a845260d7d9\",\n        \"transaction_type\": \"DEB\",\n        \"date\": \"2018-01-01\",\n        \"time\": \"13:56:00\",\n        \"transaction_description\": \"Pret a Manger Old St\",\n        \"creditor\": {\n            \"name\": \"PRET A MANGER\",\n            \"address\": \"1 Old Street, London\",\n            \"scheme\": \"SortCodeAccountNumber\",\n            \"identifier\": \"20202080009000\"\n        },\n        \"debtor\": {\n            \"name\": \"This is a sample transaction\",\n            \"address\": \"1 Old Street, London\",\n            \"scheme\": \"SortCodeAccountNumber\",\n            \"identifier\": \"08080021325698\"\n        },\n        \"credit_debit_indicator\": \"Debit\",\n        \"amount\": {\n            \"value\": \"7.75\",\n            \"currency\": \"GBP\",\n            \"local_currency\": \"USD\",\n            \"local_value\": \"10.00\"\n        }\n    }\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{proxy_url}}v1/categorise/double-cat",
+											"host": [
+												"{{proxy_url}}v1"
+											],
+											"path": [
+												"categorise",
+												"double-cat"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 12 Mar 2020 10:52:27 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "X-Request-Id",
+											"value": "5bbb2337619558c5af4a5a823c14b574"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"operation_id\": \"categorise_double_cat_post\",\n    \"data\": [\n        {\n            \"account_id\": \"5f44d9d6-8de0-4bc7-8db2-c26aea40ed62\",\n            \"transaction_id\": \"7affc586-5600-4434-ac5f-1a845260d7d9\",\n            \"transaction_type\": \"DEB\",\n            \"date\": \"2018-01-01\",\n            \"time\": \"13:56:00\",\n            \"transaction_description\": \"Pret a Manger Old St\",\n            \"creditor\": {\n                \"name\": \"PRET A MANGER\",\n                \"address\": \"1 Old Street, London\",\n                \"scheme\": \"SortCodeAccountNumber\",\n                \"identifier\": \"20202080009000\"\n            },\n            \"debtor\": {\n                \"name\": \"This is a sample transaction\",\n                \"address\": \"1 Old Street, London\",\n                \"scheme\": \"SortCodeAccountNumber\",\n                \"identifier\": \"08080021325698\"\n            },\n            \"credit_debit_indicator\": \"Debit\",\n            \"amount\": {\n                \"currency\": \"GBP\",\n                \"local_currency\": \"USD\",\n                \"local_value\": \"10.00\",\n                \"value\": \"7.75\"\n            },\n            \"enrichment\": {\n                \"categoriser\": {\n                    \"categories\": [\n                        {\n                            \"category_name\": \"eating_out\",\n                            \"confidence\": \"1.0000\"\n                        }\n                    ],\n                    \"subcategories\": [\n                        {\n                            \"subcategory_name\": \"cafes_and_lunch\",\n                            \"confidence\": \"1.0000\"\n                        }\n                    ]\n                }\n            }\n        }\n    ],\n    \"metadata\": {\n        \"results\": 1\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Determine Merchant Tags",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "x-client-id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"account_id\": \"5f44d9d6-8de0-4bc7-8db2-c26aea40ed62\",\n        \"transaction_id\": \"17affc586-5600-4434-ac5f-1a845260d7d9\",\n        \"transaction_type\": \"DD\",\n        \"transaction_description\": \"Tesco\",\n        \"date\": \"2018-01-01\",\n        \"time\": \"13:56:00\",\n        \"credit_debit_indicator\": \"Debit\",\n        \"amount\": {\n            \"value\": \"10.00\",\n            \"currency\": \"GBP\",\n            \"local_currency\": \"USD\"\n        }\n    }\n]"
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/merchants",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"merchants"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Bud Transaction Format",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "x-client-id",
+												"value": "{{api_credentials_id}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n    {\n        \"account_id\": \"5f44d9d6-8de0-4bc7-8db2-c26aea40ed62\",\n        \"transaction_id\": \"17affc586-5600-4434-ac5f-1a845260d7d9\",\n        \"transaction_type\": \"DD\",\n        \"transaction_description\": \"Tesco Shopping\",\n        \"date\": \"2018-01-01\",\n        \"time\": \"13:56:00\",\n        \"credit_debit_indicator\": \"Debit\",\n        \"amount\": {\n            \"value\": \"10.00\",\n            \"currency\": \"GBP\",\n            \"local_currency\": \"USD\"\n        }\n    }\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{proxy_url}}v1/merchants",
+											"host": [
+												"{{proxy_url}}v1"
+											],
+											"path": [
+												"merchants"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 12 Mar 2020 10:50:40 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "X-Request-Id",
+											"value": "176a37a64914521dcbb14375ac624933"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"operation_id\": \"merchants_post\",\n    \"data\": [\n        {\n            \"account_id\": \"5f44d9d6-8de0-4bc7-8db2-c26aea40ed62\",\n            \"transaction_id\": \"17affc586-5600-4434-ac5f-1a845260d7d9\",\n            \"transaction_type\": \"DD\",\n            \"date\": \"2018-01-01\",\n            \"time\": \"13:56:00\",\n            \"transaction_description\": \"Tesco Shopping\",\n            \"credit_debit_indicator\": \"Debit\",\n            \"amount\": {\n                \"currency\": \"GBP\",\n                \"local_currency\": \"USD\",\n                \"local_value\": \"0.00\",\n                \"value\": \"10.00\"\n            },\n            \"enrichment\": {\n                \"merchant\": {\n                    \"merchant_name\": \"Tesco\",\n                    \"merchant_logo\": \"https://storage.googleapis.com/bud-public-assets/bud-datasci-images/merchant_logos/17ac2742-8c93-4c11-a01f-17ad65b950ce.jpg\",\n                    \"confidence\": \"1.0000\"\n                }\n            }\n        }\n    ],\n    \"metadata\": {\n        \"results\": 1\n    }\n}"
+								},
+								{
+									"name": "TrueLayer Transaction Format",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/truelayer+json",
+												"type": "text"
+											},
+											{
+												"key": "x-client-id",
+												"value": "{{api_credentials_id}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n    {\n        \"transaction_id\": \"7affc586-5600-4434-ac5f-1a845260d7d9\",\n        \"transaction_type\": \"DEBIT\",\n        \"timestamp\": \"2018-01-01T13:56:00\",\n        \"description\": \"Tesco Shopping\",\n        \"amount\": 7.75,\n        \"currency\": \"GBP\",\n        \"meta\": {}\n    }\n]\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{proxy_url}}v1/merchants",
+											"host": [
+												"{{proxy_url}}v1"
+											],
+											"path": [
+												"merchants"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 12 Mar 2020 10:51:20 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "X-Request-Id",
+											"value": "05af136695025eb3d44b5d32a91c698f"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"operation_id\": \"merchants_post\",\n    \"data\": [\n        {\n            \"account_id\": \"\",\n            \"transaction_id\": \"7affc586-5600-4434-ac5f-1a845260d7d9\",\n            \"transaction_type\": \"DEBIT\",\n            \"date\": \"2018-01-01\",\n            \"time\": \"13:56:00\",\n            \"transaction_description\": \"Tesco Shopping\",\n            \"credit_debit_indicator\": \"Debit\",\n            \"amount\": {\n                \"currency\": \"GBP\",\n                \"local_currency\": \"GBP\",\n                \"local_value\": \"7.75\",\n                \"value\": \"7.75\"\n            },\n            \"enrichment\": {\n                \"merchant\": {\n                    \"merchant_name\": \"Tesco\",\n                    \"merchant_logo\": \"https://storage.googleapis.com/bud-public-assets/bud-datasci-images/merchant_logos/17ac2742-8c93-4c11-a01f-17ad65b950ce.jpg\",\n                    \"confidence\": \"1.0000\"\n                }\n            }\n        }\n    ],\n    \"metadata\": {\n        \"results\": 1\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Determine Regular Transaction Tags",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"account_id\": \"100000\",\n        \"transaction_id\": \"100000\",\n        \"transaction_type\": \"CSQ\",\n        \"date\": \"2019-01-01\",\n        \"time\": \"13:56:00\",\n        \"transaction_description\": \"This is a sample transaction\",\n        \"creditor\": {\n            \"name\": \"This is a sample transaction\",\n            \"address\": \"1 Old Street, London\",\n            \"scheme\": \"SortCodeAccountNumber\",\n            \"identifier\": \"08080021325698\"\n        },\n        \"credit_debit_indicator\": \"Debit\",\n        \"amount\": {\n            \"value\": \"10.00\",\n            \"currency\": \"GBP\",\n            \"local_value\": \"10.00\",\n            \"local_currency\": \"GBP\"\n        }\n    },\n    {\n        \"account_id\": \"100000\",\n        \"transaction_id\": \"100001\",\n        \"transaction_type\": \"CSQ\",\n        \"date\": \"2019-02-01\",\n        \"time\": \"13:56:00\",\n        \"transaction_description\": \"This is a sample transaction\",\n        \"creditor\": {\n            \"name\": \"This is a sample transaction\",\n            \"address\": \"1 Old Street, London\",\n            \"scheme\": \"SortCodeAccountNumber\",\n            \"identifier\": \"08080021325698\"\n        },\n        \"credit_debit_indicator\": \"Debit\",\n        \"amount\": {\n            \"value\": \"10.00\",\n            \"currency\": \"GBP\",\n            \"local_value\": \"10.00\",\n            \"local_currency\": \"GBP\"\n        }\n    },\n    {\n        \"account_id\": \"100000\",\n        \"transaction_id\": \"200001\",\n        \"transaction_type\": \"CPT\",\n        \"date\": \"2019-01-01\",\n        \"time\": \"14:20:00\",\n        \"transaction_description\": \"This is a sample transaction 2\",\n        \"debtor\": {\n            \"name\": \"This is a sample transaction\",\n            \"address\": \"1 Old Street, London\",\n            \"scheme\": \"SortCodeAccountNumber\",\n            \"identifier\": \"08080021325698\"\n        },\n        \"amount\": {\n            \"value\": \"10.00\",\n            \"currency\": \"GBP\",\n            \"local_value\": \"10.00\",\n            \"local_currency\": \"GBP\"\n        },\n        \"credit_debit_indicator\": \"Credit\"\n    }\n]\n"
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/regular-payments",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"regular-payments"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Bud Transaction Format",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}",
+												"type": "text"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}",
+												"type": "text"
+											},
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n    {\n        \"account_id\": \"100000\",\n        \"transaction_id\": \"100000\",\n        \"transaction_type\": \"CSQ\",\n        \"date\": \"2019-01-01\",\n        \"time\": \"13:56:00\",\n        \"transaction_description\": \"This is a sample transaction\",\n        \"creditor\": {\n            \"name\": \"This is a sample transaction\",\n            \"address\": \"1 Old Street, London\",\n            \"scheme\": \"SortCodeAccountNumber\",\n            \"identifier\": \"08080021325698\"\n        },\n        \"credit_debit_indicator\": \"Debit\",\n        \"amount\": {\n            \"value\": \"10.00\",\n            \"currency\": \"GBP\",\n            \"local_value\": \"10.00\",\n            \"local_currency\": \"GBP\"\n        }\n    },\n    {\n        \"account_id\": \"100000\",\n        \"transaction_id\": \"100001\",\n        \"transaction_type\": \"CSQ\",\n        \"date\": \"2019-02-01\",\n        \"time\": \"13:56:00\",\n        \"transaction_description\": \"This is a sample transaction\",\n        \"creditor\": {\n            \"name\": \"This is a sample transaction\",\n            \"address\": \"1 Old Street, London\",\n            \"scheme\": \"SortCodeAccountNumber\",\n            \"identifier\": \"08080021325698\"\n        },\n        \"credit_debit_indicator\": \"Debit\",\n        \"amount\": {\n            \"value\": \"10.00\",\n            \"currency\": \"GBP\",\n            \"local_value\": \"10.00\",\n            \"local_currency\": \"GBP\"\n        }\n    },\n    {\n        \"account_id\": \"100000\",\n        \"transaction_id\": \"200001\",\n        \"transaction_type\": \"CPT\",\n        \"date\": \"2019-01-01\",\n        \"time\": \"14:20:00\",\n        \"transaction_description\": \"This is a sample transaction 2\",\n        \"debtor\": {\n            \"name\": \"This is a sample transaction\",\n            \"address\": \"1 Old Street, London\",\n            \"scheme\": \"SortCodeAccountNumber\",\n            \"identifier\": \"08080021325698\"\n        },\n        \"amount\": {\n            \"value\": \"10.00\",\n            \"currency\": \"GBP\",\n            \"local_value\": \"10.00\",\n            \"local_currency\": \"GBP\"\n        },\n        \"credit_debit_indicator\": \"Credit\"\n    }\n]\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{proxy_url}}v1/regular-payments",
+											"host": [
+												"{{proxy_url}}v1"
+											],
+											"path": [
+												"regular-payments"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 12 Mar 2020 09:56:30 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "X-Request-Id",
+											"value": "a0a36081e07251971c552ccb557df1eb"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"operation_id\": \"regular_payments_post\",\n    \"data\": [\n        {\n            \"account_id\": \"100000\",\n            \"transaction_id\": \"100000\",\n            \"transaction_type\": \"CSQ\",\n            \"date\": \"2019-01-01\",\n            \"time\": \"13:56:00\",\n            \"transaction_description\": \"This is a sample transaction\",\n            \"creditor\": {\n                \"name\": \"This is a sample transaction\",\n                \"address\": \"1 Old Street, London\",\n                \"scheme\": \"SortCodeAccountNumber\",\n                \"identifier\": \"08080021325698\"\n            },\n            \"credit_debit_indicator\": \"Debit\",\n            \"amount\": {\n                \"currency\": \"GBP\",\n                \"local_currency\": \"GBP\",\n                \"local_value\": \"10.00\",\n                \"value\": \"10.00\"\n            },\n            \"enrichment\": {\n                \"regular_payments\": {\n                    \"label\": \"2bf07cfd9dde5c81778b88624903ca09d448e2ab-0\",\n                    \"score\": \"0.9845\",\n                    \"period\": \"monthly\"\n                }\n            }\n        },\n        {\n            \"account_id\": \"100000\",\n            \"transaction_id\": \"100001\",\n            \"transaction_type\": \"CSQ\",\n            \"date\": \"2019-02-01\",\n            \"time\": \"13:56:00\",\n            \"transaction_description\": \"This is a sample transaction\",\n            \"creditor\": {\n                \"name\": \"This is a sample transaction\",\n                \"address\": \"1 Old Street, London\",\n                \"scheme\": \"SortCodeAccountNumber\",\n                \"identifier\": \"08080021325698\"\n            },\n            \"credit_debit_indicator\": \"Debit\",\n            \"amount\": {\n                \"currency\": \"GBP\",\n                \"local_currency\": \"GBP\",\n                \"local_value\": \"10.00\",\n                \"value\": \"10.00\"\n            },\n            \"enrichment\": {\n                \"regular_payments\": {\n                    \"label\": \"2bf07cfd9dde5c81778b88624903ca09d448e2ab-0\",\n                    \"score\": \"0.9845\",\n                    \"period\": \"monthly\"\n                }\n            }\n        },\n        {\n            \"account_id\": \"100000\",\n            \"transaction_id\": \"200001\",\n            \"transaction_type\": \"CPT\",\n            \"date\": \"2019-01-01\",\n            \"time\": \"14:20:00\",\n            \"transaction_description\": \"This is a sample transaction 2\",\n            \"debtor\": {\n                \"name\": \"This is a sample transaction\",\n                \"address\": \"1 Old Street, London\",\n                \"scheme\": \"SortCodeAccountNumber\",\n                \"identifier\": \"08080021325698\"\n            },\n            \"credit_debit_indicator\": \"Credit\",\n            \"amount\": {\n                \"currency\": \"GBP\",\n                \"local_currency\": \"GBP\",\n                \"local_value\": \"10.00\",\n                \"value\": \"10.00\"\n            },\n            \"enrichment\": {\n                \"regular_payments\": {\n                    \"label\": \"-1\",\n                    \"score\": \"0.0000\",\n                    \"period\": \"unknown\"\n                }\n            }\n        }\n    ],\n    \"metadata\": {\n        \"results\": 3\n    }\n}"
+								},
+								{
+									"name": "TrueLayer Transaction Format",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}",
+												"type": "text"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/truelayer+json",
+												"type": "text"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}",
+												"type": "text"
+											},
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n    {\n        \"transaction_id\": \"7affc586-5600-4434-ac5f-1a845260d7d9\",\n        \"transaction_type\": \"DEBIT\",\n        \"timestamp\": \"2018-01-01T13:56:00\",\n        \"description\": \"Pret a Manger Old S\",\n        \"amount\": 7.75,\n        \"currency\": \"GBP\",\n        \"meta\": {}\n    },\n    {\n        \"transaction_id\": \"f111eb62-32b4-4a71-b907-70052b18600e\",\n        \"transaction_type\": \"DEBIT\",\n        \"timestamp\": \"2018-02-01T13:56:00\",\n        \"description\": \"Pret a Manger Old S\",\n        \"amount\": 7.75,\n        \"currency\": \"GBP\",\n        \"meta\": {}\n    },\n    {\n        \"transaction_id\": \"9a34a635-d14a-4ce5-acce-e7366595c768\",\n        \"transaction_type\": \"DEBIT\",\n        \"timestamp\": \"2018-03-01T13:56:00\",\n        \"description\": \"Pret a Manger Old S\",\n        \"amount\": 7.75,\n        \"currency\": \"GBP\",\n        \"meta\": {}\n    }\n]\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{proxy_url}}v1/regular-payments",
+											"host": [
+												"{{proxy_url}}v1"
+											],
+											"path": [
+												"regular-payments"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 12 Mar 2020 09:59:31 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "X-Request-Id",
+											"value": "1bfae785641bb9a6640c59357614f56c"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"operation_id\": \"regular_payments_post\",\n    \"data\": [\n        {\n            \"account_id\": \"\",\n            \"transaction_id\": \"7affc586-5600-4434-ac5f-1a845260d7d9\",\n            \"transaction_type\": \"DEBIT\",\n            \"date\": \"2018-01-01\",\n            \"time\": \"13:56:00\",\n            \"transaction_description\": \"Pret a Manger Old S\",\n            \"credit_debit_indicator\": \"Debit\",\n            \"amount\": {\n                \"currency\": \"GBP\",\n                \"local_currency\": \"GBP\",\n                \"local_value\": \"7.75\",\n                \"value\": \"7.75\"\n            },\n            \"enrichment\": {\n                \"regular_payments\": {\n                    \"label\": \"42e30348dd79939ae22dbf765ea269cffb2b348b-0\",\n                    \"score\": \"0.9878\",\n                    \"period\": \"monthly\"\n                }\n            }\n        },\n        {\n            \"account_id\": \"\",\n            \"transaction_id\": \"f111eb62-32b4-4a71-b907-70052b18600e\",\n            \"transaction_type\": \"DEBIT\",\n            \"date\": \"2018-02-01\",\n            \"time\": \"13:56:00\",\n            \"transaction_description\": \"Pret a Manger Old S\",\n            \"credit_debit_indicator\": \"Debit\",\n            \"amount\": {\n                \"currency\": \"GBP\",\n                \"local_currency\": \"GBP\",\n                \"local_value\": \"7.75\",\n                \"value\": \"7.75\"\n            },\n            \"enrichment\": {\n                \"regular_payments\": {\n                    \"label\": \"42e30348dd79939ae22dbf765ea269cffb2b348b-0\",\n                    \"score\": \"0.9878\",\n                    \"period\": \"monthly\"\n                }\n            }\n        },\n        {\n            \"account_id\": \"\",\n            \"transaction_id\": \"9a34a635-d14a-4ce5-acce-e7366595c768\",\n            \"transaction_type\": \"DEBIT\",\n            \"date\": \"2018-03-01\",\n            \"time\": \"13:56:00\",\n            \"transaction_description\": \"Pret a Manger Old S\",\n            \"credit_debit_indicator\": \"Debit\",\n            \"amount\": {\n                \"currency\": \"GBP\",\n                \"local_currency\": \"GBP\",\n                \"local_value\": \"7.75\",\n                \"value\": \"7.75\"\n            },\n            \"enrichment\": {\n                \"regular_payments\": {\n                    \"label\": \"42e30348dd79939ae22dbf765ea269cffb2b348b-0\",\n                    \"score\": \"0.9878\",\n                    \"period\": \"monthly\"\n                }\n            }\n        }\n    ],\n    \"metadata\": {\n        \"results\": 3\n    }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Submit Corrections",
+					"item": [
+						{
+							"name": "Recategorise Transactions",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"account_id\": \"6cc89f74-8166-4a8e-bde4-7e66c7aa0504\",\n    \"transaction_id\": \"000df5b1db0c0cc8d906f1b2a826199551b9ec623f94d4e210e5183d2de5f651-1\",\n    \"category_name\": \"general\",\n    \"subcategory_name\": \"other_general\"\n  }\n]"
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/recategorise/customer-corrections/double-cat",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"recategorise",
+										"customer-corrections",
+										"double-cat"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Insights",
+			"item": [
+				{
+					"name": "Enrichment Totals",
+					"item": [
+						{
+							"name": "Categories Totals",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-From",
+										"type": "text",
+										"value": "2020-02-01"
+									},
+									{
+										"key": "X-To",
+										"type": "text",
+										"value": "2021-05-01"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/categories/totals",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"categories",
+										"totals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Merchants totals",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									},
+									{
+										"key": "X-From",
+										"value": "2020-01-01",
+										"type": "text"
+									},
+									{
+										"key": "X-To",
+										"value": "2021-05-01",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v2/merchants/totals",
+									"host": [
+										"{{proxy_url}}v2"
+									],
+									"path": [
+										"merchants",
+										"totals"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Transaction Insights",
+					"item": [
+						{
+							"name": "Regular transactions",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/regular-transactions",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"regular-transactions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Future transactions",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/future-transactions",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"future-transactions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Salary",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}",
+										"disabled": true
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/salary",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"salary"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Initiate Energy Payments Discovery",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"",
+											"pm.environment.set(\"energy_switching_energy_payments_post_task_id\", response.data.task_id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/energy-switching/energy-payments",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"energy-switching",
+										"energy-payments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Energy Payments",
+							"request": {
+								"auth": {
+									"type": "bearer"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/energy-switching/energy-payments/{{energy_switching_energy_payments_post_task_id}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"energy-switching",
+										"energy-payments",
+										"{{energy_switching_energy_payments_post_task_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Transaction Labels",
+					"item": [
+						{
+							"name": "Create Transaction Rule(s)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"match_attributes\": [\n      {\n        \"type\": \"exact\",\n        \"name\": \"amount\",\n        \"value\": \"1800.00\"\n      },\n      {\n        \"type\": \"exact\",\n        \"name\": \"cdi\",\n        \"value\": \"Credit\"\n      }\n    ],\n    \"set_attribute\": {\n      \"values\": [\n        \"freelance income\",\n        \"pocket money\"\n      ]\n    }\n  }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/transactions/attributes/client-labels",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"transactions",
+										"attributes",
+										"client-labels"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Signal",
+			"item": [
+				{
+					"name": "Everyday Money Management",
+					"item": [
+						{
+							"name": "Money Management",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/signal/money-management",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"signal",
+										"money-management"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Customer Characteristics",
+					"item": [
+						{
+							"name": "Customer Characteristics",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/signal/customer-characteristics",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"signal",
+										"customer-characteristics"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Income and Expenditure Insight",
+					"item": [
+						{
+							"name": "Financial Insights",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/signal/financial-insights",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"signal",
+										"financial-insights"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Trends",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Request-Id",
+										"type": "text",
+										"value": "{{$guid}}"
+									},
+									{
+										"key": "X-From",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "X-To",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/assistant/trends",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"assistant",
+										"trends"
+									]
+								},
+								"description": "Returns the estimated 12 month monetary value for the loyalty points specified by point_type (e.g., Nectar) using transactions from the previous month."
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Financial Forecast",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Request-Id",
+										"type": "text",
+										"value": "{{$guid}}"
+									},
+									{
+										"key": "X-From",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "X-To",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/assistant/forecast",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"assistant",
+										"forecast"
+									]
+								},
+								"description": "Returns the estimated 12 month monetary value for the loyalty points specified by point_type (e.g., Nectar) using transactions from the previous month."
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Financial Review",
+			"item": [
+				{
+					"name": "Assess Affordability",
+					"item": [
+						{
+							"name": "Create Spending Groups",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									},
+									{
+										"key": "X-From",
+										"value": "2020-06-01",
+										"type": "text"
+									},
+									{
+										"key": "X-To",
+										"value": "2021-02-01",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n\t{\n\t\t\"name\": \"total_income\",\n\t\t\"transaction_categories\": [\n\t\t\t\"employment_income\",\n\t\t\t\"benefits\",\n\t\t\t\"other_income\"\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"essential_spending\",\n\t\t\"transaction_categories\": [\n\t\t\t\"mortgage_repayment\",\n\t\t\t\"utilities_water\",\n\t\t\t\"utilities_energy\",\n\t\t\t\"public_transport\"\n\t\t]\n\t}\n]"
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/affordability/spending-groups",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"affordability",
+										"spending-groups"
+									]
+								},
+								"description": "Provide a list of groups and categories to be returned as a breakdown of spending, along with all sources of income. If no groups are specified by the client, return the Bud default standar of most commonly used categories and groups.\n\nThe header parameters X-From and X-To allow you to filter the result to a specified datetime range."
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
