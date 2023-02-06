@@ -757,7 +757,7 @@
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"",
-											"tests[\"Response has taskID\"] = jsonData.data.task_id;",
+											"tests[\"Response has refresh_task_id\"] = jsonData.data.task_id;",
 											"",
 											"pm.environment.set(\"refresh_task_id\", jsonData.data.task_id);",
 											""
@@ -1008,7 +1008,7 @@
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"",
-											"tests[\"Response has taskID\"] = jsonData.data.task_id;",
+											"tests[\"Response has revoke_task_id\"] = jsonData.data.task_id;",
 											"",
 											"pm.environment.set(\"revoke_task_id\", jsonData.data.task_id);",
 											""
@@ -1129,7 +1129,7 @@
 									"script": {
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"taskId\", jsonData.data.task_id);"
+											"pm.environment.set(\"account_ingestion_task_id\", jsonData.data.task_id);"
 										],
 										"type": "text/javascript"
 									}
@@ -1162,7 +1162,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"accounts\": [\n      {\n        \"provider\": \"Barclays\",\n        \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n        \"currency\": \"GBP\",\n        \"account_type\": \"Personal\",\n        \"account_sub_type\": \"CurrentAccount\",\n        \"details\": [\n          {\n            \"scheme_name\": \"UK.OBIE.SortCodeAccountNumber\",\n            \"identification\": \"98765432165444\",\n            \"secondary_identification\": \"00021\",\n            \"name\": \"Mr Kevin\"\n          }\n        ],\n        \"balances\": [\n          {\n            \"amount\": {\n              \"value\": \"7.00\",\n              \"currency\": \"GBP\"\n            },\n            \"credit_debit_indicator\": \"outgoing_debit\",\n            \"credit_line\": [\n              {\n                \"included\": true,\n                \"amount\": {\n                  \"value\": \"200.00\",\n                  \"currency\": \"GBP\"\n                },\n                \"type\": \"Credit\"\n              }\n            ],\n            \"date\": \"2020-12-01\",\n            \"time\": \"00:00:00\",\n            \"type\": \"InterimBooked\"\n          }\n        ]\n      }\n    ]\n  }\n ]",
+									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"accounts\": [\n      {\n        \"provider\": \"Barclays\",\n        \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n        \"currency\": \"GBP\",\n        \"account_type\": \"Personal\",\n        \"account_sub_type\": \"CurrentAccount\",\n        \"details\": [\n          {\n            \"scheme_name\": \"UK.OBIE.SortCodeAccountNumber\",\n            \"identification\": \"98765432165444\",\n            \"secondary_identification\": \"00021\",\n            \"name\": \"Mr Kevin\"\n          }\n        ],\n        \"balances\": [\n          {\n            \"amount\": {\n              \"value\": \"7.00\",\n              \"currency\": \"GBP\"\n            },\n            \"credit_debit_indicator\": \"outgoing_debit\",\n            \"credit_line\": [\n              {\n                \"included\": true,\n                \"amount\": {\n                  \"value\": \"200.00\",\n                  \"currency\": \"GBP\"\n                },\n                \"type\": \"Credit\"\n              }\n            ],\n            \"date\": \"2020-12-01\",\n            \"time\": \"00:00:00\",\n            \"type\": \"InterimBooked\"\n          }\n        ]\n      }\n    ]\n  }\n ]",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1222,14 +1222,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{proxy_url}}v1/ingest/accounts/{{taskId}}",
+									"raw": "{{proxy_url}}v1/ingest/accounts/{{account_ingestion_task_id}}",
 									"host": [
 										"{{proxy_url}}v1"
 									],
 									"path": [
 										"ingest",
 										"accounts",
-										"{{taskId}}"
+										"{{account_ingestion_task_id}}"
 									]
 								}
 							},
