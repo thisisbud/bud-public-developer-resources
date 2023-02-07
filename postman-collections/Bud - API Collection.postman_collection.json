@@ -33,13 +33,13 @@
 							"type": "basic",
 							"basic": [
 								{
-									"key": "password",
-									"value": "{{api_credentials_secret}}",
+									"key": "username",
+									"value": "{{api_credentials_id}}",
 									"type": "string"
 								},
 								{
-									"key": "username",
-									"value": "{{api_credentials_id}}",
+									"key": "password",
+									"value": "{{api_credentials_secret}}",
 									"type": "string"
 								}
 							]
@@ -4456,6 +4456,20 @@
 			"item": [
 				{
 					"name": "Initiate Company Check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Response has check uuid\"] = jsonData.data.check_uuid;",
+									"pm.environment.set(\"kyc_check_uuid\", jsonData.data.check_uuid);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -4499,6 +4513,20 @@
 				},
 				{
 					"name": "Initiate Person Check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Response has check uuid\"] = jsonData.data.check_uuid;",
+									"pm.environment.set(\"kyc_check_uuid\", jsonData.data.check_uuid);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -4517,6 +4545,15 @@
 								"value": "{{api_credentials_id}}"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"person\": {\n    \"bank_account\": {\n      \"account_number\": \"31926819\",\n      \"sort_code\": \"123456\"\n    },\n    \"current_address\": {\n      \"country\": \"GB\",\n      \"county\": \"Greater London\",\n      \"line_five\": null,\n      \"line_four\": null,\n      \"line_six\": null,\n      \"line_three\": \"Ground floor\",\n      \"name_number\": \"25B\",\n      \"postcode\": \"E29DG\",\n      \"state\": \"United Kingdom\",\n      \"street\": \"Vyner Street\",\n      \"town\": \"London\"\n    },\n    \"date_of_birth\": \"1984-12-26\",\n    \"email_address\": [\n      \"test@thisisbud.com\"\n    ],\n    \"first_name\": \"John\",\n    \"gender\": \"male\",\n    \"identification_details\": [\n      {\n        \"issuing_country\": \"GB\",\n        \"number\": \"P4312345\",\n        \"type\": \"passport\"\n      }\n    ],\n    \"last_name\": \"Doh\",\n    \"middle_name\": \"Paul\",\n    \"phone\": [\n      {\n        \"number\": \"07939225566\",\n        \"type\": \"mobile\"\n      }\n    ],\n    \"previous_address\": [\n      {\n        \"country\": \"GB\",\n        \"county\": \"Greater London\",\n        \"line_five\": null,\n        \"line_four\": null,\n        \"line_six\": null,\n        \"line_three\": \"Ground floor\",\n        \"name_number\": \"25B\",\n        \"postcode\": \"E29DG\",\n        \"state\": \"United Kingdom\",\n        \"street\": \"Vyner Street\",\n        \"town\": \"London\"\n      }\n    ],\n    \"title\": \"mr\"\n  },\n  \"custom_data\": [\n    {\n      \"key\": \"my-user-id\",\n      \"value\": \"123\"\n    }\n  ],\n  \"header\": {\n    \"profile_uuid\": \"{{$randomUUID}}\",\n    \"transaction_reference\": \"ppl-38\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "{{proxy_url}}v1/kyc/check/person",
 							"host": [
@@ -4552,81 +4589,20 @@
 							}
 						],
 						"url": {
-							"raw": "{{proxy_url}}v1/kyc/check/asd",
+							"raw": "{{proxy_url}}v1/kyc/check/{{kyc_check_uuid}}",
 							"host": [
 								"{{proxy_url}}v1"
 							],
 							"path": [
 								"kyc",
 								"check",
-								"asd"
+								"{{kyc_check_uuid}}"
 							]
 						}
 					},
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "Ingest Transactions Regular",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = JSON.parse(responseBody);",
-							"pm.environment.set(\"ingestion_task_id\", jsonData.metadata.task_id);"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{auth_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "X-Client-Id",
-						"value": "{{api_credentials_id}}",
-						"type": "text"
-					},
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/bud-transaction-v3+json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"{{bank_account_id}}\",\n\t    \"transaction_id\": \"{{$randomUUID}}\",\n\t    \"date_time\": \"2021-03-02T02:07:14Z\",\n\t    \"description\": \"Netflix subscription\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-15.00\"\n\t  },\n      {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"{{bank_account_id}}\",\n\t    \"transaction_id\": \"{{$randomUUID}}\",\n\t    \"date_time\": \"2021-04-02T02:07:14Z\",\n\t    \"description\": \"Netflix subscription\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-15.00\"\n\t  },\n      {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"{{bank_account_id}}\",\n\t    \"transaction_id\": \"{{$randomUUID}}\",\n\t    \"date_time\": \"2021-05-02T02:07:14Z\",\n\t    \"description\": \"Netflix subscription\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-15.00\"\n\t  }\n\t]\n  }\n]",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{proxy_url}}v2/ingest/transactions",
-					"host": [
-						"{{proxy_url}}v2"
-					],
-					"path": [
-						"ingest",
-						"transactions"
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"event": [
