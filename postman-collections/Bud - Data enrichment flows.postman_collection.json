@@ -1715,7 +1715,7 @@
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);",
 									"",
-									"tests[\"Response has taskID\"] = jsonData.data.task_id;",
+									"tests[\"Response has refresh_task_id\"] = jsonData.data.task_id;",
 									"",
 									"pm.environment.set(\"refresh_task_id\", jsonData.data.task_id);",
 									""
@@ -1966,7 +1966,7 @@
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);",
 									"",
-									"tests[\"Response has taskID\"] = jsonData.data.task_id;",
+									"tests[\"Response has revoke_task_id\"] = jsonData.data.task_id;",
 									"",
 									"pm.environment.set(\"revoke_task_id\", jsonData.data.task_id);",
 									""
