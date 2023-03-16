@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: 'Bud API Services: Documentation'
-  version: 2.3.5
+  version: 2.3.6
   contact:
     name: 'Bud Support'
     url: 'https://www.thisisbud.com/'
@@ -290,6 +290,9 @@ info:
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
+
+    **Version 2.3.6: 16/03/2023**
+    > - Deprecated __Initiate Energy Payments Discovery__ and __Retrieve Energy Payments__
 
     **Version 2.3.5: 13/03/2023**
     > - Updated holder and holders fields on __List Accounts V2 (beta)__ and __Retrieve Account By ID V2 (beta)__.
@@ -6004,6 +6007,7 @@ paths:
       tags:
         - 'Expenditure Insights'
       summary: 'Initiate Energy Payments Discovery'
+      deprecated: true
       description: 'Start the process of detecting a customer''s energy payments from their aggregated transactional history.'
       operationId: energy_switching_energy_payments_post
       security:
@@ -6038,6 +6042,7 @@ paths:
       tags:
         - 'Expenditure Insights'
       summary: 'Retrieve Energy Payments'
+      deprecated: true
       operationId: energy_switching_energy_payments_get
       security:
         -
