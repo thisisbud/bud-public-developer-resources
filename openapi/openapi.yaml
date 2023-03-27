@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: 'Bud API Services: Documentation'
-  version: 2.3.5
+  version: 2.4.0
   contact:
     name: 'Bud Support'
     url: 'https://www.thisisbud.com/'
@@ -276,6 +276,8 @@ info:
 
     | Date of Announcement | Deprecation Details                                                                                                                                                                                                                                                                                                   |
     |:---------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | 24/03/2023           | Deprecated **Retrieve Accounts** endpoint. Bud understands that many clients have integrated this endpoint in order to retrieve accounts held on the Bud platform. As a result, there is a **six month** deprecation window, meaning that support for this endpoint will cease on the **24th of September 2023**, meaning clients must have migrated over to the new and improved **Retrieve Accounts V2** endpoint by that point in time.
+
     | 04/12/2020           | Changed the base URL of the **GET Warnings**, **GET Trends** and **GET Forecast** endpoints from `/v1/assistant/` to `/v1/signal/`.                                                                                                                                                                                   |
     | 06/08/2020           | Removed `bank_name` field in favour of a new field called `provider` in the following endpoints:<br>__POST__`/v1/open-banking/authorisation-url` (Request Payload)<br> __POST__`/v1/open-banking/connect/{connection_task_id}` (Response Payload)<br> __POST__`/v1/open-banking/refresh/{task_id}` (Response Payload) |
     | 01/09/2021           | Deprecated **GET Warnings** endpoints in favour of new **GET Money Management**, **GET Customer Characteristics** and **GET Financial Insight** endpoints.                                                                                                                                                            |
@@ -290,6 +292,38 @@ info:
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
+
+    **Version 2.4.0: 24/03/2023**
+    > - Deprecated __Retrieve Accounts__.
+    > - Finalised __Retrieve Accounts V2 (beta)__ to production release as __Retrieve Accounts V2__.
+    > - Finalised __Retrieve Account By ID V2 (beta)__ to production release as __Retrieve Account By ID V2__.
+    > - Finalised __Retrieve Balances Over Time (Beta)__ to production release as __Retrieve Balances Over Time__.
+    > - Finalised __Retrieve Balances Over Time By Account (Beta)__ to production release as __Retrieve Balances Over Time By Account__.
+
+
+    **Version 2.3.9: 21/03/2023**
+    > - Update merchant descriptions & required fields for **Retrieve Subscriptions**
+    > - Standardised description used for dates in __Retrieve Merchant Totals V2__.
+    > - Standardised description used for dates in __Retrieve Income Transactions V1__.
+    > - Standardised description used for dates in __Retrieve Income Transactions V2__.
+    > - Standardised description used for dates in __Retrieve Loan Transactions__.
+    > - Standardised description used for dates in __Retrieve Debt Collection Transactions__.
+    > - Standardised description used for dates in __Retrieve Benefits Transactions__.
+    > - Standardised description used for dates in __Retrieve Benefits Totals__.
+    > - Standardised description used for dates in __Retrieve Financial Products__.
+    > - Standardised description used for dates in __Retrieve Subscriptions__.
+    > - Standardised description used for dates in __Retrieve Upcoming Transactions V1__.
+    > - Standardised description used for dates in __Retrieve Salary Information__.
+
+    **Version 2.3.8: 21/03/2023**
+    > - Update amount descriptions
+
+    **Version 2.3.7: 20/03/2023**
+    > - Fix the docs for **Retrieve Money Management** correcting the category names for some warning types.
+    > - Remove the deprecated `large_expense` and `high_balance` warnings from **Retrieve Money Management**.
+
+    **Version 2.3.6: 16/03/2023**
+    > - Deprecated __Initiate Energy Payments Discovery__ and __Retrieve Energy Payments__
 
     **Version 2.3.5: 13/03/2023**
     > - Updated holder and holders fields on __List Accounts V2 (beta)__ and __Retrieve Account By ID V2 (beta)__.
@@ -3283,6 +3317,800 @@ paths:
           description: 'An unexpected HTTP method was used'
         5XX:
           description: 'An unexpected error occurred on the server side'
+  /financial/v2/accounts:
+    get:
+      tags:
+        - 'Retrieve Financial Data'
+      summary: 'Retrieve Accounts V2'
+      description: |
+        Retrieves a list of a customer's connected accounts. The result can be filtered using the parameters outlined below.
+      operationId: financial_v2_accounts
+      security:
+        -
+          OAuth2: []
+      parameters:
+        -
+          $ref: 'components.yaml#/parameters/ClientId'
+        -
+          $ref: 'components.yaml#/parameters/CustomerId'
+        -
+          $ref: 'components.yaml#/parameters/CustomerSecret'
+        -
+          $ref: 'components.yaml#/parameters/QueryCurrency'
+        -
+          $ref: 'components.yaml#/parameters/QueryProvider'
+        -
+          in: query
+          name: account_type
+          schema:
+            type: string
+          example: current_account
+          description: |
+            Use this parameter to filter the results returned on the `account_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `account_type` will be returned.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `charge_card`
+              - `credit_card`
+              - `current_account`
+              - `e_money`
+              - `loan`
+              - `mortgage`
+              - `pre_paid_card`
+              - `savings`
+        -
+          in: query
+          name: usage_type
+          schema:
+            type: string
+          example: personal
+          description: |
+            Use this parameter to filter the results returned on the `usage_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `usage_type` will be returned.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `personal`
+              - `business`
+        -
+          in: query
+          name: holder_relationship_type
+          schema:
+            type: string
+          example: joint
+          description: |
+            Use this parameter to filter the results returned on the `holder_relationship_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `holder_relationship_type` will be returned.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `sole`
+              - `joint`
+              - `delegate`
+              - `unknown`
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/ListAccountsV2Response'
+              examples:
+                'Account Without Parties Data':
+                  value:
+                    operation_id: financial_v2_accounts
+                    data:
+                      -
+                        account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
+                        currency: GBP
+                        holder:
+                          name: 'David Smith'
+                          relationship: unknown
+                        account_name: 'My Current Account'
+                        account_type: current_account
+                        usage_type: personal
+                        provider: BankOfBud
+                        identifiers:
+                          uk_sort_code: '126432'
+                          uk_account_number: '31510604'
+                        balances:
+                          -
+                            date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '3552.61'
+                              currency: GBP
+                            type: interim_booked
+                            credit_debit_indicator: credit
+                          -
+                            date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '3552.61'
+                              currency: GBP
+                            type: expected
+                            credit_debit_indicator: credit
+                        credit_lines:
+                          -
+                            date: '2023-01-12T00:00:00Z'
+                            type: credit
+                            amount:
+                              value: '1000.00'
+                              currency: GBP
+                    metadata:
+                      parameters:
+                        currencies:
+                          - GBP
+                      result_count: 1
+                'Account With Parties Data':
+                  value:
+                    operation_id: financial_v2_accounts
+                    data:
+                      -
+                        account_id: 928fed73-2eb9-4910-8a26-22b6c76fb9fa
+                        currency: GBP
+                        holders:
+                          -
+                            name: 'David Smith'
+                            relationship: joint
+                          -
+                            name: 'Jane Smith'
+                            relationship: joint
+                        account_name: 'Household Account'
+                        account_type: current_account
+                        usage_type: personal
+                        provider: BankOfBud
+                        identifiers:
+                          uk_sort_code: '124332'
+                          uk_account_number: '12642318'
+                        balances:
+                          -
+                            date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '3552.61'
+                              currency: GBP
+                            type: interim_booked
+                            credit_debit_indicator: credit
+                          -
+                            date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '3552.61'
+                              currency: GBP
+                            type: expected
+                            credit_debit_indicator: credit
+                        credit_lines:
+                          -
+                            date: '2023-01-12T00:00:00Z'
+                            type: credit
+                            amount:
+                              value: '1000.00'
+                              currency: GBP
+                    metadata:
+                      parameters: null
+                      result_count: 1
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/BadRequestResponse'
+              examples:
+                'CustomerID Not Sent':
+                  value:
+                    operation_id: financial_v2_accounts
+                    code_id: failed_validation
+                    message: 'Invalid request payload.'
+                    errors:
+                      error:
+                        X-Customer-Id: 'not present'
+                'CustomerID and CustomerSecret Not Sent':
+                  value:
+                    operation_id: financial_v2_accounts
+                    code_id: failed_validation
+                    message: 'Invalid request payload.'
+                    errors:
+                      error:
+                        X-Customer-Id: 'not present'
+                        X-Customer-Secret: 'not present'
+        500:
+          description: 'Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
+  '/financial/v2/accounts/{account_id}':
+    get:
+      tags:
+        - 'Retrieve Financial Data'
+      summary: 'Retrieve Account By ID V2'
+      description: |
+        Retrieves a customer's connected account by its ID.
+      operationId: financial_v2_accounts_account_id
+      security:
+        -
+          OAuth2: []
+      parameters:
+        -
+          $ref: 'components.yaml#/parameters/ClientId'
+        -
+          $ref: 'components.yaml#/parameters/CustomerId'
+        -
+          $ref: 'components.yaml#/parameters/CustomerSecret'
+        -
+          $ref: 'components.yaml#/parameters/PathAccountID'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/RetrieveAccountByIDV2Response'
+              examples:
+                'Single Holder Personal Account':
+                  value:
+                    operation_id: financial_v2_accounts_account_id
+                    data:
+                      account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
+                      currency: GBP
+                      holder:
+                        name: 'David Smith'
+                        relationship: unknown
+                      account_name: 'My Current Account'
+                      account_type: current_account
+                      provider: BankOfBud
+                      identifiers:
+                        uk_sort_code: '126432'
+                        uk_account_number: '31510604'
+                      balance:
+                        date: '2023-01-12T00:00:00Z'
+                        booked:
+                          amount:
+                            value: '3552.61'
+                            currency: GBP
+                          credit_debit_indicator: debit
+                        credit_limit:
+                          value: '1000.00'
+                          currency: GBP
+                    metadata: null
+                'Multiple Holder Joint Account':
+                  value:
+                    operation_id: financial_v2_accounts_account_id
+                    data:
+                      account_id: 928fed73-2eb9-4910-8a26-22b6c76fb9fa
+                      currency: GBP
+                      holders:
+                        -
+                          name: 'David Smith'
+                          relationship: joint
+                        -
+                          name: 'Jane Smith'
+                          relationship: joint
+                      account_name: 'Household Account'
+                      account_type: current_account
+                      provider: BankOfBud
+                      identifiers:
+                        uk_sort_code: '124332'
+                        uk_account_number: '12642318'
+                      balances:
+                        -
+                          date: '2023-01-12T00:00:00Z'
+                          amount:
+                            value: '3552.61'
+                            currency: GBP
+                          type: interim_booked
+                          credit_debit_indicator: credit
+                        -
+                          date: '2023-01-12T00:00:00Z'
+                          amount:
+                            value: '3552.61'
+                            currency: GBP
+                          type: expected
+                          credit_debit_indicator: credit
+                      credit_lines:
+                        -
+                          date: '2023-01-12T00:00:00Z'
+                          type: credit
+                          amount:
+                            value: '1000.00'
+                            currency: GBP
+                    metadata: null
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/BadRequestResponse'
+              examples:
+                'CustomerID Not Sent':
+                  value:
+                    operation_id: financial_v2_accounts_account_id
+                    code_id: failed_validation
+                    message: 'Invalid request payload.'
+                    errors:
+                      error:
+                        X-Customer-Id: 'not present'
+                'CustomerID and CustomerSecret Not Sent':
+                  value:
+                    operation_id: financial_v2_accounts_account_id
+                    code_id: failed_validation
+                    message: 'Invalid request payload.'
+                    errors:
+                      error:
+                        X-Customer-Id: 'not present'
+                        X-Customer-Secret: 'not present'
+        500:
+          description: 'Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
+  /financial/v2/balances:
+    get:
+      tags:
+        - 'Retrieve Financial Data'
+      summary: 'Retrieve Balances Over Time'
+      description: |
+        List the balances of each bank account for a customer accross all ingestion sources. Ordered by balance date.
+
+        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` and `from` dates provided. It then checks all the transactions within this range, calculating the balance at the end of each day.
+
+        This endpoint limits the date from which it gets balances from either by the oldest `transaction_window` on the account if they are present, or by the oldest transaction within the requested date range available.
+
+        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the data supplied from this service by including the transaction_window field upon acccount ingestion.
+      operationId: financial_v2_balances_get
+      security:
+        -
+          OAuth2: []
+      parameters:
+        -
+          $ref: 'components.yaml#/parameters/ClientId'
+        -
+          $ref: 'components.yaml#/parameters/CustomerId'
+        -
+          $ref: 'components.yaml#/parameters/CustomerSecret'
+        -
+          $ref: 'components-common-parameters.yaml#/parameters/QueryFromBudDate'
+        -
+          $ref: 'components-common-parameters.yaml#/parameters/QueryToBudDate'
+        -
+          in: query
+          name: granularity
+          schema:
+            type: string
+          example: daily
+          description: |
+            Specifies in what interval the balance over time should be retrieved.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `daily`
+              - `weekly`
+              - `biweekly`
+              - `monthly`
+              - `quarterly`
+              - `six_monthly`
+              - `annually`
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/GetBalancesResponse'
+              example:
+                operation_id: financial_v2_balances_get
+                data:
+                  -
+                    account_id: 5b271e24-9ea5-4d7e-b5da-64f01d32db22
+                    balances:
+                      -
+                        date: '2022-11-15T23:59:59Z'
+                        booked:
+                          amount:
+                            value: '900.00'
+                            currency: GBP
+                          type: interim_booked
+                          credit_debit_indicator: credit
+                        pending:
+                          amount:
+                            value: '850.00'
+                            currency: GBP
+                          type: expected
+                          credit_debit_indicator: credit
+                      -
+                        date: '2022-11-14T23:59:59Z'
+                        booked:
+                          amount:
+                            value: '950.00'
+                            currency: GBP
+                          type: interim_booked
+                          credit_debit_indicator: credit
+                        pending:
+                          amount:
+                            value: '900.00'
+                            currency: GBP
+                          type: expected
+                          credit_debit_indicator: credit
+                  -
+                    account_id: b6e9ea3c-71f9-4572-983a-3e5e85470dad
+                    balances:
+                      -
+                        date: '2022-11-15T23:59:59Z'
+                        booked:
+                          amount:
+                            value: '500'
+                            currency: JPY
+                          type: interim_booked
+                          credit_debit_indicator: credit
+                metadata:
+                  accounts:
+                    5b271e24-9ea5-4d7e-b5da-64f01d32db22:
+                      balance_count: 2
+                      from: '2022-11-14T23:59:59Z'
+                      to: '2022-11-15T23:59:59Z'
+                    b6e9ea3c-71f9-4572-983a-3e5e85470dad:
+                      balance_count: 1
+                      from: '2022-11-15T23:59:59Z'
+                      to: '2022-11-15T23:59:59Z'
+                  parameters:
+                    from: '2020-12-22T00:00:00Z'
+                    to: '2022-11-15T00:00:00Z'
+                    granularity: daily
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/BadRequestResponse'
+        500:
+          description: 'Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/ServerErrorResponse'
+              example:
+                operation_id: financial_v2_balances_get
+                code_id: internal_error
+                message: 'Internal server error has occurred.'
+                errors:
+                  error: 'failed to format amount'
+  '/financial/v2/accounts/{account_id}/balances':
+    get:
+      tags:
+        - 'Retrieve Financial Data'
+      summary: 'Retrieve Balances Over Time By Account'
+      description: |
+        List the balances of a specific bank account for a customer accross all ingestion sources. Ordered by balance date.
+
+        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` and `from` dates provided. It then checks all the transactions within this range, calculating the balance at the end of each day.
+
+        This endpoint limits the date from which it gets balances from either by the oldest `transaction_window` on the account if they are present, or by the oldest transaction within the requested date range available.
+
+        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the data supplied from this service by including the transaction_window field upon acccount ingestion.
+      operationId: financial_v2_accounts_balances_get
+      parameters:
+        -
+          $ref: 'components.yaml#/parameters/ClientId'
+        -
+          $ref: 'components.yaml#/parameters/CustomerId'
+        -
+          $ref: 'components.yaml#/parameters/CustomerSecret'
+        -
+          $ref: 'components-common-parameters.yaml#/parameters/QueryFromBudDate'
+        -
+          $ref: 'components-common-parameters.yaml#/parameters/QueryToBudDate'
+        -
+          $ref: 'components.yaml#/parameters/PathAccountID'
+        -
+          in: query
+          name: granularity
+          schema:
+            type: string
+            enum:
+              - daily
+              - weekly
+              - biweekly
+              - monthly
+              - quarterly
+              - six_monthly
+              - annually
+          example: daily
+          description: 'Specifies in what interval the balance over time should be retrieved.'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/GetBalancesForAccountIDResponse'
+              example:
+                operation_id: financial_v2_accounts_balances_get
+                data:
+                  -
+                    date: '2022-11-15T23:59:59Z'
+                    booked:
+                      amount:
+                        value: '900.00'
+                        currency: GBP
+                      type: interim_booked
+                      credit_debit_indicator: credit
+                    pending:
+                      amount:
+                        value: '850.00'
+                        currency: GBP
+                      type: expected
+                      credit_debit_indicator: credit
+                  -
+                    date: '2022-11-14T23:59:59Z'
+                    booked:
+                      amount:
+                        value: '950.00'
+                        currency: GBP
+                      type: interim_booked
+                      credit_debit_indicator: credit
+                    pending:
+                      amount:
+                        value: '900.00'
+                        currency: GBP
+                      type: expected
+                      credit_debit_indicator: credit
+                metadata:
+                  account:
+                    balance_count: 2
+                    from: '2022-11-14T23:59:59Z'
+                    to: '2022-11-15T23:59:59Z'
+                  parameters:
+                    from: '2020-12-22T00:00:00Z'
+                    to: '2022-11-15T00:00:00Z'
+                    granularity: daily
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/BadRequestResponse'
+              example:
+                operation_id: financial_v2_accounts_balances_get
+                code_id: failed_validation
+                message: 'Invalid request payload.'
+                errors:
+                  CustomerID: 'not present'
+                  CustomerSecret: 'not present'
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/BadRequestNotFoundResponse'
+              example:
+                operation_id: financial_v2_accounts_balances_get
+                code_id: account_not_found
+                message: 'The specified account could not be found. Please check the account identifier is correct. The account might be closed or suspended.'
+        500:
+          description: 'Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/ServerErrorResponse'
+              example:
+                operation_id: financial_v2_accounts_balances_get
+                code_id: internal_error
+                message: 'Internal server error has occurred.'
+                errors:
+                  error: 'failed to format amount'
+  /financial/v2/transactions:
+    get:
+      tags:
+        - 'Retrieve Financial Data'
+      summary: 'Retrieve Transactions V2'
+      description: |
+        List the transactions for a customer across all ingestion sources. Ordered by `date_time` and then `transaction_id` descending.
+      operationId: v2_transactions_get
+      security:
+        -
+          OAuth2: []
+      parameters:
+        -
+          $ref: 'components.yaml#/parameters/ClientId'
+        -
+          $ref: 'components.yaml#/parameters/CustomerId'
+        -
+          $ref: 'components.yaml#/parameters/CustomerSecret'
+        -
+          in: query
+          name: date_from
+          schema:
+            type: string
+          example: '2022-02-28'
+          description: 'UTC Date (YYYY-MM-DD) from which the transactions should be returned from.'
+        -
+          in: query
+          name: date_to
+          schema:
+            type: string
+          example: '2022-05-28'
+          description: 'UTC Date (YYYY-MM-DD) from which the transactions should be returned to.'
+        -
+          in: query
+          name: page_size
+          schema:
+            type: integer
+          example: 100
+          description: 'Maximum number of results to be returned. Defaults to 100, maximum is 200'
+        -
+          in: query
+          name: page_token
+          schema:
+            type: string
+          example: eyJvZmZzZXQiOjEwMH0
+          description: 'The token required to fetch a specific page of results. Provided by the `next_page_token` field in the previous request.'
+        -
+          in: query
+          name: account_id
+          schema:
+            type: string
+          example: an_account_id
+          description: 'Identifier of the accounts from which transactions should be returned.'
+        -
+          in: query
+          name: merchant
+          schema:
+            type: string
+          description: 'Human readable identifier of the merchants for which associated transactions should be returned.'
+          example: a_merchant_slug
+        -
+          in: query
+          name: category_l1
+          schema:
+            type: string
+          example: bills
+          description: 'Identifier of the Category Level 1 for which associated transactions should be returned.'
+        -
+          in: query
+          name: category_l2
+          schema:
+            type: string
+          example: tv_and_broadband
+          description: 'Identifier of the Category Level 2 for which associated transactions should be returned.'
+        -
+          in: query
+          name: include_tags
+          schema:
+            type: array
+            items:
+              type: string
+          example: regular-transaction
+          description: 'Tags for which associated transactions should be returned.'
+        -
+          in: query
+          name: exclude_tags
+          schema:
+            type: array
+            items:
+              type: string
+          example: benefit
+          description: 'Tags for which associated transactions should not be returned.'
+      responses:
+        200:
+          description: 'The request was successfully processed.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTransactionsResponse'
+              examples:
+                'Multiple Transactions':
+                  value:
+                    operation_id: v2_transactions_get
+                    data:
+                      -
+                        transaction_id: a_transaction_id
+                        account_id: an_account_id
+                        provider: a_bank_account_provider
+                        description: 'paypal* specialty coffee'
+                        credit_debit_indicator: debit
+                        status: booked
+                        amount:
+                          value: '10.99'
+                          currency: GBP
+                        date_time: '2022-05-28T10:00:00Z'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            id: 01cc2d49-6144-46f1-9414-67c99b139a95
+                            slug: specialty_coffee
+                            display_name: 'Specialty Coffee Supplier Ltd.'
+                            logo: 'http://url/specialty_coffee_supplier_logo.jpeg'
+                          processor:
+                            id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                            slug: paypal
+                            display_name: PayPal
+                            logo: 'http://url/paypal_logo.jpeg'
+                          regularity:
+                            frequency: monthly
+                            predicted_date_times:
+                              - '2022-06-28T15:00:00Z'
+                              - '2022-07-28T15:00:00Z'
+                              - '2022-08-28T15:00:00Z'
+                            group_label: a_group_id
+                          transaction_types:
+                            - card
+                            - debit
+                          names:
+                            - 'jane doe'
+                        tags:
+                          - regular-transaction
+                      -
+                        transaction_id: another_transaction_id
+                        account_id: another_account_id
+                        provider: another_bank_account_provider
+                        description: 'Tesco 2956 London GBR'
+                        credit_debit_indicator: debit
+                        status: booked
+                        amount:
+                          value: '50.23'
+                          currency: GBP
+                        date_time: '2022-05-26T10:00:00Z'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            id: 0980cf54-6052-4527-84ff-e6f9b169884f
+                            slug: tesco_stores
+                            display_name: Tesco
+                            logo: 'http://url/tesco_stores_logo.jpeg'
+                          location:
+                            address:
+                              address_lines:
+                                - '224-226 Portobello Rd'
+                                - London
+                              country: GBR
+                          transaction_types:
+                            - card
+                            - debit
+                    metadata:
+                      results: 2
+                      next_page_token: eyJvZmZzZXQiOjEwMH0
+                'Single Transaction Without Enrichments':
+                  value:
+                    operation_id: v2_transactions_get
+                    data:
+                      -
+                        transaction_id: a_transaction_id
+                        account_id: an_account_id
+                        provider: a_bank_account_provider
+                        description: a_transaction_description
+                        credit_debit_indicator: credit
+                        status: pending
+                        amount:
+                          value: '10.99'
+                          currency: GBP
+                        date_time: '2022-01-02T15:00:00Z'
+                    metadata:
+                      results: 1
+                      next_page_token: eyJvZmZzZXQiOjEwMH0
+                'No Transactions':
+                  value:
+                    operation_id: v2_transactions_get
+                    data: []
+                    metadata:
+                      results: 0
+        401:
+          description: 'An unauthenticated request was received.'
+        405:
+          description: 'The request uses an unexpected HTTP method.'
+        5XX:
+          description: 'An unexpected error occurred on the server side.'
   /v1/open-banking/accounts:
     get:
       tags:
@@ -3293,6 +4121,7 @@ paths:
 
         An X-Account-Id header parameter can be used in order to get the details for a specific account.
       operationId: accounts_get
+      deprecated: true
       security:
         -
           OAuth2: []
@@ -3970,805 +4799,6 @@ paths:
           description: 'The request uses an unexpected HTTP method.'
         5XX:
           description: 'An unexpected error occurred on the server side.'
-  /financial/v2/transactions:
-    get:
-      tags:
-        - 'Retrieve Financial Data'
-      summary: 'Retrieve Transactions V2'
-      description: |
-        List the transactions for a customer across all ingestion sources. Ordered by `date_time` and then `transaction_id` descending.
-      operationId: v2_transactions_get
-      security:
-        -
-          OAuth2: []
-      parameters:
-        -
-          $ref: 'components.yaml#/parameters/ClientId'
-        -
-          $ref: 'components.yaml#/parameters/CustomerId'
-        -
-          $ref: 'components.yaml#/parameters/CustomerSecret'
-        -
-          in: query
-          name: date_from
-          schema:
-            type: string
-          example: '2022-02-28'
-          description: 'UTC Date (YYYY-MM-DD) from which the transactions should be returned from.'
-        -
-          in: query
-          name: date_to
-          schema:
-            type: string
-          example: '2022-05-28'
-          description: 'UTC Date (YYYY-MM-DD) from which the transactions should be returned to.'
-        -
-          in: query
-          name: page_size
-          schema:
-            type: integer
-          example: 100
-          description: 'Maximum number of results to be returned. Defaults to 100, maximum is 200'
-        -
-          in: query
-          name: page_token
-          schema:
-            type: string
-          example: eyJvZmZzZXQiOjEwMH0
-          description: 'The token required to fetch a specific page of results. Provided by the `next_page_token` field in the previous request.'
-        -
-          in: query
-          name: account_id
-          schema:
-            type: string
-          example: an_account_id
-          description: 'Identifier of the accounts from which transactions should be returned.'
-        -
-          in: query
-          name: merchant
-          schema:
-            type: string
-          description: 'Human readable identifier of the merchants for which associated transactions should be returned.'
-          example: a_merchant_slug
-        -
-          in: query
-          name: category_l1
-          schema:
-            type: string
-          example: bills
-          description: 'Identifier of the Category Level 1 for which associated transactions should be returned.'
-        -
-          in: query
-          name: category_l2
-          schema:
-            type: string
-          example: tv_and_broadband
-          description: 'Identifier of the Category Level 2 for which associated transactions should be returned.'
-        -
-          in: query
-          name: include_tags
-          schema:
-            type: array
-            items:
-              type: string
-          example: regular-transaction
-          description: 'Tags for which associated transactions should be returned.'
-        -
-          in: query
-          name: exclude_tags
-          schema:
-            type: array
-            items:
-              type: string
-          example: benefit
-          description: 'Tags for which associated transactions should not be returned.'
-      responses:
-        200:
-          description: 'The request was successfully processed.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListTransactionsResponse'
-              examples:
-                'Multiple Transactions':
-                  value:
-                    operation_id: v2_transactions_get
-                    data:
-                      -
-                        transaction_id: a_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: 'paypal* specialty coffee'
-                        credit_debit_indicator: debit
-                        status: booked
-                        amount:
-                          value: '10.99'
-                          currency: GBP
-                        date_time: '2022-05-28T10:00:00Z'
-                        enrichments:
-                          categories:
-                            l1:
-                              slug: eating_out
-                              confidence: '0.99'
-                            l2:
-                              slug: cafes_and_eating_out
-                              confidence: '0.98'
-                          merchant:
-                            id: 01cc2d49-6144-46f1-9414-67c99b139a95
-                            slug: specialty_coffee
-                            display_name: 'Specialty Coffee Supplier Ltd.'
-                            logo: 'http://url/specialty_coffee_supplier_logo.jpeg'
-                          processor:
-                            id: 18f63293-0217-4520-bbf0-071dca7a9d04
-                            slug: paypal
-                            display_name: PayPal
-                            logo: 'http://url/paypal_logo.jpeg'
-                          regularity:
-                            frequency: monthly
-                            predicted_date_times:
-                              - '2022-06-28T15:00:00Z'
-                              - '2022-07-28T15:00:00Z'
-                              - '2022-08-28T15:00:00Z'
-                            group_label: a_group_id
-                          transaction_types:
-                            - card
-                            - debit
-                          names:
-                            - 'jane doe'
-                        tags:
-                          - regular-transaction
-                      -
-                        transaction_id: another_transaction_id
-                        account_id: another_account_id
-                        provider: another_bank_account_provider
-                        description: 'Tesco 2956 London GBR'
-                        credit_debit_indicator: debit
-                        status: booked
-                        amount:
-                          value: '50.23'
-                          currency: GBP
-                        date_time: '2022-05-26T10:00:00Z'
-                        enrichments:
-                          categories:
-                            l1:
-                              slug: eating_out
-                              confidence: '0.99'
-                            l2:
-                              slug: cafes_and_eating_out
-                              confidence: '0.98'
-                          merchant:
-                            id: 0980cf54-6052-4527-84ff-e6f9b169884f
-                            slug: tesco_stores
-                            display_name: Tesco
-                            logo: 'http://url/tesco_stores_logo.jpeg'
-                          location:
-                            address:
-                              address_lines:
-                                - '224-226 Portobello Rd'
-                                - London
-                              country: GBR
-                          transaction_types:
-                            - card
-                            - debit
-                    metadata:
-                      results: 2
-                      next_page_token: eyJvZmZzZXQiOjEwMH0
-                'Single Transaction Without Enrichments':
-                  value:
-                    operation_id: v2_transactions_get
-                    data:
-                      -
-                        transaction_id: a_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: a_transaction_description
-                        credit_debit_indicator: credit
-                        status: pending
-                        amount:
-                          value: '10.99'
-                          currency: GBP
-                        date_time: '2022-01-02T15:00:00Z'
-                    metadata:
-                      results: 1
-                      next_page_token: eyJvZmZzZXQiOjEwMH0
-                'No Transactions':
-                  value:
-                    operation_id: v2_transactions_get
-                    data: []
-                    metadata:
-                      results: 0
-        401:
-          description: 'An unauthenticated request was received.'
-        405:
-          description: 'The request uses an unexpected HTTP method.'
-        5XX:
-          description: 'An unexpected error occurred on the server side.'
-  /financial/beta/accounts:
-    get:
-      tags:
-        - 'Retrieve Financial Data'
-      summary: 'Retrieve Accounts V2 (beta)'
-      description: |
-        *Beta endpoint not subject to breaking change restrictions. This endpoint will eventually be moved to `/financial/v2/accounts`.*
-
-        Retrieves a list of accounts for a customer. This result can be filtered using the query parameters outlined below.
-
-        Bud sometimes adjusts the `balance.date` for some balance types, based on the `type` supplied on account ingestion. This is done so the
-        data returned from this endpoint is correct and easy to understand and consume regardless of the account provider or ingestion method.
-
-        Below is a table of balance types that have their date adjusted before it is returned from this endpoint.
-
-        | Balance Type                                                                    | Date Adjustment                                                                                      | Example                                                      |
-        |:--------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------|:-------------------------------------------------------------|
-        | `ClosingAvailable`, `ClosingBooked`, `ClosingCleared`                           | This is the balance at the end of the previous day. The date and time are set to then.               | `2023-01-12T13:00:00Z` is returned as `2023-01-11T23:59:59Z` |
-        | `OpeningAvailable`, `OpeningBooked`, `OpeningCleared`, `PreviouslyClosedBooked` | This is the balance at the start of the day. The time is set to the start of then.                   | `2023-01-12T13:00:00Z` is returned as `2023-01-12T00:00:00Z` |
-        | `Expected`                                                                      | This is the balance including, pending transactions, at the end of the day. The time is set to then. | `2023-01-12T13:00:00Z` is returned as `2023-01-12T23:59:59Z` |
-
-        > 📘 Do you have feedback?
-        > Beta endpoints rely on customer feedback to get better and more powerful for everyone.
-        > If you have any suggestions, feedback or questions, please use the `Did this page help you?` buttons at the bottom of this page to let us know.
-        > Any feedback you can provide will allow us to further improve prior to releasing this as a full production endpoint.
-      operationId: financial_beta_accounts
-      security:
-        -
-          OAuth2: []
-      parameters:
-        -
-          $ref: 'components.yaml#/parameters/ClientId'
-        -
-          $ref: 'components.yaml#/parameters/CustomerId'
-        -
-          $ref: 'components.yaml#/parameters/CustomerSecret'
-        -
-          $ref: 'components.yaml#/parameters/QueryCurrency'
-        -
-          $ref: 'components.yaml#/parameters/QueryProvider'
-        -
-          in: query
-          name: account_type
-          schema:
-            type: string
-            enum:
-              - charge_card
-              - credit_card
-              - current_account
-              - e_money
-              - loan
-              - mortgage
-              - pre_paid_card
-              - savings
-          example: current_account
-          description: 'Use this parameter to filter the results returned on the `account_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `account_type` will be returned.'
-        -
-          in: query
-          name: usage_type
-          schema:
-            type: string
-            enum:
-              - personal
-              - business
-          example: personal
-          description: 'Use this parameter to filter the results returned on the `usage_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `usage_type` will be returned.'
-        -
-          in: query
-          name: holder_relationship_type
-          schema:
-            type: string
-            enum:
-              - sole
-              - joint
-              - delegate
-              - unknown
-          example: joint
-          description: 'Use this parameter to filter the results returned on the `holder_relationship_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `holder_relationship_type` will be returned.'
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/schemas/ListAccountsV2Response'
-              examples:
-                'Account Without Parties Data':
-                  value:
-                    operation_id: financial_beta_accounts
-                    data:
-                      -
-                        account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
-                        currency: GBP
-                        holder:
-                          name: 'David Smith'
-                          relationship: unknown
-                        account_name: 'My Current Account'
-                        account_type: current_account
-                        usage_type: personal
-                        provider: BankOfBud
-                        identifiers:
-                          uk_sort_code: '126432'
-                          uk_account_number: '31510604'
-                        balance:
-                          date: '2023-01-12T00:00:00Z'
-                          booked:
-                            amount:
-                              value: '3552.61'
-                              currency: GBP
-                            credit_debit_indicator: debit
-                          credit_limit:
-                            value: '1000.00'
-                            currency: GBP
-                    metadata:
-                      parameters:
-                        currencies:
-                          - GBP
-                      result_count: 1
-                'Account With Parties Data':
-                  value:
-                    operation_id: financial_beta_accounts
-                    data:
-                      -
-                        account_id: 928fed73-2eb9-4910-8a26-22b6c76fb9fa
-                        currency: GBP
-                        holders:
-                          -
-                            name: 'David Smith'
-                            relationship: joint
-                          -
-                            name: 'Jane Smith'
-                            relationship: joint
-                        account_name: 'Household Account'
-                        account_type: current_account
-                        usage_type: personal
-                        provider: BankOfBud
-                        identifiers:
-                          uk_sort_code: '124332'
-                          uk_account_number: '12642318'
-                        balance:
-                          date: '2023-01-12T00:00:00Z'
-                          booked:
-                            amount:
-                              value: '1532.61'
-                              currency: GBP
-                            credit_debit_indicator: credit
-                          credit_limit:
-                            value: '1500.00'
-                            currency: GBP
-                    metadata:
-                      parameters: null
-                      result_count: 1
-        400:
-          description: 'Bad Request'
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/schemas/BadRequestResponse'
-              examples:
-                'CustomerID Not Sent':
-                  value:
-                    operation_id: financial_beta_accounts
-                    code_id: failed_validation
-                    message: 'Invalid request payload.'
-                    errors:
-                      error:
-                        X-Customer-Id: 'not present'
-                'CustomerID and CustomerSecret Not Sent':
-                  value:
-                    operation_id: financial_beta_accounts
-                    code_id: failed_validation
-                    message: 'Invalid request payload.'
-                    errors:
-                      error:
-                        X-Customer-Id: 'not present'
-                        X-Customer-Secret: 'not present'
-        500:
-          description: 'Server Error'
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
-  '/financial/beta/accounts/{account_id}':
-    get:
-      tags:
-        - 'Retrieve Financial Data'
-      summary: 'Retrieve Account By ID V2 (beta)'
-      description: |
-        *Beta endpoint not subject to breaking change restrictions. This endpoint will eventually be moved to `/financial/v2/accounts/{account_id}`.*
-
-        Retrieves a specific account for a customer by `account_id`.
-
-        Bud sometimes adjusts the `balance.date` for some balance types, based on the `type` supplied on account ingestion. This is done so the
-        data returned from this endpoint is correct and easy to understand and consume regardless of the account provider or ingestion method.
-
-        Below is a table of balance types that have their date adjusted before it is returned from this endpoint.
-
-        | Balance Type                                                                    | Date Adjustment                                                                                      | Example                                                      |
-        |:--------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------|:-------------------------------------------------------------|
-        | `ClosingAvailable`, `ClosingBooked`, `ClosingCleared`                           | This is the balance at the end of the previous day. The date and time are set to then.               | `2023-01-12T13:00:00Z` is returned as `2023-01-11T23:59:59Z` |
-        | `OpeningAvailable`, `OpeningBooked`, `OpeningCleared`, `PreviouslyClosedBooked` | This is the balance at the start of the day. The time is set to the start of then.                   | `2023-01-12T13:00:00Z` is returned as `2023-01-12T00:00:00Z` |
-        | `Expected`                                                                      | This is the balance including, pending transactions, at the end of the day. The time is set to then. | `2023-01-12T13:00:00Z` is returned as `2023-01-12T23:59:59Z` |
-
-        > 📘 Do you have feedback?
-        > Beta endpoints rely on customer feedback to get better and more powerful for everyone.
-        > If you have any suggestions, feedback or questions, please use the `Did this page help you?` buttons at the bottom of this page to let us know.
-        > Any feedback you can provide will allow us to further improve prior to releasing this as a full production endpoint.
-      operationId: financial_beta_accounts_account_id
-      security:
-        -
-          OAuth2: []
-      parameters:
-        -
-          $ref: 'components.yaml#/parameters/ClientId'
-        -
-          $ref: 'components.yaml#/parameters/CustomerId'
-        -
-          $ref: 'components.yaml#/parameters/CustomerSecret'
-        -
-          $ref: 'components.yaml#/parameters/PathAccountID'
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/schemas/RetrieveAccountByIDV2Response'
-              examples:
-                'Single Holder Personal Account':
-                  value:
-                    operation_id: financial_beta_accounts_account_id
-                    data:
-                      account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
-                      currency: GBP
-                      holder:
-                        name: 'David Smith'
-                        relationship: unknown
-                      account_name: 'My Current Account'
-                      account_type: current_account
-                      provider: BankOfBud
-                      identifiers:
-                        uk_sort_code: '126432'
-                        uk_account_number: '31510604'
-                      balance:
-                        date: '2023-01-12T00:00:00Z'
-                        booked:
-                          amount:
-                            value: '3552.61'
-                            currency: GBP
-                          credit_debit_indicator: debit
-                        credit_limit:
-                          value: '1000.00'
-                          currency: GBP
-                    metadata: null
-                'Multiple Holder Joint Account':
-                  value:
-                    operation_id: financial_beta_accounts_account_id
-                    data:
-                      account_id: 928fed73-2eb9-4910-8a26-22b6c76fb9fa
-                      currency: GBP
-                      holders:
-                        -
-                          name: 'David Smith'
-                          relationship: joint
-                        -
-                          name: 'Jane Smith'
-                          relationship: joint
-                      account_name: 'Household Account'
-                      account_type: current_account
-                      provider: BankOfBud
-                      identifiers:
-                        uk_sort_code: '124332'
-                        uk_account_number: '12642318'
-                      balance:
-                        date: '2023-01-12T00:00:00Z'
-                        booked:
-                          amount:
-                            value: '1532.61'
-                            currency: GBP
-                          credit_debit_indicator: credit
-                        credit_limit:
-                          value: '1500.00'
-                          currency: GBP
-                    metadata: null
-        400:
-          description: 'Bad Request'
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/schemas/BadRequestResponse'
-              examples:
-                'CustomerID Not Sent':
-                  value:
-                    operation_id: financial_beta_accounts_account_id
-                    code_id: failed_validation
-                    message: 'Invalid request payload.'
-                    errors:
-                      error:
-                        X-Customer-Id: 'not present'
-                'CustomerID and CustomerSecret Not Sent':
-                  value:
-                    operation_id: financial_beta_accounts_account_id
-                    code_id: failed_validation
-                    message: 'Invalid request payload.'
-                    errors:
-                      error:
-                        X-Customer-Id: 'not present'
-                        X-Customer-Secret: 'not present'
-        500:
-          description: 'Server Error'
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
-  /financial/beta/balances:
-    get:
-      tags:
-        - 'Retrieve Financial Data'
-      summary: 'Retrieve Balances Over Time (Beta)'
-      description: |
-        *Beta endpoint not subject to breaking change restrictions.* 
-
-        - Will eventually be moved to `/financial/v2/balances`
-
-        List the balances of each bank account for a customer accross all ingestion sources. Ordered by balance date.
-
-        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` and `from` dates provided. It then checks all the transactions within this range, calculating the balance at the end of each day.
-
-        This endpoint limits the date from which it gets balances from either by the oldest `transaction_window` on the account if they are present, or by the oldest transaction within the requested date range available.
-
-        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the data supplied from this service by including the transaction_window field upon acccount ingestion.
-
-        > 📘 Do you have feedback?
-        > Beta endpoints rely on customer feedback to get better and more powerful for everyone.
-        > If you have any suggestions, feedback or questions, please use the `Did this page help you?` buttons at the bottom of this page to let us know.
-        > Any feedback you can provide will allow us to further improve prior to releasing this as a full production endpoint.
-      operationId: financial_v2_balances_get
-      security:
-        -
-          OAuth2: []
-      parameters:
-        -
-          $ref: 'components.yaml#/parameters/ClientId'
-        -
-          $ref: 'components.yaml#/parameters/CustomerId'
-        -
-          $ref: 'components.yaml#/parameters/CustomerSecret'
-        -
-          $ref: 'components.yaml#/parameters/QueryFromDate'
-        -
-          $ref: 'components.yaml#/parameters/QueryToDate'
-        -
-          in: query
-          name: granularity
-          schema:
-            type: string
-            enum:
-              - daily
-              - weekly
-              - biweekly
-              - monthly
-              - quarterly
-              - six_monthly
-              - annually
-          example: daily
-          description: 'Specifies in what interval the balance over time should be retrieved.'
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/schemas/GetBalancesResponse'
-              example:
-                operation_id: financial_v2_balances_get
-                data:
-                  -
-                    account_id: 5b271e24-9ea5-4d7e-b5da-64f01d32db22
-                    account_type: personal
-                    account_sub_type: current_account
-                    balances:
-                      -
-                        date: '2022-11-15'
-                        booked:
-                          amount:
-                            value: '900.00'
-                            currency: GBP
-                          credit_debit_indicator: credit
-                        pending:
-                          amount:
-                            value: '850.00'
-                            currency: GBP
-                          credit_debit_indicator: credit
-                      -
-                        date: '2022-11-14'
-                        booked:
-                          amount:
-                            value: '950.00'
-                            currency: GBP
-                          credit_debit_indicator: credit
-                        pending:
-                          amount:
-                            value: '900.00'
-                            currency: GBP
-                          credit_debit_indicator: credit
-                  -
-                    account_id: b6e9ea3c-71f9-4572-983a-3e5e85470dad
-                    account_type: personal
-                    account_sub_type: savings
-                    balances:
-                      -
-                        date: '2022-11-15'
-                        booked:
-                          amount:
-                            value: '500'
-                            currency: JPY
-                          credit_debit_indicator: credit
-                metadata:
-                  accounts:
-                    5b271e24-9ea5-4d7e-b5da-64f01d32db22:
-                      balance_count: 2
-                      from: '2022-11-14'
-                      to: '2022-11-15'
-                    b6e9ea3c-71f9-4572-983a-3e5e85470dad:
-                      balance_count: 1
-                      from: '2022-11-15'
-                      to: '2022-11-15'
-                  parameters:
-                    from: '2020-12-22'
-                    to: '2022-11-15'
-                    granularity: daily
-        400:
-          description: 'Bad Request'
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/schemas/BadRequestResponse'
-        500:
-          description: 'Server Error'
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/schemas/ServerErrorResponse'
-              example:
-                operation_id: financial_v2_balances_get
-                code_id: internal_error
-                message: 'Internal server error has occurred.'
-                errors:
-                  error: 'failed to format amount'
-  '/financial/beta/accounts/{account_id}/balances':
-    get:
-      tags:
-        - 'Retrieve Financial Data'
-      summary: 'Retrieve Balances Over Time By Account (Beta)'
-      description: |
-        *Beta endpoint not subject to breaking change restrictions.* 
-
-        - Will eventually be moved to `/financial/v2/accounts/{account_id}/balances`
-
-        List the balances of a specific bank account for a customer accross all ingestion sources. Ordered by balance date.
-
-        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` and `from` dates provided. It then checks all the transactions within this range, calculating the balance at the end of each day.
-
-        This endpoint limits the date from which it gets balances from either by the oldest `transaction_window` on the account if they are present, or by the oldest transaction within the requested date range available.
-
-        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the data supplied from this service by including the transaction_window field upon acccount ingestion.
-
-        > 📘 Do you have feedback?
-        > Beta endpoints rely on customer feedback to get better and more powerful for everyone.
-        > If you have any suggestions, feedback or questions, please use the `Did this page help you?` buttons at the bottom of this page to let us know.
-        > Any feedback you can provide will allow us to further improve prior to releasing this as a full production endpoint.
-      operationId: financial_v2_accounts_balances_get
-      parameters:
-        -
-          $ref: 'components.yaml#/parameters/ClientId'
-        -
-          $ref: 'components.yaml#/parameters/CustomerId'
-        -
-          $ref: 'components.yaml#/parameters/CustomerSecret'
-        -
-          $ref: 'components.yaml#/parameters/QueryFromDate'
-        -
-          $ref: 'components.yaml#/parameters/QueryToDate'
-        -
-          $ref: 'components.yaml#/parameters/PathAccountID'
-        -
-          in: query
-          name: granularity
-          schema:
-            type: string
-            enum:
-              - daily
-              - weekly
-              - biweekly
-              - monthly
-              - quarterly
-              - six_monthly
-              - annually
-          example: daily
-          description: 'Specifies in what interval the balance over time should be retrieved.'
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/schemas/GetBalancesForAccountIDResponse'
-              example:
-                operation_id: financial_v2_accounts_balances_get
-                data:
-                  -
-                    date: '2022-11-15'
-                    booked:
-                      amount:
-                        value: '900.00'
-                        currency: GBP
-                      credit_debit_indicator: credit
-                    pending:
-                      amount:
-                        value: '850.00'
-                        currency: GBP
-                      credit_debit_indicator: credit
-                  -
-                    date: '2022-11-14'
-                    booked:
-                      amount:
-                        value: '950.00'
-                        currency: GBP
-                      credit_debit_indicator: credit
-                    pending:
-                      amount:
-                        value: '900.00'
-                        currency: GBP
-                      credit_debit_indicator: credit
-                metadata:
-                  account:
-                    balance_count: 2
-                    from: '2022-11-14'
-                    to: '2022-11-15'
-                  parameters:
-                    from: '2020-12-22'
-                    to: '2022-11-15'
-                    granularity: daily
-        400:
-          description: 'Bad Request'
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/schemas/BadRequestResponse'
-              example:
-                operation_id: financial_v2_accounts_balances_get
-                code_id: failed_validation
-                message: 'Invalid request payload.'
-                errors:
-                  CustomerID: 'not present'
-                  CustomerSecret: 'not present'
-        404:
-          description: 'Not Found'
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/schemas/BadRequestNotFoundResponse'
-              example:
-                operation_id: financial_v2_accounts_balances_get
-                code_id: account_not_found
-                message: 'The specified account could not be found. Please check the account identifier is correct. The account might be closed or suspended.'
-        500:
-          description: 'Server Error'
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/schemas/ServerErrorResponse'
-              example:
-                operation_id: financial_v2_accounts_balances_get
-                code_id: internal_error
-                message: 'Internal server error has occurred.'
-                errors:
-                  error: 'failed to format amount'
   '/v1/provider/{provider}':
     delete:
       tags:
@@ -5795,8 +5825,8 @@ paths:
                       period: monthly
                 metadata:
                   results: 1
-                  from: '2022-03-19'
-                  to: '2022-04-19'
+                  from: '2022-09-03T11:28:22.00Z'
+                  to: '2023-03-03T11:28:22.00Z'
         204:
           description: 'No transactions found'
         400:
@@ -5874,8 +5904,8 @@ paths:
                       currency: GBP
                     period: monthly
                 metadata:
-                  from: '2022-09-03'
-                  to: '2023-03-03'
+                  from: '2022-09-03T11:28:22.00Z'
+                  to: '2023-03-03T11:28:22.00Z'
                   results: 2
         400:
           description: 'Bad Request - the request was unacceptable'
@@ -6004,6 +6034,7 @@ paths:
       tags:
         - 'Expenditure Insights'
       summary: 'Initiate Energy Payments Discovery'
+      deprecated: true
       description: 'Start the process of detecting a customer''s energy payments from their aggregated transactional history.'
       operationId: energy_switching_energy_payments_post
       security:
@@ -6038,6 +6069,7 @@ paths:
       tags:
         - 'Expenditure Insights'
       summary: 'Retrieve Energy Payments'
+      deprecated: true
       operationId: energy_switching_energy_payments_get
       security:
         -
@@ -8734,8 +8766,6 @@ paths:
         | `regular_payment_changed`       | The value of a regular payment has increased or decreased between the oldest and newest instance |
         | `suspected_duplicate_charge`    | A duplicate transaction is one of more transactions that are debit transactions, have a non-zero booking time, and have a non-zero amount. They must also have matching `account_id`, `transaction_reference`, `merchant_id` (if one exists), `amount`, `currency`, `date`, `booking_datetime` |
         | `regular_monthly_income_change` | The value of a regular income has increased or decreased based on the previous months income. As this is comparing income over whole months, only complete months are considered in the provided date range. For instance, if `X-From=2022-01-05` and `X-To=2022-04-05` then the range considered by this warning will be `(2022-01-01, 2022-03-31)`. In addition, the default treshold for a difference in amounts to trigger this warning is 10%. |
-        | ~`large_expense`~ (deprecated)  | A transaction that exceeds 20% of the months income. Income is calculated by summing all credit transactions for that month |
-        | ~`high_balance`~ (deprecated)   | Balance is greater than the sum of the essential expenses. Essential expenses are calculated by filtering transactions by 14 distinct subcategories and summing their amounts. |
       operationId: v1_signal_money_management_get
       security:
         -
@@ -8821,9 +8851,9 @@ paths:
                                 id: edf_energy
                                 name: 'EDF Energy'
                                 logo: 'https://thisisbud.com/logos/edf_energy.png'
-                              category_l1_name: bills
-                              category_l2_name: utilities
-                              category_l3_name: utilities_energy
+                              category_l1: bills
+                              category_l2: utilities
+                              category_l3: utilities_energy
                     metadata:
                       results: 1
                       from: '2020-02-01'
@@ -8928,9 +8958,9 @@ paths:
                                 id: british_gas
                                 name: 'British Gas'
                                 logo: 'https://thisisbud.com/logos/british_gas.png'
-                              category_l1_name: bills
-                              category_l2_name: utilities
-                              category_l3_name: utilities_energy
+                              l1_category_name: bills
+                              l2_category_name: utilities
+                              l3_category_name: utilities_energy
                             -
                               account_id: c9d6ab0b-93ba-450b-ac94-d9a72cbd668f
                               transaction_id: 1245359584085527da09acf52846e33e5b14034c4dd3458da17539e1ff710e59-1
@@ -8945,9 +8975,9 @@ paths:
                                 id: british_gas
                                 name: 'British Gas'
                                 logo: 'https://thisisbud.com/logos/british_gas.png'
-                              category_l1_name: bills
-                              category_l2_name: utilities
-                              category_l3_name: utilities_energy
+                              l1_category_name: bills
+                              l2_category_name: utilities
+                              l3_category_name: utilities_energy
                     metadata:
                       results: 1
                       from: '2020-02-01'
@@ -8974,9 +9004,9 @@ paths:
                               id: british_gas
                               name: 'British Gas'
                               logo: 'https://thisisbud.com/logos/british_gas.png'
-                            category_l1_name: bills
-                            category_l2_name: utilities
-                            category_l3_name: utilities_energy
+                            l1_category_name: bills
+                            l2_category_name: utilities
+                            l3_category_name: utilities_energy
                           -
                             account_id: c9d6ab0b-93ba-450b-ac94-d9a72cbd668f
                             transaction_id: 78c2e7d5ec7b00e07d8cdcd0037694733988850add8c65fa92f7134bf3143642-1
@@ -8991,59 +9021,11 @@ paths:
                               id: british_gas
                               name: 'British Gas'
                               logo: 'https://thisisbud.com/logos/british_gas.png'
-                            category_l1_name: bills
-                            category_l2_name: utilities
-                            category_l3_name: utilities_energy
+                            l1_category_name: bills
+                            l2_category_name: utilities
+                            l3_category_name: utilities_energy
                     metadata:
                       results: 2
-                      from: '2020-02-01'
-                      to: '2020-02-28'
-                      today: '2020-02-04'
-                'Large Expense':
-                  value:
-                    operation_id: v1_signal_money_management_get
-                    data:
-                      -
-                        type: large_expense
-                        details:
-                          transaction_id: 1245359584085527da09acf52846e33e5b14034c4dd3458da17539e1ff107d12-1
-                          account_id: c9d6ab0b-93ba-450b-ac94-d9a72cbd668f
-                          amount:
-                            value: '500.00'
-                            currency: GBP
-                          credit_debit_indicator: Debit
-                          merchant:
-                            id: sainsburys
-                            name: Sainsburys
-                            logo: 'https://thisisbud.com/logos/sainsburys.png'
-                          l1_category_name: expenses
-                          date: '2020-02-01'
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-28'
-                      today: '2020-02-04'
-                'High Balance':
-                  value:
-                    operation_id: v1_signal_money_management_get
-                    data:
-                      -
-                        type: high_balance
-                        details:
-                          balance:
-                            value: '1800.00'
-                            currency: GBP
-                          quarterly_total_expenses:
-                            value: '500.00'
-                            currency: GBP
-                          total_debt:
-                            value: '200.00'
-                            currency: GBP
-                          quarterly_expenses_by_category:
-                            value: '500.00'
-                            currency: GBP
-                    metadata:
-                      results: 1
                       from: '2020-02-01'
                       to: '2020-02-28'
                       today: '2020-02-04'
@@ -10270,20 +10252,6 @@ components:
     OAuth2:
       $ref: 'components.yaml#/securitySchemes/OAuth2'
   schemas:
-    Amount:
-      title: Amount
-      type: object
-      description: 'A monetary amount composed of both value and currency.'
-      required:
-        - value
-        - currency
-      properties:
-        value:
-          type: string
-          description: 'The absolute monetary value of the amount. Always greater than or equal to 0.'
-        currency:
-          type: string
-          description: 'Currency code compliant with ISO 4217.'
     Transaction:
       title: Transaction
       type: object
@@ -10322,7 +10290,7 @@ components:
             - booked
             - pending
         amount:
-          $ref: '#/components/schemas/Amount'
+          $ref: 'components-common-schemas.yaml#/schemas/BudAmount'
         date_time:
           type: string
           description: 'Date of the transaction compliant with RFC3339.'
@@ -10582,19 +10550,7 @@ components:
         - credit_debit_indicator
       properties:
         amount:
-          title: Amount
-          type: object
-          description: 'A monetary amount composed of both value and currency.'
-          required:
-            - value
-            - currency
-          properties:
-            value:
-              type: string
-              description: 'The absolute monetary value of the amount. Always greater than or equal to 0.'
-            currency:
-              type: string
-              description: 'The currency code compliant with ISO 4217.'
+          $ref: 'components-common-schemas.yaml#/schemas/BudAmount'
         credit_debit_indicator:
           type: string
           description: 'Indication as to whether the balance is in credit or debit.'
@@ -10619,19 +10575,7 @@ components:
       description: 'The amount of credit available to the customer.'
       properties:
         amount:
-          title: Amount
-          type: object
-          description: 'A monetary amount composed of both value and currency.'
-          required:
-            - value
-            - currency
-          properties:
-            value:
-              type: string
-              description: 'The absolute monetary value of the amount. Always greater than or equal to 0.'
-            currency:
-              type: string
-              description: 'The currency code compliant with ISO 4217.'
+          $ref: 'components-common-schemas.yaml#/schemas/BudAmount'
     BalanceInsights:
       title: 'Balance Insights'
       type: object
