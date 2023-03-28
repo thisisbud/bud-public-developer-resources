@@ -1,0 +1,90 @@
+schemas:
+  BudMonetaryValue:
+    title: "Monetary Value"
+    description: |
+      The value of the monetary amount. The value is formatted with the number of decimal places for the respective currency. 
+
+      Example: `10.98`
+    type: string
+
+  BudCurrency:
+    title: "Currency"
+    description: |
+      The three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html) of the monetary amount.
+      
+      Example: `GBP`
+    type: string
+
+  LegacyBudAmount:
+    title: Legacy Bud Amount
+    type: object
+    description: "The monetary amount."
+    required:
+      - amount
+      - currency
+    properties:
+      amount:
+        $ref: "#/schemas/BudMonetaryValue"
+      currency:
+        $ref: "#/schemas/BudCurrency"
+        
+  BudAmount:
+    title: Standard Bud Amount
+    type: object
+    description: "The monetary amount."
+    required:
+      - value
+      - currency
+    properties:
+      value:
+        $ref: "#/schemas/BudMonetaryValue"
+      currency:
+        $ref: "#/schemas/BudCurrency"
+  
+  LegacyBudDateRangeMetadata:
+    title: Metadata
+    type: object
+    required:
+      - from
+      - to
+    properties:
+      from:
+        type: string
+        description: |
+          The date from when results were retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
+          This is either populated with the default value used when retrieving the results, or the user specified parameter.
+
+          Example: `2023-01-17`
+      to:
+        type: string
+        description: |
+          The date up to when results were retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
+          This is either populated with the default value used when retrieving the results, or the user specified parameter.
+
+          Example: `2023-03-17`
+
+  BudDateRangeMetadata:
+    title: Metadata
+    type: object
+    required:
+      - from
+      - to
+    properties:
+      from:
+        type: string
+        description: |
+          The date from when results were retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+          This is either populated with the default value used when retrieving the results, or the user specified parameter.
+
+          Examples:
+            - `2023-01-17T17:29:51Z`
+            - `2023-01-17T17:29:51-08:00`
+      to:
+        type: string
+        description: |
+          The date up to when results were retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+          This is either populated with the default value used when retrieving the results, or the user specified parameter.
+
+          Examples:
+            - `2023-03-17T17:29:51Z`
+            - `2023-03-17T17:29:51-08:00`
