@@ -1,0 +1,26 @@
+parameters:
+  QueryFromBudDate:
+    in: query
+    name: from
+    schema:
+      type: string
+    example: "2019-02-29T12:23:00Z"
+    description: |
+      The date from when results are to be retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+      Examples:
+        - `2023-01-17T17:29:51Z`
+        - `2023-01-17T17:29:51-08:00`
+
+  QueryToBudDate:
+    in: query
+    name: to
+    schema:
+      type: string
+    example: "2019-02-29T12:23:00Z"
+    description: |
+      The date up to when results are to be retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+      Examples:
+        - `2023-03-17T17:29:51Z`
+        - `2023-03-17T17:29:51-08:00`

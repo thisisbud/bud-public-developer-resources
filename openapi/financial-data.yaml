@@ -1,0 +1,1861 @@
+openapi: "3.1.0"
+info:
+  version: "1.0.0"
+  title: "Financial Data API"
+  contact:
+    name: "API Support"
+    url: "http://www.thisisbud.com/support"
+    email: "contact@thisisbud.com"
+  x-logo:
+    url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATAAAABuCAQAAAAKAYdLAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAB3RJTUUH4wQDDggcbXcx7wAABeJJREFUeNrt3W2IFVUcx/HvXRW1VdQedy1bZVfoYX0osVQyfSGElKbRA5oFIaIlhAkWUYm6gvqqDMHMoBeKlhayCCZC2AMRPay7aJrSZmauZhQqaj7t7u1Fi965987s7D1n7pk7/j73zX2Y85//mXt2Zu45Z2ZBREREREREREREREREREREREREREREREREREREREREREREREREROIiZSFGH+YxgsOs5U/X1bFiPDPpQT3bu1DmcaZyg+vErWpjD+s47zoN6Mte0qRJc4Iq18lYMJv2jvosD11mRUeJpD32UO7664BFGQl94DoZY704fbU2rQwKVWYwbc6bQlSPBaYbtMz4K7nP53lpGkK/q8+7MTxUmeEWtmJcGX+j5psmM0I3l9vCirKAV36OuE46QsbfaHL/9opnL9tcpxBf3V0nkAgzWMRj9HadhrH+3Gk7pBqYDZdY3oXfnHE2gc1U2gyoQ6Rk+pKZdgOqgYnXF7TYDGe3gcWgW85QH9cJxMAVm8HsNrBqhhV1U9g33XUCzo1gsM1wdhtYio8ZWsytYdksFrpOwbGhbLYb0PavyLs5wA+c9v28lRa+Zzt/+y5RwwKqaOCdgCjZRvEit/A1a7jou8xwJjOMAb7D+ylqqCmw1imeZ0oCBrv7Mzp+/QofFTDCdZG13Jw3Wi1nOpbZT9+QGUziUkeZ3T49z+P4pqCRuCkhM1jjfMwwqsdG182rsAaWJs0JxuWJ9knGEq+EzODHjDLTcj5NsbjgwehwDazm6vyL5D2MG5i7booKdjE25917M57XhoxUG1hmJUsjrmWtlVl18ZQ2DeCyH6ycT7kpIJ+wuQWVeZJXI69HcpsXHDQN4LajtZIlkcbvzWqn9St1R3nPNIT93wzt/MSZPO+nqKA65699Nos5FdHmgZkMzHnvIj9zLm9+Q7jd0nqP8VtkdSqWNppYxT+u08g+yW8OnKRXw4ac08hnPUscyvjkw5AZXM4os9jzyY6sdZ3h5YC++jLm0lrASf50T5krzEn0QbOLbB8in2FvwKfNPJczCXd0hLV7wPPqL8bybt691//aWWfhkPo2681PjZPDbgP7lYZOl1nNJs9rW4elXD2zfkK8wIFOy2w1XuuWyOpTkuw2sHOhlqrzvIqu59gbuYEdIcqcjSyb65SLX5EHOepgrbuKtJ6nHNQtxtx0U5xM8DoXMkez7K5xM7Tp4iS4WOvszvss5feSP9Fvo5EVnDDfHGJfpd157Y48xFRGmfaEaWcu/qqYZxpCDcxcqR8Mg9xlGkANzNz+BDcx4zEJNTBzv5gPCSeXTvJtmM+3PJqIKdNj6GE3pJsG5mIwOMp1ptnABgd1sq+G7ebnXZncHCKjG3+M1zpLTzMz7AZ00cBG5pmlFb3JmkQTSpPd21HZbWD9Qy21zPPK/zricNH6+B7mvZFreTpEtAFWt0dpsnoWZreBVTG+kyVS1GVN4/vDd9lJVIRY5yzfPdPlrPHHdTwYItr1bkLcTia8M1qPM9F3yRRjcuaYprNmHxzyfNbQyQlnGTM47ynhndFan7WuCywLODz35I2sC9DCXheZHBNpsXvZmu1fkZXs5rjPnPzb8hyAzrIzINr9HOBIwNXat+ZcleS1hame1714izc55jNvbVDBtz7pyWuJuI15P/tnx1F0UwzsQpprO5nil2KIQSZbqcspnwp57+iu2MQT1mMmhNue/MMR3xfwMi8VYRhnmJqXP/MG1lZwyVNMy9l/FR4tf/mdvB553Uz2sXFn+n1YaGCNBZZr5mH25by7xzCb3PKrmM+lgmK1BV4hdc0+2g2zjq8m1wlAOY1dvqXGKep87oZYzUmDW3Vs8+myuIf6Am6AsiT0Nljp/CYl0Twaze9ZaaN3u5w5jAy5L2ylhe/4nAu+S1Qwl+oCsrjCV2wM2KXfwSPUcmPIGv9LPZ91Ye1TEnEb80ztNLE+Dv8MS0RERERERERERERERERERERERERERERERERERERERERERERERERs+Q/rhi5WauEgfQAAAABJRU5ErkJggg=="
+  description: |
+
+    These endpoints handle the aggregation and retrieval of financial data. They are designed to be generic across
+    a range of ingestion sources and regions.
+
+tags:
+  - name: 'Retrieve Financial Data'
+    x-displayName: 'Retrieve Financial Data'
+    description: |
+      Retrieve a customer's financial data from a range of sources.
+  - name: 'Manage Financial Data'
+    x-displayName: 'Manage Financial Data'
+    description: |
+      Manipulate Transactions held on the Bud platform by removing data, submitting corrections, or adding tags through different rulesets.
+
+x-readme:
+  explorer-enabled: false
+
+servers:
+  - url: https://api-sandbox.thisisbud.com/
+    description: Bud sandbox
+
+paths:
+  /financial/v2/accounts:
+    get:
+      tags:
+        - "Retrieve Financial Data"
+      summary: "Retrieve Accounts V2"
+      description: |
+        Retrieves a list of a customer's connected accounts. The result can be filtered using the parameters outlined below.
+      operationId: financial_v2_accounts
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: "components.yaml#/parameters/ClientId"
+        - $ref: "components.yaml#/parameters/CustomerId"
+        - $ref: "components.yaml#/parameters/CustomerSecret"
+        - $ref: "components.yaml#/parameters/QueryCurrency"
+        - $ref: "components.yaml#/parameters/QueryProvider"
+        - in: query
+          name: account_type
+          schema:
+            type: string
+          example: current_account
+          description: |
+            Use this parameter to filter the results returned on the `account_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `account_type` will be returned.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `charge_card`
+              - `credit_card`
+              - `current_account`
+              - `e_money`
+              - `loan`
+              - `mortgage`
+              - `pre_paid_card`
+              - `savings`
+        - in: query
+          name: usage_type
+          schema:
+            type: string
+          example: personal
+          description: |
+            Use this parameter to filter the results returned on the `usage_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `usage_type` will be returned.
+            
+            Currently supported values include (but are not necessarily limited to):
+              - `personal`
+              - `business`
+        - in: query
+          name: holder_relationship_type
+          schema:
+            type: string
+          example: joint
+          description: |
+            Use this parameter to filter the results returned on the `holder_relationship_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `holder_relationship_type` will be returned.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `sole`
+              - `joint`
+              - `delegate`
+              - `unknown`
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/ListAccountsV2Response"
+              examples:
+                Account Without Parties Data:
+                  value:
+                    operation_id: "financial_v2_accounts"
+                    data: 
+                      - account_id: "ee7a2d6a-2baa-461a-aca2-844e88a3f3e7"
+                        currency: "GBP"
+                        holder:
+                          name: "David Smith"
+                          relationship: "unknown"
+                        account_name: "My Current Account"
+                        account_type: "current_account"
+                        usage_type: "personal"
+                        provider: "BankOfBud"
+                        identifiers: 
+                          uk_sort_code: "126432"
+                          uk_account_number: "31510604"
+                        balances:
+                          - date: "2023-01-12T00:00:00Z"
+                            amount:
+                              value: "3552.61"
+                              currency: "GBP"
+                            type: "interim_booked"
+                            credit_debit_indicator: "credit"
+                          - date: "2023-01-12T00:00:00Z"
+                            amount:
+                              value: "3552.61"
+                              currency: "GBP"
+                            type: "expected"
+                            credit_debit_indicator: "credit"
+                        credit_lines:
+                          - date: "2023-01-12T00:00:00Z"
+                            type: "credit"
+                            amount:
+                              value: "1000.00"
+                              currency: "GBP"
+                    metadata:
+                      parameters:
+                        currencies:
+                          - "GBP"
+                      result_count: 1 
+                Account With Parties Data:
+                  value: 
+                    operation_id: "financial_v2_accounts"
+                    data: 
+                      - account_id: "928fed73-2eb9-4910-8a26-22b6c76fb9fa"
+                        currency: "GBP"
+                        holders:
+                          - name: "David Smith"
+                            relationship: "joint"
+                          - name: "Jane Smith"
+                            relationship: "joint"
+                        account_name: "Household Account"
+                        account_type: "current_account"
+                        usage_type: "personal"
+                        provider: "BankOfBud"
+                        identifiers: 
+                          uk_sort_code: "124332"
+                          uk_account_number: "12642318"
+                        balances:
+                          - date: "2023-01-12T00:00:00Z"
+                            amount:
+                              value: "3552.61"
+                              currency: "GBP"
+                            type: "interim_booked"
+                            credit_debit_indicator: "credit"
+                          - date: "2023-01-12T00:00:00Z"
+                            amount:
+                              value: "3552.61"
+                              currency: "GBP"
+                            type: "expected"
+                            credit_debit_indicator: "credit"
+                        credit_lines:
+                          - date: "2023-01-12T00:00:00Z"
+                            type: "credit"
+                            amount:
+                              value: "1000.00"
+                              currency: "GBP"
+                    metadata:
+                      parameters:
+                      result_count: 1
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/BadRequestResponse"
+              examples:
+                CustomerID Not Sent:
+                  value:
+                    operation_id: "financial_v2_accounts"
+                    code_id: "failed_validation"
+                    message: "Invalid request payload."
+                    errors: 
+                      error:
+                        X-Customer-Id: "not present"
+                CustomerID and CustomerSecret Not Sent:
+                  value:
+                    operation_id: "financial_v2_accounts"
+                    code_id: "failed_validation"
+                    message: "Invalid request payload."
+                    errors: 
+                      error:
+                        X-Customer-Id: "not present"
+                        X-Customer-Secret: "not present"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/ServerErrorResponse"
+              example:
+                operation_id: "unknown"
+                code_id: "unknown"
+                message: "An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8"
+  /financial/v2/accounts/{account_id}:
+    get:
+      tags:
+        - "Retrieve Financial Data"
+      summary: "Retrieve Account By ID V2"
+      description: |
+        Retrieves a customer's connected account by its ID.
+      operationId: financial_v2_accounts_account_id
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: "components.yaml#/parameters/ClientId"
+        - $ref: "components.yaml#/parameters/CustomerId"
+        - $ref: "components.yaml#/parameters/CustomerSecret"
+        - $ref: "components.yaml#/parameters/PathAccountID"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/RetrieveAccountByIDV2Response"
+              examples:
+                Single Holder Personal Account:
+                  value:
+                    operation_id: "financial_v2_accounts_account_id"
+                    data: 
+                        account_id: "ee7a2d6a-2baa-461a-aca2-844e88a3f3e7"
+                        currency: "GBP"
+                        holder:
+                          name: "David Smith"
+                          relationship: "unknown"
+                        account_name: "My Current Account"
+                        account_type: "current_account"
+                        provider: "BankOfBud"
+                        identifiers: 
+                          uk_sort_code: "126432"
+                          uk_account_number: "31510604"
+                        balance:
+                          date: "2023-01-12T00:00:00Z"
+                          booked:
+                            amount:
+                              value: "3552.61"
+                              currency: "GBP"
+                            credit_debit_indicator: "debit"
+                          credit_limit:
+                            value: "1000.00"
+                            currency: "GBP"
+                    metadata:
+                Multiple Holder Joint Account:
+                  value: 
+                    operation_id: "financial_v2_accounts_account_id"
+                    data: 
+                      account_id: "928fed73-2eb9-4910-8a26-22b6c76fb9fa"
+                      currency: "GBP"
+                      holders:
+                          - name: "David Smith"
+                            relationship: "joint"
+                          - name: "Jane Smith"
+                            relationship: "joint"
+                      account_name: "Household Account"
+                      account_type: "current_account"
+                      provider: "BankOfBud"
+                      identifiers: 
+                        uk_sort_code: "124332"
+                        uk_account_number: "12642318"
+                      balances:
+                        - date: "2023-01-12T00:00:00Z"
+                          amount:
+                            value: "3552.61"
+                            currency: "GBP"
+                          type: "interim_booked"
+                          credit_debit_indicator: "credit"
+                        - date: "2023-01-12T00:00:00Z"
+                          amount:
+                            value: "3552.61"
+                            currency: "GBP"
+                          type: "expected"
+                          credit_debit_indicator: "credit"
+                      credit_lines:
+                        - date: "2023-01-12T00:00:00Z"
+                          type: "credit"
+                          amount:
+                            value: "1000.00"
+                            currency: "GBP"
+                    metadata:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/BadRequestResponse"
+              examples:
+                CustomerID Not Sent:
+                  value:
+                    operation_id: "financial_v2_accounts_account_id"
+                    code_id: "failed_validation"
+                    message: "Invalid request payload."
+                    errors: 
+                      error:
+                        X-Customer-Id: "not present"
+                CustomerID and CustomerSecret Not Sent:
+                  value:
+                    operation_id: "financial_v2_accounts_account_id"
+                    code_id: "failed_validation"
+                    message: "Invalid request payload."
+                    errors: 
+                      error:
+                        X-Customer-Id: "not present"
+                        X-Customer-Secret: "not present"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/ServerErrorResponse"
+              example:
+                operation_id: "unknown"
+                code_id: "unknown"
+                message: "An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8"
+
+  /financial/v2/balances:
+    get:
+      tags:
+        - "Retrieve Financial Data"
+      summary: "Retrieve Balances Over Time"
+      description: |
+        List the balances of each bank account for a customer accross all ingestion sources. Ordered by balance date.
+
+        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` and `from` dates provided. It then checks all the transactions within this range, calculating the balance at the end of each day.
+
+        This endpoint limits the date from which it gets balances from either by the oldest `transaction_window` on the account if they are present, or by the oldest transaction within the requested date range available.
+        
+        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the data supplied from this service by including the transaction_window field upon acccount ingestion.
+      operationId: financial_v2_balances_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: "components.yaml#/parameters/ClientId"
+        - $ref: "components.yaml#/parameters/CustomerId"
+        - $ref: "components.yaml#/parameters/CustomerSecret"
+        - $ref: "components-common-parameters.yaml#/parameters/QueryFromBudDate"
+        - $ref: "components-common-parameters.yaml#/parameters/QueryToBudDate"
+        - in: query
+          name: granularity
+          schema:
+            type: string
+          example: daily
+          description: |
+            Specifies in what interval the balance over time should be retrieved.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `daily`
+              - `weekly`
+              - `biweekly`
+              - `monthly`
+              - `quarterly`
+              - `six_monthly`
+              - `annually`
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/GetBalancesResponse"
+              example:
+                operation_id: "financial_v2_balances_get"
+                data:
+                  - account_id: "5b271e24-9ea5-4d7e-b5da-64f01d32db22"
+                    balances:
+                      - date: "2022-11-15T23:59:59Z"
+                        booked: 
+                          amount:
+                            value: "900.00"
+                            currency: "GBP"
+                          type: "interim_booked"
+                          credit_debit_indicator: "credit"
+                        pending: 
+                          amount:
+                            value: "850.00"
+                            currency: "GBP"
+                          type: "expected"
+                          credit_debit_indicator: "credit"
+                      - date: "2022-11-14T23:59:59Z"
+                        booked: 
+                          amount:
+                            value: "950.00"
+                            currency: "GBP"
+                          type: "interim_booked"
+                          credit_debit_indicator: "credit"
+                        pending: 
+                          amount:
+                            value: "900.00"
+                            currency: "GBP"
+                          type: "expected"
+                          credit_debit_indicator: "credit"
+                  - account_id: "b6e9ea3c-71f9-4572-983a-3e5e85470dad"
+                    balances:
+                      - date: "2022-11-15T23:59:59Z"
+                        booked:
+                          amount:
+                            value: "500"
+                            currency: "JPY"
+                          type: "interim_booked"
+                          credit_debit_indicator: "credit"
+                metadata:
+                  accounts:
+                    5b271e24-9ea5-4d7e-b5da-64f01d32db22: 
+                      balance_count: 2
+                      from: "2022-11-14T23:59:59Z"
+                      to: "2022-11-15T23:59:59Z"
+                    b6e9ea3c-71f9-4572-983a-3e5e85470dad:
+                      balance_count: 1
+                      from: "2022-11-15T23:59:59Z"
+                      to: "2022-11-15T23:59:59Z"
+                  parameters:
+                    from: "2020-12-22T00:00:00Z"
+                    to: "2022-11-15T00:00:00Z"
+                    granularity: "daily"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/BadRequestResponse"
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/ServerErrorResponse"
+              example:
+                operation_id: "financial_v2_balances_get"
+                code_id: "internal_error"
+                message: "Internal server error has occurred."
+                errors:
+                  error: "failed to format amount"
+  
+  /financial/v2/accounts/{account_id}/balances:
+    get:
+      tags:
+        - "Retrieve Financial Data"
+      summary: "Retrieve Balances Over Time By Account"
+      description: |
+        List the balances of a specific bank account for a customer accross all ingestion sources. Ordered by balance date.
+
+        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` and `from` dates provided. It then checks all the transactions within this range, calculating the balance at the end of each day.
+
+        This endpoint limits the date from which it gets balances from either by the oldest `transaction_window` on the account if they are present, or by the oldest transaction within the requested date range available.
+
+        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the data supplied from this service by including the transaction_window field upon acccount ingestion.
+      operationId: financial_v2_accounts_balances_get
+      parameters:
+        - $ref: "components.yaml#/parameters/ClientId"
+        - $ref: "components.yaml#/parameters/CustomerId"
+        - $ref: "components.yaml#/parameters/CustomerSecret"
+        - $ref: "components-common-parameters.yaml#/parameters/QueryFromBudDate"
+        - $ref: "components-common-parameters.yaml#/parameters/QueryToBudDate"
+        - $ref: "components.yaml#/parameters/PathAccountID"
+        - in: query
+          name: granularity
+          schema:
+            type: string
+            enum:
+              - daily
+              - weekly
+              - biweekly
+              - monthly
+              - quarterly
+              - six_monthly
+              - annually
+          example: daily
+          description: "Specifies in what interval the balance over time should be retrieved."
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/GetBalancesForAccountIDResponse"
+              example:
+                operation_id: "financial_v2_accounts_balances_get"
+                data:
+                  - date: "2022-11-15T23:59:59Z"
+                    booked: 
+                      amount:
+                        value: "900.00"
+                        currency: "GBP"
+                      type: "interim_booked"
+                      credit_debit_indicator: "credit"
+                    pending: 
+                      amount:
+                        value: "850.00"
+                        currency: "GBP"
+                      type: "expected"
+                      credit_debit_indicator: "credit"
+                  - date: "2022-11-14T23:59:59Z"
+                    booked: 
+                      amount:
+                        value: "950.00"
+                        currency: "GBP"
+                      type: "interim_booked"
+                      credit_debit_indicator: "credit"
+                    pending: 
+                      amount:
+                        value: "900.00"
+                        currency: "GBP"
+                      type: "expected"
+                      credit_debit_indicator: "credit"
+                metadata:
+                  account:
+                    balance_count: 2
+                    from: "2022-11-14T23:59:59Z"
+                    to: "2022-11-15T23:59:59Z"
+                  parameters:
+                    from: "2020-12-22T00:00:00Z"
+                    to: "2022-11-15T00:00:00Z"
+                    granularity: "daily"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/BadRequestResponse"
+              example:
+                operation_id: "financial_v2_accounts_balances_get"
+                code_id: "failed_validation"
+                message: "Invalid request payload."
+                errors:
+                  CustomerID: "not present"
+                  CustomerSecret: "not present"
+        404:
+          description: Not Found
+          content:
+             application/json:
+              schema:
+                $ref: "components.yaml#/schemas/BadRequestNotFoundResponse"
+              example:
+                operation_id: "financial_v2_accounts_balances_get"
+                code_id: "account_not_found"
+                message: "The specified account could not be found. Please check the account identifier is correct. The account might be closed or suspended."
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/ServerErrorResponse"
+              example:
+                operation_id: "financial_v2_accounts_balances_get"
+                code_id: "internal_error"
+                message: "Internal server error has occurred."
+                errors:
+                  error: "failed to format amount"
+
+  /financial/v2/transactions:
+    get:
+      tags:
+        - "Retrieve Financial Data"
+      summary: "Retrieve Transactions V2"
+      description: |
+        List the transactions for a customer across all ingestion sources. Ordered by `date_time` and then `transaction_id` descending.
+      operationId: "v2_transactions_get"
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: "components.yaml#/parameters/ClientId"
+        - $ref: "components.yaml#/parameters/CustomerId"
+        - $ref: "components.yaml#/parameters/CustomerSecret"
+        - in: query
+          name: date_from
+          schema:
+            type: string
+          example: "2022-02-28"
+          description: "UTC Date (YYYY-MM-DD) from which the transactions should be returned from."
+        - in: query
+          name: date_to
+          schema:
+            type: string
+          example: "2022-05-28"
+          description: "UTC Date (YYYY-MM-DD) from which the transactions should be returned to."
+        - in: query
+          name: page_size
+          schema:
+            type: integer
+          example: 100
+          description: "Maximum number of results to be returned. Defaults to 100, maximum is 200"
+        - in: query
+          name: page_token
+          schema:
+            type: string
+          example: "eyJvZmZzZXQiOjEwMH0"
+          description: "The token required to fetch a specific page of results. Provided by the `next_page_token` field in the previous request."
+        - in: query
+          name: account_id
+          schema:
+            type: string
+          example: "an_account_id"
+          description: "Identifier of the accounts from which transactions should be returned."
+        - in: query
+          name: merchant
+          schema:
+            type: string
+          description: "Human readable identifier of the merchants for which associated transactions should be returned."
+          example: "a_merchant_slug"
+        - in: query
+          name: category_l1
+          schema:
+            type: string
+          example: "bills"
+          description: "Identifier of the Category Level 1 for which associated transactions should be returned."
+        - in: query
+          name: category_l2
+          schema:
+            type: string
+          example: "tv_and_broadband"
+          description: "Identifier of the Category Level 2 for which associated transactions should be returned."
+        - in: query
+          name: include_tags
+          schema:
+            type: array
+            items:
+              type: string
+          example: "regular-transaction"
+          description: "Tags for which associated transactions should be returned."
+        - in: query
+          name: exclude_tags
+          schema:
+            type: array
+            items:
+              type: string
+          example: "benefit"
+          description: "Tags for which associated transactions should not be returned."
+      responses:
+        "200":
+          description: "The request was successfully processed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListTransactionsResponse"
+              examples:
+                Multiple Transactions:
+                  value:
+                    operation_id: "v2_transactions_get"
+                    data:
+                      - transaction_id: "a_transaction_id"
+                        account_id: "an_account_id"
+                        provider: "a_bank_account_provider"
+                        description: "paypal* specialty coffee"
+                        credit_debit_indicator: "debit"
+                        status: "booked"
+                        amount:
+                          value: "10.99"
+                          currency: "GBP"
+                        date_time: "2022-05-28T10:00:00Z"
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: "eating_out"
+                              confidence: "0.99"
+                            l2:
+                              slug: "cafes_and_eating_out"
+                              confidence: "0.98"
+                          merchant:
+                            id: "01cc2d49-6144-46f1-9414-67c99b139a95"
+                            slug: "specialty_coffee"
+                            display_name: "Specialty Coffee Supplier Ltd."
+                            logo: "http://url/specialty_coffee_supplier_logo.jpeg"
+                          processor:
+                            id: "18f63293-0217-4520-bbf0-071dca7a9d04"
+                            slug: "paypal"
+                            display_name: "PayPal"
+                            logo: "http://url/paypal_logo.jpeg"
+                          regularity:
+                            frequency: "monthly"
+                            predicted_date_times:
+                              - "2022-06-28T15:00:00Z"
+                              - "2022-07-28T15:00:00Z"
+                              - "2022-08-28T15:00:00Z"
+                            group_label: "a_group_id"
+                          transaction_types:
+                            - "card"
+                            - "debit"
+                          names:
+                            - "jane doe"
+                        tags:
+                          - "regular-transaction"
+                      - transaction_id: "another_transaction_id"
+                        account_id: "another_account_id"
+                        provider: "another_bank_account_provider"
+                        description: "Tesco 2956 London GBR"
+                        credit_debit_indicator: "debit"
+                        status: "booked"
+                        amount:
+                          value: "50.23"
+                          currency: "GBP"
+                        date_time: "2022-05-26T10:00:00Z"
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: "eating_out"
+                              confidence: "0.99"
+                            l2:
+                              slug: "cafes_and_eating_out"
+                              confidence: "0.98"
+                          merchant:
+                            id: "0980cf54-6052-4527-84ff-e6f9b169884f"
+                            slug: "tesco_stores"
+                            display_name: "Tesco"
+                            logo: "http://url/tesco_stores_logo.jpeg"
+                          location:
+                            address:
+                              address_lines:
+                                - "224-226 Portobello Rd"
+                                - "London"
+                              country: "GBR"
+                          transaction_types:
+                            - "card"
+                            - "debit"
+                    metadata:
+                      results: 2
+                      next_page_token: "eyJvZmZzZXQiOjEwMH0"
+                Single Transaction Without Enrichments:
+                  value:
+                    operation_id: "v2_transactions_get"
+                    data:
+                      - transaction_id: "a_transaction_id"
+                        account_id: "an_account_id"
+                        provider: "a_bank_account_provider"
+                        description: "a_transaction_description"
+                        credit_debit_indicator: "credit"
+                        status: "pending"
+                        amount:
+                          value: "10.99"
+                          currency: "GBP"
+                        date_time: "2022-01-02T15:00:00Z"
+                    metadata:
+                      results: 1
+                      next_page_token: "eyJvZmZzZXQiOjEwMH0"
+                No Transactions:
+                  value:
+                    operation_id: "v2_transactions_get"
+                    data: [ ]
+                    metadata:
+                      results: 0
+        "401":
+          description: "An unauthenticated request was received."
+        "405":
+          description: "The request uses an unexpected HTTP method."
+        "5XX":
+          description: "An unexpected error occurred on the server side."
+  /v1/open-banking/accounts:
+    get:
+      tags:
+        - "Retrieve Financial Data"
+      summary: "Retrieve Accounts"
+      description: |
+        List a customer’s current, credit card and savings accounts held on the Bud platform along with each account’s balance. 
+
+        An X-Account-Id header parameter can be used in order to get the details for a specific account.
+      operationId: "accounts_get"
+      deprecated: true
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: "components.yaml#/parameters/ClientId"
+        - $ref: "components.yaml#/parameters/CustomerId"
+        - $ref: "components.yaml#/parameters/CustomerSecret"
+        - $ref: "components.yaml#/parameters/OBAccountId"
+      responses:
+        "200":
+          description: "The request was successfully processed."
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/OBListAccountsResponse"
+              examples:
+                All accounts:
+                  value:
+                    operation_id: "accounts_get"
+                    data:
+                      - account_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                        currency: "GBP"
+                        account_type: "Personal"
+                        account_sub_type: "Savings"
+                        nickname: "Holiday Funds"
+                        details:
+                          - scheme_name: "UK.OBIE.SortCodeAccountNumber"
+                            identification: "80200110203345"
+                            name: "Mr Kevin"
+                            secondary_identification: "00021"
+                        provider: "HSBC"
+                        balances:
+                          - account_id: "aa86f72c-476a-3355-b54c-614a815fae40"
+                            amount:
+                              amount: "357.90"
+                              currency: "GBP"
+                            credit_debit_indicator: "Credit"
+                            credit_line:
+                              - included: true
+                                amount:
+                                  amount: "272.90"
+                                  currency: "GBP"
+                                type: "Temporary"
+                            date_time: "2019-02-27T06:11:57+0000"
+                            type: "InterimBooked"
+                        parties:
+                          - full_name: "Jane Doe"
+                            type: "sole"
+
+                      - account_id: "423fdf64-5317-4562-b3fc-268abd8e9ff9"
+                        currency: "GBP"
+                        account_type: "Personal"
+                        account_sub_type: "CurrentAccount"
+                        nickname: "Current Account"
+                        details:
+                          - scheme_name: "UK.OBIE.SortCodeAccountNumber"
+                            identification: "80200110203346"
+                            name: "Mr Kevin"
+                            secondary_identification: "00022"
+                        provider: "Lloyds"
+                        balances:
+                          - account_id: "aa86f72c-476a-3355-b54c-614a815fae40"
+                            amount:
+                              amount: "357.90"
+                              currency: "GBP"
+                            credit_debit_indicator: "Credit"
+                            credit_line:
+                              - included: true
+                                amount:
+                                  amount: "272.90"
+                                  currency: "GBP"
+                                type: "Temporary"
+                            date_time: "2019-02-27T06:11:57+0000"
+                            type: "InterimBooked"
+                        parties:
+                          - full_name: "Jane Doe"
+                            type: "joint"
+                    metadata:
+                      results: 2
+                Specific Account:
+                  value:
+                    operation_id: "accounts_get"
+                    data:
+                      account_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                      currency: "GBP"
+                      account_type: "Personal"
+                      account_sub_type: "SavingsAccount"
+                      nickname: "Holiday Funds"
+                      details:
+                        - scheme_name: "UK.OBIE.SortCodeAccountNumber"
+                          identification: "80200110203345"
+                          name: "Mr Kevin"
+                          secondary_identification: "00021"
+                      provider: "Lloyds"
+                      balances:
+                        - account_id: "aa86f72c-476a-3355-b54c-614a815fae40"
+                          amount:
+                            amount: "357.90"
+                            currency: "GBP"
+                          credit_debit_indicator: "Credit"
+                          credit_line:
+                            - included: true
+                              amount:
+                                amount: "272.90"
+                                currency: "GBP"
+                              type: "Temporary"
+                          date_time: "2019-02-27T06:11:57+0000"
+                          type: "InterimBooked"
+                      parties:
+                        - full_name: "Mr Kevin"
+                          type: "sole"
+                    metadata:
+                      results: 1
+        "401":
+          description: "An unauthenticated request was received."
+        "405":
+          description: "The request uses an unexpected HTTP method."
+        "5XX":
+          description: "An unexpected error occurred on the server side."
+
+  /v1/open-banking/transactions:
+    get:
+      tags:
+        - "Retrieve Financial Data"
+      summary: "Retrieve Transactions"
+      deprecated: true
+      description: |
+        List the transactions for each of the customer’s accounts held on the Bud platform.
+
+        By default this endpoint will return the last 3 months of transactions unless a valid `from` and `to` range is given (*where `from` is older than `to`).
+
+        **Please note: support will cease for this endpoint on the 1st of August 2023 - please complete your migration to the Retrieve Transactions V2 endpoint by that point in time. For further details, contact your Bud account manager or email `help@thisisbud.com`.**
+
+      operationId: "transactions_get"
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: "components.yaml#/parameters/ClientId"
+        - $ref: "components.yaml#/parameters/CustomerId"
+        - $ref: "components.yaml#/parameters/CustomerSecret"
+        - $ref: "components.yaml#/parameters/HeaderFrom"
+        - $ref: "components.yaml#/parameters/HeaderTo"
+        - $ref: "components.yaml#/parameters/OBAccountId"
+      responses:
+        "200":
+          description: "The request was successfully processed."
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/OBListTransactionsResponse"
+              examples:
+                All Account Transactions:
+                  value:
+                    operation_id: "transactions_get"
+                    data:
+                      - "id": "980ef9ba0211a05ee3ca92ed2c38b77ec8a49d5cb5c7d72e3dcdb9981000000-1"
+                        "provider": "Lloyds"
+                        "raw_transaction":
+                          "account_id": "100000"
+                          "transaction_id": "100001"
+                          "transaction_reference": "Ref 100001"
+                          "amount":
+                            "amount": "10.00"
+                            "currency": "GBP"
+                          "credit_debit_indicator": "Credit"
+                          "status": "Booked"
+                          "booking_date_time": "2019-05-07T00:00:00+0000"
+                          "value_date_time": "2019-06-15T00:00:00+0000"
+                          "address_line": "London"
+                          "transaction_information": "6278 16Mar19 CD HONEST BURGERS LONDON GB"
+                          "bank_transaction_code":
+                            "code": "ReceivedCreditTransfer"
+                            "sub_code": "DomesticCreditTransfer"
+                          "proprietary_bank_transaction_code":
+                            "code": "Transfer"
+                            "issuer": "AlphaBank"
+                          "balance":
+                            "amount":
+                              "amount": "230.00"
+                              "currency": "GBP"
+                            "credit_debit_indicator": "Credit"
+                            "type": "InterimBooked"
+                          "merchant_details":
+                            "merchant_name": "Eddie Ching"
+                            "merchant_category_code": "MNC1"
+                          "statement_reference": ["REF1"]
+                          "currency_exchange":
+                            "contract_identification": "GBP to AUD"
+                            "exchange_rate": "1.83"
+                            "instructed_amount":
+                              "amount": "10.00"
+                              "currency": "GBP"
+                            "quotation_date": "2019-04-11T00:00:00+0000"
+                            "source_currency": "GBP"
+                            "target_currency": "AUD"
+                            "unit_currency": "GBP"
+                          "creditor_agent":
+                            "scheme_name": "BICFI"
+                            "identification": "AlphaBank"
+                            "name": "AlphaBank business account"
+                            "postal_address":
+                              "address_type": "Business"
+                              "building_number": "1"
+                              "country": "United Kingdom"
+                              "country_subdivision": "England"
+                              "department": "admin"
+                              "postcode": "EC1V 9NR"
+                              "street_name": "street name"
+                              "sub_department": "reception"
+                              "town_name": "london"
+                              "address_line":
+                                - "line 1"
+                                - "line 2"
+                                - "line 3"
+                          "creditor_account":
+                            "scheme_name": "IBAN"
+                            "identification": "Bobs Bills"
+                            "name": "Account1"
+                            "secondary_identification": "SecId"
+                          "debtor_agent":
+                            "scheme_name": "IBAN"
+                            "identification": "Bobs Bills"
+                            "name": "Bobs bank account"
+                            "postal_address":
+                              "address_type": "Business"
+                              "building_number": "1"
+                              "country": "United Kingdom"
+                              "country_subdivision": "England"
+                              "department": "admin"
+                              "postcode": "EC1V 9NR"
+                              "street_name": "street name"
+                              "sub_department": "reception"
+                              "town_name": "london"
+                              "address_line":
+                                - "line 1"
+                                - "line 2"
+                                - "line 3"
+                          "debtor_account":
+                            "scheme_name": "BICFI"
+                            "identification": "AlphaBank"
+                            "name": "BB1"
+                            "secondary_identification": "4435534GG"
+                          "card_instrument":
+                            "card_scheme_name": "AmericanExpress"
+                            "card_authorisation_type": "Contactless"
+                            "cardholder_name": "Mr Bob Smith"
+                            "identification": "PAYMENT xxxxx"
+                          "charge_amount":
+                            "amount": "10.00"
+                            "currency": "GBP"
+                          "supplementary_data":
+                            "unknown_elements": true
+                        "enrichment":
+                          "categoriser":
+                            "categories":
+                              - "category_name": "groceries"
+                                "confidence": "0.88"
+                            "subcategories":
+                              - "subcategory_name": "super_markets_and_grocery_stores"
+                                "confidence": "0.93"
+                          "merchant":
+                            "id": "honest_burgers"
+                            "merchant_name": "Honest Burgers"
+                            "merchant_logo": "https://assets.example.com/image.jpg"
+                            "merchant_confidence": "1"
+                          "regular_payments":
+                            "label": "-1"
+                            "score": "0"
+                            "period": "unknown"
+                          "carbon_tracker":
+                            "co2_amount_kg": 7.02
+                      - "id": "980ef9ba0211a05ee3ca92ed2c38b77ec8a49d5cb5c7d72e3dcdb9981a025e74-1"
+                        "provider": "Lloyds"
+                        "raw_transaction":
+                          "account_id": "200000"
+                          "transaction_id": "200001"
+                          "transaction_reference": "Ref 200001"
+                          "amount":
+                            "amount": "20.00"
+                            "currency": "GBP"
+                          "credit_debit_indicator": "Credit"
+                          "status": "Booked"
+                          "booking_date_time": "2019-04-12T00:00:00+0000"
+                          "value_date_time": "2019-04-15T00:00:00+0000"
+                          "address_line": "Liverpool"
+                          "transaction_information": "111 CLOSE GATE LANE"
+                          "bank_transaction_code":
+                            "code": "ReceivedCreditTransfer"
+                            "sub_code": "DomesticCreditTransfer"
+                          "proprietary_bank_transaction_code":
+                            "code": "Transfer"
+                            "issuer": "BlinkBank"
+                          "balance":
+                            "amount":
+                              "amount": "230.20"
+                              "currency": "GBP"
+                            "credit_debit_indicator": "Credit"
+                            "type": "InterimBooked"
+                          "merchant_details":
+                            "merchant_name": "Rick Rock"
+                            "merchant_category_code": "RR1"
+                          "statement_reference": ["REF1", "REF2"]
+                          "currency_exchange":
+                            "contract_identification": "GBP to AUD"
+                            "exchange_rate": "1.83"
+                            "instructed_amount":
+                              "amount": "11.00"
+                              "currency": "GBP"
+                            "quotation_date": "2019-05-04T00:00:00+0000"
+                            "source_currency": "GBP"
+                            "target_currency": "AUD"
+                            "unit_currency": "GBP"
+                          "creditor_agent":
+                            "scheme_name": "BICFI"
+                            "identification": "BlinkBank"
+                            "name": "BlinkBank"
+                            "postal_address":
+                              "address_type": "Business"
+                              "building_number": "1"
+                              "country": "United Kingdom"
+                              "country_subdivision": "England"
+                              "department": "admin"
+                              "postcode": "EC1V 9NR"
+                              "street_name": "street name"
+                              "sub_department": "reception"
+                              "town_name": "london"
+                              "address_line":
+                                - "line 1"
+                                - "line 2"
+                                - "line 3"
+                          "creditor_account":
+                            "scheme_name": "IBAN"
+                            "identification": "Roman Erik"
+                            "name": "Account1"
+                            "secondary_identification": null
+                          "debtor_agent":
+                            "scheme_name": "IBAN"
+                            "identification": "Roman Erik"
+                            "name": "Roman Erik"
+                            "postal_address":
+                              "address_type": "Business"
+                              "building_number": "1"
+                              "country": "United Kingdom"
+                              "country_subdivision": "England"
+                              "department": "admin"
+                              "postcode": "EC1V 9NR"
+                              "street_name": "street name"
+                              "sub_department": "reception"
+                              "town_name": "london"
+                              "address_line":
+                                - "line 1"
+                                - "line 2"
+                                - "line 3"
+                          "debtor_account":
+                            "scheme_name": "BICFI"
+                            "identification": "BlinkBank"
+                            "name": "BB1"
+                            "secondary_identification": null
+                          "card_instrument":
+                            "card_scheme_name": "Visa"
+                            "card_authorisation_type": "Contactless"
+                            "cardholder_name": "Elly Bon"
+                            "identification": "ABC123"
+                          "charge_amount":
+                            "amount": "2.00"
+                            "currency": "GBP"
+                          "supplementary_data":
+                            "unknown_elements": true
+                        "enrichment":
+                          "categoriser":
+                            "categories":
+                              - "category_name": "groceries"
+                                "confidence": "0.88"
+                            "subcategories":
+                              - "subcategory_name": "super_markets_and_grocery_stores"
+                                "confidence": "0.93"
+                          "merchant":
+                            "id": "rick_rock"
+                            "merchant_name": "Rick Rock"
+                            "merchant_logo": "https://assets.example.com/image.jpg"
+                            "merchant_confidence": "1"
+                          "regular_payments":
+                            "label": "-1"
+                            "score": "0"
+                            "period": "unknown"
+                          "carbon_tracker":
+                            "co2_amount_kg": 1.26
+                    metadata:
+                      from: '2019-03-27'
+                      to: '2019-03-29'
+                      results: 2
+                Specific Account Transactions:
+                  value:
+                    operation_id: "transactions_get"
+                    data:
+                      - "id": "980ef9ba0211a05ee3ca92ed2c38b77ec8a49d5cb5c7d72e3dcdb9981000000"
+                        "provider": "Lloyds"
+                        "raw_transaction":
+                          "account_id": "100000"
+                          "transaction_id": "100001"
+                          "transaction_reference": "Ref 100001"
+                          "amount":
+                            "amount": "10.00"
+                            "currency": "GBP"
+                          "credit_debit_indicator": "Credit"
+                          "status": "Booked"
+                          "booking_date_time": "2019-05-07T00:00:00+0000"
+                          "value_date_time": "2019-06-15T00:00:00+0000"
+                          "address_line": "London"
+                          "transaction_information": "6278 16Mar19 CD HONEST BURGERS LONDON GB"
+                          "bank_transaction_code":
+                            "code": "ReceivedCreditTransfer"
+                            "sub_code": "DomesticCreditTransfer"
+                          "proprietary_bank_transaction_code":
+                            "code": "Transfer"
+                            "issuer": "AlphaBank"
+                          "balance":
+                            "amount":
+                              "amount": "230.00"
+                              "currency": "GBP"
+                            "credit_debit_indicator": "Credit"
+                            "type": "InterimBooked"
+                          "merchant_details":
+                            "merchant_name": "Eddie Ching"
+                            "merchant_category_code": "MNC1"
+                          "statement_reference": ["REF1"]
+                          "currency_exchange":
+                            "contract_identification": "GBP to AUD"
+                            "exchange_rate": "1.83"
+                            "instructed_amount":
+                              "amount": "10.00"
+                              "currency": "GBP"
+                            "quotation_date": "2019-04-11T00:00:00+0000"
+                            "source_currency": "GBP"
+                            "target_currency": "AUD"
+                            "unit_currency": "GBP"
+                          "creditor_agent":
+                            "scheme_name": "BICFI"
+                            "identification": "AlphaBank"
+                            "name": "AlphaBank business account"
+                            "postal_address":
+                              "address_type": "Business"
+                              "building_number": "1"
+                              "country": "United Kingdom"
+                              "country_subdivision": "England"
+                              "department": "admin"
+                              "postcode": "EC1V 9NR"
+                              "street_name": "street name"
+                              "sub_department": "reception"
+                              "town_name": "london"
+                              "address_line":
+                                - "line 1"
+                                - "line 2"
+                                - "line 3"
+                          "creditor_account":
+                            "scheme_name": "IBAN"
+                            "identification": "Bobs Bills"
+                            "name": "Account1"
+                            "secondary_identification": "SecId"
+                          "debtor_agent":
+                            "scheme_name": "IBAN"
+                            "identification": "Bobs Bills"
+                            "name": "Bobs bank account"
+                            "postal_address":
+                              "address_type": "Business"
+                              "building_number": "1"
+                              "country": "United Kingdom"
+                              "country_subdivision": "England"
+                              "department": "admin"
+                              "postcode": "EC1V 9NR"
+                              "street_name": "street name"
+                              "sub_department": "reception"
+                              "town_name": "london"
+                              "address_line":
+                                - "line 1"
+                                - "line 2"
+                                - "line 3"
+                          "debtor_account":
+                            "scheme_name": "BICFI"
+                            "identification": "AlphaBank"
+                            "name": "BB1"
+                            "secondary_identification": "4435534GG"
+                          "card_instrument":
+                            "card_scheme_name": "AmericanExpress"
+                            "card_authorisation_type": "Contactless"
+                            "cardholder_name": "Mr Bob Smith"
+                            "identification": "PAYMENT xxxxx"
+                          "charge_amount":
+                            "amount": "10.00"
+                            "currency": "GBP"
+                          "supplementary_data":
+                            "unknown_elements": true
+                        "enrichment":
+                          "categoriser":
+                            "categories":
+                              - "category_name": "groceries"
+                                "confidence": "0.88"
+                            "subcategories":
+                              - "subcategory_name": "super_markets_and_grocery_stores"
+                                "confidence": "0.93"
+                          "merchant":
+                            "id": "honest_burgers"
+                            "merchant_name": "Honest Burgers"
+                            "merchant_logo": "https://assets.example.com/image.jpg"
+                            "merchant_confidence": "1"
+                          "regular_payments":
+                            "label": "de153aaed3b7427as8o9uoljk23098jlksdosd27de5e8df68224d33d3b74272-1"
+                            "score": "0.9656"
+                            "period": "monthly"
+                          "carbon_tracker":
+                            "co2_amount_kg": 7.02
+                      - "id": "980ef9ba0211a05ee3ca92ed2c38b77ec8a49d5cb5c7d72e3dcdb9981a025e74"
+                        "provider": "Lloyds"
+                        "raw_transaction":
+                          "account_id": "100000"
+                          "transaction_id": "200001"
+                          "transaction_reference": "Ref 200001"
+                          "amount":
+                            "amount": "20.00"
+                            "currency": "GBP"
+                          "credit_debit_indicator": "Credit"
+                          "status": "Booked"
+                          "booking_date_time": "2019-04-13T00:00:00+0000"
+                          "value_date_time": "2019-04-16T00:00:00+0000"
+                          "address_line": "Liverpool"
+                          "transaction_information": "111 CLOSE GATE LANE"
+                          "bank_transaction_code":
+                            "code": "ReceivedCreditTransfer"
+                            "sub_code": "DomesticCreditTransfer"
+                          "proprietary_bank_transaction_code":
+                            "code": "Transfer"
+                            "issuer": "BlinkBank"
+                          "balance":
+                            "amount":
+                              "amount": "230.20"
+                              "currency": "GBP"
+                            "credit_debit_indicator": "Credit"
+                            "type": "InterimBooked"
+                          "merchant_details":
+                            "merchant_name": "Rick Rock"
+                            "merchant_category_code": "RR1"
+                          "statement_reference": ["REF1", "REF2"]
+                          "currency_exchange":
+                            "contract_identification": "GBP to AUD"
+                            "exchange_rate": "1.83"
+                            "instructed_amount":
+                              "amount": "11.00"
+                              "currency": "GBP"
+                            "quotation_date": "2019-05-04T00:00:00+0000"
+                            "source_currency": "GBP"
+                            "target_currency": "AUD"
+                            "unit_currency": "GBP"
+                          "creditor_agent":
+                            "scheme_name": "BICFI"
+                            "identification": "BlinkBank"
+                            "name": "BlinkBank"
+                            "postal_address":
+                              "address_type": "Business"
+                              "building_number": "1"
+                              "country": "United Kingdom"
+                              "country_subdivision": "England"
+                              "department": "admin"
+                              "postcode": "EC1V 9NR"
+                              "street_name": "street name"
+                              "sub_department": "reception"
+                              "town_name": "london"
+                              "address_line":
+                                - "line 1"
+                                - "line 2"
+                                - "line 3"
+                          "creditor_account":
+                            "scheme_name": "IBAN"
+                            "identification": "Roman Erik"
+                            "name": "Account1"
+                            "secondary_identification": null
+                          "debtor_agent":
+                            "scheme_name": "IBAN"
+                            "identification": "Roman Erik"
+                            "name": "Roman Erik"
+                            "postal_address":
+                              "address_type": "Business"
+                              "building_number": "1"
+                              "country": "United Kingdom"
+                              "country_subdivision": "England"
+                              "department": "admin"
+                              "postcode": "EC1V 9NR"
+                              "street_name": "street name"
+                              "sub_department": "reception"
+                              "town_name": "london"
+                              "address_line":
+                                - "line 1"
+                                - "line 2"
+                                - "line 3"
+                          "debtor_account":
+                            "scheme_name": "BICFI"
+                            "identification": "BlinkBank"
+                            "name": "BB1"
+                            "secondary_identification": null
+                          "card_instrument":
+                            "card_scheme_name": "Visa"
+                            "card_authorisation_type": "Contactless"
+                            "cardholder_name": "Elly Bon"
+                            "identification": "ABC123"
+                          "charge_amount":
+                            "amount": "2.00"
+                            "currency": "GBP"
+                          "supplementary_data":
+                            "unknown_elements": true
+                        "enrichment":
+                          "categoriser":
+                            "categories":
+                              - "category_name": "groceries"
+                                "confidence": "0.88"
+                            "subcategories":
+                              - "subcategory_name": "super_markets_and_grocery_stores"
+                                "confidence": "0.93"
+                          "merchant":
+                            "id": "rick_rock"
+                            "merchant_name": "Rick Rock"
+                            "merchant_logo": "https://assets.example.com/image.jpg"
+                            "merchant_confidence": "1"
+                          "regular_payments":
+                            "label": "sdf09823lkjewf9jlk31908sadsaoiusd3ggs3g2gk7099dkh0123-2"
+                            "score": "0.4987"
+                            "period": "quarterly"
+                          "carbon_tracker":
+                            "co2_amount_kg": 1.26                            
+                    metadata:
+                      from: '2019-03-27'
+                      to: '2019-03-29'
+                      results: 2
+        "401":
+          description: "An unauthenticated request was received."
+        "405":
+          description: "The request uses an unexpected HTTP method."
+        "5XX":
+          description: "An unexpected error occurred on the server side."
+
+  /v1/provider/{provider}:
+    delete:
+      tags:
+        - "Manage Financial Data"
+      summary: "Remove Provider Data"
+      description: |
+        Delete all data (transactions, enrichments, accounts) related to the specified provider.
+      operationId: "v1_provider_delete"
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: "components.yaml#/parameters/ClientId"
+        - $ref: "components.yaml#/parameters/CustomerId"
+        - $ref: "components.yaml#/parameters/CustomerSecret"
+        - $ref: "components.yaml#/parameters/OBProvider"
+      responses:
+        "204":
+          description: "The request was successfully processed."
+        "400":
+          description: "Bad request."
+        "401":
+          description: "An unauthenticated request was received."
+        "405":
+          description: "The request uses an unexpected HTTP method."
+        "5XX":
+          description: "An unexpected error occurred on the server side."
+
+  /v1/recategorise/customer-corrections/double-cat:
+    post:
+      tags:
+        - "Manage Financial Data"
+      summary: "Recategorise Transactions V1"
+      description: |
+        Allow a customer to change a transaction’s category and/or subcategory.
+
+        Tag all similar transactions (those that currently exist and those that happen in the future) with the new category and/or subcategory value for a given customer.
+
+        Similar transactions are determined based on transactions with similar descriptions & amounts.
+      operationId: "recategorise_customer_double_cat_post"
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: "components.yaml#/parameters/ClientId"
+        - $ref: "components.yaml#/parameters/CustomerId"
+        - $ref: "components.yaml#/parameters/CustomerSecret"
+      requestBody:
+        required: true  
+        content:
+          application/json:
+            schema:
+              $ref: "components.yaml#/schemas/RecategoriseCustomerRequestDoublecat"
+            example:
+              - account_id: "5f44d9d6-8de0-4bc7-8db2-c26aea40ed62"
+                transaction_id: "7affc586-5600-4434-ac5f-1a845260d7d9"
+                category_name: "eating_out"
+                subcategory_name: "other_eating_out"
+      responses:
+        "200":
+          description: "The request was successfully processed"
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/RecategoriseCustomerResponseDoublecat"
+              example:
+                operation_id: "recategorise_customer_double_cat_post"
+                data:
+                  - account_id: "5f44d9d6-8de0-4bc7-8db2-c26aea40ed62"
+                    transaction_id: "7affc586-5600-4434-ac5f-1a845260d7d9"
+                    category_name: "eating_out"
+                    subcategory_name: "other_eating_out"
+                metadata:
+                  results: 1
+        "400":
+          description: "The request contains an invalid payload"
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/BadRequestResponse"
+              example:
+                operation_id: "recategorise_customer_double_cat_post"
+                code_id: "failed_validation"
+                message: "Failed validation"
+                errors:
+                  category_name: "This value should not be blank"
+        "401":
+          description: "Unauthorised request"
+        "405":
+          description: "An unexpected HTTP method was used"
+        "5XX":
+          description: "An unexpected error occurred on the server side"
+
+  /corrections/v2/categories:
+    post:
+      tags:
+        - "Manage Financial Data"
+      summary: "Recategorise Transactions V2"
+      description: |
+        Allow a customer to change a transaction’s (and similar transactions') category and/or subcategory.
+
+        If `include_similar` is set to `true`, then all previous and future transactions (i.e. those that are yet to happen yet) that are similar in nature to the specified transaction id will be corrected with the provided category and/or subcategory.
+
+        Similar transactions are determined based on transactions with similar descriptions & amounts.
+      operationId: "corrections_v2_categories_post"
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: "components.yaml#/parameters/ClientId"
+        - $ref: "components.yaml#/parameters/CustomerId"
+        - $ref: "components.yaml#/parameters/CustomerSecret"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "components.yaml#/schemas/CustomerCategoryCorrectionRequest"
+            example:
+              - transaction_id: "7affc586-5600-4434-ac5f-1a845260d7d9"
+                category_l1: "food_and_drink"
+                category_l2: "coffee"
+                include_similar: false
+      responses:
+        "200":
+          description: "The request was successfully processed"
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/CustomerCategoryCorrectionResponse"
+              example:
+                operation_id: "corrections_v2_categories_post"
+                data:
+                  - transaction_id: "7affc586-5600-4434-ac5f-1a845260d7d9"
+                    category_l1: "food_and_drink"
+                    category_l2: "coffee"
+                    include_similar: false
+                metadata:
+                  results: 1
+        "400":
+          description: "The request contains an invalid payload"
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/schemas/BadRequestResponse"
+              example:
+                operation_id: "corrections_v2_categories_post"
+                code_id: "validation_error"
+                message: "Bad request payload"
+                errors:
+                  X-Client-ID: "This value should not be blank"
+        "401":
+          description: "Unauthorised request"
+        "405":
+          description: "An unexpected HTTP method was used"
+        "5XX":
+          description: "An unexpected error occurred on the server side"
+
+  /v1/transactions/attributes/client-labels:
+    post:
+      tags:
+        - "Manage Financial Data"
+      summary: Create Transaction Rule(s)
+      description: "Submit rules for adding custom attributes to transactions based on properties of the transaction. Rules can be a combination of an exact match on the amount, cdi, currency and description."
+      operationId: v1_transactions_attributes_client_labels_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: "components.yaml#/parameters/ClientId"
+        - $ref: "components.yaml#/parameters/CustomerId"
+        - $ref: "components.yaml#/parameters/CustomerSecret"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'components.yaml#/schemas/TransactionAttributesClientLabelsRequest'
+            example:
+              - match_attributes:
+                  - type: 'exact'
+                    name: 'amount'
+                    value: '1800.00'
+                  - type: 'exact'
+                    name: 'cdi'
+                    value: 'Credit'
+                set_attribute:
+                  values:
+                    - 'freelance income'
+                    - 'pocket money'
+      responses:
+        '200':
+          description: The operation was successful
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/TransactionAttributesClientLabelsResponse'
+              example:
+                operation_id: v1_transactions_attributes_client_labels_post
+                data:
+                  rules_created: 2
+        '400':
+          description: The request contains an invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/schemas/BadRequestResponse'
+              example:
+                operation_id: v1_transactions_attributes_client_labels_post
+                code_id: "Bad Request"
+                message: "Required field in payload not set"
+                errors:
+                  match_attributes[0].type: this field is required
+        '401':
+          description: Unauthorised request
+        '405':
+          description: An unexpected HTTP method was used
+        '413':
+          description: More than 1000 corrections were requested
+        '422':
+          description: Transaction(s) not found, corrections could not be processed
+        '5XX':
+          description: An unexpected error occurred on the server side
+
+components:
+  securitySchemes:
+    OAuth2:
+      $ref: "components.yaml#/securitySchemes/OAuth2"
+
+  schemas:
+    Transaction:
+      title: "Transaction"
+      type: object
+      description: "A financial transaction"
+      required:
+        - transaction_id
+        - account_id
+        - description
+        - amount
+        - credit_debit_indicator
+        - status
+        - date_time
+      properties:
+        transaction_id:
+          type: string
+          description: "Unique identifier for the transaction. May be mutable depending on original ingestion source."
+        account_id:
+          type: string
+          description: "Identifier for the account associated with the transaction."
+        provider:
+          type: string
+          description: "Name of the transaction source provider."
+        description:
+          type: string
+          description: "Description of the transaction. Similar to the transaction information in Open Banking."
+        credit_debit_indicator:
+          type: string
+          description: "Credit/Debit Indicator"
+          enum:
+            - credit
+            - debit
+        status:
+          type: string
+          description: "Status of the transaction. Defaults to booked."
+          enum:
+            - booked
+            - pending
+        amount:
+          $ref: "components-common-schemas.yaml#/schemas/BudAmount"
+        date_time:
+          type: string
+          description: "Date of the transaction compliant with RFC3339."
+        enrichments:
+          $ref: "#/components/schemas/Enrichments"
+        tags:
+          type: array
+          description: |
+            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering.
+            Region and client specific.
+
+            | Value                   | Description                                               |
+            |:------------------------|:----------------------------------------------------------|
+            | `benefit`               | A government/non-profit benefit transaction               |
+            | `debt-collection`       | A transaction associated with a known debt-collector      |
+            | `income`                | A transaction associated with income                      |
+            | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
+            | `salary`                | A transaction associated with a regular wage              |
+            | `subscription`          | A transaction associated with a subscription service      |
+          items:
+            type: string
+
+    Enrichments:
+      title: "Enrichments"
+      type: object
+      description: "Contextual enrichments associated with a Transaction"
+      properties:
+        categories:
+          $ref: "#/components/schemas/Categories"
+        merchant:
+          $ref: "#/components/schemas/Merchant"
+        processor:
+          $ref: "#/components/schemas/Processor"
+        regularity:
+          $ref: "#/components/schemas/Regularity"
+        locations:
+          $ref: "#/components/schemas/Location"
+        transaction_types:
+          type: array
+          description: "Transaction types associated with the transaction"
+          items:
+            type: string
+        names:
+          type: array
+          description: "Names that were detected in the transaction description"
+          items:
+            type: string
+
+    Categories:
+      title: "Categories"
+      type: object
+      description: "Categories enrichment associated with a Transaction"
+      properties:
+        l1:
+          $ref: "#/components/schemas/Category"
+          description: "Level 1 Category"
+        l2:
+          $ref: "#/components/schemas/Category"
+          description: "Level 2 Category"
+
+    Category:
+      title: "Category"
+      type: object
+      description: "Category associated with a Transaction"
+      required:
+        - slug
+        - confidence
+      properties:
+        slug:
+          type: string
+          description: "Unique human readable identifier of the category. Not subject to version control."
+        confidence:
+          type: string
+          description: "Degree of belief of correct assignment, expressed as a probability."
+
+    Merchant:
+      title: "Merchant"
+      type: object
+      description: "Merchant enrichment associated with a Transaction"
+      properties:
+        id:
+          type: string
+          description: "UUID corresponding to the merchant, if available. Subject to version control."
+        slug:
+          type: string
+          description: "Unique human readable identifier of the merchant. Not subject to version control."
+        display_name:
+          type: string
+          description: "UI friendly display name for the merchant."
+        logo:
+          type: string
+          description: "URL supplying merchant logo, if available."
+
+    Processor:
+      title: "Processor"
+      type: object
+      description: "Processor enrichment associated with a Transaction"
+      properties:
+        id:
+          type: string
+          description: "UUID corresponding to the processor, if available. Subject to version control."
+        slug:
+          type: string
+          description: "Unique human readable identifier of the merchant. Not subject to version control."
+        display_name:
+          type: string
+          description: "UI friendly display name for the processor."
+        logo:
+          type: string
+          description: "URL supplying processor logo, if available."
+
+    Regularity:
+      title: "Regularity"
+      type: object
+      description: "Regularity enrichment associated with a Transaction."
+      properties:
+        frequency:
+          type: string
+          description: "Detected frequency of the Transaction."
+          enum:
+            - "unknown"
+            - "daily"
+            - "weekly"
+            - "biweekly"
+            - "monthly"
+            - "quarterly"
+            - "six_monthly"
+            - "annually"
+        predicted_date_times:
+          type: array
+          description: "Expected date times for the Transaction to repeat."
+          items:
+            type: string
+        group_label:
+          type: string
+          description: "Unique label applied to multiple transactions in the same group."
+
+    Location:
+      title: "Location"
+      type: object
+      description: "Location enrichment associated with a Transaction"
+      properties:
+        address:
+          type: object
+          description: "The address of the detected location."
+          properties:
+            address_lines:
+              type: array
+              description: |
+                The lines of the detected address. These could be anything from a full street address down to a simple town or city.
+                The level of detail depends on the resolution with which we are able to detect the transaction location.
+              items:
+                type: string
+            country:
+              type: string
+              description: "An ISO-3166 Alpha-3 country code representing the detected country the transaction was located."
+
+    ListTransactionsResponse:
+      title: "Retrieve Transactions Response"
+      type: object
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - "v2_transactions_get"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+        metadata:
+          type: object
+          required:
+            - results
+          properties:
+            results:
+              type: integer
+              description: "The number of results returned."
+            next_page_token:
+              type: string
+              description: "The token required to retrieve the next page of results. Will be omitted if no next page exists."
+
