@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ba0850bd-7106-4261-b3eb-072e3b48cec9",
+		"_postman_id": "c96cb21b-13fe-4210-8b4b-14a19ed793e1",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -151,7 +151,7 @@
 					"name": "Manage Customers",
 					"item": [
 						{
-							"name": "Create a  new Customer",
+							"name": "Create Customer",
 							"event": [
 								{
 									"listen": "test",
@@ -196,7 +196,8 @@
 									"path": [
 										"customers"
 									]
-								}
+								},
+								"description": "This endpoint is used to create a new Customer in order for them to consume the Bud services."
 							},
 							"response": []
 						},
@@ -251,12 +252,13 @@
 									"path": [
 										"customers"
 									]
-								}
+								},
+								"description": "This endpoint is used to create new Customers in order for them to consume the Bud services."
 							},
 							"response": []
 						},
 						{
-							"name": "Delete an existing customer",
+							"name": "Remove Customer",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -290,7 +292,8 @@
 										"customers",
 										"{{customer_id}}"
 									]
-								}
+								},
+								"description": "This endpoint is used to delete an existing Customer."
 							},
 							"response": []
 						},
@@ -374,12 +377,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"region\": \"US\",\n  \"locale\": \"en-US\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "{\n  \"region\": \"US\",\n  \"locale\": \"en-US\"\n}"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/customers/{{customer_id}}/context",
@@ -395,7 +393,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -406,7 +405,7 @@
 					"name": "Create a Connection",
 					"item": [
 						{
-							"name": "List Providers",
+							"name": "Retrieve OB Providers",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -434,12 +433,12 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}v1/payments/providers?country=GBR,DEU",
+									"raw": "{{proxy_url}}v1/open-banking/providers?",
 									"host": [
 										"{{proxy_url}}v1"
 									],
 									"path": [
-										"payments",
+										"open-banking",
 										"providers"
 									],
 									"query": [
@@ -449,12 +448,13 @@
 											"disabled": true
 										},
 										{
-											"key": "country",
-											"value": "GBR,DEU"
+											"key": "region",
+											"value": "GBR",
+											"disabled": true
 										},
 										{
-											"key": "product",
-											"value": "domestic-single-payment,domestic-standing-order",
+											"key": "scopes",
+											"value": "parties",
 											"disabled": true
 										}
 									]
@@ -513,7 +513,275 @@
 									]
 								}
 							},
-							"response": []
+							"response": [
+								{
+									"name": "Retrieve Auth Gateway URL V2 - Filter by provider type",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "default"
+											},
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}",
+												"type": "default"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}",
+												"type": "default"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}",
+												"type": "default"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"redirect_url\": \"https://my-agent-webapp.com/connected?my-parameter=xyz\",\n  \"provider_types\": [\n    \"business\"\t\n  ]\n}"
+										},
+										"url": {
+											"raw": "{{proxy_url}}v2/open-banking/authorisation-gateway-url",
+											"host": [
+												"{{proxy_url}}v2"
+											],
+											"path": [
+												"open-banking",
+												"authorisation-gateway-url"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Thu, 30 Mar 2023 11:37:28 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "403"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-envoy-upstream-service-time",
+											"value": "176"
+										},
+										{
+											"key": "x-upstream-request-id",
+											"value": "b141e39f-b42d-4e06-b1eb-e84b4476d385"
+										},
+										{
+											"key": "CF-Cache-Status",
+											"value": "DYNAMIC"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=2592000; includeSubDomains"
+										},
+										{
+											"key": "Server",
+											"value": "cloudflare"
+										},
+										{
+											"key": "CF-RAY",
+											"value": "7b000f906a52889d-LHR"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"operation_id\": \"v2_ob_authorisation_gateway_url_post\",\n    \"data\": {\n        \"url\": \"https://connect-sandbox.thisisbud.com/connect?nonce=wvpzUFr917&token=rseQrF6zONHuK6z25cVnyn1x1DQlc5MM9iddQmtzq1Zv3A5UNSBE2qav2AS4BI22KupogxFAosYDcbQ8Z67lU0VeGwYE3e22QZmlSa3DCxmjF0muBMfDUc0kRXTWEUmCOGSeEkYpS7wovIOPgbCnpicCQSG4u4vNxWKuSKuvxRfXPq857a3H29mahDsChwa0PhJDTsADKkn541P1rpr3BtpJvc5Uvk00R5s1xwhf6LEjUrSaFdXhSYuRIuIv0k9\"\n    }\n}"
+								},
+								{
+									"name": "Retrieve Auth Gateway URL V2",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "default"
+											},
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}",
+												"type": "default"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}",
+												"type": "default"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}",
+												"type": "default"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"redirect_url\": \"https://my-agent-webapp.com/connected?my-parameter=xyz\"\n}"
+										},
+										"url": {
+											"raw": "{{proxy_url}}v2/open-banking/authorisation-gateway-url",
+											"host": [
+												"{{proxy_url}}v2"
+											],
+											"path": [
+												"open-banking",
+												"authorisation-gateway-url"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Thu, 30 Mar 2023 11:33:05 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "403"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-envoy-upstream-service-time",
+											"value": "176"
+										},
+										{
+											"key": "x-upstream-request-id",
+											"value": "c608ea95-49f0-458f-8d02-17a49684372a"
+										},
+										{
+											"key": "CF-Cache-Status",
+											"value": "DYNAMIC"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=2592000; includeSubDomains"
+										},
+										{
+											"key": "Server",
+											"value": "cloudflare"
+										},
+										{
+											"key": "CF-RAY",
+											"value": "7b0009268fed889d-LHR"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"operation_id\": \"v2_ob_authorisation_gateway_url_post\",\n    \"data\": {\n        \"url\": \"https://connect-sandbox.thisisbud.com/connect?nonce=3NfQEp5jJR&token=rk0RJDCxo5tQ4jWVDHMUSZcagrUPw707eBPeq0L6GiYm3aRciQzUuolhKn7kNPiw17dLvCdJvnYYV2tPCoBDRClFtvlUOGe9FeDqywOFuuhA2JDO4bTMna7lRy8oI6qzzz17uHKQEkQlnf4syeMqITUIQQNsDWAr6yoeXI0Ygxp4xDbGVnQdhvmjzfxdou9XtJrHOvNRoVr0IBcthSzMgsp0MVdvMYZNYaLGLUMkl08gp29ziHk2OoDx6ZjwzdJ\"\n    }\n}"
+								},
+								{
+									"name": "Retrieve Auth Gateway URL V2 - Filter by providers",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "default"
+											},
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}",
+												"type": "default"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}",
+												"type": "default"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}",
+												"type": "default"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"redirect_url\": \"https://my-agent-webapp.com/connected?my-parameter=xyz\",\n  \"providers\": [\n  \t\"Natwest_Sandbox\"\n  ]\n}"
+										},
+										"url": {
+											"raw": "{{proxy_url}}v2/open-banking/authorisation-gateway-url",
+											"host": [
+												"{{proxy_url}}v2"
+											],
+											"path": [
+												"open-banking",
+												"authorisation-gateway-url"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Thu, 30 Mar 2023 11:33:05 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "403"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-envoy-upstream-service-time",
+											"value": "176"
+										},
+										{
+											"key": "x-upstream-request-id",
+											"value": "c608ea95-49f0-458f-8d02-17a49684372a"
+										},
+										{
+											"key": "CF-Cache-Status",
+											"value": "DYNAMIC"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=2592000; includeSubDomains"
+										},
+										{
+											"key": "Server",
+											"value": "cloudflare"
+										},
+										{
+											"key": "CF-RAY",
+											"value": "7b0009268fed889d-LHR"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"operation_id\": \"v2_ob_authorisation_gateway_url_post\",\n    \"data\": {\n        \"url\": \"https://connect-sandbox.thisisbud.com/connect?nonce=3NfQEp5jJR&token=rk0RJDCxo5tQ4jWVDHMUSZcagrUPw707eBPeq0L6GiYm3aRciQzUuolhKn7kNPiw17dLvCdJvnYYV2tPCoBDRClFtvlUOGe9FeDqywOFuuhA2JDO4bTMna7lRy8oI6qzzz17uHKQEkQlnf4syeMqITUIQQNsDWAr6yoeXI0Ygxp4xDbGVnQdhvmjzfxdou9XtJrHOvNRoVr0IBcthSzMgsp0MVdvMYZNYaLGLUMkl08gp29ziHk2OoDx6ZjwzdJ\"\n    }\n}"
+								}
+							]
 						},
 						{
 							"name": "Initiate Provider Authorisation",
@@ -564,12 +832,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"provider\": \"{{bank_name}}\",\n  \"redirect_url\": \"https://my-agent-webapp.com/connected?my-parameter=xyz\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "{\n  \"provider\": \"{{bank_name}}\",\n  \"redirect_url\": \"https://my-agent-webapp.com/connected?my-parameter=xyz\"\n}"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/open-banking/authorisation-url",
@@ -678,12 +941,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"state\": \"{{connection_task_id}}\",\n  \"my-parameter\":\"xyz\",\n  \"code\": \"....\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "{\n  \"state\": \"{{connection_task_id}}\",\n  \"my-parameter\":\"xyz\",\n  \"code\": \"....\"\n}"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/open-banking/authorisation-codes",
@@ -699,7 +957,7 @@
 							"response": []
 						},
 						{
-							"name": "Retrieve connection status Copy",
+							"name": "Retrieve connection status",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -743,7 +1001,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Manage a Connection",
@@ -865,11 +1124,12 @@
 							"response": []
 						},
 						{
-							"name": "List Customer Consents",
+							"name": "Retrieve Customer Consents",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
+										"id": "8a16a163-9935-4d0c-8d97-3fa9ca6b7089",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"",
@@ -906,8 +1166,13 @@
 									},
 									{
 										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "default"
+										"type": "default",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
 									}
 								],
 								"body": {
@@ -928,6 +1193,125 @@
 											"key": "status",
 											"value": "all"
 										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Initiate Revoke Consent",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b14ca38a-7339-4a34-9347-88f06879f25f",
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has revoke_task_id\"] = jsonData.data.task_id;",
+											"",
+											"pm.environment.set(\"revoke_task_id\", jsonData.data.task_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"provider\": \"{{bank_name}}\"\n}"
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/account-access-consent/revoke",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"account-access-consent",
+										"revoke"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Revoke consent status",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/open-banking/account-access-consent/revoke/{{revoke_task_id}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"open-banking",
+										"account-access-consent",
+										"revoke",
+										"{{revoke_task_id}}"
 									]
 								}
 							},
@@ -998,125 +1382,9 @@
 								}
 							},
 							"response": []
-						},
-						{
-							"name": "Initiate Revoke Consent",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"",
-											"tests[\"Response has revoke_task_id\"] = jsonData.data.task_id;",
-											"",
-											"pm.environment.set(\"revoke_task_id\", jsonData.data.task_id);",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "default"
-									},
-									{
-										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "default"
-									},
-									{
-										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "default"
-									},
-									{
-										"key": "X-Customer-Secret",
-										"value": "{{customer_secret}}",
-										"type": "default"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"provider\": \"{{bank_name}}\"\n}"
-								},
-								"url": {
-									"raw": "{{proxy_url}}v1/open-banking/refresh",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"open-banking",
-										"refresh"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Retrieve Revoke consent status",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									},
-									{
-										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "default"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "{{proxy_url}}v1/open-banking/account-access-consent/revoke/{{revoke_task_id}}",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"open-banking",
-										"account-access-consent",
-										"revoke",
-										"{{revoke_task_id}}"
-									]
-								}
-							},
-							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Ingest first party data",
@@ -1127,6 +1395,7 @@
 								{
 									"listen": "test",
 									"script": {
+										"id": "da78691f-9049-442d-adfd-875b6d7f15f3",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"pm.environment.set(\"account_ingestion_task_id\", jsonData.data.task_id);"
@@ -1157,17 +1426,12 @@
 										"key": "Content-Type",
 										"name": "Content-Type",
 										"type": "text",
-										"value": "application/bud-transaction-v2+json"
+										"value": "application/bud-accounts+json"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"accounts\": [\n      {\n        \"provider\": \"Barclays\",\n        \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n        \"currency\": \"GBP\",\n        \"account_type\": \"Personal\",\n        \"account_sub_type\": \"CurrentAccount\",\n        \"details\": [\n          {\n            \"scheme_name\": \"UK.OBIE.SortCodeAccountNumber\",\n            \"identification\": \"98765432165444\",\n            \"secondary_identification\": \"00021\",\n            \"name\": \"Mr Kevin\"\n          }\n        ],\n        \"balances\": [\n          {\n            \"amount\": {\n              \"value\": \"7.00\",\n              \"currency\": \"GBP\"\n            },\n            \"credit_debit_indicator\": \"outgoing_debit\",\n            \"credit_line\": [\n              {\n                \"included\": true,\n                \"amount\": {\n                  \"value\": \"200.00\",\n                  \"currency\": \"GBP\"\n                },\n                \"type\": \"Credit\"\n              }\n            ],\n            \"date\": \"2020-12-01\",\n            \"time\": \"00:00:00\",\n            \"type\": \"InterimBooked\"\n          }\n        ]\n      }\n    ]\n  }\n ]",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"accounts\": [\n      {\n        \"provider\": \"Barclays\",\n        \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n        \"currency\": \"GBP\",\n        \"account_type\": \"Personal\",\n        \"account_sub_type\": \"CurrentAccount\",\n        \"details\": [\n          {\n            \"scheme_name\": \"UK.OBIE.SortCodeAccountNumber\",\n            \"identification\": \"98765432165444\",\n            \"secondary_identification\": \"00021\",\n            \"name\": \"Mr Kevin\"\n          }\n        ],\n        \"balances\": [\n          {\n            \"amount\": {\n              \"value\": \"7.00\",\n              \"currency\": \"GBP\"\n            },\n            \"credit_debit_indicator\": \"outgoing_debit\",\n            \"credit_line\": [\n              {\n                \"included\": true,\n                \"amount\": {\n                  \"value\": \"200.00\",\n                  \"currency\": \"GBP\"\n                },\n                \"type\": \"Credit\"\n              }\n            ],\n            \"date\": \"2020-12-01\",\n            \"time\": \"00:00:00\",\n            \"type\": \"InterimBooked\"\n          }\n        ]\n      }\n    ]\n  }\n ]"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/ingest/accounts",
@@ -1184,9 +1448,6 @@
 						},
 						{
 							"name": "Retrieve Account Ingestion Task Status",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -1212,15 +1473,6 @@
 										"value": "application/bud-transaction-v2+json"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": "[\n  {\n    \"customer_id\": \"8e10757f-4f18-41d6-a5a7-a7ae56bccdd7\",\n    \"customer_secret\": \"531d99d9f2bfe1d2bf07f010cfeb0c81c65527ced517d4a9b9465baf14a75b8e\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Plaid\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRq\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-09-01T00:00:00.000Z\",\n\t    \"transaction_description\": \"BINANCE BCC3B1DEED FT\",\n\t    \"credit_debit_indicator\": \"incoming_credit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"schema\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"amount\": \"10000.0\",\n\t      \"curency\": \"GBP\"\n\t    }\n\t  }\n\t]\n  }\n]",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
 									"raw": "{{proxy_url}}v1/ingest/accounts/{{account_ingestion_task_id}}",
 									"host": [
@@ -1241,6 +1493,7 @@
 								{
 									"listen": "test",
 									"script": {
+										"id": "8a212ed6-9bb9-42f4-8921-5ea539b37464",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"pm.environment.set(\"ingestion_task_id\", jsonData.data.task_id);"
@@ -1276,12 +1529,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRe\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-03-01\",\n\t    \"transaction_description\": \"WEEKLY DELIVEROO\",\n\t    \"credit_debit_indicator\": \"outgoing_debit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"value\": \"15.00\",\n\t      \"currency\": \"GBP\"\n\t    }\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRq\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-03-08\",\n\t    \"transaction_description\": \"WEEKLY DELIVEROO\",\n\t    \"credit_debit_indicator\": \"outgoing_debit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"value\": \"15.00\",\n\t      \"currency\": \"GBP\"\n\t    }\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRw\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-03-15\",\n\t    \"transaction_description\": \"WEEKLY DELIVEROO\",\n\t    \"credit_debit_indicator\": \"outgoing_debit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"value\": \"15.00\",\n\t      \"currency\": \"GBP\"\n\t    }\n\t  }\n\t]\n  }\n]",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRe\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-03-01\",\n\t    \"transaction_description\": \"WEEKLY DELIVEROO\",\n\t    \"credit_debit_indicator\": \"outgoing_debit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"value\": \"15.00\",\n\t      \"currency\": \"GBP\"\n\t    }\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRq\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-03-08\",\n\t    \"transaction_description\": \"WEEKLY DELIVEROO\",\n\t    \"credit_debit_indicator\": \"outgoing_debit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"value\": \"15.00\",\n\t      \"currency\": \"GBP\"\n\t    }\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRw\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-03-15\",\n\t    \"transaction_description\": \"WEEKLY DELIVEROO\",\n\t    \"credit_debit_indicator\": \"outgoing_debit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"value\": \"15.00\",\n\t      \"currency\": \"GBP\"\n\t    }\n\t  }\n\t]\n  }\n]"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/ingest/transactions",
@@ -1302,6 +1550,7 @@
 								{
 									"listen": "test",
 									"script": {
+										"id": "58956fdb-9267-42c1-bd71-5c3272c8e3f5",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"pm.environment.set(\"ingestion_task_id\", jsonData.metadata.task_id);"
@@ -1333,16 +1582,16 @@
 										"name": "Content-Type",
 										"value": "application/bud-transaction-v3+json",
 										"type": "text"
+									},
+									{
+										"key": "X-Disable-Synchronous",
+										"value": "false",
+										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123V2\",\n\t    \"date_time\": \"2021-03-02T02:07:14Z\",\n\t    \"description\": \"Macbook Pro 16\\\" 512GB\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-2300.00\"\n\t  }\n\t]\n  }\n]",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123V2\",\n\t    \"date_time\": \"2023-03-02T02:07:14Z\",\n\t    \"description\": \"Macbook Pro 16\\\" 512GB\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-2300.00\"\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123V2\",\n\t    \"date_time\": \"2023-02-02T02:07:14Z\",\n\t    \"description\": \"Starbucks\",\n\t    \"status\": \"booked\",\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-8.00\"\n\t  }\n\t],\n\t\"transaction_windows\": [\n\t  {\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"start\": \"2023-02-02T02:07:14Z\",\n\t    \"end\": \"2023-03-02T02:07:14Z\"\n\t  }\n\t]\n  }\n]"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v2/ingest/transactions",
@@ -1389,12 +1638,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n  {\n    \"customer_id\": \"8e10757f-4f18-41d6-a5a7-a7ae56bccdd7\",\n    \"customer_secret\": \"531d99d9f2bfe1d2bf07f010cfeb0c81c65527ced517d4a9b9465baf14a75b8e\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Plaid\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRq\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-09-01T00:00:00.000Z\",\n\t    \"transaction_description\": \"BINANCE BCC3B1DEED FT\",\n\t    \"credit_debit_indicator\": \"incoming_credit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"schema\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"amount\": \"10000.0\",\n\t      \"curency\": \"GBP\"\n\t    }\n\t  }\n\t]\n  }\n]",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "[\n  {\n    \"customer_id\": \"8e10757f-4f18-41d6-a5a7-a7ae56bccdd7\",\n    \"customer_secret\": \"531d99d9f2bfe1d2bf07f010cfeb0c81c65527ced517d4a9b9465baf14a75b8e\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Plaid\",\n\t    \"account_id\": \"6AbDgadYgAsYkkpgozpYFEadbX4Mp9UaamJLw\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zdbFb8NwRq\",\n\t    \"transaction_type\": \"DEB\",\n\t    \"date\": \"2021-09-01T00:00:00.000Z\",\n\t    \"transaction_description\": \"BINANCE BCC3B1DEED FT\",\n\t    \"credit_debit_indicator\": \"incoming_credit\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"schema\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"amount\": {\n\t      \"amount\": \"10000.0\",\n\t      \"curency\": \"GBP\"\n\t    }\n\t  }\n\t]\n  }\n]"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/ingest/transactions/{{ingestion_task_id}}",
@@ -1410,7 +1654,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -1418,14 +1663,15 @@
 			"name": "Financial Data API",
 			"item": [
 				{
-					"name": "Fetch Financial Data",
+					"name": "Retrieve Financial Data",
 					"item": [
 						{
-							"name": "List Accounts",
+							"name": "Retrieve Accounts V2",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
+										"id": "183b9c79-7520-40fe-9d73-ff3f3a24a2d6",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"",
@@ -1462,6 +1708,159 @@
 									},
 									{
 										"key": "X-Customer-Id",
+										"type": "default",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "default",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}financial/v2/accounts?",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v2",
+										"accounts"
+									],
+									"query": [
+										{
+											"key": "currency",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the currency associated with each result. Multiple values are accepted. If this parameter is not provided then results of any currency will be returned.",
+											"disabled": true
+										},
+										{
+											"key": "provider",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the provider associated with each result. Multiple values are accepted. If this parameter is not provided then results of any provider will be returned",
+											"disabled": true
+										},
+										{
+											"key": "account_type",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the account_type associated with each result. Multiple values are accepted. If this parameter is not provided then results of any account_type will be returned.",
+											"disabled": true
+										},
+										{
+											"key": "usage_type",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the usage_type associated with each result. Multiple values are accepted. If this parameter is not provided then results of any usage_type will be returned.",
+											"disabled": true
+										},
+										{
+											"key": "holder_relationship_type",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the holder_relationship_type associated with each result. Multiple values are accepted. If this parameter is not provided then results of any holder_relationship_type will be returned.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Account By ID V2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "183b9c79-7520-40fe-9d73-ff3f3a24a2d6",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "default",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "default",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}financial/v2/accounts/{{bank_account_id}}",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v2",
+										"accounts",
+										"{{bank_account_id}}"
+									]
+								},
+								"description": "Retrieves a customer's connected account by its ID."
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Balances over time",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
 										"value": "{{customer_id}}",
 										"type": "default"
 									},
@@ -1469,6 +1868,276 @@
 										"key": "X-Customer-Secret",
 										"value": "{{customer_secret}}",
 										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}financial/v2/balances?",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v2",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2022-11-25",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "2023-02-01",
+											"disabled": true
+										},
+										{
+											"key": "granularity",
+											"value": "annually",
+											"disabled": true
+										}
+									]
+								},
+								"description": "List the balances of each bank account for a customer accross all ingestion sources. Ordered by balance date.\n\nIt calculates the balance for each date, by iterating from the date the account was last refreshed to the to and from dates provided. It then checks all the transactions within this range, calculating the balance at the end of each day.\n\nThis endpoint limits the date from which it gets balances from either by the oldest transaction_window on the account if they are present, or by the oldest transaction within the requested date range available.\n\nFor users ingesting data via the Ingest Accounts endpoint, you can increase the range and accuracy of the data supplied from this service by including the transaction_window field upon acccount ingestion."
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Balances over time by account",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "default",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "default",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "default",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "default",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}financial/v2/accounts/{{bank_account_id}}/balances?",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v2",
+										"accounts",
+										"{{bank_account_id}}",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2021-11-25",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "2023-02-01",
+											"disabled": true
+										},
+										{
+											"key": "granularity",
+											"value": "annually",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Transactions V2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ddd4ae2a-1b19-4f32-8c3f-95103b135849",
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"transaction_id\", jsonData.data[0].transaction_id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}financial/v2/transactions?",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v2",
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "date_from",
+											"value": "2020-01-01",
+											"disabled": true
+										},
+										{
+											"key": "date_to",
+											"value": "2023-10-10",
+											"disabled": true
+										},
+										{
+											"key": "page_size",
+											"value": "100",
+											"disabled": true
+										},
+										{
+											"key": "page_token",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "account_id",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "merchant",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "category_l1",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "category_l2",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "include_tags[0]",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "exclude_tags[0]",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Accounts (deprecated)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "0c4c5962-cd14-4701-b429-4d50419d9668",
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has data\"] = jsonData.data;",
+											"var firstElement = jsonData.data[0]",
+											"",
+											"pm.environment.set(\"bank_account_id\", firstElement.account_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "default",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "default",
+										"value": "{{customer_secret}}"
+									},
+									{
+										"key": "X-Account-Id",
+										"value": "{{bank_account_id}}",
+										"type": "text",
+										"disabled": true
 									}
 								],
 								"body": {
@@ -1489,11 +2158,12 @@
 							"response": []
 						},
 						{
-							"name": "List Transactions",
+							"name": "Retrieve Transactions (deprecated)",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
+										"id": "5425d5db-1789-4436-b417-f0bbaa7d8068",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"pm.environment.set(\"transaction_id\", jsonData.data[0].id);"
@@ -1533,12 +2203,14 @@
 									{
 										"key": "X-From",
 										"value": "2020-01-01",
-										"type": "text"
+										"type": "text",
+										"disabled": true
 									},
 									{
 										"key": "X-To",
 										"value": "2021-05-01",
-										"type": "text"
+										"type": "text",
+										"disabled": true
 									},
 									{
 										"key": "X-Account-Id",
@@ -1559,213 +2231,31 @@
 								}
 							},
 							"response": []
-						},
-						{
-							"name": "List Transactions V2",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"transaction_id\", jsonData.data[0].transaction_id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "text"
-									},
-									{
-										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "text"
-									},
-									{
-										"key": "X-Customer-Secret",
-										"value": "{{customer_secret}}",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{proxy_url}}financial/v2/transactions?date_from=2020-01-01&date_to=2023-10-10&page_size=100",
-									"host": [
-										"{{proxy_url}}financial"
-									],
-									"path": [
-										"v2",
-										"transactions"
-									],
-									"query": [
-										{
-											"key": "date_from",
-											"value": "2020-01-01"
-										},
-										{
-											"key": "date_to",
-											"value": "2023-10-10"
-										},
-										{
-											"key": "page_size",
-											"value": "100"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Balances over time (Beta)",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "default"
-									},
-									{
-										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "default"
-									},
-									{
-										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "default"
-									},
-									{
-										"key": "X-Customer-Secret",
-										"value": "{{customer_secret}}",
-										"type": "default"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "{{proxy_url}}financial/beta/balances?from=2022-11-25&to=2023-02-01&granularity=annually",
-									"host": [
-										"{{proxy_url}}financial"
-									],
-									"path": [
-										"beta",
-										"balances"
-									],
-									"query": [
-										{
-											"key": "from",
-											"value": "2022-11-25"
-										},
-										{
-											"key": "to",
-											"value": "2023-02-01"
-										},
-										{
-											"key": "granularity",
-											"value": "annually"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Balances over time by account (Beta)",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "default"
-									},
-									{
-										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "default"
-									},
-									{
-										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "default"
-									},
-									{
-										"key": "X-Customer-Secret",
-										"value": "{{customer_secret}}",
-										"type": "default"
-									}
-								],
-								"url": {
-									"raw": "{{proxy_url}}financial/beta/accounts/{{bank_account_id}}/balances?from=2021-11-25&to=2023-02-01&granularity=annually",
-									"host": [
-										"{{proxy_url}}financial"
-									],
-									"path": [
-										"beta",
-										"accounts",
-										"{{bank_account_id}}",
-										"balances"
-									],
-									"query": [
-										{
-											"key": "from",
-											"value": "2021-11-25"
-										},
-										{
-											"key": "to",
-											"value": "2023-02-01"
-										},
-										{
-											"key": "granularity",
-											"value": "annually"
-										}
-									]
-								}
-							},
-							"response": []
 						}
-					]
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3235f9e6-f1cf-4b2d-a7b6-17a3d1052231",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "d76ca0aa-a3bb-4570-8632-83ece3132e9f",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Manage Financial Data",
@@ -1815,7 +2305,7 @@
 							"response": []
 						},
 						{
-							"name": "Recategorise transactions V1",
+							"name": "Correct Transaction Categories V1",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -1839,23 +2329,23 @@
 									},
 									{
 										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "default"
+										"type": "default",
+										"value": "{{api_credentials_id}}"
 									},
 									{
 										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "default"
+										"type": "default",
+										"value": "{{customer_id}}"
 									},
 									{
 										"key": "X-Customer-Secret",
-										"value": "{{customer_secret}}",
-										"type": "default"
+										"type": "default",
+										"value": "{{customer_secret}}"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "\n[\n     {\n          \"transaction_id\": \"{{transaction_id}}\",\n          \"account_id\": \"{{bank_account_id}}\",\n          \"category_name\": \"company_equipment\",\n          \"subcategory_name\": \"it_equipment\"\n     }\n]\n"
+									"raw": "[\n     {\n          \"transaction_id\": \"{{transaction_id}}\",\n          \"account_id\": \"{{bank_account_id}}\",\n          \"category_name\": \"company_equipment\",\n          \"subcategory_name\": \"it_equipment\"\n     }\n]"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/recategorise/customer-corrections/double-cat",
@@ -1872,7 +2362,7 @@
 							"response": []
 						},
 						{
-							"name": "Recategorise transactions V2",
+							"name": "Correct Transaction Categories V2",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -1887,32 +2377,28 @@
 								"method": "POST",
 								"header": [
 									{
-										"key": "accept",
-										"value": "application/json"
-									},
-									{
 										"key": "content-type",
 										"value": "application/json"
 									},
 									{
 										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "default"
+										"type": "default",
+										"value": "{{api_credentials_id}}"
 									},
 									{
 										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "default"
+										"type": "default",
+										"value": "{{customer_id}}"
 									},
 									{
 										"key": "X-Customer-Secret",
-										"value": "{{customer_secret}}",
-										"type": "default"
+										"type": "default",
+										"value": "{{customer_secret}}"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "\n[\n     {\n          \"include_similar\": true,\n          \"transaction_id\": \"{{transaction_id}}\",\n          \"category_l1\": \"company_equipment\",\n          \"category_l2\": \"it_equipment\"\n     }\n]\n"
+									"raw": "[\n     {\n          \"include_similar\": true,\n          \"transaction_id\": \"{{transaction_id}}\",\n          \"category_l1\": \"company_equipment\",\n          \"category_l2\": \"it_equipment\"\n     }\n]"
 								},
 								"url": {
 									"raw": "{{proxy_url}}corrections/v2/categories",
@@ -1928,7 +2414,7 @@
 							"response": []
 						},
 						{
-							"name": "Create transaction rules",
+							"name": "Create transaction rules (deprecated)",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -1976,7 +2462,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -2020,7 +2507,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Enrichment Totals",
@@ -2198,7 +2686,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -2347,7 +2836,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Income Insights",
@@ -2559,7 +3049,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Expenditure Insights",
@@ -2857,7 +3348,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -2911,7 +3403,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Customer Characteristics",
@@ -2960,7 +3453,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Income and Expenditure Insight",
@@ -3143,7 +3637,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Custom Signals",
@@ -3228,12 +3723,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"parent-with-kids\",\n\t\"description\": \"Matches customers with childcare expenses\",\n\t\"components\": [\n\t\t{\n\t\t\t\"name\": \"expenditure_l3s\",\n\t\t\t\"parameters\": {\n\t\t\t\t\"l3-categories\": [\"childcare_and_nursery\"],\n\t\t\t\t\"amount\": 400,\n\t\t\t\t\"period\": \"4M\"\n\t\t\t}\n\t\t}\n\t]\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "{\n\t\"name\": \"parent-with-kids\",\n\t\"description\": \"Matches customers with childcare expenses\",\n\t\"components\": [\n\t\t{\n\t\t\t\"name\": \"expenditure_l3s\",\n\t\t\t\"parameters\": {\n\t\t\t\t\"l3-categories\": [\"childcare_and_nursery\"],\n\t\t\t\t\"amount\": 400,\n\t\t\t\t\"period\": \"4M\"\n\t\t\t}\n\t\t}\n\t]\n}"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/signal/custom/insights",
@@ -3330,7 +3820,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -3385,12 +3876,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n\t{\n\t\t\"name\": \"total_income\",\n\t\t\"transaction_categories\": [\n\t\t\t\"employment_income\",\n\t\t\t\"benefits\",\n\t\t\t\"other_income\"\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"essential_spending\",\n\t\t\"transaction_categories\": [\n\t\t\t\"mortgage_repayment\",\n\t\t\t\"utilities_water\",\n\t\t\t\"utilities_energy\",\n\t\t\t\"public_transport\"\n\t\t]\n\t}\n]",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "[\n\t{\n\t\t\"name\": \"total_income\",\n\t\t\"transaction_categories\": [\n\t\t\t\"employment_income\",\n\t\t\t\"benefits\",\n\t\t\t\"other_income\"\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"essential_spending\",\n\t\t\"transaction_categories\": [\n\t\t\t\"mortgage_repayment\",\n\t\t\t\"utilities_water\",\n\t\t\t\"utilities_energy\",\n\t\t\t\"public_transport\"\n\t\t]\n\t}\n]"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/affordability/spending-groups",
@@ -3406,7 +3892,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Affordability Report",
@@ -3527,7 +4014,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -3631,12 +4119,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"redirect_url\": \"https://thisisbud.com\",\n  \"provider\": \"BankOfBudOBUK\",\n  \"payment_details\": {\n    \"reference\": \"single payment\",\n    \"recipient\": {\n      \"name\": \"{{$randomFirstName}}\",\n      \"account_number\": \"{{sort_code_account_number}}\",\n      \"type\": \"SortCodeAccountNumber\"\n    },\n    \"sender\": {\n      \"user_id\": \"{{$randomUUID}}\",\n      \"name\": \"Chris\"\n    },\n    \"amount\": {\n      \"value\": \"10.0\",\n      \"currency\": \"GBP\"\n    }\n  }\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "{\n  \"redirect_url\": \"https://thisisbud.com\",\n  \"provider\": \"BankOfBudOBUK\",\n  \"payment_details\": {\n    \"reference\": \"single payment\",\n    \"recipient\": {\n      \"name\": \"{{$randomFirstName}}\",\n      \"account_number\": \"{{sort_code_account_number}}\",\n      \"type\": \"SortCodeAccountNumber\"\n    },\n    \"sender\": {\n      \"user_id\": \"{{$randomUUID}}\",\n      \"name\": \"Chris\"\n    },\n    \"amount\": {\n      \"value\": \"10.0\",\n      \"currency\": \"GBP\"\n    }\n  }\n}"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/payments/single/bud-pay-url",
@@ -3690,12 +4173,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"redirect_url\": \"https://thisisbud.com\",\n    \"standing_order_details\": {\n        \"reference\": \"reference monthly\",\n        \"recipient\": {\n            \"name\": \"{{$randomFirstName}}\",\n            \"type\": \"SortCodeAccountNumber\",\n            \"account_number\": \"{{sort_code_account_number}}\"\n        },\n        \"recurring_amount\": {\n            \"value\": \"15.0\",\n            \"currency\": \"GBP\"\n        },\n        \"sender\": {\n            \"name\": \"Chris\",\n            \"user_id\": \"{{$randomUUID}}\"\n        },\n        \"frequency\": \"monthly\",\n        \"first_payment_date\": \"2023-02-08\"\n    }\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "{\n    \"redirect_url\": \"https://thisisbud.com\",\n    \"standing_order_details\": {\n        \"reference\": \"reference monthly\",\n        \"recipient\": {\n            \"name\": \"{{$randomFirstName}}\",\n            \"type\": \"SortCodeAccountNumber\",\n            \"account_number\": \"{{sort_code_account_number}}\"\n        },\n        \"recurring_amount\": {\n            \"value\": \"15.0\",\n            \"currency\": \"GBP\"\n        },\n        \"sender\": {\n            \"name\": \"Chris\",\n            \"user_id\": \"{{$randomUUID}}\"\n        },\n        \"frequency\": \"monthly\",\n        \"first_payment_date\": \"2023-02-08\"\n    }\n}"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/payments/standing-order/bud-pay-url",
@@ -3749,12 +4227,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"redirect_url\": \"https://thisisbud.com\",\n    \"scheduled_payment_details\": {\n        \"reference\": \"Test\",\n        \"recipient\": {\n            \"name\": \"{{$randomFirstName}}\",\n            \"type\": \"SortCodeAccountNumber\",\n            \"account_number\": \"{{sort_code_account_number}}\"\n        },\n        \"amount\": {\n            \"value\": \"19.0\",\n            \"currency\": \"GBP\"\n        },\n        \"sender\": {\n            \"name\": \"Chris\",\n            \"user_id\": \"{{$randomUUID}}\"\n        },\n        \"requested_execution_date\": \"2023-10-01\"\n    }\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "{\n    \"redirect_url\": \"https://thisisbud.com\",\n    \"scheduled_payment_details\": {\n        \"reference\": \"Test\",\n        \"recipient\": {\n            \"name\": \"{{$randomFirstName}}\",\n            \"type\": \"SortCodeAccountNumber\",\n            \"account_number\": \"{{sort_code_account_number}}\"\n        },\n        \"amount\": {\n            \"value\": \"19.0\",\n            \"currency\": \"GBP\"\n        },\n        \"sender\": {\n            \"name\": \"Chris\",\n            \"user_id\": \"{{$randomUUID}}\"\n        },\n        \"requested_execution_date\": \"2023-10-01\"\n    }\n}"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/payments/scheduled/bud-pay-url",
@@ -3770,7 +4243,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Initiate Payment - TSP",
@@ -3813,12 +4287,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"redirect_url\": \"https://thisisbud.com\",\n  \"provider\": \"BankOfBudOBUK\",\n  \"payment_details\": {\n    \"reference\": \"single payment\",\n    \"recipient\": {\n      \"name\": \"{{$randomFirstName}}\",\n      \"account_number\": \"{{sort_code_account_number}}\",\n      \"type\": \"SortCodeAccountNumber\"\n    },\n    \"sender\": {\n      \"user_id\": \"{{$randomUUID}}\",\n      \"name\": \"Chris\"\n    },\n    \"amount\": {\n      \"value\": \"10.0\",\n      \"currency\": \"GBP\"\n    }\n  }\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "{\n  \"redirect_url\": \"https://thisisbud.com\",\n  \"provider\": \"BankOfBudOBUK\",\n  \"payment_details\": {\n    \"reference\": \"single payment\",\n    \"recipient\": {\n      \"name\": \"{{$randomFirstName}}\",\n      \"account_number\": \"{{sort_code_account_number}}\",\n      \"type\": \"SortCodeAccountNumber\"\n    },\n    \"sender\": {\n      \"user_id\": \"{{$randomUUID}}\",\n      \"name\": \"Chris\"\n    },\n    \"amount\": {\n      \"value\": \"10.0\",\n      \"currency\": \"GBP\"\n    }\n  }\n}"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/payments/single",
@@ -3917,12 +4386,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"state\": \"{{connection_task_id}}\",\n  \"my-parameter\":\"xyz\",\n  \"code\": \"....\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "{\n  \"state\": \"{{connection_task_id}}\",\n  \"my-parameter\":\"xyz\",\n  \"code\": \"....\"\n}"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/open-banking/authorisation-codes",
@@ -3975,12 +4439,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"redirect_url\": \"https://thisisbud.com\",\n    \"provider\": \"BankOfBudOBUK\",\n    \"standing_order_details\": {\n        \"reference\": \"reference monthly\",\n        \"recipient\": {\n            \"name\": \"{{$randomFirstName}}\",\n            \"type\": \"SortCodeAccountNumber\",\n            \"account_number\": \"{{sort_code_account_number}}\"\n        },\n        \"recurring_amount\": {\n            \"value\": \"15.0\",\n            \"currency\": \"GBP\"\n        },\n        \"sender\": {\n            \"name\": \"Chris\",\n            \"user_id\": \"{{$randomUUID}}\"\n        },\n        \"frequency\": \"monthly\",\n        \"first_payment_date\": \"2023-02-08\"\n    }\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "{\n    \"redirect_url\": \"https://thisisbud.com\",\n    \"provider\": \"BankOfBudOBUK\",\n    \"standing_order_details\": {\n        \"reference\": \"reference monthly\",\n        \"recipient\": {\n            \"name\": \"{{$randomFirstName}}\",\n            \"type\": \"SortCodeAccountNumber\",\n            \"account_number\": \"{{sort_code_account_number}}\"\n        },\n        \"recurring_amount\": {\n            \"value\": \"15.0\",\n            \"currency\": \"GBP\"\n        },\n        \"sender\": {\n            \"name\": \"Chris\",\n            \"user_id\": \"{{$randomUUID}}\"\n        },\n        \"frequency\": \"monthly\",\n        \"first_payment_date\": \"2023-02-08\"\n    }\n}"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/payments/standing-order",
@@ -4068,12 +4527,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"redirect_url\": \"https://thisisbud.com\",\n    \"provider\": \"BankOfBudOBUK\",\n    \"scheduled_payment_details\": {\n        \"reference\": \"Test\",\n        \"recipient\": {\n            \"name\": \"{{$randomFirstName}}\",\n            \"type\": \"SortCodeAccountNumber\",\n            \"account_number\": \"{{sort_code_account_number}}\"\n        },\n        \"amount\": {\n            \"value\": \"19.0\",\n            \"currency\": \"GBP\"\n        },\n        \"sender\": {\n            \"name\": \"Chris\",\n            \"user_id\": \"{{$randomUUID}}\"\n        },\n        \"requested_execution_date\": \"2023-10-01\"\n    }\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "{\n    \"redirect_url\": \"https://thisisbud.com\",\n    \"provider\": \"BankOfBudOBUK\",\n    \"scheduled_payment_details\": {\n        \"reference\": \"Test\",\n        \"recipient\": {\n            \"name\": \"{{$randomFirstName}}\",\n            \"type\": \"SortCodeAccountNumber\",\n            \"account_number\": \"{{sort_code_account_number}}\"\n        },\n        \"amount\": {\n            \"value\": \"19.0\",\n            \"currency\": \"GBP\"\n        },\n        \"sender\": {\n            \"name\": \"Chris\",\n            \"user_id\": \"{{$randomUUID}}\"\n        },\n        \"requested_execution_date\": \"2023-10-01\"\n    }\n}"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/payments/scheduled",
@@ -4123,7 +4577,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Manage Payments",
@@ -4447,7 +4902,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -4490,12 +4946,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"company\": {\n    \"description\": \"Bud Financial Limited\",\n    \"name\": \"Bud financial\",\n    \"phone\": {\n      \"number\": \"4407492429214\",\n      \"type\": \"mobile\"\n    },\n    \"registered\": {\n      \"country\": \"GB\",\n      \"county\": \"Greater London\",\n      \"line_five\": null,\n      \"line_four\": null,\n      \"line_six\": null,\n      \"line_three\": \"Ground floor\",\n      \"name_number\": \"25B\",\n      \"postcode\": \"E29DG\",\n      \"state\": \"United Kingdom\",\n      \"street\": \"Vyner Street\",\n      \"town\": \"London\"\n    },\n    \"registration_number\": \"09651629\",\n    \"tax_number\": \"9651629\",\n    \"trading\": {\n      \"country\": \"GB\",\n      \"county\": \"Greater London\",\n      \"line_five\": null,\n      \"line_four\": null,\n      \"line_six\": null,\n      \"line_three\": \"Ground floor\",\n      \"name_number\": \"25B\",\n      \"postcode\": \"E29DG\",\n      \"state\": \"United Kingdom\",\n      \"street\": \"Vyner Street\",\n      \"town\": \"London\"\n    },\n    \"type\": \"Ltd\",\n    \"vat_number\": \"GB243609761\",\n    \"website\": \"thisisbud.com\"\n  },\n  \"contacts\": [\n    {\n      \"bank_account\": {\n        \"account_number\": \"31926819\",\n        \"sort_code\": \"123456\"\n      },\n      \"current_address\": {\n        \"country\": \"GB\",\n        \"county\": \"Greater London\",\n        \"line_five\": null,\n        \"line_four\": null,\n        \"line_six\": null,\n        \"line_three\": \"Ground floor\",\n        \"name_number\": \"25B\",\n        \"postcode\": \"E29DG\",\n        \"state\": \"United Kingdom\",\n        \"street\": \"Vyner Street\",\n        \"town\": \"London\"\n      },\n      \"date_of_birth\": \"1984-12-26\",\n      \"email_address\": [\n        \"test@thisisbud.com\"\n      ],\n      \"first_name\": \"John\",\n      \"gender\": \"male\",\n      \"identification_details\": [\n        {\n          \"issuing_country\": \"GB\",\n          \"number\": \"P4312345\",\n          \"type\": \"passport\"\n        }\n      ],\n      \"last_name\": \"Doh\",\n      \"middle_name\": \"Paul\",\n      \"phone\": [\n        {\n          \"number\": \"07939225566\",\n          \"type\": \"mobile\"\n        }\n      ],\n      \"previous_address\": [\n        {\n          \"country\": \"GB\",\n          \"county\": \"Greater London\",\n          \"line_five\": null,\n          \"line_four\": null,\n          \"line_six\": null,\n          \"line_three\": \"Ground floor\",\n          \"name_number\": \"25B\",\n          \"postcode\": \"E29DG\",\n          \"state\": \"United Kingdom\",\n          \"street\": \"Vyner Street\",\n          \"town\": \"London\"\n        }\n      ],\n      \"title\": \"mr\"\n    }\n  ],\n  \"custom_data\": [\n    {\n      \"key\": \"my-user-id\",\n      \"value\": \"123\"\n    }\n  ],\n  \"header\": {\n    \"profile_uuid\": \"edd65610-b1ae-4051-acfc-0fc52d4d5f64\",\n    \"transaction_reference\": \"cos-1\"\n  }\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\n  \"company\": {\n    \"description\": \"Bud Financial Limited\",\n    \"name\": \"Bud financial\",\n    \"phone\": {\n      \"number\": \"4407492429214\",\n      \"type\": \"mobile\"\n    },\n    \"registered\": {\n      \"country\": \"GB\",\n      \"county\": \"Greater London\",\n      \"line_five\": null,\n      \"line_four\": null,\n      \"line_six\": null,\n      \"line_three\": \"Ground floor\",\n      \"name_number\": \"25B\",\n      \"postcode\": \"E29DG\",\n      \"state\": \"United Kingdom\",\n      \"street\": \"Vyner Street\",\n      \"town\": \"London\"\n    },\n    \"registration_number\": \"09651629\",\n    \"tax_number\": \"9651629\",\n    \"trading\": {\n      \"country\": \"GB\",\n      \"county\": \"Greater London\",\n      \"line_five\": null,\n      \"line_four\": null,\n      \"line_six\": null,\n      \"line_three\": \"Ground floor\",\n      \"name_number\": \"25B\",\n      \"postcode\": \"E29DG\",\n      \"state\": \"United Kingdom\",\n      \"street\": \"Vyner Street\",\n      \"town\": \"London\"\n    },\n    \"type\": \"Ltd\",\n    \"vat_number\": \"GB243609761\",\n    \"website\": \"thisisbud.com\"\n  },\n  \"contacts\": [\n    {\n      \"bank_account\": {\n        \"account_number\": \"31926819\",\n        \"sort_code\": \"123456\"\n      },\n      \"current_address\": {\n        \"country\": \"GB\",\n        \"county\": \"Greater London\",\n        \"line_five\": null,\n        \"line_four\": null,\n        \"line_six\": null,\n        \"line_three\": \"Ground floor\",\n        \"name_number\": \"25B\",\n        \"postcode\": \"E29DG\",\n        \"state\": \"United Kingdom\",\n        \"street\": \"Vyner Street\",\n        \"town\": \"London\"\n      },\n      \"date_of_birth\": \"1984-12-26\",\n      \"email_address\": [\n        \"test@thisisbud.com\"\n      ],\n      \"first_name\": \"John\",\n      \"gender\": \"male\",\n      \"identification_details\": [\n        {\n          \"issuing_country\": \"GB\",\n          \"number\": \"P4312345\",\n          \"type\": \"passport\"\n        }\n      ],\n      \"last_name\": \"Doh\",\n      \"middle_name\": \"Paul\",\n      \"phone\": [\n        {\n          \"number\": \"07939225566\",\n          \"type\": \"mobile\"\n        }\n      ],\n      \"previous_address\": [\n        {\n          \"country\": \"GB\",\n          \"county\": \"Greater London\",\n          \"line_five\": null,\n          \"line_four\": null,\n          \"line_six\": null,\n          \"line_three\": \"Ground floor\",\n          \"name_number\": \"25B\",\n          \"postcode\": \"E29DG\",\n          \"state\": \"United Kingdom\",\n          \"street\": \"Vyner Street\",\n          \"town\": \"London\"\n        }\n      ],\n      \"title\": \"mr\"\n    }\n  ],\n  \"custom_data\": [\n    {\n      \"key\": \"my-user-id\",\n      \"value\": \"123\"\n    }\n  ],\n  \"header\": {\n    \"profile_uuid\": \"edd65610-b1ae-4051-acfc-0fc52d4d5f64\",\n    \"transaction_reference\": \"cos-1\"\n  }\n}"
 						},
 						"url": {
 							"raw": "{{proxy_url}}v1/kyc/check/company",
@@ -4547,12 +4998,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"person\": {\n    \"bank_account\": {\n      \"account_number\": \"31926819\",\n      \"sort_code\": \"123456\"\n    },\n    \"current_address\": {\n      \"country\": \"GB\",\n      \"county\": \"Greater London\",\n      \"line_five\": null,\n      \"line_four\": null,\n      \"line_six\": null,\n      \"line_three\": \"Ground floor\",\n      \"name_number\": \"25B\",\n      \"postcode\": \"E29DG\",\n      \"state\": \"United Kingdom\",\n      \"street\": \"Vyner Street\",\n      \"town\": \"London\"\n    },\n    \"date_of_birth\": \"1984-12-26\",\n    \"email_address\": [\n      \"test@thisisbud.com\"\n    ],\n    \"first_name\": \"John\",\n    \"gender\": \"male\",\n    \"identification_details\": [\n      {\n        \"issuing_country\": \"GB\",\n        \"number\": \"P4312345\",\n        \"type\": \"passport\"\n      }\n    ],\n    \"last_name\": \"Doh\",\n    \"middle_name\": \"Paul\",\n    \"phone\": [\n      {\n        \"number\": \"07939225566\",\n        \"type\": \"mobile\"\n      }\n    ],\n    \"previous_address\": [\n      {\n        \"country\": \"GB\",\n        \"county\": \"Greater London\",\n        \"line_five\": null,\n        \"line_four\": null,\n        \"line_six\": null,\n        \"line_three\": \"Ground floor\",\n        \"name_number\": \"25B\",\n        \"postcode\": \"E29DG\",\n        \"state\": \"United Kingdom\",\n        \"street\": \"Vyner Street\",\n        \"town\": \"London\"\n      }\n    ],\n    \"title\": \"mr\"\n  },\n  \"custom_data\": [\n    {\n      \"key\": \"my-user-id\",\n      \"value\": \"123\"\n    }\n  ],\n  \"header\": {\n    \"profile_uuid\": \"{{$randomUUID}}\",\n    \"transaction_reference\": \"ppl-38\"\n  }\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\n  \"person\": {\n    \"bank_account\": {\n      \"account_number\": \"31926819\",\n      \"sort_code\": \"123456\"\n    },\n    \"current_address\": {\n      \"country\": \"GB\",\n      \"county\": \"Greater London\",\n      \"line_five\": null,\n      \"line_four\": null,\n      \"line_six\": null,\n      \"line_three\": \"Ground floor\",\n      \"name_number\": \"25B\",\n      \"postcode\": \"E29DG\",\n      \"state\": \"United Kingdom\",\n      \"street\": \"Vyner Street\",\n      \"town\": \"London\"\n    },\n    \"date_of_birth\": \"1984-12-26\",\n    \"email_address\": [\n      \"test@thisisbud.com\"\n    ],\n    \"first_name\": \"John\",\n    \"gender\": \"male\",\n    \"identification_details\": [\n      {\n        \"issuing_country\": \"GB\",\n        \"number\": \"P4312345\",\n        \"type\": \"passport\"\n      }\n    ],\n    \"last_name\": \"Doh\",\n    \"middle_name\": \"Paul\",\n    \"phone\": [\n      {\n        \"number\": \"07939225566\",\n        \"type\": \"mobile\"\n      }\n    ],\n    \"previous_address\": [\n      {\n        \"country\": \"GB\",\n        \"county\": \"Greater London\",\n        \"line_five\": null,\n        \"line_four\": null,\n        \"line_six\": null,\n        \"line_three\": \"Ground floor\",\n        \"name_number\": \"25B\",\n        \"postcode\": \"E29DG\",\n        \"state\": \"United Kingdom\",\n        \"street\": \"Vyner Street\",\n        \"town\": \"London\"\n      }\n    ],\n    \"title\": \"mr\"\n  },\n  \"custom_data\": [\n    {\n      \"key\": \"my-user-id\",\n      \"value\": \"123\"\n    }\n  ],\n  \"header\": {\n    \"profile_uuid\": \"{{$randomUUID}}\",\n    \"transaction_reference\": \"ppl-38\"\n  }\n}"
 						},
 						"url": {
 							"raw": "{{proxy_url}}v1/kyc/check/person",
