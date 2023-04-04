@@ -1591,7 +1591,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123V2\",\n\t    \"date_time\": \"2023-03-02T02:07:14Z\",\n\t    \"description\": \"Macbook Pro 16\\\" 512GB\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-2300.00\"\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123V2\",\n\t    \"date_time\": \"2023-02-02T02:07:14Z\",\n\t    \"description\": \"Starbucks\",\n\t    \"status\": \"booked\",\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-8.00\"\n\t  }\n\t],\n\t\"transaction_windows\": [\n\t  {\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"start\": \"2023-02-02T02:07:14Z\",\n\t    \"end\": \"2023-03-02T02:07:14Z\"\n\t  }\n\t]\n  }\n]"
+									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"transactions\": [\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123V2\",\n\t    \"date_time\": \"2023-03-02T02:07:14Z\",\n\t    \"description\": \"Macbook Pro 16\\\" 512GB\",\n\t    \"status\": \"booked\",\n\t    \"counterparty\": {\n\t      \"name\": \"UNK\",\n\t      \"address\": \"UNK\",\n\t      \"scheme\": \"SortCodeAccountNumber\",\n\t      \"identifier\": \"UNK\"\n\t    },\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-2300.00\"\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123V5\",\n\t    \"date_time\": \"2023-02-02T02:07:14Z\",\n\t    \"description\": \"Starbucks\",\n\t    \"status\": \"booked\",\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-8.00\"\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123V6\",\n\t    \"date_time\": \"2023-02-28T02:07:14Z\",\n\t    \"description\": \"CHILD BENEFIT\",\n\t    \"status\": \"booked\",\n\t    \"currency\": \"GBP\",\n        \"amount\": \"90.00\"\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123a1\",\n\t    \"date_time\": \"2023-02-28T02:07:14Z\",\n\t    \"description\": \"Pra Group Debt Collection\",\n\t    \"status\": \"booked\",\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-800.00\"\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123b2\",\n\t    \"date_time\": \"2023-02-15T02:07:14Z\",\n\t    \"description\": \"m & s credit card\",\n\t    \"status\": \"booked\",\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-80.00\"\n\t  }\n\t  ,\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123c1\",\n\t    \"date_time\": \"2023-01-05T02:07:14Z\",\n\t    \"description\": \"Netflix\",\n\t    \"status\": \"booked\",\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-13.00\"\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123c2\",\n\t    \"date_time\": \"2023-02-05T02:07:14Z\",\n\t    \"description\": \"Netflix\",\n\t    \"status\": \"booked\",\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-13.00\"\n\t  },\n\t  {\n\t    \"provider\": \"Barclays\",\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"transaction_id\": \"dZyaKRwkKZULmmkd0wkLc0wLKo5zd123123c3\",\n\t    \"date_time\": \"2023-03-05T02:07:14Z\",\n\t    \"description\": \"Netflix\",\n\t    \"status\": \"booked\",\n\t    \"currency\": \"GBP\",\n        \"amount\": \"-13.00\"\n\t  }\n\t],\n\t\"transaction_windows\": [\n\t  {\n\t    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n\t    \"start\": \"2023-01-05T02:07:14Z\",\n\t    \"end\": \"2023-03-05T02:07:14Z\"\n\t  }\n\t]\n  }\n]"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v2/ingest/transactions",
@@ -2474,7 +2474,7 @@
 					"name": "Enrichment Resources",
 					"item": [
 						{
-							"name": "List Categories",
+							"name": "Retrieve Categories",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -2490,8 +2490,8 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "text"
+										"type": "text",
+										"value": "{{api_credentials_id}}"
 									}
 								],
 								"url": {
@@ -2502,6 +2502,13 @@
 									"path": [
 										"categories",
 										"double-cat"
+									],
+									"query": [
+										{
+											"key": "format",
+											"value": "map",
+											"disabled": true
+										}
 									]
 								}
 							},
@@ -2532,20 +2539,10 @@
 								"method": "GET",
 								"header": [
 									{
-										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
-									},
-									{
 										"key": "Content-Type",
 										"name": "Content-Type",
 										"type": "text",
 										"value": "application/json"
-									},
-									{
-										"key": "X-Customer-Secret",
-										"type": "text",
-										"value": "{{customer_secret}}"
 									},
 									{
 										"key": "X-Client-Id",
@@ -2553,14 +2550,26 @@
 										"value": "{{api_credentials_id}}"
 									},
 									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									},
+									{
 										"key": "X-From",
 										"type": "text",
-										"value": "2020-02-01"
+										"value": "2020-02-01",
+										"disabled": true
 									},
 									{
 										"key": "X-To",
 										"type": "text",
-										"value": "2023-05-01"
+										"value": "2023-05-01",
+										"disabled": true
 									}
 								],
 								"body": {
@@ -2619,6 +2628,18 @@
 										"key": "X-To",
 										"value": "2023-05-01",
 										"type": "text"
+									},
+									{
+										"key": "X-Include-Categories",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "X-Exclude-Categories",
+										"value": "",
+										"type": "text",
+										"disabled": true
 									}
 								],
 								"url": {
@@ -2651,11 +2672,13 @@
 								"header": [
 									{
 										"key": "X-From",
-										"value": "2021-02-28"
+										"value": "2021-02-28",
+										"disabled": true
 									},
 									{
 										"key": "X-To",
-										"value": "2023-01-29"
+										"value": "2023-01-29",
+										"disabled": true
 									},
 									{
 										"key": "X-Customer-Id",
@@ -2685,6 +2708,60 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Retrieve Merchant Totals V1",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									},
+									{
+										"key": "X-From",
+										"type": "text",
+										"value": "2020-01-01"
+									},
+									{
+										"key": "X-To",
+										"type": "text",
+										"value": "2023-05-01"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/merchants/totals",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"merchants",
+										"totals"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"_postman_isSubFolder": true
@@ -2692,7 +2769,7 @@
 			]
 		},
 		{
-			"name": "Insights",
+			"name": "Financial Insights API",
 			"item": [
 				{
 					"name": "Regular Insights",
@@ -2741,50 +2818,7 @@
 							"response": []
 						},
 						{
-							"name": "Retrieve Upcoming Transactions V1",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									},
-									{
-										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
-									},
-									{
-										"key": "X-Customer-Secret",
-										"type": "text",
-										"value": "{{customer_secret}}"
-									}
-								],
-								"url": {
-									"raw": "{{proxy_url}}v1/future-transactions",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"future-transactions"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Retrieve Upcoming Transactions V2",
+							"name": "Retrieve Forecasted Transactions V2",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -2831,6 +2865,49 @@
 											"key": "change_percentage\\[subcategory\\]",
 											"value": "change_percentage[all]=2.0"
 										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Forecasted Transactions V1 (deprecated)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/future-transactions",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"future-transactions"
 									]
 								}
 							},
@@ -2913,11 +2990,13 @@
 								"header": [
 									{
 										"key": "X-From",
-										"value": "2020-02-28"
+										"value": "2020-02-28",
+										"disabled": true
 									},
 									{
 										"key": "X-To",
-										"value": "2022-03-29"
+										"value": "2022-03-29",
+										"disabled": true
 									},
 									{
 										"key": "X-Client-Id",
@@ -2964,11 +3043,13 @@
 								"header": [
 									{
 										"key": "X-From",
-										"value": "2020-01-29"
+										"value": "2020-01-29",
+										"disabled": true
 									},
 									{
 										"key": "X-To",
-										"value": "2022-03-29"
+										"value": "2022-03-29",
+										"disabled": true
 									},
 									{
 										"key": "X-Client-Id",
@@ -3015,11 +3096,13 @@
 								"header": [
 									{
 										"key": "X-From",
-										"value": "2020-02-29"
+										"value": "2020-02-29",
+										"disabled": true
 									},
 									{
 										"key": "X-To",
-										"value": "2022-03-29"
+										"value": "2022-03-29",
+										"disabled": true
 									},
 									{
 										"key": "X-Client-Id",
@@ -3072,11 +3155,13 @@
 								"header": [
 									{
 										"key": "X-From",
-										"value": "2020-01-29"
+										"value": "2020-01-29",
+										"disabled": true
 									},
 									{
 										"key": "X-To",
-										"value": "2023-01-29"
+										"value": "2023-01-29",
+										"disabled": true
 									},
 									{
 										"key": "X-Client-Id",
@@ -3123,11 +3208,13 @@
 								"header": [
 									{
 										"key": "X-From",
-										"value": "2020-02-29"
+										"value": "2020-02-29",
+										"disabled": true
 									},
 									{
 										"key": "X-To",
-										"value": "2023-01-29"
+										"value": "2023-01-29",
+										"disabled": true
 									},
 									{
 										"key": "X-Client-Id",
@@ -3158,7 +3245,7 @@
 							"response": []
 						},
 						{
-							"name": "Get Financial Products",
+							"name": "Retrieve Financial Products",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -3174,11 +3261,13 @@
 								"header": [
 									{
 										"key": "X-From",
-										"value": "2020-01-29"
+										"value": "2020-01-29",
+										"disabled": true
 									},
 									{
 										"key": "X-To",
-										"value": "2022-03-29"
+										"value": "2022-03-29",
+										"disabled": true
 									},
 									{
 										"key": "X-Client-Id",
@@ -3209,6 +3298,64 @@
 							"response": []
 						},
 						{
+							"name": "Retrieve Financial Products V2",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/v2/products",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"v2",
+										"products"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "",
+											"description": "Filter from this date (format: YYYY-MM-DD).",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "",
+											"description": "Filter to this date (format: YYYY-MM-DD).",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Retrieve Subscriptions",
 							"request": {
 								"auth": {
@@ -3225,11 +3372,13 @@
 								"header": [
 									{
 										"key": "X-From",
-										"value": "2020-01-29"
+										"value": "2020-01-29",
+										"disabled": true
 									},
 									{
 										"key": "X-To",
-										"value": "2023-01-29"
+										"value": "2023-01-29",
+										"disabled": true
 									},
 									{
 										"key": "X-Client-Id",
@@ -3260,7 +3409,7 @@
 							"response": []
 						},
 						{
-							"name": "Initiate Energy Payments Discovery",
+							"name": "Initiate Energy Payments Discovery (deprecated)",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -3304,7 +3453,7 @@
 							"response": []
 						},
 						{
-							"name": "Retrieve Energy Payments",
+							"name": "Retrieve Energy Payments (deprecated)",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -3350,6 +3499,28 @@
 						}
 					],
 					"_postman_isSubFolder": true
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b49ddbd9-d61d-4167-8331-73bd637ccd4d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "fa7ad525-c6cc-456f-af44-72b2b58f81e3",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		},
