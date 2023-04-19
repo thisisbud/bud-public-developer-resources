@@ -145,10 +145,10 @@
 			]
 		},
 		{
-			"name": "Platform API",
+			"name": "Customers API",
 			"item": [
 				{
-					"name": "Customers",
+					"name": "Manage Customers",
 					"item": [
 						{
 							"name": "Create Customer V3",
@@ -250,17 +250,7 @@
 								}
 							},
 							"response": []
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "Customers API",
-			"item": [
-				{
-					"name": "Manage Customers",
-					"item": [
+						},
 						{
 							"name": "Create Customer",
 							"event": [
