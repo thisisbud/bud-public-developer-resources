@@ -287,38 +287,40 @@ info:
     \ Deprecated **Retrieve Trends** in favour of **Retrieve Category Totals**. |\n\
     \n## Changelog\n\nThis changelog represents a list of all changes that have been\
     \ made to Bud’s API documentation. This includes both backward-compatible and\
-    \ backward-incompatible changes.\n\n**Version 2.5.1: 30/03/2023**\n> - Fix income\
-    \ types for __Retrieve Income Transactions V2__.\n\n**Version 2.5.0: 28/03/2023**\n\
-    > - Deprecated __Retrieve Financial Forecast__.\n> - Deprecated __Create Transaction\
-    \ Rule(s)__.\n> - Renamed __Retrieve Upcoming Transaction__ endpoints (V1 and\
-    \ V2) to __Retrieve Forecasted Transactions__.\n> - Renamed __Recategorise Transaction__\
-    \ endpoints (V1 and V2) to __Correct Transaction Categories__.\n> - Fix documented\
-    \ required fields for __Recategorise Transaction V1__.\n\n\n**Version 2.4.0: 24/03/2023**\n\
-    > - Deprecated __Retrieve Accounts__.\n> - Finalised __Retrieve Accounts V2 (beta)__\
-    \ to production release as __Retrieve Accounts V2__.\n> - Finalised __Retrieve\
-    \ Account By ID V2 (beta)__ to production release as __Retrieve Account By ID\
-    \ V2__.\n> - Finalised __Retrieve Balances Over Time (Beta)__ to production release\
-    \ as __Retrieve Balances Over Time__.\n> - Finalised __Retrieve Balances Over\
-    \ Time By Account (Beta)__ to production release as __Retrieve Balances Over Time\
-    \ By Account__.\n\n\n**Version 2.3.9: 21/03/2023**\n> - Update merchant descriptions\
-    \ & required fields for **Retrieve Subscriptions**\n> - Standardised description\
-    \ used for dates in __Retrieve Merchant Totals V2__.\n> - Standardised description\
-    \ used for dates in __Retrieve Income Transactions V1__.\n> - Standardised description\
-    \ used for dates in __Retrieve Income Transactions V2__.\n> - Standardised description\
-    \ used for dates in __Retrieve Loan Transactions__.\n> - Standardised description\
-    \ used for dates in __Retrieve Debt Collection Transactions__.\n> - Standardised\
-    \ description used for dates in __Retrieve Benefits Transactions__.\n> - Standardised\
-    \ description used for dates in __Retrieve Benefits Totals__.\n> - Standardised\
-    \ description used for dates in __Retrieve Financial Products__.\n> - Standardised\
-    \ description used for dates in __Retrieve Subscriptions__.\n> - Standardised\
-    \ description used for dates in __Retrieve Upcoming Transactions V1__.\n> - Standardised\
-    \ description used for dates in __Retrieve Salary Information__.\n\n**Version\
-    \ 2.3.8: 21/03/2023**\n> - Update amount descriptions\n\n**Version 2.3.7: 20/03/2023**\n\
-    > - Fix the docs for **Retrieve Money Management** correcting the category names\
-    \ for some warning types.\n> - Remove the deprecated `large_expense` and `high_balance`\
-    \ warnings from **Retrieve Money Management**.\n\n**Version 2.3.6: 16/03/2023**\n\
-    > - Deprecated __Initiate Energy Payments Discovery__ and __Retrieve Energy Payments__\n\
-    \n**Version 2.3.5: 13/03/2023**\n> - Updated holder and holders fields on __List\
+    \ backward-incompatible changes.\n\n**Version 2.5.2: 19/04/2023**\n> - Added `format`\
+    \ query parameter to __Retrieve Categories__.\n\n**Version 2.5.1: 30/03/2023**\n\
+    > - Fix income types for __Retrieve Income Transactions V2__.\n\n**Version 2.5.0:\
+    \ 28/03/2023**\n> - Deprecated __Retrieve Financial Forecast__.\n> - Deprecated\
+    \ __Create Transaction Rule(s)__.\n> - Renamed __Retrieve Upcoming Transaction__\
+    \ endpoints (V1 and V2) to __Retrieve Forecasted Transactions__.\n> - Renamed\
+    \ __Recategorise Transaction__ endpoints (V1 and V2) to __Correct Transaction\
+    \ Categories__.\n> - Fix documented required fields for __Recategorise Transaction\
+    \ V1__.\n\n\n**Version 2.4.0: 24/03/2023**\n> - Deprecated __Retrieve Accounts__.\n\
+    > - Finalised __Retrieve Accounts V2 (beta)__ to production release as __Retrieve\
+    \ Accounts V2__.\n> - Finalised __Retrieve Account By ID V2 (beta)__ to production\
+    \ release as __Retrieve Account By ID V2__.\n> - Finalised __Retrieve Balances\
+    \ Over Time (Beta)__ to production release as __Retrieve Balances Over Time__.\n\
+    > - Finalised __Retrieve Balances Over Time By Account (Beta)__ to production\
+    \ release as __Retrieve Balances Over Time By Account__.\n\n\n**Version 2.3.9:\
+    \ 21/03/2023**\n> - Update merchant descriptions & required fields for **Retrieve\
+    \ Subscriptions**\n> - Standardised description used for dates in __Retrieve Merchant\
+    \ Totals V2__.\n> - Standardised description used for dates in __Retrieve Income\
+    \ Transactions V1__.\n> - Standardised description used for dates in __Retrieve\
+    \ Income Transactions V2__.\n> - Standardised description used for dates in __Retrieve\
+    \ Loan Transactions__.\n> - Standardised description used for dates in __Retrieve\
+    \ Debt Collection Transactions__.\n> - Standardised description used for dates\
+    \ in __Retrieve Benefits Transactions__.\n> - Standardised description used for\
+    \ dates in __Retrieve Benefits Totals__.\n> - Standardised description used for\
+    \ dates in __Retrieve Financial Products__.\n> - Standardised description used\
+    \ for dates in __Retrieve Subscriptions__.\n> - Standardised description used\
+    \ for dates in __Retrieve Upcoming Transactions V1__.\n> - Standardised description\
+    \ used for dates in __Retrieve Salary Information__.\n\n**Version 2.3.8: 21/03/2023**\n\
+    > - Update amount descriptions\n\n**Version 2.3.7: 20/03/2023**\n> - Fix the docs\
+    \ for **Retrieve Money Management** correcting the category names for some warning\
+    \ types.\n> - Remove the deprecated `large_expense` and `high_balance` warnings\
+    \ from **Retrieve Money Management**.\n\n**Version 2.3.6: 16/03/2023**\n> - Deprecated\
+    \ __Initiate Energy Payments Discovery__ and __Retrieve Energy Payments__\n\n\
+    **Version 2.3.5: 13/03/2023**\n> - Updated holder and holders fields on __List\
     \ Accounts V2 (beta)__ and __Retrieve Account By ID V2 (beta)__.\n\n**Version\
     \ 2.3.3: 13/03/2023**\n> - Document `provider_redirect_url` field for **Create\
     \ Single Payment**\n\n**Version 2.3.2: 13/03/2023**\n> - Document `reconfirm_consent_redirect`\
@@ -677,7 +679,7 @@ info:
     name: Bud Support
     url: https://www.thisisbud.com/
     email: help@thisisbud.com
-  version: 2.5.1
+  version: 2.5.2
   x-logo:
     url: "data:image/png;base64,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"
 servers:
@@ -3054,120 +3056,206 @@ paths:
         required: true
         schema:
           type: string
+      - name: format
+        in: query
+        description: |
+          Determines if the response will be structured:
+            - As a flat object where all categories and subcategories are listed separately under different fields. See the example response `Flat Response`.
+            - As a map where all categories are listed as objects themselves with their respective subcategories listed in fields within the category objects. See the example response `Map Response`.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: flat
+          enum:
+          - map
+          - flat
       responses:
         "200":
-          description: List of available categories.
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DoubleCatCategoriesResponse'
-              example:
-                operation_id: categories_double_cat_get
-                data:
-                  categories:
-                  - bills
-                  - eating_out
-                  - entertainment
-                  - expenses
-                  - finances
-                  - general
-                  - groceries
-                  - personal_care
-                  - services
-                  - shopping
-                  - transport
-                  - travel
-                  subcategories:
-                  - accommodation
-                  - activities
-                  - bars_and_pubs
-                  - beauty
-                  - benefits
-                  - boat
-                  - books_and_reading
-                  - bus
-                  - business_expenses
-                  - cafes_and_lunch
-                  - car_payments
-                  - car_sharing
-                  - care_provision
-                  - cash_withdrawals
-                  - charity
-                  - childcare
-                  - children_and_babies
-                  - cinema
-                  - cleaning
-                  - clothing
-                  - convenience_stores
-                  - credit_cards
-                  - cycling
-                  - department_stores
-                  - education_and_school_fees
-                  - electronics
-                  - events
-                  - fast_food
-                  - flights
-                  - furniture_and_appliances
-                  - gambling_and_betting
-                  - gaming
-                  - gardening
-                  - general_banking
-                  - gym_and_fitness
-                  - hardware_and_diy
-                  - healthcare
-                  - home_improvements
-                  - income
-                  - insurance
-                  - interest_payments
-                  - investments
-                  - laundry
-                  - loans
-                  - mobile_phone
-                  - mortgage_and_rent
-                  - museums_and_art_galleries
-                  - music
-                  - online_shopping
-                  - other_bills
-                  - other_eating_out
-                  - other_entertainment
-                  - other_expenses
-                  - other_finances
-                  - other_general
-                  - other_groceries
-                  - other_personal_care
-                  - other_services
-                  - other_shopping
-                  - other_transport
-                  - other_travel
-                  - package_holidays
-                  - parking_and_tolls
-                  - pensions
-                  - petrol
-                  - pets
-                  - pharmacies_and_health_products
-                  - postage_and_shipping
-                  - public_transport
-                  - refunds
-                  - repairs
-                  - restaurants
-                  - savings
-                  - service_stations
-                  - software_and_apps
-                  - speciality_food_and_drink_shops
-                  - sports
-                  - subscriptions
-                  - supermarkets
-                  - takeaway
-                  - taxes
-                  - taxi
-                  - train
-                  - transfers_in
-                  - transfers_out
-                  - travel_purchases
-                  - tv_broadband_and_phone
-                  - utilities
-                  - vehicle
-                  - vehicle_hire
+                $ref: '#/components/schemas/CategoriesResponse'
+              examples:
+                Flat Response:
+                  value:
+                    operation_id: categories_double_cat_get
+                    data:
+                      categories:
+                      - bills
+                      - eating_out
+                      - entertainment
+                      - expenses
+                      - finances
+                      - general
+                      - groceries
+                      - personal_care
+                      - services
+                      - shopping
+                      - transport
+                      - travel
+                      subcategories:
+                      - accommodation
+                      - activities
+                      - bars_and_pubs
+                      - beauty
+                      - benefits
+                      - boat
+                      - books_and_reading
+                      - bus
+                      - business_expenses
+                      - cafes_and_lunch
+                      - car_payments
+                      - car_sharing
+                      - care_provision
+                      - cash_withdrawals
+                      - charity
+                      - childcare
+                      - children_and_babies
+                      - cinema
+                      - cleaning
+                      - clothing
+                      - convenience_stores
+                      - credit_cards
+                      - cycling
+                      - department_stores
+                      - education_and_school_fees
+                      - electronics
+                      - events
+                      - fast_food
+                      - flights
+                      - furniture_and_appliances
+                      - gambling_and_betting
+                      - gaming
+                      - gardening
+                      - general_banking
+                      - gym_and_fitness
+                      - hardware_and_diy
+                      - healthcare
+                      - home_improvements
+                      - income
+                      - insurance
+                      - interest_payments
+                      - investments
+                      - laundry
+                      - loans
+                      - mobile_phone
+                      - mortgage_and_rent
+                      - museums_and_art_galleries
+                      - music
+                      - online_shopping
+                      - other_bills
+                      - other_eating_out
+                      - other_entertainment
+                      - other_expenses
+                      - other_finances
+                      - other_general
+                      - other_groceries
+                      - other_personal_care
+                      - other_services
+                      - other_shopping
+                      - other_transport
+                      - other_travel
+                      - package_holidays
+                      - parking_and_tolls
+                      - pensions
+                      - petrol
+                      - pets
+                      - pharmacies_and_health_products
+                      - postage_and_shipping
+                      - public_transport
+                      - refunds
+                      - repairs
+                      - restaurants
+                      - savings
+                      - service_stations
+                      - software_and_apps
+                      - speciality_food_and_drink_shops
+                      - sports
+                      - subscriptions
+                      - supermarkets
+                      - takeaway
+                      - taxes
+                      - taxi
+                      - train
+                      - transfers_in
+                      - transfers_out
+                      - travel_purchases
+                      - tv_broadband_and_phone
+                      - utilities
+                      - vehicle
+                      - vehicle_hire
+                Map Response:
+                  value:
+                    operation_id: categories_double_cat_get
+                    data:
+                    - name: bills
+                      subcategories:
+                      - name: taxes
+                      - name: mortgage_and_rent
+                      - name: utilities
+                      - name: other_bills
+                    - name: eating_out
+                      subcategories:
+                      - name: bars_and_pubs
+                      - name: restaurants
+                      - name: other_eating_out
+                    - name: entertainment
+                      subcategories:
+                      - name: books_and_reading
+                      - name: events
+                      - name: gambling_and_betting
+                      - name: subscriptions
+                      - name: cinema
+                      - name: other_entertainment
+                    - name: expenses
+                      subcategories:
+                      - name: business_expenses
+                      - name: other_expenses
+                    - name: finances
+                      subcategories:
+                      - name: income
+                      - name: savings
+                      - name: loans
+                      - name: other_finances
+                    - name: general
+                      subcategories:
+                      - name: other_general
+                    - name: groceries
+                      subcategories:
+                      - name: supermarkets
+                      - name: convenience_stores
+                    - name: personal_care
+                      subcategories:
+                      - name: healthcare
+                      - name: beauty
+                      - name: gym_and_fitness
+                      - name: pharmacies_and_health_products
+                      - name: other_personal_care
+                    - name: services
+                      subcategories:
+                      - name: other_services
+                    - name: shopping
+                      subcategories:
+                      - name: department_stores
+                      - name: other_shopping
+                    - name: transport
+                      subcategories:
+                      - name: public_transport
+                      - name: petrol
+                      - name: parking_and_tolls
+                      - name: service_stations
+                      - name: taxi
+                      - name: vehicle
+                      - name: vehicle_hire
+                      - name: other_transport
+                    - name: travel
+                      subcategories:
+                      - name: travel_purchases
+                      - name: flights
+                      - name: other_travel
         "400":
           description: The request contains an invalid payload
           content:
@@ -4385,6 +4473,19 @@ paths:
           items:
             type: string
         example: benefit
+      - name: credit_debit_indicator
+        in: query
+        description: Credit debit indicator for which associated transactions should
+          be returned.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - credit
+          - debit
+        example: credit
       responses:
         "200":
           description: The request was successfully processed.
@@ -12860,7 +12961,7 @@ components:
         data:
           $ref: '#/components/schemas/Updated_Customer_Context_Data'
       description: Customer context update response.
-    DoubleCatCategoriesResponse:
+    CategoriesResponse:
       title: Categories Response
       required:
       - data
@@ -12870,23 +12971,31 @@ components:
         operation_id:
           $ref: '#/components/schemas/OperationId'
         data:
-          $ref: '#/components/schemas/DoubleCategoriesList'
+          oneOf:
+          - $ref: '#/components/schemas/CategoriesFlat'
+          - $ref: '#/components/schemas/CategoriesMap'
       description: Expected response structure for the get categories endpoint
-    DoubleCategoriesList:
+    CategoriesFlat:
       title: Category List
       type: object
       properties:
-        categories:
+        l1:
           type: array
-          description: List of all the transaction categories
+          description: List of all the available categories.
           items:
             type: string
-        subcategories:
+        l2:
           type: array
-          description: List of all the transaction subcategories
+          description: List of all the available subcategories.
           items:
             type: string
-      description: A list of all the transaction categories
+      description: A list of all the available categories and subcategories.
+    CategoriesMap:
+      title: Category Map
+      type: array
+      description: A map of all the available categories and respective subcategories
+      items:
+        $ref: '#/components/schemas/Category_1'
     CategoriesTotalResponse:
       title: Categories Totals Response
       required:
@@ -18599,6 +18708,28 @@ components:
           $ref: '#/components/schemas/CustomerContextRegion'
         locale:
           $ref: '#/components/schemas/CustomerContextLocale'
+    Category_1:
+      title: Category
+      type: object
+      properties:
+        name:
+          title: Category Name
+          type: string
+          description: The name of the category.
+        subcategories:
+          title: Subcategories
+          type: array
+          description: The respective subcategories for the given category.
+          items:
+            title: subcategory
+            type: object
+            properties:
+              name:
+                title: Subcategory Name
+                type: string
+                description: The name of the subcategory.
+            description: A subcategory that belongs to the given category.
+      description: A single category and its respective subcategories.
     CategoriesTotalResponse_data:
       required:
       - categories
