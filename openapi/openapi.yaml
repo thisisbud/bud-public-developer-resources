@@ -287,40 +287,47 @@ info:
     \ Deprecated **Retrieve Trends** in favour of **Retrieve Category Totals**. |\n\
     \n## Changelog\n\nThis changelog represents a list of all changes that have been\
     \ made to Bud’s API documentation. This includes both backward-compatible and\
-    \ backward-incompatible changes.\n\n**Version 2.5.2: 19/04/2023**\n> - Added `format`\
-    \ query parameter to __Retrieve Categories__.\n\n**Version 2.5.1: 30/03/2023**\n\
-    > - Fix income types for __Retrieve Income Transactions V2__.\n\n**Version 2.5.0:\
-    \ 28/03/2023**\n> - Deprecated __Retrieve Financial Forecast__.\n> - Deprecated\
-    \ __Create Transaction Rule(s)__.\n> - Renamed __Retrieve Upcoming Transaction__\
-    \ endpoints (V1 and V2) to __Retrieve Forecasted Transactions__.\n> - Renamed\
-    \ __Recategorise Transaction__ endpoints (V1 and V2) to __Correct Transaction\
-    \ Categories__.\n> - Fix documented required fields for __Recategorise Transaction\
-    \ V1__.\n\n\n**Version 2.4.0: 24/03/2023**\n> - Deprecated __Retrieve Accounts__.\n\
-    > - Finalised __Retrieve Accounts V2 (beta)__ to production release as __Retrieve\
-    \ Accounts V2__.\n> - Finalised __Retrieve Account By ID V2 (beta)__ to production\
-    \ release as __Retrieve Account By ID V2__.\n> - Finalised __Retrieve Balances\
-    \ Over Time (Beta)__ to production release as __Retrieve Balances Over Time__.\n\
-    > - Finalised __Retrieve Balances Over Time By Account (Beta)__ to production\
-    \ release as __Retrieve Balances Over Time By Account__.\n\n\n**Version 2.3.9:\
-    \ 21/03/2023**\n> - Update merchant descriptions & required fields for **Retrieve\
-    \ Subscriptions**\n> - Standardised description used for dates in __Retrieve Merchant\
-    \ Totals V2__.\n> - Standardised description used for dates in __Retrieve Income\
-    \ Transactions V1__.\n> - Standardised description used for dates in __Retrieve\
-    \ Income Transactions V2__.\n> - Standardised description used for dates in __Retrieve\
-    \ Loan Transactions__.\n> - Standardised description used for dates in __Retrieve\
-    \ Debt Collection Transactions__.\n> - Standardised description used for dates\
-    \ in __Retrieve Benefits Transactions__.\n> - Standardised description used for\
-    \ dates in __Retrieve Benefits Totals__.\n> - Standardised description used for\
-    \ dates in __Retrieve Financial Products__.\n> - Standardised description used\
-    \ for dates in __Retrieve Subscriptions__.\n> - Standardised description used\
-    \ for dates in __Retrieve Upcoming Transactions V1__.\n> - Standardised description\
-    \ used for dates in __Retrieve Salary Information__.\n\n**Version 2.3.8: 21/03/2023**\n\
-    > - Update amount descriptions\n\n**Version 2.3.7: 20/03/2023**\n> - Fix the docs\
-    \ for **Retrieve Money Management** correcting the category names for some warning\
-    \ types.\n> - Remove the deprecated `large_expense` and `high_balance` warnings\
-    \ from **Retrieve Money Management**.\n\n**Version 2.3.6: 16/03/2023**\n> - Deprecated\
-    \ __Initiate Energy Payments Discovery__ and __Retrieve Energy Payments__\n\n\
-    **Version 2.3.5: 13/03/2023**\n> - Updated holder and holders fields on __List\
+    \ backward-incompatible changes.\n\n**Version 2.6.0: 25/04/2023**\n> - Added new\
+    \ __Retrieve Categories V2__ endpoint.\n> - Added new __Retrieve Available Categorisation\
+    \ Models V2__ endpoint.\n> - Deprecated __Retrieve Categories__.\n> - Added `models.categorisation`\
+    \ field to _Customer Context_ models.\n\n**Version 2.5.3: 20/04/2023**\n> - Updated\
+    \ __Retrieve Category Totals__ X-From and X-To parameter descriptions and endpoint\
+    \ description.\n> - Updated __Retrieve Merchant Totals V2__ X-From and X-To parameter\
+    \ descriptions.\n> - Updated __Retrieve Benefits Totals__ X-From and X-To parameter\
+    \ descriptions.\n> - Removed __Retrieve Merchant Totals V1__ following deprecation\
+    \ period.\n\n**Version 2.5.2: 19/04/2023**\n> - Added `format` query parameter\
+    \ to __Retrieve Categories__.\n\n**Version 2.5.1: 30/03/2023**\n> - Fix income\
+    \ types for __Retrieve Income Transactions V2__.\n\n**Version 2.5.0: 28/03/2023**\n\
+    > - Deprecated __Retrieve Financial Forecast__.\n> - Deprecated __Create Transaction\
+    \ Rule(s)__.\n> - Renamed __Retrieve Upcoming Transaction__ endpoints (V1 and\
+    \ V2) to __Retrieve Forecasted Transactions__.\n> - Renamed __Recategorise Transaction__\
+    \ endpoints (V1 and V2) to __Correct Transaction Categories__.\n> - Fix documented\
+    \ required fields for __Recategorise Transaction V1__.\n\n\n**Version 2.4.0: 24/03/2023**\n\
+    > - Deprecated __Retrieve Accounts__.\n> - Finalised __Retrieve Accounts V2 (beta)__\
+    \ to production release as __Retrieve Accounts V2__.\n> - Finalised __Retrieve\
+    \ Account By ID V2 (beta)__ to production release as __Retrieve Account By ID\
+    \ V2__.\n> - Finalised __Retrieve Balances Over Time (Beta)__ to production release\
+    \ as __Retrieve Balances Over Time__.\n> - Finalised __Retrieve Balances Over\
+    \ Time By Account (Beta)__ to production release as __Retrieve Balances Over Time\
+    \ By Account__.\n\n\n**Version 2.3.9: 21/03/2023**\n> - Update merchant descriptions\
+    \ & required fields for **Retrieve Subscriptions**\n> - Standardised description\
+    \ used for dates in __Retrieve Merchant Totals V2__.\n> - Standardised description\
+    \ used for dates in __Retrieve Income Transactions V1__.\n> - Standardised description\
+    \ used for dates in __Retrieve Income Transactions V2__.\n> - Standardised description\
+    \ used for dates in __Retrieve Loan Transactions__.\n> - Standardised description\
+    \ used for dates in __Retrieve Debt Collection Transactions__.\n> - Standardised\
+    \ description used for dates in __Retrieve Benefits Transactions__.\n> - Standardised\
+    \ description used for dates in __Retrieve Benefits Totals__.\n> - Standardised\
+    \ description used for dates in __Retrieve Financial Products__.\n> - Standardised\
+    \ description used for dates in __Retrieve Subscriptions__.\n> - Standardised\
+    \ description used for dates in __Retrieve Upcoming Transactions V1__.\n> - Standardised\
+    \ description used for dates in __Retrieve Salary Information__.\n\n**Version\
+    \ 2.3.8: 21/03/2023**\n> - Update amount descriptions\n\n**Version 2.3.7: 20/03/2023**\n\
+    > - Fix the docs for **Retrieve Money Management** correcting the category names\
+    \ for some warning types.\n> - Remove the deprecated `large_expense` and `high_balance`\
+    \ warnings from **Retrieve Money Management**.\n\n**Version 2.3.6: 16/03/2023**\n\
+    > - Deprecated __Initiate Energy Payments Discovery__ and __Retrieve Energy Payments__\n\
+    \n**Version 2.3.5: 13/03/2023**\n> - Updated holder and holders fields on __List\
     \ Accounts V2 (beta)__ and __Retrieve Account By ID V2 (beta)__.\n\n**Version\
     \ 2.3.3: 13/03/2023**\n> - Document `provider_redirect_url` field for **Create\
     \ Single Payment**\n\n**Version 2.3.2: 13/03/2023**\n> - Document `reconfirm_consent_redirect`\
@@ -679,7 +686,7 @@ info:
     name: Bud Support
     url: https://www.thisisbud.com/
     email: help@thisisbud.com
-  version: 2.5.2
+  version: 2.6.0
   x-logo:
     url: "data:image/png;base64,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"
 servers:
@@ -2779,6 +2786,8 @@ paths:
                 type: personal
                 region: GB
                 locale: en-GB
+                models:
+                  categorisation: uk-v2
         required: false
       responses:
         "201":
@@ -2796,6 +2805,8 @@ paths:
                     type: personal
                     region: GB
                     locale: en-GB
+                    models:
+                      categorisation: uk-v2
         "400":
           description: The request contains an invalid payload.
           content:
@@ -2843,6 +2854,8 @@ paths:
                 type: personal
                 region: GB
                 locale: en-GB
+                models:
+                  categorisation: uk-v2
         required: false
       responses:
         "201":
@@ -2862,18 +2875,24 @@ paths:
                         type: personal
                         region: GB
                         locale: en-GB
+                        models:
+                          categorisation: uk-v2
                     - customer_id: 7788d43e-4eb1-11eb-ae93-0242ac130002
                       customer_secret: 63ae14a67e5cf8c8f7bf5376479d13e5
                       customer_context:
                         type: personal
                         region: GB
                         locale: en-GB
+                        models:
+                          categorisation: uk-v2
                     - customer_id: 8e4b6f88-4eb1-11eb-ae93-0242ac130002
                       customer_secret: a951d12bf19e2874254cb2833dc5a8c3
                       customer_context:
                         type: personal
                         region: GB
                         locale: en-GB
+                        models:
+                          categorisation: uk-v2
                     metadata:
                       results: 3
                 Single Customer:
@@ -2886,6 +2905,8 @@ paths:
                         type: personal
                         region: GB
                         locale: en-GB
+                        models:
+                          categorisation: uk-v2
                     metadata:
                       results: 1
         "400":
@@ -2979,6 +3000,8 @@ paths:
                   type: personal
                   region: GB
                   locale: en-GB
+                  models:
+                    categorisation: uk-v2
         "401":
           description: An unauthenticated request was received.
         "404":
@@ -3018,6 +3041,8 @@ paths:
             example:
               region: GB
               locale: en-GB
+              models:
+                categorisation: uk-v2
         required: true
       responses:
         "200":
@@ -3031,6 +3056,8 @@ paths:
                 data:
                   region: GB
                   locale: en-GB
+                  models:
+                    categorisation: uk-v2
         "401":
           description: An unauthenticated request was received.
         "404":
@@ -3041,6 +3068,137 @@ paths:
           description: An unexpected error occurred on the server side.
       security:
       - OAuth2: []
+  /resources/v2/categories/models:
+    get:
+      tags:
+      - Enrichment Resources
+      summary: Retrieve Available Categorisation Models V2
+      description: Retrieve the available Bud categorisation models.
+      operationId: resources_v2_models_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetModelsResponse'
+              example:
+                operation_id: resources_v2_models_get
+                data:
+                - name: uk-v2
+                  description: "A UK categorisation model. This model can be used\
+                    \ for the following use cases: affordability assessments, collections\
+                    \ assessments, affordability monitoring, customer engagement and\
+                    \ product recommendations."
+                - name: uk-v1
+                  description: "A UK categorisation model. This model can be used\
+                    \ for the following use cases: affordability assessments, collections\
+                    \ assessments, affordability monitoring, customer engagement and\
+                    \ product recommendations."
+                  deprecated: true
+        "400":
+          description: The request contains an invalid payload
+        "401":
+          description: Unauthorised request
+        "405":
+          description: An unexpected HTTP method was used
+        "5XX":
+          description: An unexpected error occurred on the server side
+  /resources/v2/categories:
+    get:
+      tags:
+      - Enrichment Resources
+      summary: Retrieve Categories V2
+      description: Retrieve a list of primary and secondary categories supported by
+        Bud's categorisation model.
+      operationId: resources_v2_categories_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: |
+          Determines if the response will be structured:
+            - As a flat object where all categories and subcategories are listed separately under different fields. See the example response `Flat Response`.
+            - As a map where all categories are listed as objects themselves with their respective subcategories listed in fields within the category objects. See the example response `Map Response`.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: flat
+          enum:
+          - map
+          - flat
+      - name: model
+        in: query
+        description: |
+          The name of the model for which categories should be returned. See the *List Categorisation Models V2* endpoint for available model names.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCategoriesV2Response'
+              examples:
+                flat:
+                  value:
+                    operation_id: resources_v2_categories_get
+                    data:
+                      categories:
+                      - travel
+                      subcategories:
+                      - flights
+                      - insurance
+                      - other_travel
+                    metadata:
+                      model:
+                        name: uk-v2
+                        description: "A UK categorisation model. This model can be\
+                          \ used for the following use cases: affordability assessments,\
+                          \ collections assessments, affordability monitoring, customer\
+                          \ engagement and product recommendations."
+                map:
+                  value:
+                    operation_id: resources_v2_categories_get
+                    data:
+                    - name: travel
+                      subcategories:
+                      - flights
+                      - insurance
+                      - other_travel
+                    metadata:
+                      model:
+                        name: uk-v2
+                        description: "A UK categorisation model. This model can be\
+                          \ used for the following use cases: affordability assessments,\
+                          \ collections assessments, affordability monitoring, customer\
+                          \ engagement and product recommendations."
+        "400":
+          description: The request contains an invalid payload
+        "401":
+          description: Unauthorised request
+        "405":
+          description: An unexpected HTTP method was used
+        "5XX":
+          description: An unexpected error occurred on the server side
   /v1/categories/double-cat:
     get:
       tags:
@@ -3274,6 +3432,7 @@ paths:
           description: An unexpected HTTP method was used
         "5XX":
           description: An unexpected error occurred on the server side
+      deprecated: true
       security:
       - OAuth2: []
   /v1/categories/totals:
@@ -3281,10 +3440,9 @@ paths:
       tags:
       - Enrichment Totals
       summary: Retrieve Category Totals
-      description: |
-        Provides a customer’s total income and expenditure for each primary and secondary category, over a given time period.
-
-        The header parameters X-From and X-To allow you to filter the result to a specified datetime range.
+      description: "Provides a customer’s total income and expenditure for each category\
+        \ and subcategory, over a given time period. \n\nEach income and expenditure\
+        \ total is separated by currency, as we cannot sum totals in different currencies.\n"
       operationId: v1_categories_totals_get
       parameters:
       - name: X-Client-Id
@@ -3308,20 +3466,32 @@ paths:
           type: string
       - name: X-From
         in: header
-        description: "Date (YYYY-MM-DD) from which the transactions should be returned\
-          \ from, this works in pair with the 'X-To' parameter"
+        description: |
+          The date from when results are to be retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
+
+          When ommited from the request, a default value of 30 days from before today's date will be used.
+
+          Example: `2022-02-28`
         required: false
+        style: simple
+        explode: false
         schema:
           type: string
         example: 2022-02-28
       - name: X-To
         in: header
-        description: "Date (YYYY-MM-DD) from which the transactions should be returned\
-          \ to, this works in pair with the 'X-From' parameter"
+        description: |
+          The date up to when results are to be retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
+
+          When ommited from the request, a default value of today's date will be used.
+
+          Example: `2022-01-28`
         required: false
+        style: simple
+        explode: false
         schema:
           type: string
-        example: 2022-03-30
+        example: 2022-01-28
       responses:
         "200":
           description: The operation was successful
@@ -3349,9 +3519,13 @@ paths:
                     credit_amount:
                     - value: "9.99"
                       currency: GBP
+                    - value: "3.99"
+                      currency: USD
                     debit_amount:
                     - value: "0.00"
                       currency: GBP
+                    - value: "32.99"
+                      currency: USD
         "400":
           description: The request contains an invalid payload
           content:
@@ -3370,106 +3544,6 @@ paths:
           description: The request uses an unexpected HTTP method
         "5XX":
           description: An unexpected error occurred on the server side
-      security:
-      - OAuth2: []
-  /v1/merchants/totals:
-    get:
-      tags:
-      - Enrichment Totals
-      summary: Retrieve Merchant Totals V1
-      description: |
-        Provides a customer’s total income and expenditure for each merchant.
-      operationId: merchants_totals_get
-      parameters:
-      - name: X-Client-Id
-        in: header
-        description: The API Client Identifier (Service Application Identifier).
-        required: true
-        schema:
-          type: string
-      - name: X-Customer-Id
-        in: header
-        description: Bud Customer identifier
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: X-Customer-Secret
-        in: header
-        description: Bud Customer secret
-        required: true
-        schema:
-          type: string
-      - name: X-From
-        in: header
-        description: Transaction from date
-        schema:
-          type: string
-        example: 2022-01-29
-      - name: X-To
-        in: header
-        description: Transaction to date
-        schema:
-          type: string
-        example: 2022-03-29
-      responses:
-        "200":
-          description: The request was successfully processed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MerchantTotalsResponse'
-              example:
-                operation_id: merchants_totals_get
-                data:
-                  total_outgoing:
-                    amount: "5838.11"
-                    currency: GBP
-                  total_incoming:
-                    amount: "15001.00"
-                    currency: GBP
-                  unknown_spend:
-                    amount: "5782.48"
-                    currency: GBP
-                    transactions: 11
-                  merchant_spend:
-                    argos:
-                      amount: "10.45"
-                      currency: GBP
-                      transactions: 1
-                    tesco:
-                      amount: "10.45"
-                      currency: GBP
-                      transactions: 1
-                    uber:
-                      amount: "34.73"
-                      currency: GBP
-                      transactions: 2
-                metadata:
-                  from: 2018-01-01
-                  to: 2018-01-17
-                  transaction_count: 3
-        "204":
-          description: No transactions found
-        "400":
-          description: The request contains an invalid payload
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              example:
-                operation_id: merchants_totals_get
-                code_id: failed_validation
-                message: Failed validation
-                errors:
-                  client_id: This value should not be blank
-        "401":
-          description: Unauthorised request
-        "405":
-          description: An unexpected HTTP method was used
-        "5XX":
-          description: An unexpected error occurred on the server side
-      deprecated: true
       security:
       - OAuth2: []
   /v2/merchants/totals:
@@ -3502,16 +3576,32 @@ paths:
           type: string
       - name: X-From
         in: header
-        description: Transaction from date
+        description: |
+          The date from when results are to be retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
+
+          When ommited from the request, a default value of 30 days from before today's date will be used.
+
+          Example: `2022-02-28`
+        required: false
+        style: simple
+        explode: false
         schema:
           type: string
-        example: 2022-01-29
+        example: 2022-02-28
       - name: X-To
         in: header
-        description: Transaction to date
+        description: |
+          The date up to when results are to be retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
+
+          When ommited from the request, a default value of today's date will be used.
+
+          Example: `2022-01-28`
+        required: false
+        style: simple
+        explode: false
         schema:
           type: string
-        example: 2022-03-29
+        example: 2022-01-28
       - name: X-Include-Categories
         in: header
         description: Comma-separated list of transaction categories to include in
@@ -3614,16 +3704,32 @@ paths:
           type: string
       - name: X-From
         in: header
-        description: Transaction from date
+        description: |
+          The date from when results are to be retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
+
+          When ommited from the request, a default value of 30 days from before today's date will be used.
+
+          Example: `2022-02-28`
+        required: false
+        style: simple
+        explode: false
         schema:
           type: string
-        example: 2022-01-29
+        example: 2022-02-28
       - name: X-To
         in: header
-        description: Transaction to date
+        description: |
+          The date up to when results are to be retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
+
+          When ommited from the request, a default value of today's date will be used.
+
+          Example: `2022-01-28`
+        required: false
+        style: simple
+        explode: false
         schema:
           type: string
-        example: 2022-03-29
+        example: 2022-01-28
       responses:
         "200":
           description: OK
@@ -3632,7 +3738,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BenefitsTotalsResponseV1'
               example:
-                operation_id: v1_benefits_totals_get
+                operation_id: v1_benefits_get_totals
                 data:
                 - benefit:
                     type: disability_living_allowance
@@ -9819,9 +9925,9 @@ paths:
         | `overdraft`                     | Account is overdrawn (note that credit cards will not trigger this warning). |
         | `cannot_cover_bills`            | The total upcoming payments for exceeds the current balance. The time range used for analysing past payments is `(X-From, X-Today)` and the period used for predicting upcoming payments is `(X-Today, X-To)`. |
         | `late_income`                   | A regular incoming payment was expected to be received on the account and hasn't yet. |
-        | `late_payment`                  | A regular outgoing payment was expected to come out of the account and hasn't yet.    |
-        | `regular_payment_changed`       | The value of a regular payment has increased or decreased between the oldest and newest instance |
-        | `suspected_duplicate_charge`    | A duplicate transaction is one of more transactions that are debit transactions, have a non-zero booking time, and have a non-zero amount. They must also have matching `account_id`, `transaction_reference`, `merchant_id` (if one exists), `amount`, `currency`, `date`, `booking_datetime` |
+        | `late_payment`                  | A regular outgoing payment that was expected to come out of the account on a specific date but has been paid after expected date.  |
+        | `regular_payment_changed`       | The value of a regular payment has increased or decreased between the oldest and newest instance. |
+        | `suspected_duplicate_charge`    | A duplicate transaction is one of more transactions that are debit transactions, have a non-zero booking time, and have a non-zero amount. They must also have matching `account_id`, `transaction_reference`, `merchant_id` (if one exists), `amount`, `currency`, `date`, `booking_datetime`. |
         | `regular_monthly_income_change` | The value of a regular income has increased or decreased based on the previous months income. As this is comparing income over whole months, only complete months are considered in the provided date range. For instance, if `X-From=2022-01-05` and `X-To=2022-04-05` then the range considered by this warning will be `(2022-01-01, 2022-03-31)`. In addition, the default treshold for a difference in amounts to trigger this warning is 10%. |
       operationId: v1_signal_money_management_get
       parameters:
@@ -12832,6 +12938,8 @@ components:
           $ref: '#/components/schemas/CustomerContextRegion'
         locale:
           $ref: '#/components/schemas/CustomerContextLocale'
+        models:
+          $ref: '#/components/schemas/CustomerContextModels'
       description: The context in which a customer is processed throughout the Bud
         platform. Default values can be populated using client configuration.
     CustomerContextType:
@@ -12857,6 +12965,15 @@ components:
       type: string
       description: "The locale/language, based on the region, format defined by BCP\
         \ 47."
+    CustomerContextModels:
+      title: Customer Context Models
+      type: object
+      properties:
+        categorisation:
+          type: string
+          description: The name of the categorisation model to use for this customer
+            at enrichment. See *List Categorisation Models V2* for available models.
+      description: The configuration for Bud's enrichment models.
     CustomerCreateResponse:
       title: Create Customer Response
       required:
@@ -12948,6 +13065,8 @@ components:
           $ref: '#/components/schemas/CustomerContextRegion'
         locale:
           $ref: '#/components/schemas/CustomerContextLocale'
+        models:
+          $ref: '#/components/schemas/CustomerContextModels'
       description: Expected request payload structure.
     UpdateCustomerContextResponse:
       title: Customer Context Update Response
@@ -12959,8 +13078,76 @@ components:
         operation_id:
           type: string
         data:
-          $ref: '#/components/schemas/Updated_Customer_Context_Data'
+          $ref: '#/components/schemas/Updated Customer Context'
       description: Customer context update response.
+    GetModelsResponse:
+      title: Models Response
+      required:
+      - data
+      - operation_id
+      properties:
+        operation_id:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategorisationModel'
+    CategorisationModel:
+      title: Categorisation Model
+      required:
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the model.
+        description:
+          type: string
+          description: Description of the model & use-cases it provides.
+        deprecated:
+          type: boolean
+          description: A flag to mark a particular model version as deprecated (this
+            field is omitted if the model is not deprecated).
+      description: Bud categorisation model.
+    GetCategoriesV2Response:
+      title: Categories Response
+      required:
+      - data
+      - metadata
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/CategoriesFlat'
+          - $ref: '#/components/schemas/CategoriesMap'
+        metadata:
+          $ref: '#/components/schemas/GetCategoriesV2Response_metadata'
+      description: Expected response structure for the get categories endpoint.
+    CategoriesFlat:
+      title: Category List
+      type: object
+      properties:
+        categories:
+          type: array
+          description: List of all the available categories.
+          items:
+            type: string
+        subcategories:
+          type: array
+          description: List of all the available subcategories.
+          items:
+            type: string
+      description: A list of all the available categories and subcategories.
+    CategoriesMap:
+      title: Category Map
+      type: array
+      description: A map of all the available categories and respective subcategories
+      items:
+        $ref: '#/components/schemas/Category_1'
     CategoriesResponse:
       title: Categories Response
       required:
@@ -12974,28 +13161,7 @@ components:
           oneOf:
           - $ref: '#/components/schemas/CategoriesFlat'
           - $ref: '#/components/schemas/CategoriesMap'
-      description: Expected response structure for the get categories endpoint
-    CategoriesFlat:
-      title: Category List
-      type: object
-      properties:
-        l1:
-          type: array
-          description: List of all the available categories.
-          items:
-            type: string
-        l2:
-          type: array
-          description: List of all the available subcategories.
-          items:
-            type: string
-      description: A list of all the available categories and subcategories.
-    CategoriesMap:
-      title: Category Map
-      type: array
-      description: A map of all the available categories and respective subcategories
-      items:
-        $ref: '#/components/schemas/Category_1'
+      description: Expected response structure for the get categories endpoint.
     CategoriesTotalResponse:
       title: Categories Totals Response
       required:
@@ -13042,64 +13208,6 @@ components:
           type: string
           description: The label (name) of the transaction category for display purposes
       description: Category information
-    MerchantTotalsResponse:
-      title: Merchant Totals Response
-      type: object
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: array
-          description: Information surrounding possible groups of Regular transactions
-          items:
-            $ref: '#/components/schemas/MerchantTotals'
-        metadata:
-          $ref: '#/components/schemas/MerchantTotalsMetadata'
-      description: Merchant Totals from Aggregated Data Response
-    MerchantTotals:
-      title: Merchant Totals
-      required:
-      - spend_by_merchants
-      - total_incoming
-      - total_outgoing
-      type: object
-      properties:
-        total_outgoing:
-          $ref: '#/components/schemas/LegacyBudAmount'
-        total_incoming:
-          $ref: '#/components/schemas/LegacyBudAmount'
-        unknown_spend:
-          $ref: '#/components/schemas/MerchantSpendObject'
-        merchant_spend:
-          type: array
-          items:
-            $ref: '#/components/schemas/MerchantSpendObject'
-      description: Merchant Total spend structure
-    MerchantSpendObject:
-      title: Merchant Spend
-      description: Total spend by merchants
-      allOf:
-      - $ref: '#/components/schemas/LegacyBudAmount'
-      - required:
-        - transaction_count
-        type: object
-        properties:
-          transaction_count:
-            type: number
-            description: Number of transactions found using this merchant
-    MerchantTotalsMetadata:
-      title: Merchant Totals Metadata
-      type: object
-      properties:
-        from:
-          type: string
-          description: Date (Y-m-d) from which transactions are returned from.
-        to:
-          type: string
-          description: Date (Y-m-d) from which transactions are returned to.
-        transaction_count:
-          type: number
-          description: Number of transactions returned.
     MerchantTotalsResponseV2:
       title: Merchant Totals
       required:
@@ -16737,9 +16845,9 @@ components:
         | `overdraft`                     | Account is overdrawn (note that credit cards will not trigger this warning). |
         | `cannot_cover_bills`            | The total upcoming payments for exceeds the current balance. The time range used for analysing past payments is `(X-From, X-Today)` and the period used for predicting upcoming payments is `(X-Today, X-To)`. |
         | `late_income`                   | A regular incoming payment was expected to be received on the account and hasn't yet. |
-        | `late_payment`                  | A regular outgoing payment was expected to come out of the account and hasn't yet.    |
-        | `regular_payment_changed`       | The value of a regular payment has increased or decreased between the oldest and newest instance |
-        | `suspected_duplicate_charge`    | A duplicate transaction is one of more transactions that are debit transactions, have a non-zero booking time, and have a non-zero amount. They must also have matching `account_id`, `transaction_reference`, `merchant_id` (if one exists), `amount`, `currency`, `date`, `booking_datetime` |
+        | `late_payment`                  | A regular outgoing payment that was expected to come out of the account on a specific date but has been paid after expected date. |
+        | `regular_payment_changed`       | The value of a regular payment has increased or decreased between the oldest and newest instance. |
+        | `suspected_duplicate_charge`    | A duplicate transaction is one of more transactions that are debit transactions, have a non-zero booking time, and have a non-zero amount. They must also have matching `account_id`, `transaction_reference`, `merchant_id` (if one exists), `amount`, `currency`, `date`, `booking_datetime`. |
         | `regular_monthly_income_change` | The value of a regular income has increased or decreased based on the previous months income. As this is comparing income over whole months, only complete months are considered in the provided date range. For instance, if `X-From=2022-01-05` and `X-To=2022-04-05` then the range considered by this warning will be `(2022-01-01, 2022-03-31)`. In addition, the default treshold for a difference in amounts to trigger this warning is 10%. |
       items:
         $ref: '#/components/schemas/MoneyManagement'
@@ -18700,14 +18808,23 @@ components:
             \ data stored on the Bud platform."
         customer_context:
           $ref: '#/components/schemas/CustomerContext'
-    Updated_Customer_Context_Data:
-      title: Updated_Customer_Context_Data
+    Updated Customer Context:
+      title: Updated Customer Context
       type: object
       properties:
         region:
           $ref: '#/components/schemas/CustomerContextRegion'
         locale:
           $ref: '#/components/schemas/CustomerContextLocale'
+        models:
+          $ref: '#/components/schemas/CustomerContextModels'
+    GetCategoriesV2Response_metadata:
+      required:
+      - model
+      type: object
+      properties:
+        model:
+          $ref: '#/components/schemas/CategorisationModel'
     Category_1:
       title: Category
       type: object
@@ -20274,38 +20391,6 @@ components:
         type: string
         enum:
         - "true"
-    HeaderFrom:
-      name: X-From
-      in: header
-      description: "Date (YYYY-MM-DD) from which the transactions should be returned\
-        \ from, this works in pair with the 'X-To' parameter"
-      required: false
-      schema:
-        type: string
-      example: 2022-02-28
-    HeaderTo:
-      name: X-To
-      in: header
-      description: "Date (YYYY-MM-DD) from which the transactions should be returned\
-        \ to, this works in pair with the 'X-From' parameter"
-      required: false
-      schema:
-        type: string
-      example: 2022-03-30
-    From:
-      name: X-From
-      in: header
-      description: Transaction from date
-      schema:
-        type: string
-      example: 2022-01-29
-    To:
-      name: X-To
-      in: header
-      description: Transaction to date
-      schema:
-        type: string
-      example: 2022-03-29
     MerchantsTotalsIncludeCategories:
       name: X-Include-Categories
       in: header
@@ -20378,6 +20463,24 @@ components:
       required: false
       schema:
         type: string
+    HeaderFrom:
+      name: X-From
+      in: header
+      description: "Date (YYYY-MM-DD) from which the transactions should be returned\
+        \ from, this works in pair with the 'X-To' parameter"
+      required: false
+      schema:
+        type: string
+      example: 2022-02-28
+    HeaderTo:
+      name: X-To
+      in: header
+      description: "Date (YYYY-MM-DD) from which the transactions should be returned\
+        \ to, this works in pair with the 'X-From' parameter"
+      required: false
+      schema:
+        type: string
+      example: 2022-03-30
     OBProvider:
       name: provider
       in: path
@@ -20407,6 +20510,20 @@ components:
       schema:
         type: string
         default: "change_percentage[all]=0.0"
+    From:
+      name: X-From
+      in: header
+      description: Transaction from date
+      schema:
+        type: string
+      example: 2022-01-29
+    To:
+      name: X-To
+      in: header
+      description: Transaction to date
+      schema:
+        type: string
+      example: 2022-03-29
     QueryFromDate:
       name: from
       in: query
