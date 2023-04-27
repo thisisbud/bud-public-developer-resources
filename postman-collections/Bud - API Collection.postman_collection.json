@@ -2495,20 +2495,62 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}v1/categories/double-cat",
+									"raw": "{{proxy_url}}resources/v2/categories",
 									"host": [
-										"{{proxy_url}}v1"
+										"{{proxy_url}}resources"
 									],
 									"path": [
-										"categories",
-										"double-cat"
+										"v2",
+										"categories"
 									],
 									"query": [
 										{
+											"key": "model",
+											"value": "uk-v2",
+											"description": "The name of the model for which categories should be returned. See the Retrieve Categorisation Models V2 endpoint for available model names.",
+											"disabled": true
+										},
+										{
 											"key": "format",
 											"value": "map",
+											"description": "Determines if the response will be structured:\n - As a flat object where all categories and subcategories are listed separately under different fields.\n - As a map where all categories are listed as objects themselves with their respective subcategories listed in fields within the category objects.",
 											"disabled": true
 										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Available Categorisation Models",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}resources/v2/categories/models",
+									"host": [
+										"{{proxy_url}}resources"
+									],
+									"path": [
+										"v2",
+										"categories",
+										"models"
 									]
 								}
 							},
