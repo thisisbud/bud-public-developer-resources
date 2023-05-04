@@ -1420,7 +1420,8 @@ paths:
           format: uuid
       - name: task_id
         in: path
-        description: Bud Task identifier
+        description: Bud Task identifier returned from an async task for the requested
+          action
         required: true
         schema:
           type: string
@@ -1702,7 +1703,7 @@ paths:
       - Manage a Connection
       summary: Initiate Refresh
       description: |
-        Download a customer’s latest account information. Refresh the accounts from a single provider with an existing connection. If the customer's consent has expired for this provider, Bud will be unable to refresh the account. This will be confirmed in the response of the refresh status endpoint associated with the `task_id` provided in the response to this endpoint, where the `reconnect_required` field will set to `true`.
+        Instruct Bud to retrieve the latest account infomation for a customer. Refresh the accounts from a single provider with an existing connection. If the customer's consent has been revoked or expired for this provider, Bud will be unable to refresh the account. This will be confirmed in the response of the refresh status endpoint associated with the `task_id` provided in the response to this endpoint, where the `reconnect_required` field will set to `true` and status set to `Completed`.
       operationId: open_banking_refresh_post
       parameters:
       - name: X-Client-Id
@@ -1735,9 +1736,6 @@ paths:
               to: 2019-06-01T00:00:00+00:00
         required: true
       responses:
-        "102":
-          description: An identical request has been accepted for processing but the
-            processing has not been completed yet.
         "202":
           description: A new Task has been generated to request the Customer's bank
             account refresh. The generated `task_id` can be used to check the Task's
@@ -1749,10 +1747,12 @@ paths:
               example:
                 operation_id: open_banking_refresh_post
                 data:
+                  provider: Barclays
                   task_id: 360e5821-4f18-4077-83f4-c9a7c1768bea
                 metadata:
                   next_url: /v1/open-banking/refresh/360e5821-4f18-4077-83f4-c9a7c1768bea
                   next_url_delay: 50
+                  status: Pending
         "400":
           description: The request contains an invalid payload
           content:
@@ -1880,7 +1880,7 @@ paths:
       - Manage a Connection
       summary: Retrieve Refresh Status
       description: |
-        Check the status of an account information refresh task e.g. progress on account information download. If the task is not yet completed, the status will be shown as pending. If the status is completed, then the data is ready to be collected via the [Retrieve OB Data](#tag/Retrieve-OB-Data) endpoints.
+        Check the status of an account information refresh task e.g. progress on account information download. If the task is not yet completed, the status will be shown as pending. If the status is completed, then the data is ready to be collected via the [Retrieve Financial Data](/reference/retrieve-financial-data) endpoints. Successful requests will include `step` (1-4) and associated `text` values to indicate the current progress of the refresh task.
       operationId: open_banking_refresh_get
       parameters:
       - name: X-Client-Id
@@ -1898,7 +1898,8 @@ paths:
           format: uuid
       - name: task_id
         in: path
-        description: Bud Task identifier
+        description: Bud Task identifier returned from an async task for the requested
+          action
         required: true
         schema:
           type: string
@@ -1921,6 +1922,7 @@ paths:
                       result: success
                       reconnect_required: false
                       step: 4
+                      task_id: 03af1639-78a6-402d-809b-902a0b00a77d
                       text: Completed
                     metadata:
                       has_new_transactions: true
@@ -1934,6 +1936,7 @@ paths:
                       status: Pending
                       reconnect_required: false
                       step: 1
+                      task_id: 03af1639-78a6-402d-809b-902a0b00a77d
                       text: Fetching access token
                     metadata:
                       status: Pending
@@ -1977,6 +1980,7 @@ paths:
                       result: connection_revoked
                       reconnect_required: true
                       step: 4
+                      task_id: 03af1639-78a6-402d-809b-902a0b00a77d
                       text: Completed
                     metadata:
                       status: Failed
@@ -2234,7 +2238,8 @@ paths:
           format: uuid
       - name: task_id
         in: path
-        description: Bud Task identifier
+        description: Bud Task identifier returned from an async task for the requested
+          action
         required: true
         schema:
           type: string
@@ -2472,7 +2477,8 @@ paths:
           type: string
       - name: task_id
         in: path
-        description: Bud Task identifier
+        description: Bud Task identifier returned from an async task for the requested
+          action
         required: true
         schema:
           type: string
@@ -2733,7 +2739,8 @@ paths:
           type: string
       - name: task_id
         in: path
-        description: Bud Task identifier
+        description: Bud Task identifier returned from an async task for the requested
+          action
         required: true
         schema:
           type: string
@@ -6989,7 +6996,8 @@ paths:
       parameters:
       - name: task_id
         in: path
-        description: Bud Task identifier
+        description: Bud Task identifier returned from an async task for the requested
+          action
         required: true
         schema:
           type: string
@@ -11902,7 +11910,8 @@ components:
     TaskId:
       title: Task Id
       type: string
-      description: UUID used to identify an asynchronous task
+      description: Bud Task identifier returned from an async task for the requested
+        action
     AsyncTaskMetadata:
       title: Created Task Metadata
       type: object
@@ -20427,7 +20436,8 @@ components:
     TaskId:
       name: task_id
       in: path
-      description: Bud Task identifier
+      description: Bud Task identifier returned from an async task for the requested
+        action
       required: true
       schema:
         type: string
