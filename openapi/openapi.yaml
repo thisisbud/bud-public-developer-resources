@@ -287,47 +287,50 @@ info:
     \ Deprecated **Retrieve Trends** in favour of **Retrieve Category Totals**. |\n\
     \n## Changelog\n\nThis changelog represents a list of all changes that have been\
     \ made to Bud’s API documentation. This includes both backward-compatible and\
-    \ backward-incompatible changes.\n\n**Version 2.6.0: 25/04/2023**\n> - Added new\
-    \ __Retrieve Categories V2__ endpoint.\n> - Added new __Retrieve Available Categorisation\
-    \ Models V2__ endpoint.\n> - Deprecated __Retrieve Categories__.\n> - Added `models.categorisation`\
-    \ field to _Customer Context_ models.\n\n**Version 2.5.3: 20/04/2023**\n> - Updated\
-    \ __Retrieve Category Totals__ X-From and X-To parameter descriptions and endpoint\
-    \ description.\n> - Updated __Retrieve Merchant Totals V2__ X-From and X-To parameter\
-    \ descriptions.\n> - Updated __Retrieve Benefits Totals__ X-From and X-To parameter\
-    \ descriptions.\n> - Removed __Retrieve Merchant Totals V1__ following deprecation\
-    \ period.\n\n**Version 2.5.2: 19/04/2023**\n> - Added `format` query parameter\
-    \ to __Retrieve Categories__.\n\n**Version 2.5.1: 30/03/2023**\n> - Fix income\
-    \ types for __Retrieve Income Transactions V2__.\n\n**Version 2.5.0: 28/03/2023**\n\
-    > - Deprecated __Retrieve Financial Forecast__.\n> - Deprecated __Create Transaction\
-    \ Rule(s)__.\n> - Renamed __Retrieve Upcoming Transaction__ endpoints (V1 and\
-    \ V2) to __Retrieve Forecasted Transactions__.\n> - Renamed __Recategorise Transaction__\
-    \ endpoints (V1 and V2) to __Correct Transaction Categories__.\n> - Fix documented\
-    \ required fields for __Recategorise Transaction V1__.\n\n\n**Version 2.4.0: 24/03/2023**\n\
-    > - Deprecated __Retrieve Accounts__.\n> - Finalised __Retrieve Accounts V2 (beta)__\
-    \ to production release as __Retrieve Accounts V2__.\n> - Finalised __Retrieve\
-    \ Account By ID V2 (beta)__ to production release as __Retrieve Account By ID\
-    \ V2__.\n> - Finalised __Retrieve Balances Over Time (Beta)__ to production release\
-    \ as __Retrieve Balances Over Time__.\n> - Finalised __Retrieve Balances Over\
-    \ Time By Account (Beta)__ to production release as __Retrieve Balances Over Time\
-    \ By Account__.\n\n\n**Version 2.3.9: 21/03/2023**\n> - Update merchant descriptions\
-    \ & required fields for **Retrieve Subscriptions**\n> - Standardised description\
-    \ used for dates in __Retrieve Merchant Totals V2__.\n> - Standardised description\
-    \ used for dates in __Retrieve Income Transactions V1__.\n> - Standardised description\
-    \ used for dates in __Retrieve Income Transactions V2__.\n> - Standardised description\
-    \ used for dates in __Retrieve Loan Transactions__.\n> - Standardised description\
-    \ used for dates in __Retrieve Debt Collection Transactions__.\n> - Standardised\
-    \ description used for dates in __Retrieve Benefits Transactions__.\n> - Standardised\
-    \ description used for dates in __Retrieve Benefits Totals__.\n> - Standardised\
-    \ description used for dates in __Retrieve Financial Products__.\n> - Standardised\
-    \ description used for dates in __Retrieve Subscriptions__.\n> - Standardised\
-    \ description used for dates in __Retrieve Upcoming Transactions V1__.\n> - Standardised\
-    \ description used for dates in __Retrieve Salary Information__.\n\n**Version\
-    \ 2.3.8: 21/03/2023**\n> - Update amount descriptions\n\n**Version 2.3.7: 20/03/2023**\n\
-    > - Fix the docs for **Retrieve Money Management** correcting the category names\
-    \ for some warning types.\n> - Remove the deprecated `large_expense` and `high_balance`\
-    \ warnings from **Retrieve Money Management**.\n\n**Version 2.3.6: 16/03/2023**\n\
-    > - Deprecated __Initiate Energy Payments Discovery__ and __Retrieve Energy Payments__\n\
-    \n**Version 2.3.5: 13/03/2023**\n> - Updated holder and holders fields on __List\
+    \ backward-incompatible changes.\n\n**Version 2.6.1: 27/04/2023**\n> - Deprecated\
+    \ __Retrieve Financial Products__.\n> - Corrected sample Financial Products in\
+    \ __Retrieve Financial Products V2__.\n\n**Version 2.6.0: 25/04/2023**\n> - Added\
+    \ new __Retrieve Categories V2__ endpoint.\n> - Added new __Retrieve Available\
+    \ Categorisation Models V2__ endpoint.\n> - Deprecated __Retrieve Categories__.\n\
+    > - Added `models.categorisation` field to _Customer Context_ models.\n\n**Version\
+    \ 2.5.3: 20/04/2023**\n> - Updated __Retrieve Category Totals__ X-From and X-To\
+    \ parameter descriptions and endpoint description.\n> - Updated __Retrieve Merchant\
+    \ Totals V2__ X-From and X-To parameter descriptions.\n> - Updated __Retrieve\
+    \ Benefits Totals__ X-From and X-To parameter descriptions.\n> - Removed __Retrieve\
+    \ Merchant Totals V1__ following deprecation period.\n\n**Version 2.5.2: 19/04/2023**\n\
+    > - Added `format` query parameter to __Retrieve Categories__.\n\n**Version 2.5.1:\
+    \ 30/03/2023**\n> - Fix income types for __Retrieve Income Transactions V2__.\n\
+    \n**Version 2.5.0: 28/03/2023**\n> - Deprecated __Retrieve Financial Forecast__.\n\
+    > - Deprecated __Create Transaction Rule(s)__.\n> - Renamed __Retrieve Upcoming\
+    \ Transaction__ endpoints (V1 and V2) to __Retrieve Forecasted Transactions__.\n\
+    > - Renamed __Recategorise Transaction__ endpoints (V1 and V2) to __Correct Transaction\
+    \ Categories__.\n> - Fix documented required fields for __Recategorise Transaction\
+    \ V1__.\n\n\n**Version 2.4.0: 24/03/2023**\n> - Deprecated __Retrieve Accounts__.\n\
+    > - Finalised __Retrieve Accounts V2 (beta)__ to production release as __Retrieve\
+    \ Accounts V2__.\n> - Finalised __Retrieve Account By ID V2 (beta)__ to production\
+    \ release as __Retrieve Account By ID V2__.\n> - Finalised __Retrieve Balances\
+    \ Over Time (Beta)__ to production release as __Retrieve Balances Over Time__.\n\
+    > - Finalised __Retrieve Balances Over Time By Account (Beta)__ to production\
+    \ release as __Retrieve Balances Over Time By Account__.\n\n\n**Version 2.3.9:\
+    \ 21/03/2023**\n> - Update merchant descriptions & required fields for **Retrieve\
+    \ Subscriptions**\n> - Standardised description used for dates in __Retrieve Merchant\
+    \ Totals V2__.\n> - Standardised description used for dates in __Retrieve Income\
+    \ Transactions V1__.\n> - Standardised description used for dates in __Retrieve\
+    \ Income Transactions V2__.\n> - Standardised description used for dates in __Retrieve\
+    \ Loan Transactions__.\n> - Standardised description used for dates in __Retrieve\
+    \ Debt Collection Transactions__.\n> - Standardised description used for dates\
+    \ in __Retrieve Benefits Transactions__.\n> - Standardised description used for\
+    \ dates in __Retrieve Benefits Totals__.\n> - Standardised description used for\
+    \ dates in __Retrieve Financial Products__.\n> - Standardised description used\
+    \ for dates in __Retrieve Subscriptions__.\n> - Standardised description used\
+    \ for dates in __Retrieve Upcoming Transactions V1__.\n> - Standardised description\
+    \ used for dates in __Retrieve Salary Information__.\n\n**Version 2.3.8: 21/03/2023**\n\
+    > - Update amount descriptions\n\n**Version 2.3.7: 20/03/2023**\n> - Fix the docs\
+    \ for **Retrieve Money Management** correcting the category names for some warning\
+    \ types.\n> - Remove the deprecated `large_expense` and `high_balance` warnings\
+    \ from **Retrieve Money Management**.\n\n**Version 2.3.6: 16/03/2023**\n> - Deprecated\
+    \ __Initiate Energy Payments Discovery__ and __Retrieve Energy Payments__\n\n\
+    **Version 2.3.5: 13/03/2023**\n> - Updated holder and holders fields on __List\
     \ Accounts V2 (beta)__ and __Retrieve Account By ID V2 (beta)__.\n\n**Version\
     \ 2.3.3: 13/03/2023**\n> - Document `provider_redirect_url` field for **Create\
     \ Single Payment**\n\n**Version 2.3.2: 13/03/2023**\n> - Document `reconfirm_consent_redirect`\
@@ -686,7 +689,7 @@ info:
     name: Bud Support
     url: https://www.thisisbud.com/
     email: help@thisisbud.com
-  version: 2.6.0
+  version: 2.6.1
   x-logo:
     url: "data:image/png;base64,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"
 servers:
@@ -896,6 +899,28 @@ paths:
           - sandbox
           - business
           - retail
+      - name: region
+        in: query
+        description: "A comma separated list of Bud regions to be shown. If no filter\
+          \ is applied, all the providers are returned."
+        required: false
+        schema:
+          type: string
+          enum:
+          - GBR
+      - name: scopes
+        in: query
+        description: "A comma separated list of Bud ob scopes to be shown. If no filter\
+          \ is applied, all the providers are returned."
+        required: false
+        schema:
+          type: string
+          enum:
+          - accounts
+          - balances
+          - transactions
+          - parties
+          - direct-debits
       responses:
         "200":
           description: List of providers available via Bud's Open Banking Aggregation
@@ -1279,7 +1304,9 @@ paths:
       - Create a Connection
       summary: Initiate Provider Authorisation
       description: |
-        Request a new Open Banking authorisation url for a specific Customer and provider.
+        Request a new Open Banking authorisation url for a specific Customer and provider. This endpoint should be used when using Bud as a Technical Service Provider(TSP). This means that Bud will be using your license (as a registered Account Information Service Provider (AISP)). This will allow you to use your own interface to connect new account(s).
+
+        A generated consent has a 90 day expiry, to allow for re-authentication to extend this expiry the id of the customers previous consent can be included as the `consent_id` property. This re-authenciation if the customer grants consent would extend the consent by another 90 days.
       operationId: open_banking_authorisation_url_post
       parameters:
       - name: X-Client-Id
@@ -1313,9 +1340,6 @@ paths:
                   redirect_url: https://myclientredirecturl.com
         required: true
       responses:
-        "102":
-          description: An identical request has been accepted for processing but has
-            not yet been completed
         "202":
           description: A new Task has been created to obtain the bank's authorisation
             URL. The generated `task_id` can be used to check the Task's status
@@ -1331,6 +1355,7 @@ paths:
                 metadata:
                   next_url: /v1/open-banking/authorisation-url/360e5821-4f18-4077-83f4-c9a7c1768bea
                   next_url_delay: 50
+                  status: Pending
         "400":
           description: The request contains an invalid payload
           content:
@@ -1426,6 +1451,10 @@ paths:
                   summary: Pending
                   value:
                     operation_id: open_banking_authorisation_url_get
+                    data:
+                      provider: example_provider
+                      status: Pending
+                      task_id: 16fa0748-8a6b-455b-9be9-30ae257965d8
                     metadata:
                       status: Pending
                       next_url: /v1/open-banking/authorisation-url/16fa0748-8a6b-455b-9be9-30ae257965d8
@@ -1434,6 +1463,11 @@ paths:
                   summary: Failed
                   value:
                     operation_id: open_banking_authorisation_url_get
+                    data:
+                      provider: example_provider
+                      result: internal_error
+                      status: Failed
+                      task_id: 16fa0748-8a6b-455b-9be9-30ae257965d8
                     metadata:
                       status: Failed
                       next_url: /v1/open-banking/authorisation-url/16fa0748-8a6b-455b-9be9-30ae257965d8
@@ -1599,8 +1633,13 @@ paths:
                   value:
                     operation_id: open_banking_connect_get
                     data:
+                      bank_name: Barclays
                       provider: Barclays
+                      reconnect_required: false
+                      result: success
+                      status: Completed
                       step: 4
+                      task_id: 030c85d8-bbbe-4ef9-894e-7e56a2e02437
                       text: Completed
                     metadata:
                       status: Completed
@@ -1611,8 +1650,12 @@ paths:
                   value:
                     operation_id: open_banking_connect_get
                     data:
+                      bank_name: Barclays
                       provider: Barclays
+                      reconnect_required: false
+                      status: Pending
                       step: 2
+                      task_id: 030c85d8-bbbe-4ef9-894e-7e56a2e02437
                       text: Fetching accounts
                     metadata:
                       status: Pending
@@ -1623,13 +1666,16 @@ paths:
                   value:
                     operation_id: open_banking_connect_get
                     data:
+                      bank_name: Barclays
                       provider: Barclays
+                      reconnect_required: false
+                      result: auth_denied
+                      status: Failed
                       step: 3
+                      task_id: 030c85d8-bbbe-4ef9-894e-7e56a2e02437
                       text: Fetching balances and transactions
                     metadata:
                       status: Failed
-                      next_url: /v1/open-banking/connect/360e5821-4f18-4077-83f4-c9a7c1768bea
-                      next_url_delay: 50
         "400":
           description: The request contains an invalid payload
           content:
@@ -6573,99 +6619,6 @@ paths:
           description: An unexpected error occurred on the server side
       security:
       - OAuth2: []
-  /v1/products:
-    get:
-      tags:
-      - Expenditure Insights
-      summary: Retrieve Financial Products
-      description: |
-        The Financial Product Finder creates a summary of a customer's financial products using their transaction history. Currently, it can detect:
-
-        - Loans
-        - Buy Now, Pay Later (BNPL)
-        - Mortgages
-        - Insurance products
-        - Credit Cards
-        - Private Pensions
-        - Savings & Investments
-
-        **Notes:**
-        - The Financial Product Finder currently only finds products from `debit` transactions.
-      operationId: v1_products_get
-      parameters:
-      - name: X-Client-Id
-        in: header
-        description: The API Client Identifier (Service Application Identifier).
-        required: true
-        schema:
-          type: string
-      - name: X-Customer-Id
-        in: header
-        description: Bud Customer identifier
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: X-Customer-Secret
-        in: header
-        description: Bud Customer secret
-        required: true
-        schema:
-          type: string
-      - name: X-From
-        in: header
-        description: Transaction from date
-        schema:
-          type: string
-        example: 2022-01-29
-      - name: X-To
-        in: header
-        description: Transaction to date
-        schema:
-          type: string
-        example: 2022-03-29
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetProductsResponseV1'
-              example:
-                operation_id: v1_products_get
-                data:
-                - transaction_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
-                  account_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
-                  transaction_description: Nationwide Mortgage Payment
-                  provider: Barclays
-                  date: 2021-04-11T01:00:00+0100
-                  amount:
-                    value: "1000.00"
-                    currency: GBP
-                  credit_debit_indicator: Debit
-                  merchant:
-                    id: nationwidebuildingsociety
-                    logo: https://assets.thisisbud.com/bud-datasci-images/merchant_logos/e121c7aa-a254-41bb-ad3e-33b988f791be/v1/nationwidebuildingsociety.jpeg
-                    name: Nationwide Building Society
-                    confidence: "0.823456"
-                  product:
-                    type:
-                    - mortgage
-                    period: monthly
-                metadata:
-                  results: 1
-                  from: 2022-09-03T11:28:22.00Z
-                  to: 2023-03-03T11:28:22.00Z
-        "204":
-          description: No transactions found
-        "400":
-          description: The request contains an invalid payload
-        "401":
-          description: Unauthorised request
-        "405":
-          description: An unexpected HTTP method was used
-        "5XX":
-          description: An unexpected error occurred on the server side
   /insights/v2/products:
     get:
       tags:
@@ -6675,9 +6628,9 @@ paths:
         \ that a customer uses. \nThis endpoint generates data using a customer's\
         \ transaction history.\n\nFinancial Products detects the following types of\
         \ products and services: \n- Loans\n- Buy Now, Pay Later (BNPL)\n- Mortgages\n\
-        - Insurance products\n- Store Cards\n- Credit Cards\n- Private Pensions\n\
-        - Savings and Investments\n\n> 🚧 Limitations\n> \n> Financial Products are\
-        \ only identified from debit transactions.\n"
+        - Insurance products\n- Credit Cards\n- Private Pensions\n- Savings and Investments\n\
+        \n> 🚧 Limitations\n> \n> Financial Products are only identified from debit\
+        \ transactions.\n"
       operationId: insights_v2_products
       parameters:
       - name: X-Client-Id
@@ -6885,6 +6838,100 @@ paths:
           description: An unexpected HTTP method was used
         "5XX":
           description: An unexpected error occurred on the server side
+  /v1/products:
+    get:
+      tags:
+      - Expenditure Insights
+      summary: Retrieve Financial Products
+      description: |
+        The Financial Product Finder creates a summary of a customer's financial products using their transaction history. Currently, it can detect:
+
+        - Loans
+        - Buy Now, Pay Later (BNPL)
+        - Mortgages
+        - Insurance products
+        - Credit Cards
+        - Private Pensions
+        - Savings & Investments
+
+        **Notes:**
+        - The Financial Product Finder currently only finds products from `debit` transactions.
+      operationId: v1_products_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: X-Customer-Id
+        in: header
+        description: Bud Customer identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Customer-Secret
+        in: header
+        description: Bud Customer secret
+        required: true
+        schema:
+          type: string
+      - name: X-From
+        in: header
+        description: Transaction from date
+        schema:
+          type: string
+        example: 2022-01-29
+      - name: X-To
+        in: header
+        description: Transaction to date
+        schema:
+          type: string
+        example: 2022-03-29
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProductsResponseV1'
+              example:
+                operation_id: v1_products_get
+                data:
+                - transaction_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
+                  account_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
+                  transaction_description: Nationwide Mortgage Payment
+                  provider: Barclays
+                  date: 2021-04-11T01:00:00+0100
+                  amount:
+                    value: "1000.00"
+                    currency: GBP
+                  credit_debit_indicator: Debit
+                  merchant:
+                    id: nationwidebuildingsociety
+                    logo: https://assets.thisisbud.com/bud-datasci-images/merchant_logos/e121c7aa-a254-41bb-ad3e-33b988f791be/v1/nationwidebuildingsociety.jpeg
+                    name: Nationwide Building Society
+                    confidence: "0.823456"
+                  product:
+                    type:
+                    - mortgage
+                    period: monthly
+                metadata:
+                  results: 1
+                  from: 2022-09-03T11:28:22.00Z
+                  to: 2023-03-03T11:28:22.00Z
+        "204":
+          description: No transactions found
+        "400":
+          description: The request contains an invalid payload
+        "401":
+          description: Unauthorised request
+        "405":
+          description: An unexpected HTTP method was used
+        "5XX":
+          description: An unexpected error occurred on the server side
+      deprecated: true
   /v1/energy-switching/energy-payments:
     post:
       tags:
@@ -11571,6 +11618,15 @@ components:
           description: The end datetime (ISO8601) of the maintenance window
       description: Details on any scheduled maintenance windows
       nullable: true
+    ResultsMetadataNullable:
+      title: Results Metadata Object
+      type: object
+      properties:
+        results:
+          type: number
+          description: The number of results returned
+      description: Metadata associated with the response schema
+      nullable: true
     AuthGatewayURLRequest:
       title: Authorisation Gateway URL Request Payload
       required:
@@ -11815,8 +11871,8 @@ components:
             be provided.
         consent_id:
           type: string
-          description: (Optional) Uses the previous consent id of your customer to
-            re-authenticate their consent.
+          description: Uses the previous consent id of your customer to re-authenticate
+            their consent.
       description: Expected request payload structure
     TaskCreatedResponseOB:
       title: Task Created Response
@@ -11851,6 +11907,13 @@ components:
       title: Created Task Metadata
       type: object
       properties:
+        status:
+          type: string
+          description: The status of the job associated with the specified task id
+          enum:
+          - Completed
+          - Pending
+          - Failed
         next_url:
           type: string
           description: The URL to call to obtain the results of the task
@@ -11862,6 +11925,7 @@ components:
     TaskAuthoriseResponse:
       title: Open Banking Authorise Request Response
       required:
+      - data
       - metadata
       - operation_id
       type: object
@@ -11876,19 +11940,16 @@ components:
     TaskAuthorise:
       title: Open Banking Authorise Response
       required:
-      - url
+      - provider
+      - status
+      - task_id
       type: object
       properties:
         provider:
           type: string
           description: Name of the provider (banking institution)
         result:
-          type: string
-          description: The final result of the job associated with the specified task
-            id
-          enum:
-          - success
-          - failed
+          $ref: '#/components/schemas/ConnectResultCodes'
         status:
           type: string
           description: The status of the job associated with the specified task id
@@ -11905,6 +11966,8 @@ components:
     TaskManagerMetaData:
       title: Task Status Metadata
       required:
+      - next_url
+      - next_url_delay
       - status
       type: object
       properties:
@@ -11915,6 +11978,14 @@ components:
           - Completed
           - Pending
           - Failed
+        next_url:
+          type: string
+          description: The url to try next if the `status` property returned is `Pending`
+        next_url_delay:
+          type: number
+          description: The time in milliseconds that the client should wait before
+            polling the relevant GET endpoint with the above task id if the `status`
+            property returned is `Pending`
       description: Standard metadata response from the OB task manager
     AuthorisationCodesRequest:
       title: Authorisation Codes Request Payload
@@ -11968,6 +12039,7 @@ components:
       required:
       - provider
       - step
+      - task_id
       - text
       type: object
       properties:
@@ -11990,6 +12062,26 @@ components:
           - Fetching accounts
           - Fetching balances and transactions
           - Completed
+        bank_name:
+          type: string
+          description: The name of the provider the task is trying to connect to.
+            Replaced with `provider`
+          deprecated: true
+        reconnect_required:
+          type: boolean
+          description: "If true, the customer must re-connect to the specified provider"
+        result:
+          $ref: '#/components/schemas/ConnectResultCodes'
+        status:
+          title: The Task Status
+          type: string
+          description: The general status of a task
+          enum:
+          - Pending
+          - Completed
+          - Failed
+        task_id:
+          $ref: '#/components/schemas/TaskId'
       description: Status of an Open Banking Aggregation connect or refresh task
     OpenBankingRefreshRequest:
       title: Open Banking Refresh Payload
@@ -13036,15 +13128,6 @@ components:
             \ data stored on the Bud platform."
         customer_context:
           $ref: '#/components/schemas/CustomerContext'
-    ResultsMetadataNullable:
-      title: Results Metadata Object
-      type: object
-      properties:
-        results:
-          type: number
-          description: The number of results returned
-      description: Metadata associated with the response schema
-      nullable: true
     CustomerContextResponse:
       title: Customer Context Response
       required:
@@ -15146,81 +15229,6 @@ components:
           - $ref: '#/components/schemas/BudAmount'
       description: Comparisons of the returned transactions to the income found over
         the same period
-    GetProductsResponseV1:
-      title: Predicted Products Response
-      required:
-      - data
-      - metadata
-      - operation_id
-      type: object
-      properties:
-        operation_id:
-          type: string
-          enum:
-          - v1_products_get
-        data:
-          title: Product Finder Response Data
-          type: array
-          items:
-            $ref: '#/components/schemas/FinancialProductTransaction'
-        metadata:
-          title: Metadata
-          allOf:
-          - $ref: '#/components/schemas/BudDateRangeMetadata'
-          - required:
-            - results
-            type: object
-            properties:
-              results:
-                title: Results count
-                type: number
-                description: Number of products returned.
-      description: Transactions predicted as financial product payments for a customer
-    FinancialProductTransaction:
-      allOf:
-      - $ref: '#/components/schemas/BasicTransactionV2'
-      - title: Financial Product Transaction
-        required:
-        - merchant
-        - product
-        type: object
-        properties:
-          merchant:
-            $ref: '#/components/schemas/MerchantIdV2'
-          product:
-            $ref: '#/components/schemas/FinancialProduct'
-    FinancialProduct:
-      title: Financial Product Prediction
-      type: object
-      properties:
-        type:
-          type: array
-          description: The top predictions for the type of financial product
-          items:
-            title: Financial Product Type
-            type: string
-            description: The type of financial product
-            enum:
-            - loan
-            - bnpl
-            - mortgage
-            - insurance
-            - store_card
-            - credit_card
-            - private_pension
-            - savings_and_investment
-        period:
-          title: Period
-          type: string
-          description: "The regularity of the product, based on transaction history.\
-            \ If a product is not regular, it will have a period of `unknown`."
-          enum:
-          - weekly
-          - biweekly
-          - monthly
-          - quarterly
-          - unknown
-      description: Details of the predicted financial product
     GetProductsResponseV2:
       title: Retrieve Financial Products V2 Response Strucutre
       required:
@@ -15302,6 +15310,81 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BasicTransactionV2'
+    GetProductsResponseV1:
+      title: Predicted Products Response
+      required:
+      - data
+      - metadata
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+          - v1_products_get
+        data:
+          title: Product Finder Response Data
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialProductTransaction'
+        metadata:
+          title: Metadata
+          allOf:
+          - $ref: '#/components/schemas/BudDateRangeMetadata'
+          - required:
+            - results
+            type: object
+            properties:
+              results:
+                title: Results count
+                type: number
+                description: Number of products returned.
+      description: Transactions predicted as financial product payments for a customer
+    FinancialProductTransaction:
+      allOf:
+      - $ref: '#/components/schemas/BasicTransactionV2'
+      - title: Financial Product Transaction
+        required:
+        - merchant
+        - product
+        type: object
+        properties:
+          merchant:
+            $ref: '#/components/schemas/MerchantIdV2'
+          product:
+            $ref: '#/components/schemas/FinancialProduct'
+    FinancialProduct:
+      title: Financial Product Prediction
+      type: object
+      properties:
+        type:
+          type: array
+          description: The top predictions for the type of financial product
+          items:
+            title: Financial Product Type
+            type: string
+            description: The type of financial product
+            enum:
+            - loan
+            - bnpl
+            - mortgage
+            - insurance
+            - store_card
+            - credit_card
+            - private_pension
+            - savings_and_investment
+        period:
+          title: Period
+          type: string
+          description: "The regularity of the product, based on transaction history.\
+            \ If a product is not regular, it will have a period of `unknown`."
+          enum:
+          - weekly
+          - biweekly
+          - monthly
+          - quarterly
+          - unknown
+      description: Details of the predicted financial product
     EnergyPaymentSearch:
       title: Energy Payments Start Search
       required:
@@ -18025,6 +18108,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OBProvider'
+        metadata:
+          $ref: '#/components/schemas/ResultsMetadataNullable'
       example:
         operation_id: open_banking_providers_get
         data:
@@ -18107,6 +18192,7 @@ components:
           icon: https://assets.thisisbud.com/example-icon
           regions:
           - GBR
+        metadata: null
     inline_response_400:
       oneOf:
       - $ref: '#/components/schemas/BodyDecodeError'
@@ -19419,7 +19505,6 @@ components:
               - `bnpl`
               - `mortgage`
               - `insurance`
-              - `store_card`
               - `credit_card`
               - `private_pension`
               - `savings_and_investment`
@@ -20285,6 +20370,30 @@ components:
         - sandbox
         - business
         - retail
+    OBProvidersQueryRegionFilter:
+      name: region
+      in: query
+      description: "A comma separated list of Bud regions to be shown. If no filter\
+        \ is applied, all the providers are returned."
+      required: false
+      schema:
+        type: string
+        enum:
+        - GBR
+    OBProvidersQueryScopesFilter:
+      name: scopes
+      in: query
+      description: "A comma separated list of Bud ob scopes to be shown. If no filter\
+        \ is applied, all the providers are returned."
+      required: false
+      schema:
+        type: string
+        enum:
+        - accounts
+        - balances
+        - transactions
+        - parties
+        - direct-debits
     CustomerId:
       name: X-Customer-Id
       in: header
