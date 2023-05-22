@@ -287,50 +287,62 @@ info:
     \ Deprecated **Retrieve Trends** in favour of **Retrieve Category Totals**. |\n\
     \n## Changelog\n\nThis changelog represents a list of all changes that have been\
     \ made to Bud’s API documentation. This includes both backward-compatible and\
-    \ backward-incompatible changes.\n\n**Version 2.6.1: 27/04/2023**\n> - Deprecated\
-    \ __Retrieve Financial Products__.\n> - Corrected sample Financial Products in\
-    \ __Retrieve Financial Products V2__.\n\n**Version 2.6.0: 25/04/2023**\n> - Added\
-    \ new __Retrieve Categories V2__ endpoint.\n> - Added new __Retrieve Available\
-    \ Categorisation Models V2__ endpoint.\n> - Deprecated __Retrieve Categories__.\n\
-    > - Added `models.categorisation` field to _Customer Context_ models.\n\n**Version\
-    \ 2.5.3: 20/04/2023**\n> - Updated __Retrieve Category Totals__ X-From and X-To\
-    \ parameter descriptions and endpoint description.\n> - Updated __Retrieve Merchant\
-    \ Totals V2__ X-From and X-To parameter descriptions.\n> - Updated __Retrieve\
-    \ Benefits Totals__ X-From and X-To parameter descriptions.\n> - Removed __Retrieve\
-    \ Merchant Totals V1__ following deprecation period.\n\n**Version 2.5.2: 19/04/2023**\n\
-    > - Added `format` query parameter to __Retrieve Categories__.\n\n**Version 2.5.1:\
-    \ 30/03/2023**\n> - Fix income types for __Retrieve Income Transactions V2__.\n\
-    \n**Version 2.5.0: 28/03/2023**\n> - Deprecated __Retrieve Financial Forecast__.\n\
-    > - Deprecated __Create Transaction Rule(s)__.\n> - Renamed __Retrieve Upcoming\
-    \ Transaction__ endpoints (V1 and V2) to __Retrieve Forecasted Transactions__.\n\
-    > - Renamed __Recategorise Transaction__ endpoints (V1 and V2) to __Correct Transaction\
-    \ Categories__.\n> - Fix documented required fields for __Recategorise Transaction\
-    \ V1__.\n\n\n**Version 2.4.0: 24/03/2023**\n> - Deprecated __Retrieve Accounts__.\n\
-    > - Finalised __Retrieve Accounts V2 (beta)__ to production release as __Retrieve\
-    \ Accounts V2__.\n> - Finalised __Retrieve Account By ID V2 (beta)__ to production\
-    \ release as __Retrieve Account By ID V2__.\n> - Finalised __Retrieve Balances\
-    \ Over Time (Beta)__ to production release as __Retrieve Balances Over Time__.\n\
-    > - Finalised __Retrieve Balances Over Time By Account (Beta)__ to production\
-    \ release as __Retrieve Balances Over Time By Account__.\n\n\n**Version 2.3.9:\
-    \ 21/03/2023**\n> - Update merchant descriptions & required fields for **Retrieve\
-    \ Subscriptions**\n> - Standardised description used for dates in __Retrieve Merchant\
-    \ Totals V2__.\n> - Standardised description used for dates in __Retrieve Income\
-    \ Transactions V1__.\n> - Standardised description used for dates in __Retrieve\
-    \ Income Transactions V2__.\n> - Standardised description used for dates in __Retrieve\
-    \ Loan Transactions__.\n> - Standardised description used for dates in __Retrieve\
-    \ Debt Collection Transactions__.\n> - Standardised description used for dates\
-    \ in __Retrieve Benefits Transactions__.\n> - Standardised description used for\
-    \ dates in __Retrieve Benefits Totals__.\n> - Standardised description used for\
-    \ dates in __Retrieve Financial Products__.\n> - Standardised description used\
-    \ for dates in __Retrieve Subscriptions__.\n> - Standardised description used\
-    \ for dates in __Retrieve Upcoming Transactions V1__.\n> - Standardised description\
-    \ used for dates in __Retrieve Salary Information__.\n\n**Version 2.3.8: 21/03/2023**\n\
-    > - Update amount descriptions\n\n**Version 2.3.7: 20/03/2023**\n> - Fix the docs\
-    \ for **Retrieve Money Management** correcting the category names for some warning\
-    \ types.\n> - Remove the deprecated `large_expense` and `high_balance` warnings\
-    \ from **Retrieve Money Management**.\n\n**Version 2.3.6: 16/03/2023**\n> - Deprecated\
-    \ __Initiate Energy Payments Discovery__ and __Retrieve Energy Payments__\n\n\
-    **Version 2.3.5: 13/03/2023**\n> - Updated holder and holders fields on __List\
+    \ backward-incompatible changes.\n\n**Version 2.7.4: 19/05/2023**\n> - Updated\
+    \ the description for the __Ingest Transactions V2__ endpoint\n\n**Version 2.7.3:\
+    \ 18/05/2023**\n> - Updated the __Retrieve Authorisation Gateway URL (v2)__ endpoint\
+    \ with a new enable_async_connect option\n> - Updated the __Ingest Transactions\
+    \ V2__ request examples\n\n**Version 2.7.2: 18/05/2023**\n> - Updated the description\
+    \ for the __Reconfirm Consent__ endpoint\n\n**Version 2.7.1: 16/05/2023**\n> -\
+    \ Added documentation for __Retrieve Auth Tokens__ endpoint.\n\n**Version 2.7.0:\
+    \ 11/05/2023**\n> - Adds two new endpoints: __Create Customers V3__ and __Create\
+    \ Customers V3 (Batch)__.\n> - Introduces the concept of Hosted Customers, which\
+    \ makes Customer Secrets optional on all endpoints which previously required them.\n\
+    \n**Version 2.6.2: 05/05/2023**\n> - Documented default to from case in __Retrieve\
+    \ Financial Products V2__ and __Retrieve Financial Products__.\n> - Fixed documentation\
+    \ for get customers endpoints \n> - Fixed documentation for put customer context\
+    \ endpoints \n\n**Version 2.6.1: 27/04/2023**\n> - Deprecated __Retrieve Financial\
+    \ Products__.\n> - Corrected sample Financial Products in __Retrieve Financial\
+    \ Products V2__.\n\n**Version 2.6.0: 25/04/2023**\n> - Added new __Retrieve Categories\
+    \ V2__ endpoint.\n> - Added new __Retrieve Available Categorisation Models V2__\
+    \ endpoint.\n> - Deprecated __Retrieve Categories__.\n> - Added `models.categorisation`\
+    \ field to _Customer Context_ models.\n\n**Version 2.5.3: 20/04/2023**\n> - Updated\
+    \ __Retrieve Category Totals__ X-From and X-To parameter descriptions and endpoint\
+    \ description.\n> - Updated __Retrieve Merchant Totals V2__ X-From and X-To parameter\
+    \ descriptions.\n> - Updated __Retrieve Benefits Totals__ X-From and X-To parameter\
+    \ descriptions.\n> - Removed __Retrieve Merchant Totals V1__ following deprecation\
+    \ period.\n\n**Version 2.5.2: 19/04/2023**\n> - Added `format` query parameter\
+    \ to __Retrieve Categories__.\n\n**Version 2.5.1: 30/03/2023**\n> - Fix income\
+    \ types for __Retrieve Income Transactions V2__.\n\n**Version 2.5.0: 28/03/2023**\n\
+    > - Deprecated __Retrieve Financial Forecast__.\n> - Deprecated __Create Transaction\
+    \ Rule(s)__.\n> - Renamed __Retrieve Upcoming Transaction__ endpoints (V1 and\
+    \ V2) to __Retrieve Forecasted Transactions__.\n> - Renamed __Recategorise Transaction__\
+    \ endpoints (V1 and V2) to __Correct Transaction Categories__.\n> - Fix documented\
+    \ required fields for __Recategorise Transaction V1__.\n\n\n**Version 2.4.0: 24/03/2023**\n\
+    > - Deprecated __Retrieve Accounts__.\n> - Finalised __Retrieve Accounts V2 (beta)__\
+    \ to production release as __Retrieve Accounts V2__.\n> - Finalised __Retrieve\
+    \ Account By ID V2 (beta)__ to production release as __Retrieve Account By ID\
+    \ V2__.\n> - Finalised __Retrieve Balances Over Time (Beta)__ to production release\
+    \ as __Retrieve Balances Over Time__.\n> - Finalised __Retrieve Balances Over\
+    \ Time By Account (Beta)__ to production release as __Retrieve Balances Over Time\
+    \ By Account__.\n\n\n**Version 2.3.9: 21/03/2023**\n> - Update merchant descriptions\
+    \ & required fields for **Retrieve Subscriptions**\n> - Standardised description\
+    \ used for dates in __Retrieve Merchant Totals V2__.\n> - Standardised description\
+    \ used for dates in __Retrieve Income Transactions V1__.\n> - Standardised description\
+    \ used for dates in __Retrieve Income Transactions V2__.\n> - Standardised description\
+    \ used for dates in __Retrieve Loan Transactions__.\n> - Standardised description\
+    \ used for dates in __Retrieve Debt Collection Transactions__.\n> - Standardised\
+    \ description used for dates in __Retrieve Benefits Transactions__.\n> - Standardised\
+    \ description used for dates in __Retrieve Benefits Totals__.\n> - Standardised\
+    \ description used for dates in __Retrieve Financial Products__.\n> - Standardised\
+    \ description used for dates in __Retrieve Subscriptions__.\n> - Standardised\
+    \ description used for dates in __Retrieve Upcoming Transactions V1__.\n> - Standardised\
+    \ description used for dates in __Retrieve Salary Information__.\n\n**Version\
+    \ 2.3.8: 21/03/2023**\n> - Update amount descriptions\n\n**Version 2.3.7: 20/03/2023**\n\
+    > - Fix the docs for **Retrieve Money Management** correcting the category names\
+    \ for some warning types.\n> - Remove the deprecated `large_expense` and `high_balance`\
+    \ warnings from **Retrieve Money Management**.\n\n**Version 2.3.6: 16/03/2023**\n\
+    > - Deprecated __Initiate Energy Payments Discovery__ and __Retrieve Energy Payments__\n\
+    \n**Version 2.3.5: 13/03/2023**\n> - Updated holder and holders fields on __List\
     \ Accounts V2 (beta)__ and __Retrieve Account By ID V2 (beta)__.\n\n**Version\
     \ 2.3.3: 13/03/2023**\n> - Document `provider_redirect_url` field for **Create\
     \ Single Payment**\n\n**Version 2.3.2: 13/03/2023**\n> - Document `reconfirm_consent_redirect`\
@@ -689,12 +701,18 @@ info:
     name: Bud Support
     url: https://www.thisisbud.com/
     email: help@thisisbud.com
-  version: 2.6.1
+  version: 2.7.4
   x-logo:
     url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATAAAABuCAQAAAAKAYdLAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAB3RJTUUH4wQDDggcbXcx7wAABeJJREFUeNrt3W2IFVUcx/HvXRW1VdQedy1bZVfoYX0osVQyfSGElKbRA5oFIaIlhAkWUYm6gvqqDMHMoBeKlhayCCZC2AMRPay7aJrSZmauZhQqaj7t7u1Fi965987s7D1n7pk7/j73zX2Y85//mXt2Zu45Z2ZBREREREREREREREREREREREREREREREREREREREREREREREREROIiZSFGH+YxgsOs5U/X1bFiPDPpQT3bu1DmcaZyg+vErWpjD+s47zoN6Mte0qRJc4Iq18lYMJv2jvosD11mRUeJpD32UO7664BFGQl94DoZY704fbU2rQwKVWYwbc6bQlSPBaYbtMz4K7nP53lpGkK/q8+7MTxUmeEWtmJcGX+j5psmM0I3l9vCirKAV36OuE46QsbfaHL/9opnL9tcpxBf3V0nkAgzWMRj9HadhrH+3Gk7pBqYDZdY3oXfnHE2gc1U2gyoQ6Rk+pKZdgOqgYnXF7TYDGe3gcWgW85QH9cJxMAVm8HsNrBqhhV1U9g33XUCzo1gsM1wdhtYio8ZWsytYdksFrpOwbGhbLYb0PavyLs5wA+c9v28lRa+Zzt/+y5RwwKqaOCdgCjZRvEit/A1a7jou8xwJjOMAb7D+ylqqCmw1imeZ0oCBrv7Mzp+/QofFTDCdZG13Jw3Wi1nOpbZT9+QGUziUkeZ3T49z+P4pqCRuCkhM1jjfMwwqsdG182rsAaWJs0JxuWJ9knGEq+EzODHjDLTcj5NsbjgwehwDazm6vyL5D2MG5i7booKdjE25917M57XhoxUG1hmJUsjrmWtlVl18ZQ2DeCyH6ycT7kpIJ+wuQWVeZJXI69HcpsXHDQN4LajtZIlkcbvzWqn9St1R3nPNIT93wzt/MSZPO+nqKA65699Nos5FdHmgZkMzHnvIj9zLm9+Q7jd0nqP8VtkdSqWNppYxT+u08g+yW8OnKRXw4ac08hnPUscyvjkw5AZXM4os9jzyY6sdZ3h5YC++jLm0lrASf50T5krzEn0QbOLbB8in2FvwKfNPJczCXd0hLV7wPPqL8bybt691//aWWfhkPo2681PjZPDbgP7lYZOl1nNJs9rW4elXD2zfkK8wIFOy2w1XuuWyOpTkuw2sHOhlqrzvIqu59gbuYEdIcqcjSyb65SLX5EHOepgrbuKtJ6nHNQtxtx0U5xM8DoXMkez7K5xM7Tp4iS4WOvszvss5feSP9Fvo5EVnDDfHGJfpd157Y48xFRGmfaEaWcu/qqYZxpCDcxcqR8Mg9xlGkANzNz+BDcx4zEJNTBzv5gPCSeXTvJtmM+3PJqIKdNj6GE3pJsG5mIwOMp1ptnABgd1sq+G7ebnXZncHCKjG3+M1zpLTzMz7AZ00cBG5pmlFb3JmkQTSpPd21HZbWD9Qy21zPPK/zricNH6+B7mvZFreTpEtAFWt0dpsnoWZreBVTG+kyVS1GVN4/vDd9lJVIRY5yzfPdPlrPHHdTwYItr1bkLcTia8M1qPM9F3yRRjcuaYprNmHxzyfNbQyQlnGTM47ynhndFan7WuCywLODz35I2sC9DCXheZHBNpsXvZmu1fkZXs5rjPnPzb8hyAzrIzINr9HOBIwNXat+ZcleS1hame1714izc55jNvbVDBtz7pyWuJuI15P/tnx1F0UwzsQpprO5nil2KIQSZbqcspnwp57+iu2MQT1mMmhNue/MMR3xfwMi8VYRhnmJqXP/MG1lZwyVNMy9l/FR4tf/mdvB553Uz2sXFn+n1YaGCNBZZr5mH25by7xzCb3PKrmM+lgmK1BV4hdc0+2g2zjq8m1wlAOY1dvqXGKep87oZYzUmDW3Vs8+myuIf6Am6AsiT0Nljp/CYl0Twaze9ZaaN3u5w5jAy5L2ylhe/4nAu+S1Qwl+oCsrjCV2wM2KXfwSPUcmPIGv9LPZ91Ye1TEnEb80ztNLE+Dv8MS0RERERERERERERERERERERERERERERERERERERERERERERERERs+Q/rhi5WauEgfQAAAABJRU5ErkJggg=="
 servers:
 - url: https://api-sandbox.thisisbud.com
 tags:
+- name: Authentication
+  x-displayName: Authentication
+  x-traitTag: true
+- name: Retrieve Auth Tokens
+  description: ""
+  x-displayName: Retrieve Auth Tokens
 - name: Connect API
   description: "These endpoints handle the connections to Open Banking providers (ASPSPs)\
     \ and the ingestion of first party transaction data. Bud manages all of the connections\
@@ -873,6 +891,118 @@ tags:
   description: ""
   x-displayName: Retrieve Balance Insights (Beta)
 paths:
+  /v1/oauth/token:
+    post:
+      tags:
+      - Retrieve Auth Tokens
+      summary: Retrieve Auth Tokens
+      description: "This endpoint is used to create access and refresh tokens.\n\n\
+        When this endpoint is first called you must supply basic authentication credentials,\
+        \ your `client_id` and `client_secret`.\nThe response will contain an `access_token`\
+        \ and a `refresh_token`.\n\nThe `access_token` is used as a bearer token in\
+        \ most calls to Bud endpoints following this point.\n\nTo get a new `access_token`,\
+        \ you can use the `refresh_token` in a call to this endpoint. Your client_id\
+        \ will still be required, but it should be supplied as the header `X-Client-Id`.\
+        \ \nYou will need to do this once your `access_token` expires.  \n"
+      operationId: oauth_token_post
+      parameters:
+      - name: Content-Type
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - application/x-www-form-urlencoded
+      - name: X-Client-Id
+        in: header
+        description: |
+          The API Client Identifier (Service Application Identifier).
+
+          This paramater is only required when refreshing an auth token.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/oauth_token_body'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveAuthTokenResponse'
+              example:
+                operation_id: oauth_token_create
+                data:
+                  access_token: RJptkI22inJMLGmRvdUWUj02WA6cuV0P2cPAF1OkG5F2FAh41hkbGw26v419M7me4qCfsu4pZwfjxB6wOO42dJeTnTAv41C4CnR0Mkism1fwbg6trIo5lNixX1roWD4gZkG8W1Mp4cjaPWe41sc9S61Jmt6TvMgXJ3VRxqnSR9UVlaF7oeJPLwi7sHHcKuaiLrNflwEDE2aZNDVHqmNeiDFrY8GQAzNCQLevqkMKGDsnRtoD2EqX8YKu6G2z3Vr
+                  token_type: Bearer
+                  expires_in: 3600
+                  refresh_token: XO9haFEajZaEqYY8wJUkdsVWG2b3r6jY1aXdsbhNtgmiz4K6e78hZt73kTQjuO57sVo8T6xHAjxk6Day0utTpHnXzUrKy7GSESsmxJoKzcCZeXdJCQLQvyXLSYMlMf3OZVpwcwJp7fnpCARdhmP0oLocSEnTSh60FBO2HQCnseFT6DgtSTsODbx8HC230epKAbkyOeGkC2gWQctXAFb1dNa8r1W8RzPWGe5a6wkAUH2rQiv7RjIA7Eoy663Sf9Q
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              examples:
+                Basic Auth Credentials Incorrect:
+                  value:
+                    operation_id: unknown
+                    code_id: unknown
+                    message: Unauthorised request
+                Basic Auth Missing:
+                  value:
+                    operation_id: oauth_token_create
+                    code_id: failed_validation
+                    message: could not extract basic auth headers
+                Grant Type Missing/Incorrect or Content Type missing:
+                  value:
+                    operation_id: oauth_token_create
+                    code_id: failed_validation
+                    message: could not extract basic auth headers
+                    errors:
+                      grant_type: "grant_type must be one of [client_credentials refresh_token]"
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: oauth_token_create
+                code_id: unauthorised
+                message: Unauthorised.
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: oauth_token_create
+                code_id: forbidden
+                message: Forbidden.
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: "An error occurred while processing your request. Get in\
+                  \ touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8"
+      security:
+      - Basic: []
   /v1/open-banking/providers:
     get:
       tags:
@@ -980,8 +1110,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       requestBody:
@@ -1128,8 +1261,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       requestBody:
@@ -1169,6 +1305,10 @@ paths:
                 value:
                   redirect_url: https://my-agent-webapp.com/connected?my-parameter=xyz
                   enable_account_data_management": true
+              Enable a asynchronous connection:
+                value:
+                  redirect_url: https://my-agent-webapp.com/connected?my-parameter=xyz
+                  enable_async_connect: true
         required: true
       responses:
         "201":
@@ -1324,8 +1464,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       requestBody:
@@ -1721,8 +1864,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       requestBody:
@@ -2028,14 +2174,17 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
+        description: "The Bud Customer secret used to encrypt customer data. For this\
+          \ particular API call, the customer secret is optional regardless of whether\
+          \ the customer secret is already stored with Bud or not - though this is\
+          \ not true for most endpoints."
         required: false
         schema:
           type: string
       - name: status
         in: query
-        description: "Filter connections by connection status. When ommited, only\
-          \ active Authorised connections will be shown."
+        description: "By default this endpoint only returns `active` Authorised connections.\
+          \ To retrieve `all` consents, add this query param with the value of `all`"
         required: false
         schema:
           type: string
@@ -2063,6 +2212,10 @@ paths:
                       created_at: 2021-03-23T14:46:33Z
                       last_consented_on: 2021-03-23T14:47:01Z
                       status: authorised
+                      resources:
+                      - accounts
+                      - balances
+                      - transactions
                       permissions:
                       - ReadAccounts
                       - ReadBalances
@@ -2092,6 +2245,10 @@ paths:
                       created_at: 2021-04-24T15:42:13Z
                       last_consented_on: 2021-04-24T15:42:13Z
                       status: authorised
+                      resources:
+                      - accounts
+                      - balances
+                      - transactions
                       permissions:
                       - ReadAccounts
                       - ReadBalances
@@ -2118,6 +2275,10 @@ paths:
                       created_at: 2021-03-23T14:46:33Z
                       last_consented_on: 2021-03-23T14:47:01Z
                       status: authorised
+                      resources:
+                      - accounts
+                      - balances
+                      - transactions
                       permissions:
                       - ReadAccounts
                       - ReadBalances
@@ -2145,6 +2306,10 @@ paths:
                       created_at: 2021-04-24T15:42:13Z
                       last_consented_on: 2021-04-24T15:42:13Z
                       status: authorised
+                      resources:
+                      - accounts
+                      - balances
+                      - transactions
                       permissions:
                       - ReadAccounts
                       - ReadBalances
@@ -2171,6 +2336,10 @@ paths:
       summary: Initiate Revoke Consent
       description: |
         Start a task to remove consent to download further customer account information and remove Bud’s ability to download further information for a specified customer account.
+
+        This will revoke `all` the consents for the specified provider, that are associated to the specified customer account.
+
+        To check the status of this task, use the `Retrieve Revoke Consent Status` using the returned `task_id`
       operationId: open_banking_account_access_consent_revoke_post
       parameters:
       - name: X-Client-Id
@@ -2200,11 +2369,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskCreatedResponse'
+                $ref: '#/components/schemas/RevokeTaskCreatedResponse'
               example:
-                operation_id: open_banking_account_access_consent_revoke_post
+                operation_id: open_banking_revoke_post
                 data:
+                  provider: Monzo
                   task_id: 1ceb1d81-a80e-4825-a7c0-4d69424c9874
+                metadata:
+                  status: Pending
+                  next_url: /v1/open-banking/account-access-consent/revoke/1ceb1d81-a80e-4825-a7c0-4d69424c9874
+                  next_url_delay: 50
         "400":
           description: Bad Request that fails validations on headers & payload
         "401":
@@ -2219,8 +2393,8 @@ paths:
       tags:
       - Manage a Connection
       summary: Retrieve Revoke Consent Status
-      description: |
-        Check the status and result of a Revoke Consent task.
+      description: "Check the status and result of a Revoke Consent task. \n\nUse\
+        \ the `task_id` taken from a successful `Initiate Revoke Consent` request.\n"
       operationId: open_banking_account_access_consent_revoke_get
       parameters:
       - name: X-Client-Id
@@ -2255,25 +2429,51 @@ paths:
                 completed:
                   summary: Completed
                   value:
-                    operation_id: open_banking_account_access_consent_revoke_get
+                    operation_id: open_banking_revoke_task_get
+                    data:
+                      task_id: 1ceb1d81-a80e-4825-a7c0-4d69424c9874
+                      provider: Natwest
+                      status: Completed
+                      result: success
                     metadata:
                       status: Completed
                 pending:
                   summary: Pending
                   value:
-                    operation_id: open_banking_account_access_consent_revoke_get
+                    operation_id: open_banking_revoke_task_get
+                    data:
+                      task_id: 1ceb1d81-a80e-4825-a7c0-4d69424c9874
+                      provider: Natwest
+                      status: Pending
                     metadata:
                       status: Pending
+                      next_url: /v1/open-banking/account-access-consent/revoke/1ceb1d81-a80e-4825-a7c0-4d69424c9874
+                      next_url_delay: 50
                 failed:
                   summary: Failed
                   value:
-                    operation_id: open_banking_account_access_consent_revoke_get
+                    operation_id: open_banking_revoke_task_get
+                    data:
+                      task_id: 1ceb1d81-a80e-4825-a7c0-4d69424c9874
+                      provider: Natwest
+                      status: Failed
                     metadata:
                       status: Failed
-                      error_code: 1
-                      error_message: Error message
         "400":
           description: Bad Request that fails validations on headers & payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevokeAccountAccessIntentTaskStatusValidationError'
+              examples:
+                missing_customer_header:
+                  summary: Missing X-Customer-Id header
+                  value:
+                    operation_id: open_banking_revoke_task_get
+                    code_id: failed_validation
+                    message: invalid request
+                    errors:
+                      customer-id: This value should not be blank
         "401":
           description: Unauthorized (BearerToken in 'Authorization' header fails the
             authentication)
@@ -2286,8 +2486,13 @@ paths:
       tags:
       - Manage a Connection
       summary: Reconfirm Consent
-      description: |
-        Reconfirm a customer's consent to extend the expiration date by 90 days. If the provider requires SCA authentication or the consent status is not showing "Authorised" or the consent is expired, the `reconnect_required` flag will show as true. If false, the consent has been extended.
+      description: "Reconfirm a customer's consent to extend the expiration date by\
+        \ 90 days. If the provider requires SCA authentication or the consent status\
+        \ is not showing \"Authorised\" or the consent is expired, the `reconnect_required`\
+        \ flag will show as true. \nIf true, you should make a call to the Retrieve\
+        \ Authoirsation Gateway URL endpoint with the `reconfirm_consent` flag set\
+        \ to true to direct your customer to the reconfirm consent journey.\nIf false,\
+        \ the consent has been extended.\n"
       operationId: open_banking_consents_reconfirm_post
       parameters:
       - name: X-Client-Id
@@ -2305,8 +2510,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: consent_id
@@ -2330,11 +2538,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReconfirmConsentResponse'
-              example:
-                operation_id: open_banking_consents_reconfirm_post
-                data:
-                  provider_id: Barclays
-                  reconnect_required: false
+              examples:
+                no_reconnect:
+                  summary: Reconnect not required
+                  value:
+                    operation_id: open_banking_consents_reconfirm_post
+                    data:
+                      provider_id: Barclays
+                      reconnect_required: false
+                reconnect:
+                  summary: Reconnect required
+                  value:
+                    operation_id: open_banking_consents_reconfirm_post
+                    data:
+                      provider_id: Barclays
+                      reconnect_required: true
         "400":
           description: Bad Request that fails validations on headers & payload
         "401":
@@ -2467,6 +2685,8 @@ paths:
         Check the status of an ingest accounts request.
 
         The given status has an overall value and a specific status for each given customer.
+
+        Use the `task_id` taken from a successful `Ingest Accounts` request.
       operationId: ingest_accounts_get
       parameters:
       - name: X-Client-Id
@@ -2492,8 +2712,8 @@ paths:
                 $ref: '#/components/schemas/IngestStatusResponse'
               examples:
                 Success:
+                  summary: Successfully completed
                   value:
-                    summary: Successfully completed
                     operation_id: ingest_accounts_get
                     data:
                       id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
@@ -2508,8 +2728,8 @@ paths:
                         status: Completed
                         errors: null
                 Validation Failure:
+                  summary: Validation error
                   value:
-                    summary: Validation error
                     operation_id: ingest_accounts_get
                     data:
                       id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
@@ -2519,14 +2739,15 @@ paths:
                         customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
                         status: Failed
                         errors:
-                          accounts.0.account_id: account_id is required
-                          accounts.1.provider: provider is required
+                          accounts.[0].account_id: account_id is required
+                          accounts.[1].provider: provider is required
                       - id: 661d6ec2-1b08-4f30-9ede-d4d18db26b09
                         customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
                         status: Failed
                         errors:
-                          accounts.1.provider: provider is required
+                          accounts.[1].provider: provider is required
                 Transient Failure:
+                  summary: Transient error
                   value:
                     operation_id: ingest_accounts_get
                     data:
@@ -2610,6 +2831,8 @@ paths:
         This endpoint initiates a 'blocking' transaction ingestion and enrichment process. It will return partially enriched transactions and a Task ID which would then be used for finding out the current status of the full enrichment process. The complete enrichment services applied to the data will depend upon the relevant scopes assigned to your Client ID.
 
         If a 'X-Disable-Synchronous' header is present and set to true, the process will be entirely 'non-blocking', with the returned Task ID providing access to the status of the full enrichment process.
+
+        There are a number of ingest schemas that can be used with this endpoint. These are described in the `Body Params` below. You will need to ensure the content-type header matches the schema used.
       operationId: v2_ingest_transactions_post
       parameters:
       - name: X-Client-Id
@@ -2629,16 +2852,64 @@ paths:
           - application/bud-transaction-v2+json
       - name: X-Disable-Synchronous
         in: header
-        description: "If provided as true, the task will not be processed synchronously"
+        description: |
+          If provided as true, the task will **not** be processed synchronously.
+
+          If false or the header is not included, the task **will** be processed synchronously.
         schema:
           type: string
           enum:
           - "true"
+          - "false"
       requestBody:
         content:
-          application/bud-transaction-v3+json:
+          '*/*':
             schema:
-              $ref: '#/components/schemas/IngestTransactionsV3Request'
+              $ref: '#/components/schemas/ingest_transactions_body'
+            examples:
+              bud-transaction-v3 Request:
+                value:
+                - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                  customer_secret: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
+                  transactions:
+                  - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                    transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                    description: "The RSPCA, Southwater"
+                    amount: "-10.98"
+                    date_time: 2022-10-10T23:00:00Z
+                    currency: GBP
+                  - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                    transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
+                    description: "The RSPCA, Southwater"
+                    amount: "-10.98"
+                    date_time: 2022-11-10T23:00:00Z
+                    currency: GBP
+                  transaction_windows:
+                  - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                    start: 2022-10-10T23:00:00Z
+                    end: 2022-11-10T23:00:00Z
+              bud-transaction-v2 Request:
+                value:
+                - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                  customer_secret: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
+                  transactions:
+                  - provider: Lloyds
+                    account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                    transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                    transaction_type: DEB
+                    date: 2020-01-31
+                    time: 23:59:00
+                    transaction_description: "The RSPCA, Southwater"
+                    credit_debit_indicator: incoming_credit
+                    status: booked
+                    counterparty:
+                      name: The RSPCA
+                      address: "1824, Strand, London"
+                      scheme: SortCodeAccountNumber
+                      identifier: "20200811151300"
+                    amount:
+                      amount: "10.98"
+                      currency: GBP
         required: true
       responses:
         "200":
@@ -2663,7 +2934,7 @@ paths:
                     amount:
                       value: "10.99"
                       currency: GBP
-                    date_time: 2022-05-28T10:00:00Z00:00
+                    date_time: 2022-05-28T10:00:00Z
                     enrichments:
                       categories:
                         l1:
@@ -2707,6 +2978,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/inline_response_400'
+              examples:
+                DecodingError:
+                  summary: Malformed JSON In Payload
+                  value:
+                    operation_id: v2_ingest_transactions_post
+                    code_id: failed_body_decode
+                    message: invalid request body
+                    errors:
+                      decode_error: invalid character 'b' looking for beginning of
+                        value
+                RequestValidationError:
+                  summary: Request Validation Error
+                  value:
+                    operation_id: v2_ingest_transactions_post
+                    code_id: failed_validation
+                    message: validation failure(s) in request payload
+                    errors:
+                      customers[0]:
+                        customer_id: The customer ID is mandatory
+                        transactions: The transactions list is mandatory
+                PayloadValidationError:
+                  summary: Transaction Validation Error
+                  value:
+                    operation_id: v2_ingest_transactions_post
+                    code_id: failed_validation
+                    message: validation failure(s) in request payload
+                    errors:
+                      "4cef424c-1d7f-4cab-8be2-aee7e1774a00":
+                        missing_fields:
+                          transactions[0]:
+                          - description
+                          - account_id
+                        invalid_fields:
+                          transactions[0]:
+                          - amount
         "401":
           description: Unauthorized (BearerToken in 'Authorization' header fails the
             authentication)
@@ -2812,6 +3118,198 @@ paths:
           description: An unexpected error occurred on the server side
       security:
       - OAuth2: []
+  /platform/v3/customers:
+    post:
+      tags:
+      - Manage Customers
+      summary: Create Customer V3
+      description: |
+        This endpoint is used to create a new Customer in order for them to consume the Bud services.
+
+        > 📘 Please note:
+        >
+        > Customers created using this endpoint have their secrets hosted on the Bud platform by default.
+        > If you wish to host customer secrets yourself, set the `host_secret` flag in the `customer_context` field
+        > to `false` in the request body.
+      operationId: platform_v3_customers_post
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v3_customers_body'
+            examples:
+              Secret Hosted (Default):
+                value:
+                  customer_context:
+                    type: personal
+                    region: GB
+                    locale: en-GB
+              Secret Not Hosted:
+                value:
+                  customer_context:
+                    type: personal
+                    region: GB
+                    locale: en-GB
+                    host_secret: false
+        required: false
+      responses:
+        "201":
+          description: The resource has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerCreateV3Response'
+              examples:
+                Secret Hosted (Default):
+                  value:
+                    operation_id: platform_v3_customers_post
+                    data:
+                      customer_id: 360e5821-4f18-4077-83f4-c9a7c1768bea
+                      customer_context:
+                        type: personal
+                        region: GB
+                        locale: en-GB
+                        host_secret: true
+                Secret not Hosted:
+                  value:
+                    operation_id: platform_v3_customers_post
+                    data:
+                      customer_id: 360e5821-4f18-4077-83f4-c9a7c1768bea
+                      customer_secret: 63ae14a67e5cf8c8f7bf5376479d13e9
+                      customer_context:
+                        type: personal
+                        region: GB
+                        locale: en-GB
+        "400":
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: customers_create
+                code_id: failed_validation
+                message: Failed validation.
+                errors:
+                  client_id: This value should not be blank
+        "401":
+          description: An unauthenticated request was received.
+        "405":
+          description: The request uses an unexpected HTTP method.
+        "5XX":
+          description: An unexpected error occurred on the server side.
+      security:
+      - OAuth2: []
+  /platform/v3/customers/batch:
+    post:
+      tags:
+      - Manage Customers
+      summary: Create Customers V3 (Batch)
+      description: |
+        This endpoint is used to create a batch of new Customers in order for them to consume the Bud services.
+
+        > 📘 Please note:
+        >
+        > Customers created using this endpoint have their secrets hosted on the Bud platform by default.
+        > If you wish to host customer secrets yourself, set the `host_secret` flag in the `customer_context` field
+        > to `false` in the request body.
+      operationId: platform_v3_customers_batch_post
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomersV3BatchPayload'
+            examples:
+              Multiple Customers with Hosted Secrets (Default):
+                value:
+                  number_of_customers: 2
+                  customer_context:
+                    type: personal
+                    region: GB
+                    locale: en-GB
+              Multiple Customers with Secrets not Hosted (Default):
+                value:
+                  number_of_customers: 2
+                  customer_context:
+                    type: personal
+                    region: GB
+                    locale: en-GB
+                    host_secret: false
+        required: false
+      responses:
+        "201":
+          description: The resource has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCustomersV3BatchResponse'
+              examples:
+                Multiple Customers with Hosted Secrets (Default):
+                  value:
+                    operation_id: platform_v3_customers_batch_post
+                    data:
+                    - customer_id: 360e5821-4f18-4077-83f4-c9a7c1768bea
+                      customer_context:
+                        type: personal
+                        region: GB
+                        locale: en-GB
+                        host_secret: true
+                    - customer_id: 8d3e9cd4-fa92-4252-8725-9b20af307b76
+                      customer_context:
+                        type: personal
+                        region: GB
+                        locale: en-GB
+                        host_secret: true
+                Multiple Customers with Secrets not Hosted:
+                  value:
+                    operation_id: platform_v3_customers_batch_post
+                    data:
+                    - customer_id: 360e5821-4f18-4077-83f4-c9a7c1768bea
+                      customer_secret: 63ae14a67e5cf8c8f7bf5376479d13e9
+                      customer_context:
+                        type: personal
+                        region: GB
+                        locale: en-GB
+                    - customer_id: 8d3e9cd4-fa92-4252-8725-9b20af307b76
+                      customer_secret: fa824024b3443ae80d7cda7cb246ce19
+                      customer_context:
+                        type: personal
+                        region: GB
+                        locale: en-GB
+        "400":
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: customers_create
+                code_id: failed_validation
+                message: Failed validation.
+                errors:
+                  client_id: This value should not be blank
+        "401":
+          description: An unauthenticated request was received.
+        "405":
+          description: The request uses an unexpected HTTP method.
+        "5XX":
+          description: An unexpected error occurred on the server side.
+      security:
+      - OAuth2: []
   /v1/customers:
     post:
       tags:
@@ -2821,7 +3319,7 @@ paths:
         This endpoint is used to create a new Customer in order for them to consume the Bud services.
 
         **Please note: this endpoint is now deprecated, please migrate to using the POST /v2/customers endpoint.**
-      operationId: customers_create
+      operationId: customers_create_v1
       parameters:
       - name: X-Client-Id
         in: header
@@ -2886,9 +3384,9 @@ paths:
       tags:
       - Manage Customers
       summary: Create Customer(s)
-      description: This endpoint is used to create new Customers in order for them
-        to consume the Bud services.
-      operationId: v2_customers_post
+      description: "This endpoint is used to create one or many new Customers, in\
+        \ order for them to consume the Bud services."
+      operationId: customers_create_v2
       parameters:
       - name: X-Client-Id
         in: header
@@ -2987,7 +3485,8 @@ paths:
       tags:
       - Manage Customers
       summary: Remove Customer
-      description: This endpoint is used to delete an existing Customer.
+      description: This endpoint is used to delete an existing Customer. Calling this
+        deletes all data associated with the customer.
       operationId: customers_delete
       parameters:
       - name: customer_id
@@ -3022,7 +3521,7 @@ paths:
       tags:
       - Manage Customers
       summary: Retrieve Customer Context
-      description: "Retrieve the customer level customer context, i.e. a set of parameters\
+      description: "Retrieve the customer level context, i.e. a set of parameters\
         \ that defines their language, region and their customer type."
       operationId: v1_customer_context_get
       parameters:
@@ -3069,7 +3568,7 @@ paths:
       tags:
       - Manage Customers
       summary: Update Customer Context
-      description: Set the customer level customer context.
+      description: Set the customer level context.
       operationId: v1_customer_context_put
       parameters:
       - name: customer_id
@@ -3513,8 +4012,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -3623,8 +4125,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -3751,8 +4256,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -3849,8 +4357,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: currency
@@ -4068,8 +4579,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: account_id
@@ -4216,8 +4730,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: from
@@ -4372,8 +4889,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: from
@@ -4526,8 +5046,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: date_from
@@ -4791,8 +5314,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-Account-Id
@@ -4942,8 +5468,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -5497,8 +6026,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: provider
@@ -5548,8 +6080,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       requestBody:
@@ -5627,8 +6162,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       requestBody:
@@ -5703,8 +6241,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       requestBody:
@@ -5791,8 +6332,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       responses:
@@ -5917,8 +6461,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       responses:
@@ -6001,8 +6548,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: months
@@ -6099,8 +6649,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       responses:
@@ -6175,8 +6728,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -6277,8 +6833,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -6391,8 +6950,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -6472,8 +7034,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -6560,8 +7125,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -6636,8 +7204,9 @@ paths:
         \ transaction history.\n\nFinancial Products detects the following types of\
         \ products and services: \n- Loans\n- Buy Now, Pay Later (BNPL)\n- Mortgages\n\
         - Insurance products\n- Credit Cards\n- Private Pensions\n- Savings and Investments\n\
-        \n> 🚧 Limitations\n> \n> Financial Products are only identified from debit\
-        \ transactions.\n"
+        \n*Notes:*\n- If from and to parameters are not set, this endpoint will default\
+        \ to using transactions from the last six months.\n\n> 🚧 Limitations\n> \n\
+        > Financial Products are only identified from debit transactions.\n"
       operationId: insights_v2_products
       parameters:
       - name: X-Client-Id
@@ -6655,8 +7224,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: from
@@ -6762,8 +7334,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -6863,6 +7438,7 @@ paths:
 
         **Notes:**
         - The Financial Product Finder currently only finds products from `debit` transactions.
+        - If X-From and X-To headers are not set, this endpoint will default to using transactions from the last six months.
       operationId: v1_products_get
       parameters:
       - name: X-Client-Id
@@ -6880,8 +7456,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -6963,8 +7542,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       responses:
@@ -7017,8 +7599,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       responses:
@@ -7095,8 +7680,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -7476,8 +8064,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: month_from
@@ -7605,8 +8196,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: date_from
@@ -10001,8 +10595,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -10324,8 +10921,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -10609,8 +11209,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -10787,8 +11390,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -10852,8 +11458,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: X-From
@@ -10955,8 +11564,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       requestBody:
@@ -11056,8 +11668,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: insight_id
@@ -11122,8 +11737,11 @@ paths:
           format: uuid
       - name: X-Customer-Secret
         in: header
-        description: Bud Customer secret
-        required: true
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
         schema:
           type: string
       - name: account_id
@@ -11228,6 +11846,18 @@ paths:
       - OAuth2: []
 components:
   schemas:
+    RetrieveAuthTokenResponse:
+      title: Retrieve Auth Token Response
+      required:
+      - data
+      - operation_id
+      properties:
+        operation_id:
+          type: string
+          enum:
+          - oauth_token_create
+        data:
+          $ref: '#/components/schemas/RetrieveAuthTokenResponse_data'
     Transaction:
       title: Transaction
       required:
@@ -11574,10 +12204,43 @@ components:
           - actionable_insights_v1_balances_get
         data:
           $ref: '#/components/schemas/BalanceInsights'
+    ServerErrorResponse:
+      title: Server Error Response
+      required:
+      - code_id
+      - message
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+          description: A descriptive enough string that is linked to the reason for
+            the error.
+        message:
+          type: string
+          description: An actual user friendly error message.
+        errors:
+          anyOf:
+          - $ref: '#/components/schemas/Error'
+          - $ref: '#/components/schemas/Errors'
     OperationId:
       title: Operation Id Field
       type: string
       description: A unique identifier/reference associated with a given endpoint/operation
+    Error:
+      title: Error Object
+      type: object
+      additionalProperties:
+        type: string
+      description: Contains a field specific error message
+    Errors:
+      title: Array of Error Object
+      type: array
+      description: Contains a list of error messages
+      items:
+        $ref: '#/components/schemas/Error'
     OBProvider:
       title: Open Banking Providers
       required:
@@ -11711,10 +12374,6 @@ components:
         errors:
           $ref: '#/components/schemas/Error'
       description: Expected response structure
-    Error:
-      title: Error Object
-      type: object
-      description: Contains a field specific error message
     OBSyncWebhookBody:
       title: OB Synchronisation Webhook Payload
       required:
@@ -11813,6 +12472,13 @@ components:
             \ will be redirected back to the client redirect_url bypassing the account\
             \ summary screen. This should be used if you don’t want your customers\
             \ to see the Bud account summary screen."
+          nullable: true
+        enable_async_connect:
+          type: boolean
+          description: "When enabled, once the consent authorisation has completed,\
+            \ the customer will be moved on in the flow. The data is then fetched\
+            \ and enriched in the background, instead of the customer waiting on a\
+            \ loading spinner"
           nullable: true
     OBWebhookBody:
       title: OB Webhook Payload
@@ -12200,6 +12866,8 @@ components:
       - provider
       - raw_format
       - raw_version
+      - resources
+      - status
       - transaction_from_date
       type: object
       properties:
@@ -12235,14 +12903,29 @@ components:
           - authorised
           - rejected
           - revoked
+        resources:
+          type: array
+          description: List of resources this consent has access too
+          items:
+            type: string
+            enum:
+            - accounts
+            - balances
+            - transactions
+            - parties
+            - direct-debits
         permissions:
           type: array
-          description: List of granted permissions
+          description: "Specifies the Open Banking account access data types. This\
+            \ is a list of the data clusters being consented by the PSU, and requested\
+            \ for authorisation with the ASPSP."
           items:
             type: string
             enum:
             - ReadAccounts
             - ReadBalances
+            - ReadDirectDebits
+            - ReadParty
             - ReadTransactions
         raw_version:
           type: string
@@ -12255,9 +12938,7 @@ components:
           - amex
           - starling
         raw:
-          type: object
-          description: The raw consent as returned by the provider
-          nullable: true
+          $ref: '#/components/schemas/RawOBConsents'
         account_ids:
           type: array
           description: A list of the different account identifiers that are associated
@@ -12271,6 +12952,60 @@ components:
           description: The date at which the last data refresh (sync) occured for
             this consent object
       description: Schema to define a given Open Banking consent
+    RawOBConsents:
+      title: Raw OB Consent
+      required:
+      - ConsentId
+      - Permissions
+      - Status
+      - StatusUpdateDateTime
+      type: object
+      properties:
+        ConsentId:
+          type: string
+          description: Open Banking consent unique identifier
+          format: uuid
+        CreationDateTime:
+          type: string
+          description: Date and time at which the resource was created.
+          format: ISO8601
+        Permissions:
+          type: array
+          description: Specifies the Open Banking account access data types that tied
+            to the consent
+          items:
+            type: string
+            enum:
+            - ReadAccountsBasic
+            - ReadAccountsDetail
+            - ReadBalances
+            - ReadDirectDebits
+            - ReadParty
+            - ReadPartyPSU
+            - ReadTransactionsBasic
+            - ReadTransactionsCredits
+            - ReadTransactionsDebits
+            - ReadTransactionsDetail
+        Status:
+          type: string
+          description: Specifies the status of consent resource.
+          enum:
+          - Authorised
+          - AwaitingAuthorisation
+          - Rejected
+          - Revoked
+        StatusUpdateDateTime:
+          type: string
+          description: Date and time at which the resource status was updated.
+          format: ISO8601
+          nullable: true
+        TransactionFromDateTime:
+          type: string
+          description: Specified start date and time for the transaction query period.
+          format: ISO8601
+          nullable: true
+      description: The raw consent as returned by the provider
+      nullable: true
     ResultsMetadata:
       title: Results Metadata Object
       type: object
@@ -12289,10 +13024,11 @@ components:
           type: string
           description: The name of the provider (ASPSP) the Customer is requesting
             to have their consent revoked for
-    TaskCreatedResponse:
-      title: Task Created Response
+    RevokeTaskCreatedResponse:
+      title: Revoke Task Created Response
       required:
       - data
+      - metadata
       - operation_id
       type: object
       properties:
@@ -12301,11 +13037,32 @@ components:
         data:
           $ref: '#/components/schemas/TaskCreatedView'
         metadata:
-          type: object
+          $ref: '#/components/schemas/TaskCreatedMetadata'
       description: Expected response structure
+    TaskCreatedMetadata:
+      required:
+      - next_url
+      - next_url_delay
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status of the job associated with the specified task id
+          enum:
+          - Pending
+        next_url:
+          type: string
+          description: The url to get the status of the task
+        next_url_delay:
+          type: number
+          description: The time in milliseconds that the client should wait before
+            polling the relevant GET status endpoint
+      description: Created task metadata response
     RevokeAccountAccessIntentTastStatusResponse:
       title: Revoke Account Access Intent Response
       required:
+      - data
       - metadata
       - operation_id
       type: object
@@ -12313,11 +13070,32 @@ components:
         operation_id:
           $ref: '#/components/schemas/OperationId'
         data:
-          type: object
+          $ref: '#/components/schemas/Revoke Task Data'
         metadata:
-          $ref: '#/components/schemas/RevokeAccountAccessIntentTastStatusResponse_metadata'
+          $ref: '#/components/schemas/Revoke Task Metadata'
       description: Expected response from a get status request for a revoke account
         access intent call
+    RevokeAccountAccessIntentTaskStatusValidationError:
+      title: Revoke Account Access Intent Status Validation Error
+      required:
+      - code_id
+      - message
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+          enum:
+          - failed_validation
+        message:
+          type: string
+          enum:
+          - invalid request
+        errors:
+          type: object
+          description: Extra information on the validation errors
     ReconfirmConsentRequest:
       title: Reconfirm Consent Request
       required:
@@ -12371,7 +13149,8 @@ components:
       properties:
         customer_id:
           type: string
-          description: "Unique identifier for a Customer, as registered on Bud's platform."
+          description: "A unique identifier for a Customer, as registered on Bud's\
+            \ platform."
           format: uuid
         customer_secret:
           type: string
@@ -12463,14 +13242,14 @@ components:
       - type
       type: object
       properties:
-        account_id:
-          type: string
-          description: The unique id associated with the account
         amount:
           $ref: '#/components/schemas/InpAmount'
         credit_debit_indicator:
           type: string
           description: To describe whether the account balance is in debit or credit
+          enum:
+          - incoming_credit
+          - outgoing_debit
         credit_line:
           type: array
           items:
@@ -12485,7 +13264,24 @@ components:
           format: hh:mm:ss
         type:
           type: string
-          description: Describes the state of the balance
+          description: |
+            Describes the state of the balance
+
+            | Value                     | Description                                               |
+            |:--------------------------|:----------------------------------------------------------|
+            | `ClosingAvailable`        | Closing balance of amount of money that is at the disposal of the account owner on the date specified.               |
+            | `ClosingBooked`           | Balance of the account at the end of the pre-agreed account reporting period. It is the sum of the opening booked balance at the beginning of the period and all entries booked to the account during the pre-agreed account reporting period.      |
+            | `ClosingCleared`          | Closing balance of amount of money that is cleared on the date specified.                     |
+            | `Expected`                | Balance, composed of booked entries and pending items known at the time of calculation, which projects the end of day balance if everything is booked on the account and no other entry is posted.  |
+            | `ForwardAvailable`        | Forward available balance of money that is at the disposal of the account owner on the date specified.               |
+            | `Information`             | Balance for informational purposes.      |
+            | `InterimAvailable`        | Available balance calculated in the course of the account servicer's business day, at the time specified, and subject to further changes during the business day. The interim balance is calculated on the basis of booked credit and debit items during the calculation time/period specified.       |
+            | `InterimBooked`           | Balance calculated in the course of the account servicer's business day, at the time specified, and subject to further changes during the business day. The interim balance is calculated on the basis of booked credit and debit items during the calculation time/period specified.       |
+            | `InterimCleared`          | Cleared balance calculated in the course of the account servicer's business day, at the time specified, and subject to further changes during the business day.        |
+            | `OpeningAvailable`        | Opening balance of amount of money that is at the disposal of the account owner on the date specified.        |
+            | `OpeningBooked`           | Book balance of the account at the beginning of the account reporting period. It always equals the closing book balance from the previous report.        |
+            | `OpeningCleared`          | Opening balance of amount of money that is cleared on the date specified.       |
+            | `PreviouslyClosedBooked`  | Balance of the account at the previously closed account reporting period. The opening booked balance for the new period has to be equal to this balance.  |
           enum:
           - ClosingAvailable
           - ClosingBooked
@@ -12603,20 +13399,18 @@ components:
           format: uuid
         customer_id:
           type: string
-          description: "Unique identifier for a Customer, as registered on Bud's platform."
+          description: "A unique identifier for a Customer, as registered on Bud's\
+            \ platform."
           format: uuid
         status:
           $ref: '#/components/schemas/IngestResponseStatus'
         errors:
           type: object
-          additionalProperties:
-            type: string
-            description: Details surrounding a relevant error message
           description: Any error messages describing why a sub task has failed.
           nullable: true
       description: Expected response for each sub task structure.
     IngestTransactionsRequest:
-      title: Ingest Transactions Request
+      title: bud-transaction-v2 ingest request
       type: array
       description: Ingest transaction expected request body.
       items:
@@ -12631,7 +13425,8 @@ components:
       properties:
         customer_id:
           type: string
-          description: "Unique identifier for a Customer, as registered on Bud's platform."
+          description: "A unique identifier for a Customer, as registered on Bud's\
+            \ platform."
           format: uuid
           example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
         customer_secret:
@@ -12742,7 +13537,7 @@ components:
       - address
       - identifier
       - name
-      - schema
+      - scheme
       type: object
       properties:
         name:
@@ -12753,9 +13548,9 @@ components:
           type: string
           description: The address of the party.
           example: "1824, Strand, London"
-        schema:
+        scheme:
           type: string
-          description: The schema used by the party.
+          description: The scheme used by the party.
           example: SortCodeAccountNumber
           enum:
           - SortCodeAccountNumber
@@ -12765,14 +13560,14 @@ components:
           example: "20200811151300"
       description: Describes the party the money was deposited to or taken from.
     IngestTransactionsV3Request:
-      title: Ingest Transactions Request
+      title: bud-transaction-v3 ingest request
       type: array
       description: Ingest transaction expected request body.
       items:
         $ref: '#/components/schemas/IngestTransactionsV3Request_inner'
     CustomerID:
       type: string
-      description: "Unique identifier for a Customer, as registered on Bud's platform."
+      description: "A unique identifier for a Customer, as registered on Bud's platform."
       format: uuid
       example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
     CustomerSecret:
@@ -12781,36 +13576,44 @@ components:
       example: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
     CustomerTransactionV3:
       title: Customer Transaction V3
+      required:
+      - account_id
+      - amount
+      - date_time
+      - description
+      - transaction_id
+      type: object
+      properties:
+        transaction_id:
+          type: string
+          description: "Unique, immutable transaction identifier"
+          format: uuid
+          example: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
+        description:
+          type: string
+          description: Free text string providing details on the transaction itself
+        account_id:
+          type: string
+          description: The account identifier that the transaction belongs to
+          format: uuid
+          example: 2f5b2055-6253-4cd0-b646-06788342a609
+        date_time:
+          type: string
+          description: "The date detailing when the transaction occurred, compliant\
+            \ with RFC3339"
+          format: datetime
+          example: 2022-11-10T23:00:00Z
+        amount:
+          type: string
+          description: |
+            The value of the monetary amount. The value is formatted with the number of decimal places for the respective currency.
+
+            A positive amount is a credit entry and a negative a debit entry.
+
+            Example: `"10.98"` or `"-10.98"`
+        currency:
+          $ref: '#/components/schemas/BudCurrency'
       description: A schema for Bud V3 transaction format
-      allOf:
-      - $ref: '#/components/schemas/LegacyBudAmount'
-      - required:
-        - account_id
-        - date_time
-        - description
-        - transaction_id
-        type: object
-        properties:
-          transaction_id:
-            type: string
-            description: "Unique, immutable transaction identifier"
-            format: uuid
-            example: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-          description:
-            type: string
-            description: Free text string providing details on the transaction itself
-          account_id:
-            type: string
-            description: "Unique, immutable transaction identifier to show that a\
-              \ transaction belongs to a given account"
-            format: uuid
-            example: 2f5b2055-6253-4cd0-b646-06788342a609
-          date_time:
-            type: string
-            description: "The date detailing when the transaction occurred, compliant\
-              \ with RFC3339"
-            format: datetime
-            example: 2022-11-10T23:00:00Z
     TransactionV3Window:
       title: Transaction Window
       required:
@@ -12821,8 +13624,7 @@ components:
       properties:
         account_id:
           type: string
-          description: "Unique, immutable transaction identifier to show that a transaction\
-            \ window belongs to a given account"
+          description: The account identifier that the transaction belongs to
           format: uuid
           example: 2f5b2055-6253-4cd0-b646-06788342a609
         start:
@@ -13039,6 +13841,8 @@ components:
           $ref: '#/components/schemas/CustomerContextRegion'
         locale:
           $ref: '#/components/schemas/CustomerContextLocale'
+        host_secret:
+          $ref: '#/components/schemas/CustomerContextHostSecret'
         models:
           $ref: '#/components/schemas/CustomerContextModels'
       description: The context in which a customer is processed throughout the Bud
@@ -13066,6 +13870,12 @@ components:
       type: string
       description: "The locale/language, based on the region, format defined by BCP\
         \ 47."
+    CustomerContextHostSecret:
+      title: Customer Context Host Secret
+      type: boolean
+      description: "Determines whether the customer secret key should be stored with\
+        \ Bud, meaning the API consumer does not need to store this and provide it\
+        \ on subsequent API calls related to that customer."
     CustomerContextModels:
       title: Customer Context Models
       type: object
@@ -13075,6 +13885,64 @@ components:
           description: The name of the categorisation model to use for this customer
             at enrichment. See *List Categorisation Models V2* for available models.
       description: The configuration for Bud's enrichment models.
+    CustomerCreateV3Response:
+      title: Create Customer V3 Response
+      required:
+      - data
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/CustomerCreatedV3'
+      description: Expected response structure.
+    CustomerCreatedV3:
+      title: Customer Created V3
+      required:
+      - customer_context
+      - customer_id
+      type: object
+      properties:
+        customer_id:
+          type: string
+          description: "A unique identifier for a Customer, as registered on Bud's\
+            \ platform"
+          format: uuid
+        customer_secret:
+          type: string
+          description: A unique Customer encryption key used to encrypt their data
+            on the Bud platform. Only returned if the secret is *not* hosted on the
+            Bud Platform.
+        customer_context:
+          $ref: '#/components/schemas/CustomerContext'
+    CreateCustomersV3BatchPayload:
+      title: Create Customers V3 Batch Payload
+      type: object
+      properties:
+        number_of_customers:
+          maximum: 200
+          type: integer
+          description: The number of customers to create (register) on Bud's platform
+            in a single request.
+          default: 1
+        customer_context:
+          $ref: '#/components/schemas/CustomerContext'
+    CreateCustomersV3BatchResponse:
+      title: Create Customers V3 Batch Response
+      required:
+      - data
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          description: An array of Customer Created objects.
+          items:
+            $ref: '#/components/schemas/CustomerCreatedV3'
+      description: Expected response structure.
     CustomerCreateResponse:
       title: Create Customer Response
       required:
@@ -13127,7 +13995,8 @@ components:
       properties:
         customer_id:
           type: string
-          description: "Unique identifier for a Customer, as registered on Bud's platform"
+          description: "A unique identifier for a Customer, as registered on Bud's\
+            \ platform"
           format: uuid
         customer_secret:
           type: string
@@ -13513,33 +14382,6 @@ components:
             typically a representation of the overdraft or credit limits.
           items:
             $ref: '#/components/schemas/Credit_Line'
-    ServerErrorResponse:
-      title: Server Error Response
-      required:
-      - code_id
-      - message
-      - operation_id
-      type: object
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        code_id:
-          type: string
-          description: A descriptive enough string that is linked to the reason for
-            the error.
-        message:
-          type: string
-          description: An actual user friendly error message.
-        errors:
-          anyOf:
-          - $ref: '#/components/schemas/Error'
-          - $ref: '#/components/schemas/Errors'
-    Errors:
-      title: Array of Error Object
-      type: array
-      description: Contains a list of error messages
-      items:
-        $ref: '#/components/schemas/Error'
     RetrieveAccountByIDV2Response:
       title: Retrieve Account By ID Response
       required:
@@ -18106,6 +18948,29 @@ components:
             Examples:
               - `2023-03-17T17:29:51Z`
               - `2023-03-17T17:29:51-08:00`
+    oauth_token_body:
+      oneOf:
+      - title: When Retrieving an Auth Token
+        required:
+        - grant_type
+        properties:
+          grant_type:
+            type: string
+            enum:
+            - client_credentials
+      - title: When Refreshing an Auth Token
+        required:
+        - grant_type
+        - refresh_token
+        properties:
+          grant_type:
+            type: string
+            enum:
+            - refresh_token
+          refresh_token:
+            type: string
+            description: The `refresh_token` received when initially retieving an
+              auth token.
     inline_response_200:
       required:
       - data
@@ -18202,6 +19067,10 @@ components:
           regions:
           - GBR
         metadata: null
+    ingest_transactions_body:
+      oneOf:
+      - $ref: '#/components/schemas/IngestTransactionsV3Request'
+      - $ref: '#/components/schemas/IngestTransactionsRequest'
     inline_response_400:
       oneOf:
       - $ref: '#/components/schemas/BodyDecodeError'
@@ -18210,6 +19079,10 @@ components:
       oneOf:
       - $ref: '#/components/schemas/FailedValidationError'
       - $ref: '#/components/schemas/TaskNotFoundError'
+    v3_customers_body:
+      properties:
+        customer_context:
+          $ref: '#/components/schemas/CustomerContext'
     v1_customers_body:
       properties:
         customer_context:
@@ -18669,6 +19542,30 @@ components:
               match: "true"
               value: 23
           match: full
+    RetrieveAuthTokenResponse_data:
+      required:
+      - access_token
+      - expires_in
+      - refresh_token
+      - token_type
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: A short-lived token that is used to authenticate requests to
+            Bud endpoints.
+        token_type:
+          type: string
+          description: The type of token provided in the `access_token` field (typically
+            `Bearer`).
+        expires_in:
+          type: integer
+          description: The amount of time (in seconds) in which the `access_token`
+            will expire.
+        refresh_token:
+          type: string
+          description: A long-lived token that can be used to obtain a new `access_token`
+            when the current `access_token` expires.
     Location_address:
       type: object
       properties:
@@ -18813,17 +19710,49 @@ components:
           type: integer
           description: Recommended delay in milliseconds before next call
       description: Refresh Response Metadata
-    RevokeAccountAccessIntentTastStatusResponse_metadata:
+    Revoke Task Data:
+      title: Revoke Task Data
+      required:
+      - provider
+      - status
+      - task_id
+      type: object
+      properties:
+        task_id:
+          $ref: '#/components/schemas/TaskId'
+        provider:
+          type: string
+          description: The provider (ASPSP) associated with this task
+        status:
+          type: string
+          description: The status of the job associated with the specified task id
+          enum:
+          - Completed
+          - Pending
+          - Failed
+        result:
+          type: string
+          description: The result of the operation.
+    Revoke Task Metadata:
+      title: Revoke Task Metadata
       required:
       - status
       type: object
       properties:
         status:
           type: string
-        error_code:
-          type: integer
-        error_message:
+          description: The status of the job associated with the specified task id
+          enum:
+          - Completed
+          - Pending
+          - Failed
+        next_url:
           type: string
+          description: The url to try next if the `status` property returned is `Pending`
+        next_url_delay:
+          type: number
+          description: "The time in milliseconds that the client should wait before\
+            \ polling again, if the `status` property returned is `Pending`"
     IngestTransactionsResponse_data:
       type: object
       properties:
@@ -18893,7 +19822,8 @@ components:
       properties:
         customer_id:
           type: string
-          description: "Unique identifier for a Customer, as registered on Bud's platform"
+          description: "A unique identifier for a Customer, as registered on Bud's\
+            \ platform."
           format: uuid
         customer_secret:
           type: string
@@ -20414,8 +21344,11 @@ components:
     CustomerSecret:
       name: X-Customer-Secret
       in: header
-      description: Bud Customer secret
-      required: true
+      description: The Bud Customer secret used to encrypt customer data. This is
+        optional only if the customer secret is already stored with Bud (i.e. the
+        `host_secret` was set to `true` in the Customer Context when the customer
+        was created).
+      required: false
       schema:
         type: string
     SignatureHeaderParameter:
@@ -20453,15 +21386,18 @@ components:
     CustomerSecretOptional:
       name: X-Customer-Secret
       in: header
-      description: Bud Customer secret
+      description: "The Bud Customer secret used to encrypt customer data. For this\
+        \ particular API call, the customer secret is optional regardless of whether\
+        \ the customer secret is already stored with Bud or not - though this is not\
+        \ true for most endpoints."
       required: false
       schema:
         type: string
     ConsentStatus:
       name: status
       in: query
-      description: "Filter connections by connection status. When ommited, only active\
-        \ Authorised connections will be shown."
+      description: "By default this endpoint only returns `active` Authorised connections.\
+        \ To retrieve `all` consents, add this query param with the value of `all`"
       required: false
       schema:
         type: string
@@ -20505,11 +21441,15 @@ components:
     DisableSynchronous:
       name: X-Disable-Synchronous
       in: header
-      description: "If provided as true, the task will not be processed synchronously"
+      description: |
+        If provided as true, the task will **not** be processed synchronously.
+
+        If false or the header is not included, the task **will** be processed synchronously.
       schema:
         type: string
         enum:
         - "true"
+        - "false"
     MerchantsTotalsIncludeCategories:
       name: X-Include-Categories
       in: header
@@ -20889,6 +21829,9 @@ components:
         type: string
         format: uuid
   securitySchemes:
+    Basic:
+      type: http
+      scheme: basic
     OAuth2:
       type: oauth2
       description: |2
@@ -20950,6 +21893,10 @@ components:
           tokenUrl: /v1/oauth/token
           scopes: {}
 x-tagGroups:
+- name: ""
+  tags:
+  - Authentication
+  - Retrieve Auth Tokens
 - name: ""
   tags:
   - Connect API
