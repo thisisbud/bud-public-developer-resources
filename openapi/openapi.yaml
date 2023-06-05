@@ -287,13 +287,20 @@ info:
     \ Deprecated **Retrieve Trends** in favour of **Retrieve Category Totals**. |\n\
     \n## Changelog\n\nThis changelog represents a list of all changes that have been\
     \ made to Bud’s API documentation. This includes both backward-compatible and\
-    \ backward-incompatible changes.\n\n**Version 2.7.4: 19/05/2023**\n> - Updated\
-    \ the description for the __Ingest Transactions V2__ endpoint\n\n**Version 2.7.3:\
-    \ 18/05/2023**\n> - Updated the __Retrieve Authorisation Gateway URL (v2)__ endpoint\
-    \ with a new enable_async_connect option\n> - Updated the __Ingest Transactions\
-    \ V2__ request examples\n\n**Version 2.7.2: 18/05/2023**\n> - Updated the description\
-    \ for the __Reconfirm Consent__ endpoint\n\n**Version 2.7.1: 16/05/2023**\n> -\
-    \ Added documentation for __Retrieve Auth Tokens__ endpoint.\n\n**Version 2.7.0:\
+    \ backward-incompatible changes.\n\n**Version 2.7.6: 01/06/2023**\n> - Updated\
+    \ optional headers for __Reconfirm Consent__ endpoint to include `X-Customer-Ip-Address`.\n\
+    \n**Version 2.7.5: 22/05/2023**\n> - Updated the description and examples for\
+    \ the __Retrieve Balances Over Time__ and __Retrieve Balances Over Time By Account__\
+    \ endpoints.\n> - Updated the description and examples for the __Retrieve Transactions\
+    \ V2__ endpoint.\n> - Updated __Retrieve Accounts__ to show descriptive deprecation\
+    \ notice.\n> - Updated __Retrieve Accounts V2__ response HTTP codes, example transaction\
+    \ ID, `provider` query parameter description.\n\n**Version 2.7.4: 19/05/2023**\n\
+    > - Updated the description for the __Ingest Transactions V2__ endpoint.\n\n**Version\
+    \ 2.7.3: 18/05/2023**\n> - Updated the __Retrieve Authorisation Gateway URL (v2)__\
+    \ endpoint with a new enable_async_connect option.\n> - Updated the __Ingest Transactions\
+    \ V2__ request examples.\n\n**Version 2.7.2: 18/05/2023**\n> - Updated the description\
+    \ for the __Reconfirm Consent__ endpoint.\n\n**Version 2.7.1: 16/05/2023**\n>\
+    \ - Added documentation for __Retrieve Auth Tokens__ endpoint.\n\n**Version 2.7.0:\
     \ 11/05/2023**\n> - Adds two new endpoints: __Create Customers V3__ and __Create\
     \ Customers V3 (Batch)__.\n> - Introduces the concept of Hosted Customers, which\
     \ makes Customer Secrets optional on all endpoints which previously required them.\n\
@@ -701,18 +708,21 @@ info:
     name: Bud Support
     url: https://www.thisisbud.com/
     email: help@thisisbud.com
-  version: 2.7.4
+  version: 2.7.6
   x-logo:
     url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATAAAABuCAQAAAAKAYdLAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAB3RJTUUH4wQDDggcbXcx7wAABeJJREFUeNrt3W2IFVUcx/HvXRW1VdQedy1bZVfoYX0osVQyfSGElKbRA5oFIaIlhAkWUYm6gvqqDMHMoBeKlhayCCZC2AMRPay7aJrSZmauZhQqaj7t7u1Fi965987s7D1n7pk7/j73zX2Y85//mXt2Zu45Z2ZBREREREREREREREREREREREREREREREREREREREREREREREREROIiZSFGH+YxgsOs5U/X1bFiPDPpQT3bu1DmcaZyg+vErWpjD+s47zoN6Mte0qRJc4Iq18lYMJv2jvosD11mRUeJpD32UO7664BFGQl94DoZY704fbU2rQwKVWYwbc6bQlSPBaYbtMz4K7nP53lpGkK/q8+7MTxUmeEWtmJcGX+j5psmM0I3l9vCirKAV36OuE46QsbfaHL/9opnL9tcpxBf3V0nkAgzWMRj9HadhrH+3Gk7pBqYDZdY3oXfnHE2gc1U2gyoQ6Rk+pKZdgOqgYnXF7TYDGe3gcWgW85QH9cJxMAVm8HsNrBqhhV1U9g33XUCzo1gsM1wdhtYio8ZWsytYdksFrpOwbGhbLYb0PavyLs5wA+c9v28lRa+Zzt/+y5RwwKqaOCdgCjZRvEit/A1a7jou8xwJjOMAb7D+ylqqCmw1imeZ0oCBrv7Mzp+/QofFTDCdZG13Jw3Wi1nOpbZT9+QGUziUkeZ3T49z+P4pqCRuCkhM1jjfMwwqsdG182rsAaWJs0JxuWJ9knGEq+EzODHjDLTcj5NsbjgwehwDazm6vyL5D2MG5i7booKdjE25917M57XhoxUG1hmJUsjrmWtlVl18ZQ2DeCyH6ycT7kpIJ+wuQWVeZJXI69HcpsXHDQN4LajtZIlkcbvzWqn9St1R3nPNIT93wzt/MSZPO+nqKA65699Nos5FdHmgZkMzHnvIj9zLm9+Q7jd0nqP8VtkdSqWNppYxT+u08g+yW8OnKRXw4ac08hnPUscyvjkw5AZXM4os9jzyY6sdZ3h5YC++jLm0lrASf50T5krzEn0QbOLbB8in2FvwKfNPJczCXd0hLV7wPPqL8bybt691//aWWfhkPo2681PjZPDbgP7lYZOl1nNJs9rW4elXD2zfkK8wIFOy2w1XuuWyOpTkuw2sHOhlqrzvIqu59gbuYEdIcqcjSyb65SLX5EHOepgrbuKtJ6nHNQtxtx0U5xM8DoXMkez7K5xM7Tp4iS4WOvszvss5feSP9Fvo5EVnDDfHGJfpd157Y48xFRGmfaEaWcu/qqYZxpCDcxcqR8Mg9xlGkANzNz+BDcx4zEJNTBzv5gPCSeXTvJtmM+3PJqIKdNj6GE3pJsG5mIwOMp1ptnABgd1sq+G7ebnXZncHCKjG3+M1zpLTzMz7AZ00cBG5pmlFb3JmkQTSpPd21HZbWD9Qy21zPPK/zricNH6+B7mvZFreTpEtAFWt0dpsnoWZreBVTG+kyVS1GVN4/vDd9lJVIRY5yzfPdPlrPHHdTwYItr1bkLcTia8M1qPM9F3yRRjcuaYprNmHxzyfNbQyQlnGTM47ynhndFan7WuCywLODz35I2sC9DCXheZHBNpsXvZmu1fkZXs5rjPnPzb8hyAzrIzINr9HOBIwNXat+ZcleS1hame1714izc55jNvbVDBtz7pyWuJuI15P/tnx1F0UwzsQpprO5nil2KIQSZbqcspnwp57+iu2MQT1mMmhNue/MMR3xfwMi8VYRhnmJqXP/MG1lZwyVNMy9l/FR4tf/mdvB553Uz2sXFn+n1YaGCNBZZr5mH25by7xzCb3PKrmM+lgmK1BV4hdc0+2g2zjq8m1wlAOY1dvqXGKep87oZYzUmDW3Vs8+myuIf6Am6AsiT0Nljp/CYl0Twaze9ZaaN3u5w5jAy5L2ylhe/4nAu+S1Qwl+oCsrjCV2wM2KXfwSPUcmPIGv9LPZ91Ye1TEnEb80ztNLE+Dv8MS0RERERERERERERERERERERERERERERERERERERERERERERERERs+Q/rhi5WauEgfQAAAABJRU5ErkJggg=="
 servers:
 - url: https://api-sandbox.thisisbud.com
 tags:
 - name: Authentication
+  description: |
+    Endpoints related to gaining access to the Bud platform via OAuth2 authentication.
   x-displayName: Authentication
   x-traitTag: true
-- name: Retrieve Auth Tokens
-  description: ""
-  x-displayName: Retrieve Auth Tokens
+- name: OAuth2
+  description: |
+    Retrieve and manage access and refresh tokens to authenticate to the Bud platform via OAuth2 protocol.
+  x-displayName: OAuth2
 - name: Connect API
   description: "These endpoints handle the connections to Open Banking providers (ASPSPs)\
     \ and the ingestion of first party transaction data. Bud manages all of the connections\
@@ -819,6 +829,41 @@ tags:
   description: |
     Breakdown your customer's transactions by fixed/flexible spend and discretionary vs non discretionary high-level totals.
   x-displayName: Retrieve Affordability Report
+- name: Assess API
+  description: |2
+
+    These endpoints handle the origination of customer applications for the Assess
+    Dashboards. This use-case is designed for clients that wish to have an API
+    integration with the data that is available via said dashboards.
+
+    These endpoints facilitate a flow whereby:
+
+    - An application, associating a customer's name with their financial
+      information, can be created (and is visible in the dashboard).
+    - Customers can be given a URL to follow, which will allow them to connect up
+      their bank accounts.
+    - Customers' financial data and financial insights can be retrieved (via the
+      dashboard and via API).
+    - Application statuses can be managed (e.g. marked as reviewed/open) for
+      other users of the dashboard to see.
+
+    A key example of this being used is for loan applications: the Assess API
+    can be used to collect a customer's financial data, which can then be
+    retrieved and assessed (either using the API to pull in the data, or using
+    the dashboard to make manual decisions regarding the application status).
+  x-displayName: Assess API
+  x-traitTag: true
+- name: Customer Applications
+  description: |
+    Create, retrieve and manage financial applications for customers using the
+    Assess product. Applications created on this platform can be viewed using
+    the Assess Dashboard to observe application statuses.
+  x-displayName: Customer Applications
+- name: Customer Application Links
+  description: |
+    Create a link for a customer to follow, which will allow them to connect
+    their bank accounts and submit their financial data for the application.
+  x-displayName: Customer Application Links
 - name: KYC API
   description: "Bud's Know Your Customer (KYC) API allows you to perform relevant\
     \ checks against businesses and customers. This API uses the \nNorthrow API in\
@@ -887,15 +932,16 @@ tags:
     the state of a customer's financial situation that could induce a change in behaviour.
   x-displayName: Actionable Insights API
   x-traitTag: true
-- name: Retrieve Balance Insights (Beta)
-  description: ""
-  x-displayName: Retrieve Balance Insights (Beta)
+- name: Retrieve Actionable Insights
+  description: |
+    Retrieve a customer's actionable insights generated from their financial data.
+  x-displayName: Retrieve Actionable Insights
 paths:
   /v1/oauth/token:
     post:
       tags:
-      - Retrieve Auth Tokens
-      summary: Retrieve Auth Tokens
+      - OAuth2
+      summary: OAuth2
       description: "This endpoint is used to create access and refresh tokens.\n\n\
         When this endpoint is first called you must supply basic authentication credentials,\
         \ your `client_id` and `client_secret`.\nThe response will contain an `access_token`\
@@ -2517,6 +2563,13 @@ paths:
         required: false
         schema:
           type: string
+      - name: X-Customer-Ip-Address
+        in: header
+        description: The Bud Customer IP Address is used for logging customer presence.
+          This is optional and is only required for Agent of Bud clients.
+        required: false
+        schema:
+          type: string
       - name: consent_id
         in: path
         description: Bud Consent identifier
@@ -2833,6 +2886,10 @@ paths:
         If a 'X-Disable-Synchronous' header is present and set to true, the process will be entirely 'non-blocking', with the returned Task ID providing access to the status of the full enrichment process.
 
         There are a number of ingest schemas that can be used with this endpoint. These are described in the `Body Params` below. You will need to ensure the content-type header matches the schema used.
+
+        **Note**
+
+        Compared to the V1 ingest endpoints, the data validation is performed up-front. As such if this endpoints returns a __200__ or __202__ then the data is correctly formatted.
       operationId: v2_ingest_transactions_post
       parameters:
       - name: X-Client-Id
@@ -3112,6 +3169,113 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/inline_response_400_1'
+        "405":
+          description: The request uses an unexpected HTTP method
+        "5XX":
+          description: An unexpected error occurred on the server side
+      security:
+      - OAuth2: []
+  /v2/ingest/status/{task_id}:
+    get:
+      tags:
+      - Ingest First Party Data
+      summary: Retrieve Ingestion Task Status
+      description: |
+        Check the status of an ingest request. Please note that this works for both the Ingest Transactions V1 and V2 endpoints And Ingest Accounts V1.
+
+        The given status has an overall value and a specific status for each given customer.
+      operationId: v2_ingest_status_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: task_id
+        in: path
+        description: Bud Task identifier returned from an async task for the requested
+          action
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: The request was successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestStatusV2Response'
+              examples:
+                Pending Task:
+                  value:
+                    operation_id: v2_ingest_status_get
+                    data:
+                      status: Pending
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
+                      status: Pending
+                Successful Task:
+                  value:
+                    operation_id: v2_ingest_status_get
+                    data:
+                    - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
+                      status: Completed
+                      error: null
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
+                      status: Completed
+                      ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
+                      ingest_route: v2_ingest_transactions_post
+                      ingest_schema: application/bud-transaction-v3+json
+                Failed Task:
+                  value:
+                    operation_id: v2_ingest_status_get
+                    data:
+                    - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
+                      status: Failed
+                      error:
+                        accounts[0].currency: "unexpected currency code: GlkjlkjBP,\
+                          \ expected ISO-4217 currency code"
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
+                      status: Failed
+                      ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
+                      ingest_route: v2_ingest_transactions_post
+                      ingest_schema: application/bud-transaction-v3+json
+                Partially Completed Task:
+                  value:
+                    operation_id: v2_ingest_status_get
+                    data:
+                    - customer_id: c63e1aa6-954c-4cac-9c89-a86715574063
+                      status: Completed
+                      error: null
+                    - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
+                      status: Failed
+                      error:
+                        accounts[0].currency: "unexpected currency code: GlkjlkjBP,\
+                          \ expected ISO-4217 currency code"
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
+                      status: PartialCompleted
+                      ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
+                      ingest_route: v2_ingest_transactions_post
+                      ingest_schema: application/bud-transaction-v3+json
+        "401":
+          description: Unauthorized (BearerToken in 'Authorization' header fails the
+            authentication)
+        "404":
+          description: The task couldn't be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskNotFoundError'
+              example:
+                operation_id: v2_ingest_status_get
+                code_id: task_not_found
+                message: "Task ID [6c7d06a7-5b40-4556-91d4-6b6d1a7db3f1] does not\
+                  \ exist or it has expired"
         "405":
           description: The request uses an unexpected HTTP method
         "5XX":
@@ -3710,7 +3874,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetCategoriesV2Response'
               examples:
-                flat:
+                Category List (flat):
                   value:
                     operation_id: resources_v2_categories_get
                     data:
@@ -3727,7 +3891,7 @@ paths:
                           \ used for the following use cases: affordability assessments,\
                           \ collections assessments, affordability monitoring, customer\
                           \ engagement and product recommendations."
-                map:
+                Category Map:
                   value:
                     operation_id: resources_v2_categories_get
                     data:
@@ -4376,7 +4540,7 @@ paths:
         in: query
         description: Use this parameter to filter the results returned on the `provider`
           associated with each result. Multiple values are accepted. If this parameter
-          is not provided then results of any `provider` will be returned."
+          is not provided then results of any `provider` will be returned.
         schema:
           type: string
         example: BankOfBud
@@ -4442,7 +4606,7 @@ paths:
                   value:
                     operation_id: financial_v2_accounts
                     data:
-                    - account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
+                    - account_id: RxsYshVGded4JeilkXgWKdXA
                       currency: GBP
                       holder:
                         name: David Smith
@@ -4482,7 +4646,7 @@ paths:
                   value:
                     operation_id: financial_v2_accounts
                     data:
-                    - account_id: 928fed73-2eb9-4910-8a26-22b6c76fb9fa
+                    - account_id: RxsYshVGded4JeilkXgWKdXA
                       currency: GBP
                       holders:
                       - name: David Smith
@@ -4542,6 +4706,16 @@ paths:
                       error:
                         X-Customer-Id: not present
                         X-Customer-Secret: not present
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Unauthorised request
         "500":
           description: Server Error
           content:
@@ -4604,7 +4778,7 @@ paths:
                   value:
                     operation_id: financial_v2_accounts_account_id
                     data:
-                      account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
+                      account_id: RxsYshVGded4JeilkXgWKdXA
                       currency: GBP
                       holder:
                         name: David Smith
@@ -4630,7 +4804,7 @@ paths:
                   value:
                     operation_id: financial_v2_accounts_account_id
                     data:
-                      account_id: 928fed73-2eb9-4910-8a26-22b6c76fb9fa
+                      account_id: RxsYshVGded4JeilkXgWKdXA
                       currency: GBP
                       holders:
                       - name: David Smith
@@ -4687,6 +4861,16 @@ paths:
                       error:
                         X-Customer-Id: not present
                         X-Customer-Secret: not present
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Unauthorised request
         "500":
           description: Server Error
           content:
@@ -4705,14 +4889,18 @@ paths:
       tags:
       - Retrieve Financial Data
       summary: Retrieve Balances Over Time
-      description: |
-        List the balances of each bank account for a customer accross all ingestion sources. Ordered by balance date.
-
-        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` and `from` dates provided. It then checks all the transactions within this range, calculating the balance at the end of each day.
-
-        This endpoint limits the date from which it gets balances from either by the oldest `transaction_window` on the account if they are present, or by the oldest transaction within the requested date range available.
-
-        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the data supplied from this service by including the transaction_window field upon acccount ingestion.
+      description: "List the balances of each bank account for a customer across all\
+        \ ingestion sources. Ordered by balance date.\n\nIt calculates the balance\
+        \ for each date, by iterating from the date the account was last refreshed\
+        \ to the `to` \nand `from` dates provided. It then checks all the transactions\
+        \ within this range, calculating the balance at \nthe end of each day.\n\n\
+        This endpoint limits the date from which it gets balances from either by the\
+        \ oldest `transaction_window` on the \naccount if they are present, or by\
+        \ the oldest transaction within the requested date range available.\n\nFor\
+        \ users ingesting data via the `Ingest Accounts` endpoint, you can increase\
+        \ the range and accuracy of the \ndata supplied from this service by including\
+        \ the transaction_window field upon account ingestion.\n\nResults are limited\
+        \ to up to 5000 balance items across all accounts.\n"
       operationId: financial_v2_balances_get
       parameters:
       - name: X-Client-Id
@@ -4772,6 +4960,8 @@ paths:
             - `quarterly`
             - `six_monthly`
             - `annually`
+
+          Defaults to `weekly`.
         required: false
         style: form
         explode: true
@@ -4788,7 +4978,7 @@ paths:
               example:
                 operation_id: financial_v2_balances_get
                 data:
-                - account_id: 5b271e24-9ea5-4d7e-b5da-64f01d32db22
+                - account_id: 705e95fea8312d9a9b227b682033d55f
                   balances:
                   - date: 2022-11-15T23:59:59Z
                     booked:
@@ -4816,7 +5006,7 @@ paths:
                         currency: GBP
                       type: expected
                       credit_debit_indicator: credit
-                - account_id: b6e9ea3c-71f9-4572-983a-3e5e85470dad
+                - account_id: 9df0b46c8ab58277abc432fee26067ad
                   balances:
                   - date: 2022-11-15T23:59:59Z
                     booked:
@@ -4845,6 +5035,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
+        "401":
+          description: An unauthenticated request was received.
         "500":
           description: Server Error
           content:
@@ -4855,8 +5047,6 @@ paths:
                 operation_id: financial_v2_balances_get
                 code_id: internal_error
                 message: Internal server error has occurred.
-                errors:
-                  error: failed to format amount
       security:
       - OAuth2: []
   /financial/v2/accounts/{account_id}/balances:
@@ -4864,14 +5054,18 @@ paths:
       tags:
       - Retrieve Financial Data
       summary: Retrieve Balances Over Time By Account
-      description: |
-        List the balances of a specific bank account for a customer accross all ingestion sources. Ordered by balance date.
-
-        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` and `from` dates provided. It then checks all the transactions within this range, calculating the balance at the end of each day.
-
-        This endpoint limits the date from which it gets balances from either by the oldest `transaction_window` on the account if they are present, or by the oldest transaction within the requested date range available.
-
-        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the data supplied from this service by including the transaction_window field upon acccount ingestion.
+      description: "List the balances of a specific bank account for a customer across\
+        \ all ingestion sources. Ordered by balance \ndate.\n\nIt calculates the balance\
+        \ for each date, by iterating from the date the account was last refreshed\
+        \ to the `to` \nand `from` dates provided. It then checks all the transactions\
+        \ within this range, calculating the balance at \nthe end of each day.\n\n\
+        This endpoint limits the date from which it gets balances from either by the\
+        \ oldest `transaction_window` on the \naccount if they are present, or by\
+        \ the oldest transaction within the requested date range available.\n\nFor\
+        \ users ingesting data via the `Ingest Accounts` endpoint, you can increase\
+        \ the range and accuracy of the \ndata supplied from this service by including\
+        \ the transaction_window field upon account ingestion.\n\nResults are limited\
+        \ to up to 5000 balance items.\n"
       operationId: financial_v2_accounts_balances_get
       parameters:
       - name: X-Client-Id
@@ -4926,20 +5120,24 @@ paths:
           type: string
       - name: granularity
         in: query
-        description: Specifies in what interval the balance over time should be retrieved.
+        description: |
+          Specifies in what interval the balance over time should be retrieved.
+
+          Currently supported values include (but are not necessarily limited to):
+            - `daily`
+            - `weekly`
+            - `biweekly`
+            - `monthly`
+            - `quarterly`
+            - `six_monthly`
+            - `annually`
+
+          Defaults to `weekly`.
         required: false
         style: form
         explode: true
         schema:
           type: string
-          enum:
-          - daily
-          - weekly
-          - biweekly
-          - monthly
-          - quarterly
-          - six_monthly
-          - annually
         example: daily
       responses:
         "200":
@@ -4978,7 +5176,7 @@ paths:
                     type: expected
                     credit_debit_indicator: credit
                 metadata:
-                  account:
+                  accounts:
                     balance_count: 2
                     from: 2022-11-14T23:59:59Z
                     to: 2022-11-15T23:59:59Z
@@ -4992,13 +5190,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
-              example:
-                operation_id: financial_v2_accounts_balances_get
-                code_id: failed_validation
-                message: Invalid request payload.
-                errors:
-                  CustomerID: not present
-                  CustomerSecret: not present
+        "401":
+          description: An unauthenticated request was received.
         "404":
           description: Not Found
           content:
@@ -5020,15 +5213,20 @@ paths:
                 operation_id: financial_v2_accounts_balances_get
                 code_id: internal_error
                 message: Internal server error has occurred.
-                errors:
-                  error: failed to format amount
   /financial/v2/transactions:
     get:
       tags:
       - Retrieve Financial Data
       summary: Retrieve Transactions V2
-      description: |
-        List the transactions for a customer across all ingestion sources. Ordered by `date_time` and then `transaction_id` descending.
+      description: "List the Transactions for a customer across all ingestion sources\
+        \ and accounts. Ordered by `date_time` and then \n`transaction_id` descending.\n\
+        \        \nThey are also provided with Enrichments - contextual information\
+        \ generated by Bud's artificial intelligence \nmodels. Enrichments are optional\
+        \ because not all Enrichments are relevant to all Transactions, or because\
+        \ they\ndid not have enough information to generate enrichments (e.g. pending\
+        \ Transactions).\n\nThe Enrichment process also generates tags, which can\
+        \ be used for filtering using the `include_tags` and \n`exclude_tags` query\
+        \ parameters. \n"
       operationId: v2_transactions_get
       parameters:
       - name: X-Client-Id
@@ -5055,24 +5253,27 @@ paths:
           type: string
       - name: date_from
         in: query
-        description: UTC Date (YYYY-MM-DD) from which the transactions should be returned
-          from.
+        description: "Date (RFC3339) from which the transactions should be returned\
+          \ from. To maintain backwards compatibility, \ndates in the format (YYYY-MM-DD)\
+          \ can also be used and will be assumed to be UTC.\n"
         required: false
         style: form
         explode: true
         schema:
           type: string
-        example: 2022-02-28
+        example: 2022-05-28T00:00:00Z
       - name: date_to
         in: query
-        description: UTC Date (YYYY-MM-DD) from which the transactions should be returned
-          to.
+        description: "Date (RFC3339) from which the transactions should be returned\
+          \ to. To maintain backwards compatibility, \ndates in the format (YYYY-MM-DD)\
+          \ can also be used and will be assumed to be UTC. Uses the current date\n\
+          by default.\n"
         required: false
         style: form
         explode: true
         schema:
           type: string
-        example: 2022-05-28
+        example: 2022-05-29T00:00:00Z
       - name: page_size
         in: query
         description: "Maximum number of results to be returned. Defaults to 100, maximum\
@@ -5102,7 +5303,7 @@ paths:
         explode: true
         schema:
           type: string
-        example: an_account_id
+        example: 5bd9ecaf31fc2d5172fd89cb61b89fc6
       - name: merchant
         in: query
         description: Human readable identifier of the merchants for which associated
@@ -5112,7 +5313,7 @@ paths:
         explode: true
         schema:
           type: string
-        example: a_merchant_slug
+        example: netflix
       - name: category_l1
         in: query
         description: Identifier of the Category Level 1 for which associated transactions
@@ -5180,9 +5381,9 @@ paths:
                   value:
                     operation_id: v2_transactions_get
                     data:
-                    - transaction_id: a_transaction_id
-                      account_id: an_account_id
-                      provider: a_bank_account_provider
+                    - transaction_id: fbdc28e82f0f137586a526a88ec4a6be
+                      account_id: 5bd9ecaf31fc2d5172fd89cb61b89fc6
+                      provider: BankOfBud
                       description: paypal* specialty coffee
                       credit_debit_indicator: debit
                       status: booked
@@ -5222,9 +5423,9 @@ paths:
                         - jane doe
                       tags:
                       - regular-transaction
-                    - transaction_id: another_transaction_id
-                      account_id: another_account_id
-                      provider: another_bank_account_provider
+                    - transaction_id: a2294cebb45d2a6e0cfc70d270988d8c
+                      account_id: 37c633a71237b9a8282e09587109668e
+                      provider: BankOfBud
                       description: Tesco 2956 London GBR
                       credit_debit_indicator: debit
                       status: booked
@@ -5261,10 +5462,10 @@ paths:
                   value:
                     operation_id: v2_transactions_get
                     data:
-                    - transaction_id: a_transaction_id
-                      account_id: an_account_id
-                      provider: a_bank_account_provider
-                      description: a_transaction_description
+                    - transaction_id: da4ad499c86956e65e811fc88f6b54af
+                      account_id: 72fa858459bd32ce0b5fd9daf813fd07
+                      provider: BankOfBud
+                      description: ""
                       credit_debit_indicator: credit
                       status: pending
                       amount:
@@ -5296,7 +5497,10 @@ paths:
       description: "List a customer’s current, credit card and savings accounts held\
         \ on the Bud platform along with each account’s balance. \n\nAn X-Account-Id\
         \ header parameter can be used in order to get the details for a specific\
-        \ account.\n"
+        \ account.\n> ❗️ Deprecation:\n>\n> Support will cease for this endpoint on\
+        \ the 24th of September 2023 - please complete your migration to the Retrieve\
+        \ Accounts V2 endpoint by that point in time. For further details, contact\
+        \ your Bud account manager or email help@thisisbud.com.\n"
       operationId: accounts_get
       parameters:
       - name: X-Client-Id
@@ -7260,7 +7464,7 @@ paths:
                     logo: https://assets.thisisbud.com/bud-datasci-images/merchant_logos/e121c7aa-a254-41bb-ad3e-33b988f791be/v1/nationwidebuildingsociety.jpeg
                     name: Nationwide Building Society
                   amount:
-                    value: 0.03
+                    value: "0.03"
                     currency: GBP
                   period: unknown
                 - type:
@@ -7270,7 +7474,7 @@ paths:
                     logo: https://assets.thisisbud.com/bud-datasci-images/merchant_logos/c50be401-7891-44c5-9fed-535080e77c57/v1/aviva.jpeg
                     name: Aviva
                   amount:
-                    value: 59.99
+                    value: "59.99"
                     currency: GBP
                   period: monthly
                 metadata:
@@ -7295,7 +7499,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BadRequestResponse'
+                $ref: '#/components/schemas/ServerErrorResponse'
               example:
                 operation_id: unknown
                 code_id: unknown
@@ -7625,7 +7829,7 @@ paths:
                         logo: https://assets.thisisbud.com/british-gas.jpg
                       payment_type: 1
                       amount:
-                        amount: 1250.25
+                        amount: "1250.25"
                         currency: GBP
                       provider: Barclays
                     - transaction_id: 34cb968d-88f4-4b3b-a861-fcd97bc12680
@@ -7635,7 +7839,7 @@ paths:
                         logo: https://assets.thisisbud.com/scottish-power.jpg
                       payment_type: 1
                       amount:
-                        amount: 750.75
+                        amount: "750.75"
                         currency: GBP
                       provider: Monzo
                     metadata:
@@ -7662,7 +7866,12 @@ paths:
       - Assess Affordability
       summary: Create Spending Groups
       description: |
-        Provide a list of groups and categories to be returned as a breakdown of spending, along with all sources of income. If no groups are specified by the client, the Bud default standard of the most commonly used categories and groups will be returned. The header parameters X-From-Month and X-To-Month allow you to filter the result to a specified range of months.
+        Provide a list of groups and categories to be returned as a breakdown of spending, along with all sources of income. If no groups are specified by the client, return default categories and groups.
+        The header parameters X-From-Month and X-To-Month allow you to filter the result to a specified range of months.
+
+        NOTE: Headers `X-From` and `X-To` are deprecated. The following headers should be used moving forward:
+        - `X-From-Month`
+        - `X-To-Month`
       operationId: v1_affordability_spending_groups_post
       parameters:
       - name: X-Client-Id
@@ -7687,32 +7896,13 @@ paths:
         required: false
         schema:
           type: string
-      - name: X-From
-        in: header
-        description: "Date (`YYYY-MM-DD`) from which the transactions should be returned\
-          \ from, this works in pair with the `X-To` parameter. This X-From format\
-          \ of (YYYY-MM-DD) will still be backwards compatiable for 3 months see the\
-          \ release notes for more details."
-        required: false
-        schema:
-          type: string
-        example: 2022-02-28
-      - name: X-To
-        in: header
-        description: "Date (`YYYY-MM-DD`) from which the transactions should be returned\
-          \ to, this works in pair with the `X-From` parameter. This X-To format of\
-          \ (YYYY-MM-DD) will still be backwards compatiable for 3 months see the\
-          \ release notes for more details."
-        required: false
-        schema:
-          type: string
-        example: 2022-03-30
       - name: X-From-Month
         in: header
-        description: "Month (`YYYY-MM`) from which the transactions should be returned\
-          \ from, this works in pair with the `X-To` parameter. This X-From-Month\
-          \ format of (YYYY-MM) will become the default format in 3 months see the\
-          \ release notes for more details."
+        description: |
+          Month (`YYYY-MM`) from which the transactions should be returned from, this works in pair with the `X-To` parameter.
+          This X-From-Month format of (YYYY-MM) will become the default format in 3 months see the release notes for more details.
+
+          Default behaviour: Set `X-From-Month` to be today's date minus 3 months.
         required: false
         schema:
           type: string
@@ -7720,9 +7910,10 @@ paths:
       - name: X-To-Month
         in: header
         description: "Month (`YYYY-MM`) from which the transactions should be returned\
-          \ to, this works in pair with the `X-From` parameter. This X-To-Month format\
-          \ of (YYYY-MM) will become the default format in 3 months see the release\
-          \ notes for more details."
+          \ to, this works in pair with the `X-From` parameter. \nThis X-To-Month\
+          \ format of (YYYY-MM) will become the default format in 3 months see the\
+          \ release notes for more details.\n\nDefault behaviour: Set `X-To-Month`\
+          \ to be today's date.\n"
         required: false
         schema:
           type: string
@@ -7736,6 +7927,30 @@ paths:
           type: string
           default: GBP
         example: GBP
+      - name: X-From
+        in: header
+        description: "Date (`YYYY-MM-DD`) from which the transactions should be returned\
+          \ from, this works in pair with the `X-To` parameter. \nThis X-From format\
+          \ of (YYYY-MM-DD) will still be backwards compatible for 3 months see the\
+          \ release notes for more details.\nHeader will be replaced by #/parameters/FromMonthSpendingGroups.\n\
+          \nDefault behaviour: Set `X-From` to be today's date minus 3 months.\n"
+        required: false
+        deprecated: true
+        schema:
+          type: string
+        example: 2022-02-28
+      - name: X-To
+        in: header
+        description: "Date (`YYYY-MM-DD`) from which the transactions should be returned\
+          \ to, this works in pair with the `X-From` parameter. \nThis X-To format\
+          \ of (YYYY-MM-DD) will still be backwards compatible for 3 months see the\
+          \ release notes for more details.\nHeader will be replaced by #/parameters/ToMonthSpendingGroups.\n\
+          \nDefault behaviour: Set `X-To` to be today's date.\n"
+        required: false
+        deprecated: true
+        schema:
+          type: string
+        example: 2022-03-30
       requestBody:
         content:
           application/json:
@@ -8248,6 +8463,310 @@ paths:
           description: An unexpected HTTP method was used
         "5XX":
           description: An unexpected error occurred on the server side
+      security:
+      - OAuth2: []
+  /assess/v1/customer-applications:
+    get:
+      tags:
+      - Customer Applications
+      summary: Retrieve Customer Applications
+      description: |
+        Retrieve a list of all your customer applications.
+      operationId: v1_customer_applications_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: "metadata.{field_name}"
+        in: query
+        description: |
+          Search by exact-match on the `field_name` of `metadata` properties.
+          Example: `metadata.loan_product_code=credit_card_1234` will limit results to all
+          customer applications that have the following metadata contained:
+
+          ```json
+          {
+            "metadata": {
+              "loan_product_code": "credit_card_1234"
+            }
+          }
+          ```
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: page_token
+        in: query
+        description: |
+          Token provided in the `metadata` blob of a response, in order to find
+          the next page in a collection, e.g.
+
+          ```json
+          {
+            "metadata": {
+              "next_page_token": "4jmBrvVn9r"
+            }
+          }
+          ```
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The request was successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCustomerApplicationsResponse'
+              example:
+                operation_id: v1_customer_applications_get
+                data:
+                - application_id: 48ac72d0-a829-4896-a067-dcb1c2b0f30c
+                  creation_date: 2023-04-11T15:30:39Z
+                  deletion_date: 2023-05-11T15:30:39Z
+                  customer_id: 160c0c4b-9966-4dc1-a916-8407eb10d74e
+                  initiator_id: 06588898-9a84-4b35-ba8f-f9cbd64946f3
+                  primary_applicant:
+                    first_name: John
+                    last_name: Doe
+                  secondary_applicants:
+                  - first_name: Jane
+                    last_name: Doe
+                  accounts_connected: 0
+                  customer_link:
+                    created_at: 2023-04-11T15:31:39Z
+                    url: https://path-to-customer-link/b5daa5f7-b993-42e9-a232-76057151bacf
+                    finished_connecting_accounts: false
+                    expired: false
+                    status: requested
+                  review_status: ""
+                  review_date: 2023-05-11T15:30:39Z
+                  metadata:
+                    loan_product_code: credit_card_1234
+                metadata:
+                  results: 1
+                  next_page_token: 4jmBrvVn9r
+        "401":
+          description: An unauthenticated request was received.
+        "405":
+          description: The request uses an unexpected HTTP method.
+        "5XX":
+          description: An unexpected error occurred on the server side.
+      security:
+      - OAuth2: []
+    post:
+      tags:
+      - Customer Applications
+      summary: Create Customer Application
+      description: |
+        Create a new customer application.
+
+        Applications can hold more data than just the standard Bud Customer
+        information, such as:
+
+        - Applicant First Name
+        - Applicant Last Name
+        - Names for Secondary Applicants (if this is a joint application)
+        - Key-value pairs for additional metadata you may want to associate to
+          this application (e.g. if the customer is applying for finance, your
+          system may have a product code for the relevant finance product).
+      operationId: v1_customer_applications_post
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCustomerApplicationsRequest'
+            example:
+              primary_applicant:
+                first_name: John
+                last_name: Doe
+              secondary_applicants:
+              - first_name: Jane
+                last_name: Doe
+              metadata:
+                loan_product_code: credit_card_1234
+        required: true
+      responses:
+        "200":
+          description: The request was successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostCustomerApplicationsResponse'
+              example:
+                operation_id: v1_customer_applications_post
+                data:
+                  application_id: 48ac72d0-a829-4896-a067-dcb1c2b0f30c
+                  expires_at: 2023-05-11T15:30:39Z
+        "401":
+          description: An unauthenticated request was received.
+        "405":
+          description: The request uses an unexpected HTTP method.
+        "5XX":
+          description: An unexpected error occurred on the server side.
+      security:
+      - OAuth2: []
+  /assess/v1/customer-applications/{application_id}:
+    get:
+      tags:
+      - Customer Applications
+      summary: Retrieve Customer Application
+      description: |
+        Retrieve an individual customer's application.
+      operationId: v1_customer_application_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: application_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/CustomerApplicationID'
+      responses:
+        "200":
+          description: The request was successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCustomerApplicationResponse'
+              example:
+                operation_id: v1_customer_application_get
+                data:
+                  application_id: 48ac72d0-a829-4896-a067-dcb1c2b0f30c
+                  organisation_id: 9ec26450-a51e-40b1-a49f-e04045480fd5
+                  creation_date: 2023-04-11T15:30:39Z
+                  deletion_date: 2023-05-11T15:30:39Z
+                  customer_id: 160c0c4b-9966-4dc1-a916-8407eb10d74e
+                  initiator_id: 06588898-9a84-4b35-ba8f-f9cbd64946f3
+                  primary_applicant:
+                    first_name: John
+                    last_name: Doe
+                  secondary_applicants:
+                  - first_name: Jane
+                    last_name: Doe
+                  accounts_connected: 0
+                  customer_link:
+                    created_at: 2023-04-11T15:31:39Z
+                    url: https://path-to-customer-link/b5daa5f7-b993-42e9-a232-76057151bacf
+                    finished_connecting_accounts: false
+                    expired: false
+                    status: requested
+                  review_status: ""
+                  review_date: 2023-05-11T15:30:39Z
+                  metadata:
+                    loan_product_code: credit_card_1234
+        "401":
+          description: An unauthenticated request was received.
+        "405":
+          description: The request uses an unexpected HTTP method.
+        "5XX":
+          description: An unexpected error occurred on the server side.
+      security:
+      - OAuth2: []
+    delete:
+      tags:
+      - Customer Applications
+      summary: Delete Customer Application
+      description: |
+        Delete an individual customer's application, and all financial data
+        associated with it.
+      operationId: v1_customer_application_delete
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: application_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/CustomerApplicationID'
+      responses:
+        "204":
+          description: The request was successfully processed. No Content returned
+        "401":
+          description: An unauthenticated request was received.
+        "405":
+          description: The request uses an unexpected HTTP method.
+        "5XX":
+          description: An unexpected error occurred on the server side.
+      security:
+      - OAuth2: []
+  /assess/v1/customer-applications/{application_id}/customer-links:
+    post:
+      tags:
+      - Customer Application Links
+      summary: Retrieve Customer Application URL
+      description: "Allow customers to share their account information in relation\
+        \ to a\nspecific application. A URL is provided in the response, which is\
+        \ to be\ngiven to the customer for them to follow in order to share their\n\
+        information.\n\nIf a valid email is specified in the request, Bud will automatically\n\
+        send an email to the customer with the link embedded, and with \ninstructions\
+        \ for the customer to proceed.\n"
+      operationId: v1_customer_applications_customer_links_post
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: application_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/CustomerApplicationID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCustomerLinksRequest'
+            example:
+              send_to: customer@example.com
+      responses:
+        "200":
+          description: The request was successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostCustomerLinksResponse'
+              example:
+                operation_id: v1_customer_applications_customer_links_post
+                data:
+                  link: https://url-to-customer-dashboard.thisisbud.com/connect-accounts/1674af1a-96ce-4517-97c4-6937592b0807
+                metadata:
+                  connection_id: d3547de1-d1f2-4344-b4c2-17169b7526f9
+        "401":
+          description: An unauthenticated request was received.
+        "405":
+          description: The request uses an unexpected HTTP method.
+        "5XX":
+          description: An unexpected error occurred on the server side.
       security:
       - OAuth2: []
   /v1/kyc/check/company:
@@ -11704,7 +12223,7 @@ paths:
   /actionable-insights/beta/balances:
     get:
       tags:
-      - Retrieve Balance Insights (Beta)
+      - Retrieve Actionable Insights
       summary: Retrieve Balance Insights (Beta)
       description: "Retrieve actionable insights for a customer generated from their\
         \ balances. Currently in beta release and \nnot subject to breaking change\
@@ -11879,11 +12398,11 @@ components:
           description: Identifier for the account associated with the transaction.
         provider:
           type: string
-          description: Name of the transaction source provider.
+          description: Name of the transaction source provider. Optional as it may
+            not have been supplied when using first party data.
         description:
           type: string
-          description: Description of the transaction. Similar to the transaction
-            information in Open Banking.
+          description: Description of the transaction.
         credit_debit_indicator:
           type: string
           description: Credit/Debit Indicator
@@ -11953,7 +12472,10 @@ components:
           $ref: '#/components/schemas/Category'
         l2:
           $ref: '#/components/schemas/Category'
-      description: Categories enrichment associated with a Transaction
+      description: "Categories enrichment associated with a Transaction, as generated\
+        \ by Bud's artificial intelligence models. \nCurrently two levels of category\
+        \ are supported, with `l1` being a coarse-grained category level and `l2`\
+        \ being\nmore refined.\n"
     Category:
       title: Category
       required:
@@ -11987,7 +12509,9 @@ components:
         logo:
           type: string
           description: "URL supplying merchant logo, if available."
-      description: Merchant enrichment associated with a Transaction
+      description: "Merchant enrichment associated with a Transaction, as generated\
+        \ using a combination of Bud's artificial \nintelligence models and database\
+        \ of known merchants.\n"
     Processor:
       title: Processor
       type: object
@@ -11998,7 +12522,7 @@ components:
             \ to version control."
         slug:
           type: string
-          description: Unique human readable identifier of the merchant. Not subject
+          description: Unique human readable identifier of the processor. Not subject
             to version control.
         display_name:
           type: string
@@ -12006,7 +12530,9 @@ components:
         logo:
           type: string
           description: "URL supplying processor logo, if available."
-      description: Processor enrichment associated with a Transaction
+      description: "Processor enrichment associated with a Transaction, as generated\
+        \ using a combination of Bud's artificial \nintelligence models and database\
+        \ of known payment processors.\n"
     Regularity:
       title: Regularity
       type: object
@@ -12031,7 +12557,9 @@ components:
         group_label:
           type: string
           description: Unique label applied to multiple transactions in the same group.
-      description: Regularity enrichment associated with a Transaction.
+      description: "Regularity enrichment associated with a Transaction, as generated\
+        \ by Bud's artificial intelligence models. \nTransactions that are similar\
+        \ and have a known frequency will all have the same regularity enrichment.\n"
     Location:
       title: Location
       type: object
@@ -12057,6 +12585,287 @@ components:
             $ref: '#/components/schemas/Transaction'
         metadata:
           $ref: '#/components/schemas/ListTransactionsResponse_metadata'
+    CustomerApplicationID:
+      title: Customer Application ID
+      type: string
+      description: |
+        The unique identifier for a customer application.
+      format: uuid
+    DateTimeISO8601:
+      title: Date/Time (ISO 8601) - YYYY-MM-DDTHH:MM:SSTZ
+      type: string
+      description: |
+        A date (and time) in ISO 8601 format.
+      example: 2022-05-11T15:30:39Z
+    Applicant:
+      title: Applicant
+      required:
+      - first_name
+      - last_name
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: First (or "given") name.
+        last_name:
+          type: string
+          description: Last (or "family") name.
+      description: |
+        Applicant associated to a financial application.
+    CustomerLink:
+      title: Customer Link
+      required:
+      - created_at
+      - expired
+      - finished_connecting_accounts
+      - status
+      - url
+      type: object
+      properties:
+        created_at:
+          allOf:
+          - description: Date/time that the customer application link was created.
+          - $ref: '#/components/schemas/DateTimeISO8601'
+        url:
+          type: string
+          description: |
+            Full URL for the customer to connect their accounts.
+        finished_connecting_accounts:
+          type: boolean
+          description: |
+            Indicates if the customer has finished connecting all of their
+            accounts (i.e. they've reached the end of the flow).
+        expired:
+          type: boolean
+          description: |
+            Indicates whether the link is no longer usable by the customer
+            (i.e. the customer has taken too long to complete the flow).
+        status:
+          type: string
+          description: |
+            Indicates the status of the connection.
+
+            - `requested`: URL has been generated, but customer hasn't started the journey.
+            - `in_progress`: Customer has followed the URL and is connecting accounts.
+            - `completed`: Customer successfully connected all their accounts.
+            - `expired`: Customer failed to connect all their accounts before the URL became inactive.
+          enum:
+          - requested
+          - in_progress
+          - completed
+          - expired
+      description: |
+        Contains a URL that can be provided to a customer in order for them to connect
+        up their accounts (and have their data associated to the application).
+
+        Also contains information about the status of the link's usage (e.g. when it was
+        issued/created, whether it has been accessed, whether it has expired).
+    ReviewStatus:
+      title: Review Status
+      type: string
+      description: |
+        Indicates whether an application has been reviewed or not.
+
+        - Empty string indicates it has not been reviewed
+        - `reviewed` indicates that it has been reviewed.
+
+        Note: this is subject to potentially have more statuses in the future.
+      enum:
+      - ""
+      - reviewed
+    Metadata:
+      title: Metadata
+      type: object
+      properties:
+        application_id:
+          type: string
+          description: |
+            An optional ID to associate with this customer's application
+            with (e.g. if the application is related to another system
+            with a different identifier, use that one here).
+        customer_id:
+          type: string
+          description: |
+            An optional ID to associate with this customer with (e.g. if
+            the customer exists on another system with a different
+            identifier, use that one here).
+        advisor_name:
+          type: string
+          description: |
+            Name of the advisor in charge of assessing the customer's
+            application.
+        account_connection_initiator:
+          type: string
+          description: |
+            Determines whether the customer's application requires the
+            advisor to upload financial data, or the customer (via a
+            generated link).
+          enum:
+          - customer
+          - advisor
+      additionalProperties:
+        type: string
+        description: |
+          Any other additional data you wish to associate to a customer's
+          application. This will not be visible within the dashboard.
+      description: |
+        These fields add additional context to a customer's application.
+        Their visibility and relevance depends on the configuration of the
+        dashboard.
+    CustomerApplication:
+      title: Customer Application
+      required:
+      - accounts_connected
+      - application_id
+      - creation_date
+      - customer_id
+      - deletion_date
+      - initiator_id
+      - metadata
+      - primary_applicant
+      - review_status
+      - secondary_applicants
+      type: object
+      properties:
+        application_id:
+          $ref: '#/components/schemas/CustomerApplicationID'
+        creation_date:
+          allOf:
+          - description: Date that the application was created on.
+          - $ref: '#/components/schemas/DateTimeISO8601'
+        deletion_date:
+          allOf:
+          - description: Date that the application (and customer data) will be deleted
+              from the platform. May be empty if no date is set.
+          - $ref: '#/components/schemas/DateTimeISO8601'
+        customer_id:
+          type: string
+          description: Bud Customer ID (used for fetching associated financial data)
+          format: uuid
+        initiator_id:
+          type: string
+          description: ID of the user who initiated the application (if it was created
+            via the dashboard).
+          format: uuid
+          nullable: true
+        primary_applicant:
+          allOf:
+          - description: First and last name of the primary applicant.
+          - $ref: '#/components/schemas/Applicant'
+        secondary_applicants:
+          type: array
+          description: First and last names of the secondary applicants.
+          items:
+            $ref: '#/components/schemas/Applicant'
+        accounts_connected:
+          type: integer
+          description: |
+            Total number of accounts the customer has connected.
+        customer_link:
+          oneOf:
+          - nullable: true
+          - $ref: '#/components/schemas/CustomerLink'
+        review_status:
+          $ref: '#/components/schemas/ReviewStatus'
+        review_date:
+          $ref: '#/components/schemas/DateTimeISO8601'
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+      description: Details relating to a customer's application
+    GetCustomerApplicationsResponse:
+      title: Get Customer Application Response
+      required:
+      - data
+      - metadata
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerApplication'
+        metadata:
+          $ref: '#/components/schemas/GetCustomerApplicationsResponse_metadata'
+      description: Response to the retrieve customer application endpoint
+    PrimaryApplicant:
+      title: Primary Applicant
+      allOf:
+      - description: First and last name of the primary applicant.
+      - $ref: '#/components/schemas/Applicant'
+    SecondaryApplicants:
+      title: Secondary Applicants
+      type: array
+      description: First and last names of the secondary applicants.
+      items:
+        $ref: '#/components/schemas/Applicant'
+    PostCustomerApplicationsRequest:
+      title: Post Customer Application Request
+      required:
+      - primary_applicant
+      type: object
+      properties:
+        primary_applicant:
+          $ref: '#/components/schemas/PrimaryApplicant'
+        secondary_applicants:
+          $ref: '#/components/schemas/SecondaryApplicants'
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+      description: Details required in order to create a new customer application
+    PostCustomerApplicationsResponse:
+      title: Post Customer Applications Reponse Object
+      required:
+      - data
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/PostCustomerApplicationsResponse_data'
+      description: Details provided back to the client when a new customer application
+        has been created
+    GetCustomerApplicationResponse:
+      title: Get Customer Applications Response
+      required:
+      - data
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/CustomerApplication'
+      description: Details provided back to the client when requesting information
+        relating to a customer's application
+    PostCustomerLinksRequest:
+      title: Post Customer Links Request Object
+      type: object
+      properties:
+        send_to:
+          type: string
+          description: "If provided, the customer will receive an email with the generated\
+            \ link embedded."
+          format: email
+      description: Details required when requesting a new link for a given customer's
+        application
+    PostCustomerLinksResponse:
+      title: Post Customer Link Response Object
+      required:
+      - data
+      - metadata
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/PostCustomerLinksResponse_data'
+        metadata:
+          $ref: '#/components/schemas/PostCustomerLinksResponse_metadata'
+      description: Details provided back to the client when requesting a new link
+        for a customer application.
     LowBalanceInsight:
       title: Low Balance
       required:
@@ -12372,7 +13181,7 @@ components:
         message:
           type: string
         errors:
-          $ref: '#/components/schemas/Error'
+          $ref: '#/components/schemas/Errors'
       description: Expected response structure
     OBSyncWebhookBody:
       title: OB Synchronisation Webhook Payload
@@ -12565,6 +13374,9 @@ components:
       description: Expected response structure
     TaskCreatedView:
       title: Task Created View
+      required:
+      - provider
+      - task_id
       type: object
       properties:
         task_id:
@@ -13813,7 +14625,6 @@ components:
       title: Task Not Found
       required:
       - code_id
-      - errors
       - message
       - operation_id
       type: object
@@ -13822,8 +14633,6 @@ components:
           $ref: '#/components/schemas/OperationId'
         code_id:
           type: string
-          enum:
-          - not_found
         message:
           type: string
           description: High level description on what has failed
@@ -13831,6 +14640,101 @@ components:
         operation_id: ingest_transactions_get
         code_id: not_found
         message: Task not found
+    IngestStatusV2Response:
+      title: Ingest Response
+      required:
+      - data
+      - metadata
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/IngestStatusCompletedData'
+          - title: Pending Task Data
+            required:
+            - status
+            properties:
+              status:
+                type: string
+                enum:
+                - Pending
+        metadata:
+          $ref: '#/components/schemas/IngestStatusTaskMetadata'
+      description: Expected response structure.
+    IngestStatusCompletedData:
+      title: Completed Task Data
+      type: array
+      items:
+        $ref: '#/components/schemas/IngestResponseV2SubTask'
+    IngestResponseV2SubTask:
+      title: Customer Ingest Task
+      required:
+      - customer_id
+      - errors
+      - status
+      type: object
+      properties:
+        customer_id:
+          type: string
+          description: "A unique identifier for a Customer, as registered on Bud's\
+            \ platform."
+          format: uuid
+        status:
+          title: Ingest Response Status
+          type: string
+          description: Ingest response status.
+          enum:
+          - Completed
+          - Failed
+        errors:
+          type: object
+          description: Any error messages describing why a sub task has failed.
+          nullable: true
+      description: A single customer ingest task status
+    IngestStatusTaskMetadata:
+      title: Ingest Task Metadata
+      required:
+      - status
+      - task_id
+      type: object
+      properties:
+        task_id:
+          type: string
+          description: Unique task identifier.
+          format: uuid
+        status:
+          $ref: '#/components/schemas/OverallIngestResponseStatus'
+        ingest_request_id:
+          type: string
+          description: Unique identifier of the initial ingest request
+          format: uuid
+        ingest_route:
+          type: string
+          description: The endpoint used for this ingest task
+          enum:
+          - ingest_accounts_post
+          - ingest_transactions_post
+          - v2_ingest_transactions_post
+        ingest_schema:
+          type: string
+          description: The account/transaction schema used for the ingest
+          enum:
+          - application/bud-accounts+json
+          - application/bud-transaction-v2+json
+          - application/bud-transaction-v3+json
+      description: Expected response structure.
+    OverallIngestResponseStatus:
+      title: Ingest Task Overall Status
+      type: string
+      description: Ingest response status.
+      enum:
+      - Completed
+      - Pending
+      - Failed
+      - PartialCompleted
     CustomerContext:
       title: Customer Context
       type: object
@@ -14082,7 +14986,7 @@ components:
         operation_id:
           $ref: '#/components/schemas/OperationId'
         data:
-          oneOf:
+          anyOf:
           - $ref: '#/components/schemas/CategoriesFlat'
           - $ref: '#/components/schemas/CategoriesMap'
         metadata:
@@ -14377,6 +15281,7 @@ components:
           items:
             $ref: '#/components/schemas/Balance_1'
         credit_lines:
+          title: Credit Lines
           type: array
           description: The latest lines of credit available to the account. This is
             typically a representation of the overdraft or credit limits.
@@ -14545,15 +15450,14 @@ components:
           type: string
           description: Main currency of the account
         account_type:
+          type: string
           description: The type of the account. Note that this field is now nullable
             since some banks started following v3.1.7 of the Open Banking Accounts
             & Transactions standards
-          oneOf:
-          - type: string
-            enum:
-            - Business
-            - Personal
-          - type: "null"
+          enum:
+          - Business
+          - Personal
+          - null
         account_sub_type:
           type: string
           description: The sub type of the account
@@ -16263,7 +17167,7 @@ components:
             allOf:
             - $ref: '#/components/schemas/EnergyPayment'
         metadata:
-          $ref: '#/components/schemas/Metadata'
+          $ref: '#/components/schemas/Metadata_1'
       description: Representation of a customer energy payment
     EnergyPayment:
       required:
@@ -16372,6 +17276,9 @@ components:
       description: Expected response structure
     AffordabilitySpendingGroupsResponseData:
       title: Affordability Spending Groups Response Data
+      required:
+      - categories
+      - totals
       type: object
       properties:
         totals:
@@ -16542,21 +17449,55 @@ components:
         _links:
           $ref: '#/components/schemas/TransactionsLinks'
       description: Monthly Range
-    DateTimeISO8601:
+    DateTimeISO8601_1:
       title: Date/Time (ISO 8601)
       type: string
       description: ISO Date Format
       example: 2022-03-05T13:34:33Z
     AffordabilityCriteria:
-      title: Affordability Criteria
+      oneOf:
+      - $ref: '#/components/schemas/CriteriaNetDisposableIncome'
+      - $ref: '#/components/schemas/CriteriaFixedExpenditure'
+      - $ref: '#/components/schemas/CriteriaFlexibleExpenditure'
+      - $ref: '#/components/schemas/CriteriaEssentialExpenditure'
+      - $ref: '#/components/schemas/CriteriaNonessentialExpenditure'
+      - $ref: '#/components/schemas/CriteriaInternalTransfers'
+    CriteriaNetDisposableIncome:
       type: string
-      description: Affordability Criteria
+      description: |
+        Net Disposable Income criteria will return all transactions falling within the income category grouping. Typically includes exclusively credit transactions.
       enum:
       - net_disposable_income
+    CriteriaFixedExpenditure:
+      type: string
+      description: |
+        Fixed expenditure criteria will include all transactions which fall under the categories defined/expected to be consistent. Consistent in the sense of both time and financial commitment, i.e. a subscription to a healthcare provider.
+      enum:
       - fixed_expenditure
+    CriteriaFlexibleExpenditure:
+      type: string
+      description: |
+        Flexible expenditure criteria will include all transactions which fall under the categories defined/expected to be inconsistent. inconsistent in the sense of both time and financial commitment, i.e. transactions falling under  food_and_drink/eating_out_and_takeaways
+      enum:
       - flexible_expenditure
+    CriteriaEssentialExpenditure:
+      type: string
+      description: |
+        Essential expenditure criteria will include all transactions which fall under categories deemed to be essential to a persons day to day life. These expenditure can be seen as "needs" rather than "wants". For example, food_and_drink/groceries expenditure are essential compared to shopping/hobbies.
+      enum:
       - essential_expenditure
+    CriteriaNonessentialExpenditure:
+      type: string
+      description: |
+        Non essential expenditure criteria will include all transactions which fall under categories deemed to be non essential to a persons day to day life. These expenditure can be seen as "wants" rather than "needs". For example, shopping/hobbies expenditure are essential compared to food_and_drink/groceries.
+      enum:
       - non_essential_expenditure
+    CriteriaInternalTransfers:
+      type: string
+      description: |
+        Internal transfers criteria returns all credit/debit transactions deemed to be made between an individual  financial pool. If we drill down to the account level, wealth has been gained/lost however if we drill up we see no change in net sum.
+      enum:
+      - internal_transfers
     SpendingGroupsTransactionsResponse:
       title: Spending Groups Transactions Response
       required:
@@ -18632,16 +19573,16 @@ components:
           - string-array
         min:
           description: "The minimum value accepted for this parameter, if any."
-          nullable: true
           oneOf:
           - type: number
           - type: string
+          - nullable: true
         max:
           description: "The maximum value accepted for this parameter, if any."
-          nullable: true
           oneOf:
           - type: number
           - type: string
+          - nullable: true
         default:
           description: The default value for this parameter if unspecified.
           oneOf:
@@ -18827,11 +19768,11 @@ components:
           description: Identifier for the account associated with the transaction.
         provider:
           type: string
-          description: Name of the transaction source provider.
+          description: Name of the transaction source provider. Optional as it may
+            not have been supplied when using first party data.
         description:
           type: string
-          description: Description of the transaction. Similar to the transaction
-            information in Open Banking.
+          description: Description of the transaction.
         credit_debit_indicator:
           type: string
           description: Credit/Debit Indicator
@@ -18901,7 +19842,10 @@ components:
           $ref: '#/components/schemas/Category'
         l2:
           $ref: '#/components/schemas/Category'
-      description: Categories enrichment associated with a Transaction
+      description: "Categories enrichment associated with a Transaction, as generated\
+        \ by Bud's artificial intelligence models. \nCurrently two levels of category\
+        \ are supported, with `l1` being a coarse-grained category level and `l2`\
+        \ being\nmore refined.\n"
     LegacyBudDateRangeMetadata:
       title: Metadata
       required:
@@ -19593,6 +20537,53 @@ components:
           type: string
           description: The token required to retrieve the next page of results. Will
             be omitted if no next page exists.
+    GetCustomerApplicationsResponse_metadata:
+      required:
+      - next_page_token
+      - results
+      type: object
+      properties:
+        results:
+          type: integer
+          description: |
+            Total number of applications returned.
+        next_page_token:
+          type: string
+          description: |
+            Token to pass to the endpoint (with query parameter `page_token`)
+            to get the next page of applications in the collection.
+
+            This value is empty if this is the last page.
+    PostCustomerApplicationsResponse_data:
+      required:
+      - application_id
+      properties:
+        application_id:
+          $ref: '#/components/schemas/CustomerApplicationID'
+        expires_at:
+          $ref: '#/components/schemas/DateTimeISO8601'
+    PostCustomerLinksResponse_data:
+      required:
+      - link
+      type: object
+      properties:
+        link:
+          type: string
+          description: URL that the customer should click to trigger the journey.
+          format: uri
+      description: Data object relating to the customer's link.
+    PostCustomerLinksResponse_metadata:
+      required:
+      - connection_id
+      type: object
+      properties:
+        connection_id:
+          type: string
+          description: |
+            A unique ID associated to customer's connection URL (this ID is
+            contained within the link in the payload).
+          format: uuid
+      description: Metadata associated with the customer link
     AuthGatewayURLResponse_data:
       required:
       - url
@@ -20129,18 +21120,18 @@ components:
       type: object
       properties:
         accounts:
-          description: This is a hashmap representing account_ids and metadata about
-            the results returned from the balances endpoint
-          allOf:
-          - $ref: '#/components/schemas/BudDateRangeMetadata'
-          - type: object
-            additionalProperties:
-              type: object
+          type: object
+          additionalProperties:
+            description: Hashmap of an account_id returned from the balances endpoint
+            allOf:
+            - $ref: '#/components/schemas/BudDateRangeMetadata'
+            - type: object
               properties:
                 balance_count:
                   type: number
                   description: The number of balances returned for the account
-              description: Metadata about the response for the given account_id
+          description: This is a hashmap representing account_ids and metadata about
+            the results returned from the balances endpoint
         parameters:
           title: The parameters used to calculated balances
           allOf:
@@ -20149,12 +21140,21 @@ components:
             properties:
               granularity:
                 type: string
-                description: The granularity that the balances have been retrieved
-                  for.
+                description: |
+                  The granularity that the balances have been retrieved for.
+
+                  Currently supported values include (but are not necessarily limited to):
+                    - `daily`
+                    - `weekly`
+                    - `biweekly`
+                    - `monthly`
+                    - `quarterly`
+                    - `six_monthly`
+                    - `annually`
     GetBalancesForAccountIDResponse_metadata:
       type: object
       properties:
-        account:
+        accounts:
           description: Metadata about the response for the given account_id
           allOf:
           - $ref: '#/components/schemas/BudDateRangeMetadata'
@@ -20507,7 +21507,7 @@ components:
           description: The merchant's logo image URL location.
       description: Details surrounding the identified merchant of the transaction
         (this field will be omitted if a merchant is not detected)
-    Metadata:
+    Metadata_1:
       title: Metadata
       required:
       - status
@@ -21297,6 +22297,53 @@ components:
       required: true
       schema:
         type: string
+    MetadataFieldName:
+      name: "metadata.{field_name}"
+      in: query
+      description: |
+        Search by exact-match on the `field_name` of `metadata` properties.
+        Example: `metadata.loan_product_code=credit_card_1234` will limit results to all
+        customer applications that have the following metadata contained:
+
+        ```json
+        {
+          "metadata": {
+            "loan_product_code": "credit_card_1234"
+          }
+        }
+        ```
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+    PageToken:
+      name: page_token
+      in: query
+      description: |
+        Token provided in the `metadata` blob of a response, in order to find
+        the next page in a collection, e.g.
+
+        ```json
+        {
+          "metadata": {
+            "next_page_token": "4jmBrvVn9r"
+          }
+        }
+        ```
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+    CustomerApplicationID:
+      name: application_id
+      in: path
+      required: true
+      style: simple
+      explode: false
+      schema:
+        $ref: '#/components/schemas/CustomerApplicationID'
     OBProvidersQueryTypeFilter:
       name: types
       in: query
@@ -21403,6 +22450,14 @@ components:
         type: string
         enum:
         - all
+    CustomerIPAddress:
+      name: X-Customer-Ip-Address
+      in: header
+      description: The Bud Customer IP Address is used for logging customer presence.
+        This is optional and is only required for Agent of Bud clients.
+      required: false
+      schema:
+        type: string
     ConsentId:
       name: consent_id
       in: path
@@ -21480,7 +22535,7 @@ components:
       in: query
       description: Use this parameter to filter the results returned on the `provider`
         associated with each result. Multiple values are accepted. If this parameter
-        is not provided then results of any `provider` will be returned."
+        is not provided then results of any `provider` will be returned.
       schema:
         type: string
       example: BankOfBud
@@ -21597,35 +22652,14 @@ components:
       schema:
         type: string
       example: 2019-02-29
-    HeaderFromSpendingGroups:
-      name: X-From
-      in: header
-      description: "Date (`YYYY-MM-DD`) from which the transactions should be returned\
-        \ from, this works in pair with the `X-To` parameter. This X-From format of\
-        \ (YYYY-MM-DD) will still be backwards compatiable for 3 months see the release\
-        \ notes for more details."
-      required: false
-      schema:
-        type: string
-      example: 2022-02-28
-    HeaderToSpendingGroups:
-      name: X-To
-      in: header
-      description: "Date (`YYYY-MM-DD`) from which the transactions should be returned\
-        \ to, this works in pair with the `X-From` parameter. This X-To format of\
-        \ (YYYY-MM-DD) will still be backwards compatiable for 3 months see the release\
-        \ notes for more details."
-      required: false
-      schema:
-        type: string
-      example: 2022-03-30
     FromMonthSpendingGroups:
       name: X-From-Month
       in: header
-      description: "Month (`YYYY-MM`) from which the transactions should be returned\
-        \ from, this works in pair with the `X-To` parameter. This X-From-Month format\
-        \ of (YYYY-MM) will become the default format in 3 months see the release\
-        \ notes for more details."
+      description: |
+        Month (`YYYY-MM`) from which the transactions should be returned from, this works in pair with the `X-To` parameter.
+        This X-From-Month format of (YYYY-MM) will become the default format in 3 months see the release notes for more details.
+
+        Default behaviour: Set `X-From-Month` to be today's date minus 3 months.
       required: false
       schema:
         type: string
@@ -21634,9 +22668,10 @@ components:
       name: X-To-Month
       in: header
       description: "Month (`YYYY-MM`) from which the transactions should be returned\
-        \ to, this works in pair with the `X-From` parameter. This X-To-Month format\
+        \ to, this works in pair with the `X-From` parameter. \nThis X-To-Month format\
         \ of (YYYY-MM) will become the default format in 3 months see the release\
-        \ notes for more details."
+        \ notes for more details.\n\nDefault behaviour: Set `X-To-Month` to be today's\
+        \ date.\n"
       required: false
       schema:
         type: string
@@ -21651,6 +22686,32 @@ components:
         type: string
         default: GBP
       example: GBP
+    HeaderFromSpendingGroups:
+      name: X-From
+      in: header
+      description: "Date (`YYYY-MM-DD`) from which the transactions should be returned\
+        \ from, this works in pair with the `X-To` parameter. \nThis X-From format\
+        \ of (YYYY-MM-DD) will still be backwards compatible for 3 months see the\
+        \ release notes for more details.\nHeader will be replaced by #/parameters/FromMonthSpendingGroups.\n\
+        \nDefault behaviour: Set `X-From` to be today's date minus 3 months.\n"
+      required: false
+      deprecated: true
+      schema:
+        type: string
+      example: 2022-02-28
+    HeaderToSpendingGroups:
+      name: X-To
+      in: header
+      description: "Date (`YYYY-MM-DD`) from which the transactions should be returned\
+        \ to, this works in pair with the `X-From` parameter. \nThis X-To format of\
+        \ (YYYY-MM-DD) will still be backwards compatible for 3 months see the release\
+        \ notes for more details.\nHeader will be replaced by #/parameters/ToMonthSpendingGroups.\n\
+        \nDefault behaviour: Set `X-To` to be today's date.\n"
+      required: false
+      deprecated: true
+      schema:
+        type: string
+      example: 2022-03-30
     URLMonthFrom:
       name: month_from
       in: query
@@ -21896,7 +22957,7 @@ x-tagGroups:
 - name: ""
   tags:
   - Authentication
-  - Retrieve Auth Tokens
+  - OAuth2
 - name: ""
   tags:
   - Connect API
@@ -21930,6 +22991,11 @@ x-tagGroups:
   - Retrieve Affordability Report
 - name: ""
   tags:
+  - Assess API
+  - Customer Applications
+  - Customer Application Links
+- name: ""
+  tags:
   - KYC API
   - Perform KYC Check
 - name: ""
@@ -21948,4 +23014,4 @@ x-tagGroups:
 - name: ""
   tags:
   - Actionable Insights API
-  - Retrieve Balance Insights (Beta)
+  - Retrieve Actionable Insights
