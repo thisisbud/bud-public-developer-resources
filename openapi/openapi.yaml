@@ -2775,11 +2775,11 @@ paths:
                       - id: e6277c5a-c73d-47f5-847f-36bff8618691
                         customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
                         status: Completed
-                        errors: null
+                        error: null
                       - id: 661d6ec2-1b08-4f30-9ede-d4d18db26b09
                         customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
                         status: Completed
-                        errors: null
+                        error: null
                 Validation Failure:
                   summary: Validation error
                   value:
@@ -2791,13 +2791,13 @@ paths:
                       - id: e6277c5a-c73d-47f5-847f-36bff8618691
                         customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
                         status: Failed
-                        errors:
+                        error:
                           accounts.[0].account_id: account_id is required
                           accounts.[1].provider: provider is required
                       - id: 661d6ec2-1b08-4f30-9ede-d4d18db26b09
                         customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
                         status: Failed
-                        errors:
+                        error:
                           accounts.[1].provider: provider is required
                 Transient Failure:
                   summary: Transient error
@@ -2810,7 +2810,7 @@ paths:
                       - id: e6277c5a-c73d-47f5-847f-36bff8618691
                         customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
                         status: Failed
-                        errors:
+                        error:
                           error: unable to persist accounts
         "405":
           description: The request uses an unexpected HTTP method
@@ -3126,11 +3126,11 @@ paths:
                       - id: e6277c5a-c73d-47f5-847f-36bff8618691
                         customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
                         status: Completed
-                        errors: null
+                        error: null
                       - id: 661d6ec2-1b08-4f30-9ede-d4d18db26b09
                         customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
                         status: Completed
-                        errors: null
+                        error: null
                 Validation Failure:
                   value:
                     operation_id: ingest_transactions_get
@@ -3141,7 +3141,7 @@ paths:
                       - id: e6277c5a-c73d-47f5-847f-36bff8618691
                         customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
                         status: Failed
-                        errors:
+                        error:
                           transactions.0.provider: provider is required
                           transactions.0.account_id: account_id is required
                           transactions.1.provider: provider is required
@@ -3149,7 +3149,7 @@ paths:
                       - id: 661d6ec2-1b08-4f30-9ede-d4d18db26b09
                         customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
                         status: Failed
-                        errors:
+                        error:
                           transactions.1.provider: provider is required
                 Transient Failure:
                   value:
@@ -3161,7 +3161,7 @@ paths:
                       - id: e6277c5a-c73d-47f5-847f-36bff8618691
                         customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
                         status: Failed
-                        errors:
+                        error:
                           error: unable to persist transactions
         "400":
           description: The server will not process the request due to a client error.
@@ -14200,7 +14200,7 @@ components:
       title: Ingest Response Sub Task
       required:
       - customer_id
-      - errors
+      - error
       - id
       - status
       type: object
@@ -14216,8 +14216,9 @@ components:
           format: uuid
         status:
           $ref: '#/components/schemas/IngestResponseStatus'
-        errors:
+        error:
           type: object
+          additionalProperties: true
           description: Any error messages describing why a sub task has failed.
           nullable: true
       description: Expected response for each sub task structure.
@@ -14673,7 +14674,7 @@ components:
       title: Customer Ingest Task
       required:
       - customer_id
-      - errors
+      - error
       - status
       type: object
       properties:
@@ -14689,8 +14690,9 @@ components:
           enum:
           - Completed
           - Failed
-        errors:
+        error:
           type: object
+          additionalProperties: true
           description: Any error messages describing why a sub task has failed.
           nullable: true
       description: A single customer ingest task status
