@@ -236,12 +236,12 @@ info:
     \                                                                            \
     \                                                                            \
     \         |\n|:---------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n\
-    \n| 04/12/2020           | Changed the base URL of the **GET Warnings**, **GET\
-    \ Trends** and **GET Forecast** endpoints from `/v1/assistant/` to `/v1/signal/`.\
+    | 04/12/2020           | Changed the base URL of the **GET Warnings**, **GET Trends**\
+    \ and **GET Forecast** endpoints from `/v1/assistant/` to `/v1/signal/`.     \
     \                                                                            \
     \                                                                            \
-    \                           |\n| 06/08/2020           | Removed `bank_name` field\
-    \ in favour of a new field called `provider` in the following endpoints:<br>__POST__`/v1/open-banking/authorisation-url`\
+    \                      |\n| 06/08/2020           | Removed `bank_name` field in\
+    \ favour of a new field called `provider` in the following endpoints:<br>__POST__`/v1/open-banking/authorisation-url`\
     \ (Request Payload)<br> __POST__`/v1/open-banking/connect/{connection_task_id}`\
     \ (Response Payload)<br> __POST__`/v1/open-banking/refresh/{task_id}` (Response\
     \ Payload) |\n| 01/09/2021           | Deprecated **GET Warnings** endpoints in\
@@ -285,30 +285,33 @@ info:
     \ in favour of **Retrieve Forecasted Transactions V2**. |\n| 28/03/2023      \
     \     | Deprecated **Create Transaction Rule(s)**. |\n| 28/03/2023           |\
     \ Deprecated **Retrieve Trends** in favour of **Retrieve Category Totals**. |\n\
-    \n## Changelog\n\nThis changelog represents a list of all changes that have been\
-    \ made to Bud’s API documentation. This includes both backward-compatible and\
-    \ backward-incompatible changes.\n\n**Version 2.7.8: 19/06/2023**\n> - Updated\
-    \ descriptions for Payments related endpoints.\n\n**Version 2.7.7: 07/06/2023**\n\
-    > - Updated response parameters for __Ingest First Party Data__ endpoints.\n\n\
-    **Version 2.7.6: 01/06/2023**\n> - Updated optional headers for __Reconfirm Consent__\
-    \ endpoint to include `X-Customer-Ip-Address`.\n\n**Version 2.7.5: 22/05/2023**\n\
-    > - Updated the description and examples for the __Retrieve Balances Over Time__\
-    \ and __Retrieve Balances Over Time By Account__ endpoints.\n> - Updated the description\
-    \ and examples for the __Retrieve Transactions V2__ endpoint.\n> - Updated __Retrieve\
-    \ Accounts__ to show descriptive deprecation notice.\n> - Updated __Retrieve Accounts\
-    \ V2__ response HTTP codes, example transaction ID, `provider` query parameter\
-    \ description.\n\n**Version 2.7.4: 19/05/2023**\n> - Updated the description for\
-    \ the __Ingest Transactions V2__ endpoint.\n\n**Version 2.7.3: 18/05/2023**\n\
-    > - Updated the __Retrieve Authorisation Gateway URL (v2)__ endpoint with a new\
-    \ enable_async_connect option.\n> - Updated the __Ingest Transactions V2__ request\
-    \ examples.\n\n**Version 2.7.2: 18/05/2023**\n> - Updated the description for\
-    \ the __Reconfirm Consent__ endpoint.\n\n**Version 2.7.1: 16/05/2023**\n> - Added\
-    \ documentation for __Retrieve Auth Tokens__ endpoint.\n\n**Version 2.7.0: 11/05/2023**\n\
-    > - Adds two new endpoints: __Create Customers V3__ and __Create Customers V3\
-    \ (Batch)__.\n> - Introduces the concept of Hosted Customers, which makes Customer\
-    \ Secrets optional on all endpoints which previously required them.\n\n**Version\
-    \ 2.6.2: 05/05/2023**\n> - Documented default to from case in __Retrieve Financial\
-    \ Products V2__ and __Retrieve Financial Products__.\n> - Fixed documentation\
+    | 22/06/2023           | Deprecated **Retrieve Forecasted Transactions V1** in\
+    \ favour of **Retrieve Forecasted Transactions V2**. |\n\n## Changelog\n\nThis\
+    \ changelog represents a list of all changes that have been made to Bud’s API\
+    \ documentation. This includes both backward-compatible and backward-incompatible\
+    \ changes.\n\n**Versiopn 2.7.9: 22/06/2023**\n> - Updated __Retrieve Forecasted\
+    \ Transactions V1__ to show descriptive deprecation notice.\n\n**Version 2.7.8:\
+    \ 19/06/2023**\n> - Updated descriptions for Payments related endpoints.\n\n**Version\
+    \ 2.7.7: 07/06/2023**\n> - Updated response parameters for __Ingest First Party\
+    \ Data__ endpoints.\n\n**Version 2.7.6: 01/06/2023**\n> - Updated optional headers\
+    \ for __Reconfirm Consent__ endpoint to include `X-Customer-Ip-Address`.\n\n**Version\
+    \ 2.7.5: 22/05/2023**\n> - Updated the description and examples for the __Retrieve\
+    \ Balances Over Time__ and __Retrieve Balances Over Time By Account__ endpoints.\n\
+    > - Updated the description and examples for the __Retrieve Transactions V2__\
+    \ endpoint.\n> - Updated __Retrieve Accounts__ to show descriptive deprecation\
+    \ notice.\n> - Updated __Retrieve Accounts V2__ response HTTP codes, example transaction\
+    \ ID, `provider` query parameter description.\n\n**Version 2.7.4: 19/05/2023**\n\
+    > - Updated the description for the __Ingest Transactions V2__ endpoint.\n\n**Version\
+    \ 2.7.3: 18/05/2023**\n> - Updated the __Retrieve Authorisation Gateway URL (v2)__\
+    \ endpoint with a new enable_async_connect option.\n> - Updated the __Ingest Transactions\
+    \ V2__ request examples.\n\n**Version 2.7.2: 18/05/2023**\n> - Updated the description\
+    \ for the __Reconfirm Consent__ endpoint.\n\n**Version 2.7.1: 16/05/2023**\n>\
+    \ - Added documentation for __Retrieve Auth Tokens__ endpoint.\n\n**Version 2.7.0:\
+    \ 11/05/2023**\n> - Adds two new endpoints: __Create Customers V3__ and __Create\
+    \ Customers V3 (Batch)__.\n> - Introduces the concept of Hosted Customers, which\
+    \ makes Customer Secrets optional on all endpoints which previously required them.\n\
+    \n**Version 2.6.2: 05/05/2023**\n> - Documented default to from case in __Retrieve\
+    \ Financial Products V2__ and __Retrieve Financial Products__.\n> - Fixed documentation\
     \ for get customers endpoints \n> - Fixed documentation for put customer context\
     \ endpoints \n\n**Version 2.6.1: 27/04/2023**\n> - Deprecated __Retrieve Financial\
     \ Products__.\n> - Corrected sample Financial Products in __Retrieve Financial\
@@ -2826,12 +2829,15 @@ paths:
       tags:
       - Ingest First Party Data
       summary: Ingest Transactions
-      description: |
-        Initiate the asynchronous process of pushing a customer's transaction(s) through the Bud architecture to apply Bud's enrichment and insights services to first party transactional data. This request creates a task that stores the given transactions against the specified customers and initiates the relevant enrichment process.
-
-        The enrichment services applied to the data will depend upon the relevant scopes assigned to your Client ID.
-
-        The Task ID returned by this request can be used to verify the current status of the process.
+      description: "Initiate the asynchronous process of pushing a customer's transaction(s)\
+        \ through the Bud architecture to apply Bud's enrichment and insights services\
+        \ to first party transactional data. This request creates a task that stores\
+        \ the given transactions against the specified customers and initiates the\
+        \ relevant enrichment process.\n\nThe enrichment services applied to the data\
+        \ will depend upon the relevant scopes assigned to your Client ID.\n\nThe\
+        \ Task ID returned by this request can be used to verify the current status\
+        \ of the process.\n\n** NOTE **\n\nCurrently deprecated, use `/v2/ingest/transactions`.\
+        \ \n"
       operationId: ingest_transactions_post
       parameters:
       - name: X-Client-Id
@@ -2876,6 +2882,7 @@ paths:
             authentication)
         "5XX":
           description: An unexpected error occurred on the server side
+      deprecated: true
       security:
       - OAuth2: []
   /v2/ingest/transactions:
@@ -6651,6 +6658,10 @@ paths:
         - `monthly`
         - `quarterly`
         - `unknown`
+
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 22th of September 2023 - please complete your migration to the Retrieve Forecasted Transactions V2 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
       operationId: future_transactions_get
       parameters:
       - name: X-Client-Id
@@ -6721,6 +6732,7 @@ paths:
           description: An unexpected HTTP method was used
         "5XX":
           description: An unexpected error occurred on the server side
+      deprecated: true
       security:
       - OAuth2: []
   /v2/future-transactions:
@@ -13976,7 +13988,7 @@ components:
           $ref: '#/components/schemas/ReconnectRequired'
       description: Result of performing a reconfirmation of consent task
     IngestAccountsRequest:
-      title: Ingest Accounts Request
+      title: Bud V1 Accounts Request
       type: array
       description: Ingest accounts expected request body.
       items:
@@ -13986,7 +13998,6 @@ components:
       required:
       - accounts
       - customer_id
-      - customer_secret
       type: object
       properties:
         customer_id:
@@ -13995,14 +14006,21 @@ components:
             \ platform."
           format: uuid
         customer_secret:
-          type: string
-          description: Customer secret.
+          $ref: '#/components/schemas/CustomerSecret'
         accounts:
+          minLength: 1
           type: array
           description: List of accounts that belongs to the customer.
           items:
             $ref: '#/components/schemas/IngestCustomerAccount'
       description: A customer with a accounts data.
+    CustomerSecret:
+      type: string
+      description: The Bud Customer secret used to encrypt customer data. This is
+        optional only if the customer secret is already stored with Bud (i.e. the
+        `host_secret` was set to `true` in the Customer Context when the customer
+        was created).
+      example: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
     IngestCustomerAccount:
       title: Ingest Customer Account
       required:
@@ -14253,7 +14271,7 @@ components:
           nullable: true
       description: Expected response for each sub task structure.
     IngestTransactionsRequest:
-      title: bud-transaction-v2 ingest request
+      title: Bud V2 Transactions Request
       type: array
       description: Ingest transaction expected request body.
       items:
@@ -14262,7 +14280,6 @@ components:
       title: Customer With Transactions
       required:
       - customer_id
-      - customer_secret
       - transactions
       type: object
       properties:
@@ -14273,9 +14290,7 @@ components:
           format: uuid
           example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
         customer_secret:
-          type: string
-          description: Customer secret.
-          example: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
+          $ref: '#/components/schemas/CustomerSecret'
         transactions:
           type: array
           description: List of transactions belonging to the customer.
@@ -14403,7 +14418,7 @@ components:
           example: "20200811151300"
       description: Describes the party the money was deposited to or taken from.
     IngestTransactionsV3Request:
-      title: bud-transaction-v3 ingest request
+      title: Bud V3 Transactions Request
       type: array
       description: Ingest transaction expected request body.
       items:
@@ -14413,10 +14428,6 @@ components:
       description: "A unique identifier for a Customer, as registered on Bud's platform."
       format: uuid
       example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-    CustomerSecret:
-      type: string
-      description: Customer secret.
-      example: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
     CustomerTransactionV3:
       title: Customer Transaction V3
       required:
@@ -20785,7 +20796,6 @@ components:
     IngestTransactionsV3Request_inner:
       required:
       - customer_id
-      - customer_secret
       - transactions
       type: object
       properties:
