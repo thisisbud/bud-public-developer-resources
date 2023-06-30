@@ -1,0 +1,5 @@
+# Add 'postman' to any file changes within 'postman-collections' folder
+postman: postman-collections/*
+
+# Add 'openapi' to any file changes within 'openapi' folder
+openapi: openapi/*
