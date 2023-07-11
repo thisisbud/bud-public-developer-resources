@@ -289,29 +289,33 @@ info:
     \ favour of **Retrieve Forecasted Transactions V2**. |\n\n## Changelog\n\nThis\
     \ changelog represents a list of all changes that have been made to Bud’s API\
     \ documentation. This includes both backward-compatible and backward-incompatible\
-    \ changes.\n\n**Versiopn 2.7.9: 22/06/2023**\n> - Updated __Retrieve Forecasted\
-    \ Transactions V1__ to show descriptive deprecation notice.\n\n**Version 2.7.8:\
-    \ 19/06/2023**\n> - Updated descriptions for Payments related endpoints.\n\n**Version\
-    \ 2.7.7: 07/06/2023**\n> - Updated response parameters for __Ingest First Party\
-    \ Data__ endpoints.\n\n**Version 2.7.6: 01/06/2023**\n> - Updated optional headers\
-    \ for __Reconfirm Consent__ endpoint to include `X-Customer-Ip-Address`.\n\n**Version\
-    \ 2.7.5: 22/05/2023**\n> - Updated the description and examples for the __Retrieve\
-    \ Balances Over Time__ and __Retrieve Balances Over Time By Account__ endpoints.\n\
-    > - Updated the description and examples for the __Retrieve Transactions V2__\
-    \ endpoint.\n> - Updated __Retrieve Accounts__ to show descriptive deprecation\
-    \ notice.\n> - Updated __Retrieve Accounts V2__ response HTTP codes, example transaction\
-    \ ID, `provider` query parameter description.\n\n**Version 2.7.4: 19/05/2023**\n\
-    > - Updated the description for the __Ingest Transactions V2__ endpoint.\n\n**Version\
-    \ 2.7.3: 18/05/2023**\n> - Updated the __Retrieve Authorisation Gateway URL (v2)__\
-    \ endpoint with a new enable_async_connect option.\n> - Updated the __Ingest Transactions\
-    \ V2__ request examples.\n\n**Version 2.7.2: 18/05/2023**\n> - Updated the description\
-    \ for the __Reconfirm Consent__ endpoint.\n\n**Version 2.7.1: 16/05/2023**\n>\
-    \ - Added documentation for __Retrieve Auth Tokens__ endpoint.\n\n**Version 2.7.0:\
-    \ 11/05/2023**\n> - Adds two new endpoints: __Create Customers V3__ and __Create\
-    \ Customers V3 (Batch)__.\n> - Introduces the concept of Hosted Customers, which\
-    \ makes Customer Secrets optional on all endpoints which previously required them.\n\
-    \n**Version 2.6.2: 05/05/2023**\n> - Documented default to from case in __Retrieve\
-    \ Financial Products V2__ and __Retrieve Financial Products__.\n> - Fixed documentation\
+    \ changes.\n\n**Version 2.8.1: 07/07/2023**\n> - Added `loan` and `pending` tags\
+    \ as part of the __Retrieve Transactions V2__ endpoint.\n> - General bug fixes\
+    \ and improvements across examples and schemas.\n\n**Version 2.8.0: 29/06/2023**\n\
+    > - Added the new Characteristics API as part of the Engage product offering.\n\
+    \n**Version 2.7.9: 22/06/2023**\n> - Updated __Retrieve Forecasted Transactions\
+    \ V1__ to show descriptive deprecation notice.\n\n**Version 2.7.8: 19/06/2023**\n\
+    > - Updated descriptions for Payments related endpoints.\n\n**Version 2.7.7: 07/06/2023**\n\
+    > - Updated response parameters for __Ingest First Party Data__ endpoints.\n\n\
+    **Version 2.7.6: 01/06/2023**\n> - Updated optional headers for __Reconfirm Consent__\
+    \ endpoint to include `X-Customer-Ip-Address`.\n\n**Version 2.7.5: 22/05/2023**\n\
+    > - Updated the description and examples for the __Retrieve Balances Over Time__\
+    \ and __Retrieve Balances Over Time By Account__ endpoints.\n> - Updated the description\
+    \ and examples for the __Retrieve Transactions V2__ endpoint.\n> - Updated __Retrieve\
+    \ Accounts__ to show descriptive deprecation notice.\n> - Updated __Retrieve Accounts\
+    \ V2__ response HTTP codes, example transaction ID, `provider` query parameter\
+    \ description.\n\n**Version 2.7.4: 19/05/2023**\n> - Updated the description for\
+    \ the __Ingest Transactions V2__ endpoint.\n\n**Version 2.7.3: 18/05/2023**\n\
+    > - Updated the __Retrieve Authorisation Gateway URL (v2)__ endpoint with a new\
+    \ enable_async_connect option.\n> - Updated the __Ingest Transactions V2__ request\
+    \ examples.\n\n**Version 2.7.2: 18/05/2023**\n> - Updated the description for\
+    \ the __Reconfirm Consent__ endpoint.\n\n**Version 2.7.1: 16/05/2023**\n> - Added\
+    \ documentation for __Retrieve Auth Tokens__ endpoint.\n\n**Version 2.7.0: 11/05/2023**\n\
+    > - Adds two new endpoints: __Create Customers V3__ and __Create Customers V3\
+    \ (Batch)__.\n> - Introduces the concept of Hosted Customers, which makes Customer\
+    \ Secrets optional on all endpoints which previously required them.\n\n**Version\
+    \ 2.6.2: 05/05/2023**\n> - Documented default to from case in __Retrieve Financial\
+    \ Products V2__ and __Retrieve Financial Products__.\n> - Fixed documentation\
     \ for get customers endpoints \n> - Fixed documentation for put customer context\
     \ endpoints \n\n**Version 2.6.1: 27/04/2023**\n> - Deprecated __Retrieve Financial\
     \ Products__.\n> - Corrected sample Financial Products in __Retrieve Financial\
@@ -714,7 +718,7 @@ info:
     name: Bud Support
     url: https://www.thisisbud.com/
     email: help@thisisbud.com
-  version: 2.7.9
+  version: 2.8.0
   x-logo:
     url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATAAAABuCAQAAAAKAYdLAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAB3RJTUUH4wQDDggcbXcx7wAABeJJREFUeNrt3W2IFVUcx/HvXRW1VdQedy1bZVfoYX0osVQyfSGElKbRA5oFIaIlhAkWUYm6gvqqDMHMoBeKlhayCCZC2AMRPay7aJrSZmauZhQqaj7t7u1Fi965987s7D1n7pk7/j73zX2Y85//mXt2Zu45Z2ZBREREREREREREREREREREREREREREREREREREREREREREREREROIiZSFGH+YxgsOs5U/X1bFiPDPpQT3bu1DmcaZyg+vErWpjD+s47zoN6Mte0qRJc4Iq18lYMJv2jvosD11mRUeJpD32UO7664BFGQl94DoZY704fbU2rQwKVWYwbc6bQlSPBaYbtMz4K7nP53lpGkK/q8+7MTxUmeEWtmJcGX+j5psmM0I3l9vCirKAV36OuE46QsbfaHL/9opnL9tcpxBf3V0nkAgzWMRj9HadhrH+3Gk7pBqYDZdY3oXfnHE2gc1U2gyoQ6Rk+pKZdgOqgYnXF7TYDGe3gcWgW85QH9cJxMAVm8HsNrBqhhV1U9g33XUCzo1gsM1wdhtYio8ZWsytYdksFrpOwbGhbLYb0PavyLs5wA+c9v28lRa+Zzt/+y5RwwKqaOCdgCjZRvEit/A1a7jou8xwJjOMAb7D+ylqqCmw1imeZ0oCBrv7Mzp+/QofFTDCdZG13Jw3Wi1nOpbZT9+QGUziUkeZ3T49z+P4pqCRuCkhM1jjfMwwqsdG182rsAaWJs0JxuWJ9knGEq+EzODHjDLTcj5NsbjgwehwDazm6vyL5D2MG5i7booKdjE25917M57XhoxUG1hmJUsjrmWtlVl18ZQ2DeCyH6ycT7kpIJ+wuQWVeZJXI69HcpsXHDQN4LajtZIlkcbvzWqn9St1R3nPNIT93wzt/MSZPO+nqKA65699Nos5FdHmgZkMzHnvIj9zLm9+Q7jd0nqP8VtkdSqWNppYxT+u08g+yW8OnKRXw4ac08hnPUscyvjkw5AZXM4os9jzyY6sdZ3h5YC++jLm0lrASf50T5krzEn0QbOLbB8in2FvwKfNPJczCXd0hLV7wPPqL8bybt691//aWWfhkPo2681PjZPDbgP7lYZOl1nNJs9rW4elXD2zfkK8wIFOy2w1XuuWyOpTkuw2sHOhlqrzvIqu59gbuYEdIcqcjSyb65SLX5EHOepgrbuKtJ6nHNQtxtx0U5xM8DoXMkez7K5xM7Tp4iS4WOvszvss5feSP9Fvo5EVnDDfHGJfpd157Y48xFRGmfaEaWcu/qqYZxpCDcxcqR8Mg9xlGkANzNz+BDcx4zEJNTBzv5gPCSeXTvJtmM+3PJqIKdNj6GE3pJsG5mIwOMp1ptnABgd1sq+G7ebnXZncHCKjG3+M1zpLTzMz7AZ00cBG5pmlFb3JmkQTSpPd21HZbWD9Qy21zPPK/zricNH6+B7mvZFreTpEtAFWt0dpsnoWZreBVTG+kyVS1GVN4/vDd9lJVIRY5yzfPdPlrPHHdTwYItr1bkLcTia8M1qPM9F3yRRjcuaYprNmHxzyfNbQyQlnGTM47ynhndFan7WuCywLODz35I2sC9DCXheZHBNpsXvZmu1fkZXs5rjPnPzb8hyAzrIzINr9HOBIwNXat+ZcleS1hame1714izc55jNvbVDBtz7pyWuJuI15P/tnx1F0UwzsQpprO5nil2KIQSZbqcspnwp57+iu2MQT1mMmhNue/MMR3xfwMi8VYRhnmJqXP/MG1lZwyVNMy9l/FR4tf/mdvB553Uz2sXFn+n1YaGCNBZZr5mH25by7xzCb3PKrmM+lgmK1BV4hdc0+2g2zjq8m1wlAOY1dvqXGKep87oZYzUmDW3Vs8+myuIf6Am6AsiT0Nljp/CYl0Twaze9ZaaN3u5w5jAy5L2ylhe/4nAu+S1Qwl+oCsrjCV2wM2KXfwSPUcmPIGv9LPZ91Ye1TEnEb80ztNLE+Dv8MS0RERERERERERERERERERERERERERERERERERERERERERERERERs+Q/rhi5WauEgfQAAAABJRU5ErkJggg=="
 servers:
@@ -911,6 +915,26 @@ tags:
 - name: Manage Payments
   description: "Manage payments to initiated through Bud's Payments API      \n"
   x-displayName: Manage Payments
+- name: Characteristics API
+  description: |2
+
+    The Characteristics API provides endpoints for retrieving specific characteristics that apply to an individual
+    Customer based on their financial data. The currently supported characteristics are:
+
+    | Characteristic | Description |
+    |:---------------|:---------------------------------------------------------------------------------------------|
+    | `credit_card`  | Customer has made credit card repayments                                                     |
+    | `loan`         | Customer has made loan repayments (excluding credit cards)                                   |
+    | `overdraft`    | Customer has paid overdraft fees                                                             |
+    | `saver`        | Customer has savings transactions                                                            |
+
+    New characteristics will be released and added to this list without a breaking change notice.
+  x-displayName: Characteristics API
+  x-traitTag: true
+- name: Retrieve Customer Characteristics
+  description: |
+    Retrieve Characteristics associated with an individual Customer based on their financial data.
+  x-displayName: Retrieve Customer Characteristics
 - name: Signal API
   description: |
     Contextual, relevant triggers and notifications that drive action from customers.
@@ -8317,6 +8341,22 @@ paths:
         schema:
           type: string
         example: 2019-03
+      - name: timezone
+        in: query
+        schema:
+          $ref: '#/schemas/TimezoneIdentifier'
+      - name: overall_totals
+        in: query
+        schema:
+          type: boolean
+          description: |
+            If `true`, shows the overall totals in the affordability report (under `overall_total` property).
+      - name: monthly_totals
+        in: query
+        schema:
+          type: boolean
+          description: |
+            If `true`, shows the monthly totals in the affordability report (under `monthly_totals` property).
       - name: currency
         in: query
         required: false
@@ -8332,66 +8372,296 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AffordabilityReportResponse'
-              example:
-                operation_id: v1_affordability_report
-                data:
-                  months_assessed:
-                    start: 2022-01
-                    end: 2022-03
-                  accounts:
-                    connected: 3
-                    holder_names:
-                    - John Doe
-                    missing_data:
-                      income: false
-                      expenditure: false
-                  assessment:
-                    income:
-                      net_disposable:
-                        predicted_monthly:
-                          value: "1500.00"
-                          currency: GBP
-                        _links:
-                          transactions: /v1/affordability/transactions?criteria=net_disposable_income
-                      net_discretionary:
-                        predicted_monthly:
-                          value: "70.00"
-                          currency: GBP
-                        _links:
-                          income_transactions: /v1/affordability/transactions?criteria=net_disposable_income
-                          expenditure_transactions: /v1/affordability/transactions?criteria=essential_expenditure
-                    expenditure:
-                      fixed:
-                        predicted_monthly:
-                          value: "1000.00"
-                          currency: GBP
-                        _links:
-                          transactions: /v1/affordability/transactions?criteria=fixed_expenditure
-                      flexible:
-                        predicted_monthly_range:
-                          low:
-                            value: "10.00"
-                            currency: GBP
-                          high:
-                            value: "100.00"
-                            currency: GBP
-                          average:
-                            value: "56.00"
-                            currency: GBP
-                        _links:
-                          transactions: /v1/affordability/transactions?criteria=flexible_expenditure
-                      essential:
-                        predicted_monthly:
-                          value: "500.00"
-                          currency: GBP
-                        _links:
-                          transactions: /v1/affordability/transactions?criteria=essential_expenditure
-                      non_essential:
-                        predicted_monthly:
-                          value: "80.00"
-                          currency: GBP
-                        _links:
-                          transactions: /v1/affordability/transactions?criteria=non_essential_expenditure
+              examples:
+                Income and expenditure:
+                  value:
+                    operation_id: v1_affordability_report
+                    data:
+                      months_assessed:
+                        start: 2022-01
+                        end: 2022-03
+                      accounts:
+                        connected: 3
+                        holder_names:
+                        - John Doe
+                        missing_data:
+                          income: false
+                          expenditure: false
+                      assessment:
+                        income:
+                          net_disposable:
+                            predicted_monthly:
+                              value: "1500.00"
+                              currency: GBP
+                            _links:
+                              transactions: /v1/affordability/transactions?criteria=net_disposable_income
+                          net_discretionary:
+                            predicted_monthly:
+                              value: "70.00"
+                              currency: GBP
+                            _links:
+                              income_transactions: /v1/affordability/transactions?criteria=net_disposable_income
+                              expenditure_transactions: /v1/affordability/transactions?criteria=essential_expenditure
+                        expenditure:
+                          fixed:
+                            predicted_monthly:
+                              value: "1000.00"
+                              currency: GBP
+                            _links:
+                              transactions: /v1/affordability/transactions?criteria=fixed_expenditure
+                          flexible:
+                            predicted_monthly_range:
+                              low:
+                                value: "10.00"
+                                currency: GBP
+                              high:
+                                value: "100.00"
+                                currency: GBP
+                              average:
+                                value: "56.00"
+                                currency: GBP
+                            _links:
+                              transactions: /v1/affordability/transactions?criteria=flexible_expenditure
+                          essential:
+                            predicted_monthly:
+                              value: "500.00"
+                              currency: GBP
+                            _links:
+                              transactions: /v1/affordability/transactions?criteria=essential_expenditure
+                          non_essential:
+                            predicted_monthly:
+                              value: "80.00"
+                              currency: GBP
+                            _links:
+                              transactions: /v1/affordability/transactions?criteria=non_essential_expenditure
+                Overall and monthly totals included:
+                  value:
+                    operation_id: v1_affordability_report
+                    data:
+                      months_assessed:
+                        start: 2023-01
+                        end: 2023-06
+                      accounts:
+                        connected: 1
+                        holder_names: []
+                        missing_data:
+                          income: false
+                          expenditure: false
+                      assessment:
+                        income:
+                          net_disposable:
+                            overall_total:
+                              value: "13800.00"
+                              currency: GBP
+                            monthly_totals:
+                            - month: 2023-01
+                              amount:
+                                value: "2300.00"
+                                currency: GBP
+                            - month: 2023-02
+                              amount:
+                                value: "2300.00"
+                                currency: GBP
+                            - month: 2023-03
+                              amount:
+                                value: "2300.00"
+                                currency: GBP
+                            - month: 2023-04
+                              amount:
+                                value: "2300.00"
+                                currency: GBP
+                            - month: 2023-05
+                              amount:
+                                value: "2300.00"
+                                currency: GBP
+                            - month: 2023-06
+                              amount:
+                                value: "2300.00"
+                                currency: GBP
+                            predicted_monthly:
+                              value: "2300.00"
+                              currency: GBP
+                            _links:
+                              transactions: /v1/affordability/transactions?criteria=net_disposable_income&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                          net_discretionary:
+                            overall_total:
+                              value: "-9.00"
+                              currency: GBP
+                            monthly_totals:
+                            - month: 2023-01
+                              amount:
+                                value: "12.00"
+                                currency: GBP
+                            - month: 2023-02
+                              amount:
+                                value: "12.00"
+                                currency: GBP
+                            - month: 2023-03
+                              amount:
+                                value: "-69.00"
+                                currency: GBP
+                            - month: 2023-04
+                              amount:
+                                value: "12.00"
+                                currency: GBP
+                            - month: 2023-05
+                              amount:
+                                value: "12.00"
+                                currency: GBP
+                            - month: 2023-06
+                              amount:
+                                value: "12.00"
+                                currency: GBP
+                            predicted_monthly:
+                              value: "-1.50"
+                              currency: GBP
+                            _links:
+                              income_transactions: /v1/affordability/transactions?criteria=net_disposable_income&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                              expenditure_transactions: /v1/affordability/transactions?criteria=essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                        expenditure:
+                          essential:
+                            overall_total:
+                              value: "13809.00"
+                              currency: GBP
+                            monthly_totals:
+                            - month: 2023-01
+                              amount:
+                                value: "2288.00"
+                                currency: GBP
+                            - month: 2023-02
+                              amount:
+                                value: "2288.00"
+                                currency: GBP
+                            - month: 2023-03
+                              amount:
+                                value: "2369.00"
+                                currency: GBP
+                            - month: 2023-04
+                              amount:
+                                value: "2288.00"
+                                currency: GBP
+                            - month: 2023-05
+                              amount:
+                                value: "2288.00"
+                                currency: GBP
+                            - month: 2023-06
+                              amount:
+                                value: "2288.00"
+                                currency: GBP
+                            predicted_monthly:
+                              value: "2301.50"
+                              currency: GBP
+                            _links:
+                              transactions: /v1/affordability/transactions?criteria=essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                          non_essential:
+                            overall_total:
+                              value: "4232.44"
+                              currency: GBP
+                            monthly_totals:
+                            - month: 2023-01
+                              amount:
+                                value: "1198.52"
+                                currency: GBP
+                            - month: 2023-02
+                              amount:
+                                value: "591.20"
+                                currency: GBP
+                            - month: 2023-03
+                              amount:
+                                value: "747.84"
+                                currency: GBP
+                            - month: 2023-04
+                              amount:
+                                value: "534.80"
+                                currency: GBP
+                            - month: 2023-05
+                              amount:
+                                value: "597.20"
+                                currency: GBP
+                            - month: 2023-06
+                              amount:
+                                value: "562.88"
+                                currency: GBP
+                            predicted_monthly:
+                              value: "705.41"
+                              currency: GBP
+                            _links:
+                              transactions: /v1/affordability/transactions?criteria=non_essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                          fixed:
+                            overall_total:
+                              value: "12466.08"
+                              currency: GBP
+                            monthly_totals:
+                            - month: 2023-01
+                              amount:
+                                value: "2024.00"
+                                currency: GBP
+                            - month: 2023-02
+                              amount:
+                                value: "2104.08"
+                                currency: GBP
+                            - month: 2023-03
+                              amount:
+                                value: "2102.32"
+                                currency: GBP
+                            - month: 2023-04
+                              amount:
+                                value: "2062.96"
+                                currency: GBP
+                            - month: 2023-05
+                              amount:
+                                value: "2108.96"
+                                currency: GBP
+                            - month: 2023-06
+                              amount:
+                                value: "2063.76"
+                                currency: GBP
+                            predicted_monthly:
+                              value: "2077.68"
+                              currency: GBP
+                            _links:
+                              transactions: /v1/affordability/transactions?criteria=fixed_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                          flexible:
+                            overall_total:
+                              value: "5575.36"
+                              currency: GBP
+                            monthly_totals:
+                            - month: 2023-01
+                              amount:
+                                value: "1462.52"
+                                currency: GBP
+                            - month: 2023-02
+                              amount:
+                                value: "775.12"
+                                currency: GBP
+                            - month: 2023-03
+                              amount:
+                                value: "1014.52"
+                                currency: GBP
+                            - month: 2023-04
+                              amount:
+                                value: "759.84"
+                                currency: GBP
+                            - month: 2023-05
+                              amount:
+                                value: "776.24"
+                                currency: GBP
+                            - month: 2023-06
+                              amount:
+                                value: "787.12"
+                                currency: GBP
+                            predicted_monthly_range:
+                              low:
+                                value: "759.84"
+                                currency: GBP
+                              high:
+                                value: "1462.52"
+                                currency: GBP
+                              average:
+                                value: "929.23"
+                                currency: GBP
+                            _links:
+                              transactions: /v1/affordability/transactions?criteria=flexible_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
         "400":
           description: The request contains an invalid payload
         "401":
@@ -8409,7 +8679,7 @@ paths:
       summary: Retrieve Affordability Transactions
       description: View the transactions that were used to calculate a customer's
         Retrieve Affordability Report.
-      operationId: v1_affordability_transactions
+      operationId: v1_affordability_transactions_get
       parameters:
       - name: X-Client-Id
         in: header
@@ -8443,6 +8713,8 @@ paths:
           $ref: '#/schemas/DateTimeISO8601'
       - name: criteria
         in: query
+        style: form
+        explode: false
         schema:
           type: array
           items:
@@ -8470,6 +8742,85 @@ paths:
                     l2: income
                   criteria_satisfied:
                   - net_disposable_income
+        "400":
+          description: The request contains an invalid payload
+        "401":
+          description: Unauthorised request
+        "405":
+          description: An unexpected HTTP method was used
+        "5XX":
+          description: An unexpected error occurred on the server side
+      security:
+      - OAuth2: []
+  /affordability/v2/transactions:
+    get:
+      tags:
+      - Retrieve Affordability Report
+      summary: Retrieve Affordability Transactions V2
+      description: |
+        View the transactions that were used to calculate a customer's Retrieve Affordability Report, but in the same
+        response format as Retrieve Transactions V2.
+      operationId: v2_affordability_transactions_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: X-Customer-Id
+        in: header
+        description: Bud Customer identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Customer-Secret
+        in: header
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
+        schema:
+          type: string
+      - name: date_from
+        in: query
+        schema:
+          $ref: '#/schemas/DateTimeISO8601'
+      - name: date_to
+        in: query
+        schema:
+          $ref: '#/schemas/DateTimeISO8601'
+      - name: criteria
+        in: query
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/AffordabilityCriteria'
+      responses:
+        "200":
+          description: The request was successfully processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTransactionsResponse'
+              example:
+                operation_id: v2_affordability_transactions_get
+                data:
+                - transaction_id: da4ad499c86956e65e811fc88f6b54af
+                  account_id: 72fa858459bd32ce0b5fd9daf813fd07
+                  provider: BankOfBud
+                  description: ""
+                  credit_debit_indicator: credit
+                  status: pending
+                  amount:
+                    value: "10.99"
+                    currency: GBP
+                  date_time: 2022-01-02T15:00:00Z
+                metadata: []
         "400":
           description: The request contains an invalid payload
         "401":
@@ -11122,6 +11473,356 @@ paths:
           description: An unexpected error occurred on the server side
       security:
       - OAuth2: []
+  /characteristics/v1/customer:
+    get:
+      tags:
+      - Retrieve Customer Characteristics
+      summary: Retrieve Customer Characteristics
+      description: "Retrieves a collection of characteristics associated with an individual\
+        \ Customer. \nFor data on why an individual characteristic applies to a Customer,\
+        \ use the relevant detailed endpoint.\n\nThe currently supported characteristics\
+        \ are:\n\n| Characteristic | Description                                 \
+        \               |\n|:---------------|:-----------------------------------------------------------|\n\
+        | `credit_card`  | Customer has made credit card repayments              \
+        \     |\n| `loan`         | Customer has made loan repayments (excluding credit\
+        \ cards) |\n| `overdraft`    | Customer has paid overdraft fees          \
+        \                 |\n| `saver`        | Customer has savings transactions\
+        \                          |\n\nNew characteristics will be released and added\
+        \ to this list without a breaking change notice.\n"
+      operationId: characteristics_v1_customer_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: X-Customer-Id
+        in: header
+        description: Bud Customer identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Customer-Secret
+        in: header
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCustomerCharacteristicsResponse'
+              examples:
+                Multiple Characteristics:
+                  value:
+                    operation_id: characteristics_v1_customer_get
+                    data:
+                    - type: credit_card
+                      link: characteristics/v1/customer/credit_card
+                    - type: loan
+                      link: characteristics/v1/customer/loan
+                    - type: overdraft
+                      link: characteristics/v1/customer/overdraft
+                    - type: saver
+                      link: characteristics/v1/customer/saver
+                No Characteristics:
+                  value:
+                    operation_id: characteristics_v1_customer_get
+                    data: []
+        "401":
+          description: Unauthorised request
+        "5XX":
+          description: An unexpected error occurred on the server side
+      security:
+      - OAuth2: []
+  /characteristics/v1/customer/credit-card:
+    get:
+      tags:
+      - Retrieve Customer Characteristics
+      summary: Retrieve Customer Characteristics - Credit Card
+      description: |
+        Retrieves detailed information for a customer that marks them as a credit card user.
+      operationId: characteristics_v1_customer_credit_card_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: X-Customer-Id
+        in: header
+        description: Bud Customer identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Customer-Secret
+        in: header
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCreditCardCharacteristicsResponse'
+              example:
+                operation_id: characteristics_v1_customer_credit_card_get
+                data:
+                  credit_card_transactions:
+                  - transaction_id: 864a3efc-6104-4dde-99a0-c3d91a8bcecf
+                    account_id: ad7d5904-39ab-4736-b726-5792c7a2146e
+                    description: CREDIT CARD PAYMENT
+                    provider: BankOfBud
+                    status: booked
+                    amount:
+                      value: "1234.56"
+                      currency: GBP
+                    date_time: 2023-07-03T10:00:00Z
+                    enrichments:
+                      categories:
+                        l1:
+                          slug: borrowing_and_loans
+                          confidence: "0.99"
+                        l2:
+                          slug: credit_cards
+                          confidence: "0.99"
+                  credit_card_transaction_totals:
+                  - amount:
+                      value: "1234.56"
+                      currency: GBP
+                    credit_debit_indicator: debit
+        "401":
+          description: Unauthorised request
+        "5XX":
+          description: An unexpected error occurred on the server side
+      security:
+      - OAuth2: []
+  /characteristics/v1/customer/loan:
+    get:
+      tags:
+      - Retrieve Customer Characteristics
+      summary: Retrieve Customer Characteristics - Loan
+      description: |
+        Retrieves detailed information for a customer that marks them as a loan user.
+      operationId: characteristics_v1_customer_loan_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: X-Customer-Id
+        in: header
+        description: Bud Customer identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Customer-Secret
+        in: header
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLoanCharacteristicsResponse'
+              example:
+                operation_id: characteristics_v1_customer_loan_get
+                data:
+                  loan_transactions:
+                  - transaction_id: 864a3efc-6104-4dde-99a0-c3d91a8bcecf
+                    account_id: ad7d5904-39ab-4736-b726-5792c7a2146e
+                    description: CAR LOAN REPAYMENT
+                    provider: BankOfBud
+                    status: booked
+                    amount:
+                      value: "1234.56"
+                      currency: GBP
+                    date_time: 2023-07-03T10:00:00Z
+                    enrichments:
+                      categories:
+                        l1:
+                          slug: borrowing_and_loans
+                          confidence: "0.92"
+                        l2:
+                          slug: vehicle_loan
+                          confidence: "0.80"
+                  loan_transaction_totals:
+                  - amount:
+                      value: "1234.56"
+                      currency: GBP
+                    credit_debit_indicator: debit
+        "401":
+          description: Unauthorised request
+        "5XX":
+          description: An unexpected error occurred on the server side
+      security:
+      - OAuth2: []
+  /characteristics/v1/customer/overdraft:
+    get:
+      tags:
+      - Retrieve Customer Characteristics
+      summary: Retrieve Customer Characteristics - Overdraft
+      description: |
+        Retrieves detailed information for a customer that marks them as an overdraft user.
+      operationId: characteristics_v1_customer_overdraft_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: X-Customer-Id
+        in: header
+        description: Bud Customer identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Customer-Secret
+        in: header
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOverdraftCharacteristicsResponse'
+              example:
+                operation_id: characteristics_v1_customer_overdraft_get
+                data:
+                  overdraft_transactions:
+                  - transaction_id: 864a3efc-6104-4dde-99a0-c3d91a8bcecf
+                    account_id: ad7d5904-39ab-4736-b726-5792c7a2146e
+                    description: OVERDRAFT FEE
+                    provider: BankOfBud
+                    status: booked
+                    amount:
+                      value: "12.34"
+                      currency: GBP
+                    date_time: 2023-07-03T10:00:00Z
+                    enrichments:
+                      categories:
+                        l1:
+                          slug: banking
+                          confidence: "0.92"
+                        l2:
+                          slug: overdraft_fees
+                          confidence: "0.80"
+                  overdraft_transaction_totals:
+                  - amount:
+                      value: "12.34"
+                      currency: GBP
+                    credit_debit_indicator: debit
+        "401":
+          description: Unauthorised request
+        "5XX":
+          description: An unexpected error occurred on the server side
+      security:
+      - OAuth2: []
+  /characteristics/v1/customer/saver:
+    get:
+      tags:
+      - Retrieve Customer Characteristics
+      summary: Retrieve Customer Characteristics - Saver
+      description: |
+        Retrieves detailed information for a customer that marks them as a saver.
+      operationId: characteristics_v1_customer_saver_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: X-Customer-Id
+        in: header
+        description: Bud Customer identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Customer-Secret
+        in: header
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSaverCharacteristicsResponse'
+              example:
+                operation_id: characteristics_v1_customer_saver_get
+                data:
+                  saver_transactions:
+                  - transaction_id: 864a3efc-6104-4dde-99a0-c3d91a8bcecf
+                    account_id: ad7d5904-39ab-4736-b726-5792c7a2146e
+                    description: SAVINGS
+                    provider: BankOfBud
+                    status: booked
+                    amount:
+                      value: "150.00"
+                      currency: GBP
+                    date_time: 2023-07-03T10:00:00Z
+                    enrichments:
+                      categories:
+                        l1:
+                          slug: pensions_savings_and_investments
+                          confidence: "0.99"
+                        l2:
+                          slug: savings
+                          confidence: "0.99"
+                  saver_transactions_totals:
+                  - amount:
+                      value: "12.34"
+                      currency: GBP
+                    credit_debit_indicator: debit
+        "401":
+          description: Unauthorised request
+        "5XX":
+          description: An unexpected error occurred on the server side
+      security:
+      - OAuth2: []
   /v1/signal/money-management:
     get:
       tags:
@@ -12474,7 +13175,9 @@ components:
             |:------------------------|:----------------------------------------------------------|
             | `benefit`               | A government/non-profit benefit transaction               |
             | `debt-collection`       | A transaction associated with a known debt-collector      |
+            | `loan`                  | A transaction associated with a loan                      |
             | `income`                | A transaction associated with income                      |
+            | `pending`               | A transaction which has not been booked                   |
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
             | `salary`                | A transaction associated with a regular wage              |
             | `subscription`          | A transaction associated with a subscription service      |
@@ -17403,6 +18106,15 @@ components:
           description: Date (`YYYY-MM-DD`) from which the transactions should be returned
             to
       description: Metadata Response
+    TimezoneIdentifier:
+      type: string
+      description: |-
+        Timezone identifier (e.g. `Europe/London`) to make `month_from`/`month_to` dates relativised to the correct location.
+
+        In the case of daylight savings in a location, this ensures that the overall start/end date accounts for those shifts.
+
+        See [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for list of valid timezone identifiers under `TZ identifier`.
+      default: Etc/UTC
     AffordabilityReportResponse:
       title: Retrieve Affordability Report Schema
       required:
@@ -17432,40 +18144,37 @@ components:
         assessment:
           $ref: '#/components/schemas/AffordabilityReport_assessment'
       description: Retrieve Affordability Report Response Data
-    MonthlyPrediction:
-      title: Monthly Prediction
+    ReportTotal:
       required:
       - _links
       - predicted_monthly
-      type: object
       properties:
-        predicted_monthly:
-          $ref: '#/components/schemas/BudAmount'
-        _links:
-          $ref: '#/components/schemas/TransactionsLinks'
-      description: Monthly Prediction Amount
-    TransactionsLinks:
-      title: Affordability Transaction Links
-      required:
-      - transactions
-      type: object
-      properties:
-        transactions:
-          type: string
-          format: uri
-      description: Transaction Links
-    MonthlyIncomeExpenditurePrediction:
-      title: Monthly Income & Expenditure Predictions
-      required:
-      - _links
-      - predicted_monthly
-      type: object
-      properties:
+        overall_total:
+          allOf:
+          - $ref: '#/components/schemas/BudAmount'
+          - description: |
+              Overall total over the report period.
+        monthly_totals:
+          type: array
+          description: |
+            Total per month over the report period.
+          items:
+            $ref: '#/components/schemas/MonthlyTotal'
         predicted_monthly:
           $ref: '#/components/schemas/BudAmount'
         _links:
           $ref: '#/components/schemas/IncomeAndExpenditureTransactionsLinks'
-      description: Monthly Income & Expenditure Predictions
+    MonthlyTotal:
+      required:
+      - amount
+      - month
+      properties:
+        month:
+          type: string
+          description: |
+            Month (format `YYYY-MM`)
+        amount:
+          $ref: '#/components/schemas/BudAmount'
     IncomeAndExpenditureTransactionsLinks:
       title: Income & Expenditure Transactions Links
       required:
@@ -17480,6 +18189,29 @@ components:
           type: string
           format: uri
       description: Income & Expenditure Transactions Links
+    MonthlyIncomeExpenditurePrediction:
+      title: Monthly Income & Expenditure Predictions
+      required:
+      - _links
+      - predicted_monthly
+      type: object
+      properties:
+        overall_total:
+          allOf:
+          - $ref: '#/components/schemas/BudAmount'
+          - description: |
+              Overall total over the report period.
+        monthly_totals:
+          type: array
+          description: |
+            Total per month over the report period.
+          items:
+            $ref: '#/components/schemas/MonthlyTotal'
+        predicted_monthly:
+          $ref: '#/components/schemas/BudAmount'
+        _links:
+          $ref: '#/components/schemas/IncomeAndExpenditureTransactionsLinks'
+      description: Monthly Income & Expenditure Predictions
     MonthlyRangePrediction:
       title: Monthly Range Prediction
       required:
@@ -17487,11 +18219,32 @@ components:
       - predicted_monthly_range
       type: object
       properties:
+        overall_total:
+          allOf:
+          - $ref: '#/components/schemas/BudAmount'
+          - description: |
+              Overall total over the report period.
+        monthly_totals:
+          type: array
+          description: |
+            Total per month over the report period.
+          items:
+            $ref: '#/components/schemas/MonthlyTotal'
         predicted_monthly_range:
           $ref: '#/components/schemas/MonthlyRangePrediction_predicted_monthly_range'
         _links:
           $ref: '#/components/schemas/TransactionsLinks'
       description: Monthly Range
+    TransactionsLinks:
+      title: Affordability Transaction Links
+      required:
+      - transactions
+      type: object
+      properties:
+        transactions:
+          type: string
+          format: uri
+      description: Transaction Links
     DateTimeISO8601_1:
       title: Date/Time (ISO 8601)
       type: string
@@ -18755,6 +19508,166 @@ components:
           type: object
       description: Response structure when retrieving a specific Scheduled Payment
         status
+    GetCustomerCharacteristicsResponse:
+      title: Retrieve Customer Characteristics Response
+      required:
+      - data
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+          - characteristics_v1_customer_get
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerCharacteristicSimple'
+    CustomerCharacteristicSimple:
+      title: Customer Characteristic
+      type: object
+      properties:
+        type:
+          title: Characteristic Type
+          type: string
+          description: |
+            The type of customer characteristic. Currently supported values include:
+            - `credit_card`
+            - `loan`
+            - `overdraft`
+            - `saver`
+
+            However clients integrating with this endpoint should expect more to be added without notice.
+        link:
+          title: Characteristic Details Link
+          type: string
+          description: The URL to follow to get detailed Characteristic information
+            about the customer.
+    GetCreditCardCharacteristicsResponse:
+      title: Get Credit Card Customer Characteristics Response
+      required:
+      - data
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+          - characteristics_v1_customer_credit_card_get
+        data:
+          $ref: '#/components/schemas/GetCreditCardCharacteristicsResponse_data'
+    CustomerCharacteristicTransaction:
+      title: Customer Characteristic Transaction
+      required:
+      - account_id
+      - amount
+      - credit_debit_indicator
+      - date_time
+      - description
+      - status
+      - transaction_id
+      type: object
+      properties:
+        transaction_id:
+          type: string
+          description: Unique identifier for the transaction. May be mutable depending
+            on original ingestion source.
+        account_id:
+          type: string
+          description: Identifier for the account associated with the transaction.
+        provider:
+          type: string
+          description: Name of the transaction source provider. Optional as it may
+            not have been supplied when using first party data.
+        description:
+          type: string
+          description: Description of the transaction.
+        credit_debit_indicator:
+          type: string
+          description: Credit/Debit Indicator
+          enum:
+          - credit
+          - debit
+        status:
+          type: string
+          description: Status of the transaction. Defaults to booked.
+          enum:
+          - booked
+          - pending
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        date_time:
+          type: string
+          description: Date of the transaction compliant with RFC3339.
+        enrichments:
+          $ref: '#/components/schemas/CustomerCharacteristicTransaction_enrichments'
+      description: A financial transaction
+    Categories_1:
+      title: Categories
+      type: object
+      properties:
+        l1:
+          $ref: '#/components/schemas/Category'
+        l2:
+          $ref: '#/components/schemas/Category'
+      description: "Categories enrichment associated with a Transaction, as generated\
+        \ by Bud's artificial intelligence models. \nCurrently two levels of category\
+        \ are supported, with `l1` being a coarse-grained category level and `l2`\
+        \ being\nmore refined.\n"
+    TransactionTotal:
+      required:
+      - amount
+      - credit_debit_indicator
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        credit_debit_indicator:
+          type: string
+          description: Credit/Debit Indicator
+          enum:
+          - credit
+          - debit
+      description: Totals of all included transactions for the specified currency.
+    GetLoanCharacteristicsResponse:
+      title: Get Loan Customer Characteristics Response
+      required:
+      - data
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+          - characteristics_v1_customer_loan_get
+        data:
+          $ref: '#/components/schemas/GetLoanCharacteristicsResponse_data'
+    GetOverdraftCharacteristicsResponse:
+      title: Get Overdraft Customer Characteristics Response
+      required:
+      - data
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+          - characteristics_v1_customer_overdraft_get
+        data:
+          $ref: '#/components/schemas/GetOverdraftCharacteristicsResponse_data'
+    GetSaverCharacteristicsResponse:
+      title: Get Saver Customer Characteristics Response
+      required:
+      - data
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+          - characteristics_v1_customer_saver_get
+        data:
+          $ref: '#/components/schemas/GetSaverCharacteristicsResponse_data'
     MoneyManagementResponse:
       title: Money Management Response
       type: array
@@ -19846,7 +20759,9 @@ components:
             |:------------------------|:----------------------------------------------------------|
             | `benefit`               | A government/non-profit benefit transaction               |
             | `debt-collection`       | A transaction associated with a known debt-collector      |
+            | `loan`                  | A transaction associated with a loan                      |
             | `income`                | A transaction associated with income                      |
+            | `pending`               | A transaction which has not been booked                   |
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
             | `salary`                | A transaction associated with a regular wage              |
             | `subscription`          | A transaction associated with a subscription service      |
@@ -19858,7 +20773,7 @@ components:
       type: object
       properties:
         categories:
-          $ref: '#/components/schemas/Categories_1'
+          $ref: '#/components/schemas/Categories_2'
         merchant:
           $ref: '#/components/schemas/Merchant'
         processor:
@@ -19878,7 +20793,7 @@ components:
           items:
             type: string
       description: Contextual enrichments associated with a Transaction
-    Categories_1:
+    Categories_2:
       title: Categories
       type: object
       properties:
@@ -21626,7 +22541,7 @@ components:
         net_disposable:
           allOf:
           - description: Income -- excluding benefits -- after taxes
-          - $ref: '#/components/schemas/MonthlyPrediction'
+          - $ref: '#/components/schemas/ReportTotal'
         net_discretionary:
           allOf:
           - description: Net disposable income subtract essential expenditure
@@ -21642,7 +22557,7 @@ components:
         fixed:
           description: An expense that is a fixed amount each month
           allOf:
-          - $ref: '#/components/schemas/MonthlyPrediction'
+          - $ref: '#/components/schemas/ReportTotal'
         flexible:
           description: A regular expense that differs in amount each month
           allOf:
@@ -21651,12 +22566,12 @@ components:
           description: "An expense that is not optional for a customer to pay, but\
             \ isn’t necessarily the same in £ amount each month."
           allOf:
-          - $ref: '#/components/schemas/MonthlyPrediction'
+          - $ref: '#/components/schemas/ReportTotal'
         non_essential:
           description: "An expense that a customer does not necessarily need to make\
             \ per month, and isn’t necessarily the same in £ amount each month."
           allOf:
-          - $ref: '#/components/schemas/MonthlyPrediction'
+          - $ref: '#/components/schemas/ReportTotal'
       description: Detailing transactions linked to a customers expenditure
     AffordabilityReport_assessment:
       required:
@@ -22191,6 +23106,56 @@ components:
           enum:
           - confirm_scheduled_payment
       description: Scheduled Payment Response Object
+    GetCreditCardCharacteristicsResponse_data:
+      type: object
+      properties:
+        credit_card_transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerCharacteristicTransaction'
+        credit_card_transaction_totals:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionTotal'
+    CustomerCharacteristicTransaction_enrichments:
+      type: object
+      properties:
+        categories:
+          $ref: '#/components/schemas/Categories_1'
+      description: Contextual enrichments associated with a Transaction
+    GetLoanCharacteristicsResponse_data:
+      type: object
+      properties:
+        loan_transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerCharacteristicTransaction'
+        loan_transaction_totals:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionTotal'
+    GetOverdraftCharacteristicsResponse_data:
+      type: object
+      properties:
+        overdraft_transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerCharacteristicTransaction'
+        overdraft_transaction_totals:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionTotal'
+    GetSaverCharacteristicsResponse_data:
+      type: object
+      properties:
+        saver_transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerCharacteristicTransaction'
+        saver_transaction_totals:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionTotal'
     CannotCoverBillsMoneyManagementDetails_transactions:
       required:
       - account_id
@@ -22773,6 +23738,25 @@ components:
       schema:
         type: string
       example: 2019-03
+    Timezone:
+      name: timezone
+      in: query
+      schema:
+        $ref: '#/schemas/TimezoneIdentifier'
+    OverallTotals:
+      name: overall_totals
+      in: query
+      schema:
+        type: boolean
+        description: |
+          If `true`, shows the overall totals in the affordability report (under `overall_total` property).
+    MonthlyTotals:
+      name: monthly_totals
+      in: query
+      schema:
+        type: boolean
+        description: |
+          If `true`, shows the monthly totals in the affordability report (under `monthly_totals` property).
     DateFrom:
       name: date_from
       in: query
@@ -22786,6 +23770,8 @@ components:
     Criteria:
       name: criteria
       in: query
+      style: form
+      explode: false
       schema:
         type: array
         items:
@@ -23056,6 +24042,10 @@ x-tagGroups:
   - Initiate Payment - Bud license
   - Initiate Payment - Client license
   - Manage Payments
+- name: ""
+  tags:
+  - Characteristics API
+  - Retrieve Customer Characteristics
 - name: ""
   tags:
   - Signal API
