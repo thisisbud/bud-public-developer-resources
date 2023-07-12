@@ -159,7 +159,9 @@
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"pm.environment.set(\"customer_id\", jsonData.data.customer_id);",
-											"pm.environment.set(\"customer_secret\", jsonData.data.customer_secret);"
+											"if (jsonData.data.hasOwnProperty('customer_secret')) {",
+											"    pm.environment.set(\"customer_secret\", jsonData.data.customer_secret);",
+											"}"
 										],
 										"type": "text/javascript"
 									}
