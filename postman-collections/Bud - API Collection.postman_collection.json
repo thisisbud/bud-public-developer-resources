@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c96cb21b-13fe-4210-8b4b-14a19ed793e1",
+		"_postman_id": "5fe1e6a6-711e-427a-9459-e7058cddd5b9",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -5465,6 +5465,245 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Characteristics API",
+			"item": [
+				{
+					"name": "Retrieve Customer Characteristics",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Secret",
+								"value": "{{customer_secret}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}characteristics/v1/customer",
+							"host": [
+								"{{proxy_url}}characteristics"
+							],
+							"path": [
+								"v1",
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Customer Characteristics (Credit Card)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Secret",
+								"value": "{{customer_secret}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}characteristics/v1/customer/credit-card",
+							"host": [
+								"{{proxy_url}}characteristics"
+							],
+							"path": [
+								"v1",
+								"customer",
+								"credit-card"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Customer Characteristics (Loan)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"type": "text",
+								"value": "{{api_credentials_id}}"
+							},
+							{
+								"key": "X-Customer-Id",
+								"type": "text",
+								"value": "{{customer_id}}"
+							},
+							{
+								"key": "X-Customer-Secret",
+								"type": "text",
+								"value": "{{customer_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}characteristics/v1/customer/loan",
+							"host": [
+								"{{proxy_url}}characteristics"
+							],
+							"path": [
+								"v1",
+								"customer",
+								"loan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Customer Characteristics (Overdraft)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"type": "text",
+								"value": "{{api_credentials_id}}"
+							},
+							{
+								"key": "X-Customer-Id",
+								"type": "text",
+								"value": "{{customer_id}}"
+							},
+							{
+								"key": "X-Customer-Secret",
+								"type": "text",
+								"value": "{{customer_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}characteristics/v1/customer/overdraft",
+							"host": [
+								"{{proxy_url}}characteristics"
+							],
+							"path": [
+								"v1",
+								"customer",
+								"overdraft"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Customer Characteristics (Saver)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"type": "text",
+								"value": "{{api_credentials_id}}"
+							},
+							{
+								"key": "X-Customer-Id",
+								"type": "text",
+								"value": "{{customer_id}}"
+							},
+							{
+								"key": "X-Customer-Secret",
+								"type": "text",
+								"value": "{{customer_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}characteristics/v1/customer/saver",
+							"host": [
+								"{{proxy_url}}characteristics"
+							],
+							"path": [
+								"v1",
+								"customer",
+								"saver"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{auth_token}}",
+						"type": "string"
+					}
+				]
+			}
 		}
 	],
 	"event": [
