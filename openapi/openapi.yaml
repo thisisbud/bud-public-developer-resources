@@ -289,33 +289,37 @@ info:
     \ favour of **Retrieve Forecasted Transactions V2**. |\n\n## Changelog\n\nThis\
     \ changelog represents a list of all changes that have been made to Bud’s API\
     \ documentation. This includes both backward-compatible and backward-incompatible\
-    \ changes.\n\n**Version 2.8.1: 07/07/2023**\n> - Added `loan` and `pending` tags\
-    \ as part of the __Retrieve Transactions V2__ endpoint.\n> - General bug fixes\
-    \ and improvements across examples and schemas.\n\n**Version 2.8.0: 29/06/2023**\n\
-    > - Added the new Characteristics API as part of the Engage product offering.\n\
-    \n**Version 2.7.9: 22/06/2023**\n> - Updated __Retrieve Forecasted Transactions\
-    \ V1__ to show descriptive deprecation notice.\n\n**Version 2.7.8: 19/06/2023**\n\
-    > - Updated descriptions for Payments related endpoints.\n\n**Version 2.7.7: 07/06/2023**\n\
-    > - Updated response parameters for __Ingest First Party Data__ endpoints.\n\n\
-    **Version 2.7.6: 01/06/2023**\n> - Updated optional headers for __Reconfirm Consent__\
-    \ endpoint to include `X-Customer-Ip-Address`.\n\n**Version 2.7.5: 22/05/2023**\n\
-    > - Updated the description and examples for the __Retrieve Balances Over Time__\
-    \ and __Retrieve Balances Over Time By Account__ endpoints.\n> - Updated the description\
-    \ and examples for the __Retrieve Transactions V2__ endpoint.\n> - Updated __Retrieve\
-    \ Accounts__ to show descriptive deprecation notice.\n> - Updated __Retrieve Accounts\
-    \ V2__ response HTTP codes, example transaction ID, `provider` query parameter\
-    \ description.\n\n**Version 2.7.4: 19/05/2023**\n> - Updated the description for\
-    \ the __Ingest Transactions V2__ endpoint.\n\n**Version 2.7.3: 18/05/2023**\n\
-    > - Updated the __Retrieve Authorisation Gateway URL (v2)__ endpoint with a new\
-    \ enable_async_connect option.\n> - Updated the __Ingest Transactions V2__ request\
-    \ examples.\n\n**Version 2.7.2: 18/05/2023**\n> - Updated the description for\
-    \ the __Reconfirm Consent__ endpoint.\n\n**Version 2.7.1: 16/05/2023**\n> - Added\
-    \ documentation for __Retrieve Auth Tokens__ endpoint.\n\n**Version 2.7.0: 11/05/2023**\n\
-    > - Adds two new endpoints: __Create Customers V3__ and __Create Customers V3\
-    \ (Batch)__.\n> - Introduces the concept of Hosted Customers, which makes Customer\
-    \ Secrets optional on all endpoints which previously required them.\n\n**Version\
-    \ 2.6.2: 05/05/2023**\n> - Documented default to from case in __Retrieve Financial\
-    \ Products V2__ and __Retrieve Financial Products__.\n> - Fixed documentation\
+    \ changes.\n\n**Version 2.8.3: 18/07/2023**\n> - Added link to guide to __Create\
+    \ Customers V3__ and __Create Customers V3 (Batch)__.\n> - Added link to guide\
+    \ to __Retrieve Accounts V2__ and __Retrieve Accounts By ID V2__.\n\n**Version\
+    \ 2.8.2: 10/07/2023**\n> - Added `skip_success_screen` to the request body of\
+    \ the __Retrieve Authorisation Gateway URL V2__ endpoint.\n\n**Version 2.8.1:\
+    \ 07/07/2023**\n> - Added `loan` and `pending` tags as part of the __Retrieve\
+    \ Transactions V2__ endpoint.\n> - General bug fixes and improvements across examples\
+    \ and schemas.\n\n**Version 2.8.0: 29/06/2023**\n> - Added the new Characteristics\
+    \ API as part of the Engage product offering.\n\n**Version 2.7.9: 22/06/2023**\n\
+    > - Updated __Retrieve Forecasted Transactions V1__ to show descriptive deprecation\
+    \ notice.\n\n**Version 2.7.8: 19/06/2023**\n> - Updated descriptions for Payments\
+    \ related endpoints.\n\n**Version 2.7.7: 07/06/2023**\n> - Updated response parameters\
+    \ for __Ingest First Party Data__ endpoints.\n\n**Version 2.7.6: 01/06/2023**\n\
+    > - Updated optional headers for __Reconfirm Consent__ endpoint to include `X-Customer-Ip-Address`.\n\
+    \n**Version 2.7.5: 22/05/2023**\n> - Updated the description and examples for\
+    \ the __Retrieve Balances Over Time__ and __Retrieve Balances Over Time By Account__\
+    \ endpoints.\n> - Updated the description and examples for the __Retrieve Transactions\
+    \ V2__ endpoint.\n> - Updated __Retrieve Accounts__ to show descriptive deprecation\
+    \ notice.\n> - Updated __Retrieve Accounts V2__ response HTTP codes, example transaction\
+    \ ID, `provider` query parameter description.\n\n**Version 2.7.4: 19/05/2023**\n\
+    > - Updated the description for the __Ingest Transactions V2__ endpoint.\n\n**Version\
+    \ 2.7.3: 18/05/2023**\n> - Updated the __Retrieve Authorisation Gateway URL (v2)__\
+    \ endpoint with a new enable_async_connect option.\n> - Updated the __Ingest Transactions\
+    \ V2__ request examples.\n\n**Version 2.7.2: 18/05/2023**\n> - Updated the description\
+    \ for the __Reconfirm Consent__ endpoint.\n\n**Version 2.7.1: 16/05/2023**\n>\
+    \ - Added documentation for __Retrieve Auth Tokens__ endpoint.\n\n**Version 2.7.0:\
+    \ 11/05/2023**\n> - Adds two new endpoints: __Create Customers V3__ and __Create\
+    \ Customers V3 (Batch)__.\n> - Introduces the concept of Hosted Customers, which\
+    \ makes Customer Secrets optional on all endpoints which previously required them.\n\
+    \n**Version 2.6.2: 05/05/2023**\n> - Documented default to from case in __Retrieve\
+    \ Financial Products V2__ and __Retrieve Financial Products__.\n> - Fixed documentation\
     \ for get customers endpoints \n> - Fixed documentation for put customer context\
     \ endpoints \n\n**Version 2.6.1: 27/04/2023**\n> - Deprecated __Retrieve Financial\
     \ Products__.\n> - Corrected sample Financial Products in __Retrieve Financial\
@@ -718,7 +722,7 @@ info:
     name: Bud Support
     url: https://www.thisisbud.com/
     email: help@thisisbud.com
-  version: 2.8.0
+  version: 2.8.3
   x-logo:
     url: "data:image/png;base64,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"
 servers:
@@ -3321,14 +3325,13 @@ paths:
       tags:
       - Manage Customers
       summary: Create Customer V3
-      description: |
-        This endpoint is used to create a new Customer in order for them to consume the Bud services.
-
-        > 📘 Please note:
-        >
-        > Customers created using this endpoint have their secrets hosted on the Bud platform by default.
-        > If you wish to host customer secrets yourself, set the `host_secret` flag in the `customer_context` field
-        > to `false` in the request body.
+      description: "This endpoint is used to create a new Customer in order for them\
+        \ to consume the Bud services.\n\n> 📘 Note:\n>\n> Customers created using\
+        \ this endpoint have their secrets hosted on the Bud platform by default.\n\
+        > If you wish to host customer secrets yourself, set the `host_secret` flag\
+        \ in the `customer_context` field\n> to `false` in the request body.\n> \n\
+        > For more information on Customers in the Bud platform, please refer to our\
+        \ handy [guide](https://docs.thisisbud.com/docs/setup-customers).\n"
       operationId: platform_v3_customers_post
       parameters:
       - name: X-Client-Id
@@ -4538,6 +4541,10 @@ paths:
       summary: Retrieve Accounts V2
       description: |
         Retrieves a list of a customer's connected accounts. The result can be filtered using the parameters outlined below.
+
+        > 📘 Note:
+        >
+        > For more information on the Account object, please refer to our handy [guide](https://docs.thisisbud.com/docs/accounts).
       operationId: financial_v2_accounts
       parameters:
       - name: X-Client-Id
@@ -4770,6 +4777,10 @@ paths:
       summary: Retrieve Account By ID V2
       description: |
         Retrieves a customer's connected account by its ID.
+
+        > 📘 Note:
+        >
+        > For more information on the Account object, please refer to our handy [guide](https://docs.thisisbud.com/docs/accounts).
       operationId: financial_v2_accounts_account_id
       parameters:
       - name: X-Client-Id
@@ -14033,6 +14044,13 @@ components:
             \ the customer will be moved on in the flow. The data is then fetched\
             \ and enriched in the background, instead of the customer waiting on a\
             \ loading spinner"
+          nullable: true
+        skip_success_screen:
+          type: boolean
+          description: "When enabled, once the customer has completed the connect\
+            \ flow, they will be redirected back to the client redirect_url bypassing\
+            \ the success screen. This should be used if you don’t want your customers\
+            \ to see the Bud success screen."
           nullable: true
     OBWebhookBody:
       title: OB Webhook Payload
