@@ -2667,7 +2667,7 @@
 					"name": "Enrichment Totals",
 					"item": [
 						{
-							"name": "Retrieve Category Totals",
+							"name": "Retrieve Category Totals (deprecated)",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -2730,6 +2730,181 @@
 									"path": [
 										"categories",
 										"totals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Category Totals V2",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}aggregations/v2/totals/categories",
+									"host": [
+										"{{proxy_url}}aggregations"
+									],
+									"path": [
+										"v2",
+										"totals",
+										"categories"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2020-01-01T00:00:00Z",
+											"description": "RFC3339 Timestamp indicating the start of the window of transactions to include. Defaults to now-6m",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "2023-01-01T00:00:00Z",
+											"description": "RFC3339 Timestamp indicating the end of the window of transactions to include. Defaults to now",
+											"disabled": true
+										},
+										{
+											"key": "category",
+											"value": "bills.utilities,general",
+											"description": "If set, will filter result to include only the l1 categories specified, comma seperated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be aggregated in the total for the l1 category. Defaults to include all.",
+											"disabled": true
+										},
+										{
+											"key": "currency",
+											"value": "GBP,EUR",
+											"description": "List of currency codes to include, if not set will default to include all",
+											"disabled": true
+										},
+										{
+											"key": "include_l2",
+											"value": "true",
+											"description": "If set to `true` the result of category totals will include the l2 totals used in the computation",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Category Totals Trends V2",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}aggregations/v2/totals/categories/trends",
+									"host": [
+										"{{proxy_url}}aggregations"
+									],
+									"path": [
+										"v2",
+										"totals",
+										"categories",
+										"trends"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2020-01-01T00:00:00Z",
+											"description": "RFC3339 Timestamp indicating the start of the window of transactions to include. Defaults to now-6m",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "2023-01-01T00:00:00Z",
+											"description": "RFC3339 Timestamp indicating the end of the window of transactions to include. Defaults to now",
+											"disabled": true
+										},
+										{
+											"key": "category",
+											"value": "bills.utilities,general",
+											"description": "If set, will filter result to include only the l1 categories specified, comma seperated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be aggregated in the total for the l1 category. Defaults to include all.",
+											"disabled": true
+										},
+										{
+											"key": "currency",
+											"value": "GBP,EUR",
+											"description": "List of currency codes to include, if not set will default to include all",
+											"disabled": true
+										},
+										{
+											"key": "include_l2",
+											"value": "true",
+											"description": "If set to `true` the result of category totals will include the l2 totals used in the computation",
+											"disabled": true
+										},
+										{
+											"key": "granularity",
+											"value": "weekly",
+											"description": "enumeration defining the granularity of the transaction windows:\n- `daily`\n- `weekly`\n- `biweekly`\n- `monthly`\n- `quarterly`\n- `six_monthly`\n- `annually`\n\n. defaults to monthly",
+											"disabled": true
+										}
 									]
 								}
 							},

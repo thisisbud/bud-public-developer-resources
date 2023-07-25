@@ -235,62 +235,119 @@ info:
     \                                                                            \
     \                                                                            \
     \                                                                            \
-    \         |\n|:---------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n\
+    \                                                                            \
+    \                                                  |\n|:---------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n\
     | 04/12/2020           | Changed the base URL of the **GET Warnings**, **GET Trends**\
     \ and **GET Forecast** endpoints from `/v1/assistant/` to `/v1/signal/`.     \
     \                                                                            \
     \                                                                            \
-    \                      |\n| 06/08/2020           | Removed `bank_name` field in\
-    \ favour of a new field called `provider` in the following endpoints:<br>__POST__`/v1/open-banking/authorisation-url`\
+    \                                                                            \
+    \                                                               |\n| 06/08/2020\
+    \           | Removed `bank_name` field in favour of a new field called `provider`\
+    \ in the following endpoints:<br>__POST__`/v1/open-banking/authorisation-url`\
     \ (Request Payload)<br> __POST__`/v1/open-banking/connect/{connection_task_id}`\
     \ (Response Payload)<br> __POST__`/v1/open-banking/refresh/{task_id}` (Response\
-    \ Payload) |\n| 01/09/2021           | Deprecated **GET Warnings** endpoints in\
-    \ favour of new **GET Money Management**, **GET Customer Characteristics** and\
-    \ **GET Financial Insight** endpoints.                                       \
+    \ Payload)                                                                   \
+    \                                                   |\n| 01/09/2021          \
+    \ | Deprecated **GET Warnings** endpoints in favour of new **GET Money Management**,\
+    \ **GET Customer Characteristics** and **GET Financial Insight** endpoints.  \
     \                                                                            \
-    \                                         |\n| 01/11/2021           | Deprecated\
+    \                                                                            \
+    \                                                                            \
+    \                                           |\n| 01/11/2021           | Deprecated\
     \ **Retrieve Authorisation Gateway URL** endpoint in favour of new **Retrieve\
     \ Authorisation Gateway URL (v2)** endpoint.                                 \
     \                                                                            \
-    \                                                                        |\n|\
-    \ 01/11/2021           | Deprecated **Energy Switching API**, **Mortgage API**,\
-    \ **Home Insurance API** and **Broadband API** which formed Bud's marketplace\
-    \ offering.                                                                  \
     \                                                                            \
-    \                            |\n| 14/03/2022           | Deprecated **Enrich Transaction**\
+    \                                                                            \
+    \                                     |\n| 01/11/2021           | Deprecated **Energy\
+    \ Switching API**, **Mortgage API**, **Home Insurance API** and **Broadband API**\
+    \ which formed Bud's marketplace offering.                                   \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \                        |\n| 14/03/2022           | Deprecated **Enrich Transaction**\
     \ endpoints from the Ingest and Enrich API suite.                            \
     \                                                                            \
     \                                                                            \
-    \                                                 |\n| 01/08/2022           |\
-    \ Deprecated `YYYY-MM-DD` date format for `X-From` and `X-To` headers within `/v1/affordability/spending-groups`.\
+    \                                                                            \
+    \                                                                            \
+    \              |\n| 01/08/2022           | Deprecated `YYYY-MM-DD` date format\
+    \ for `X-From` and `X-To` headers within `/v1/affordability/spending-groups`.\
     \ Both `X-From` and `X-To` headers now follow the `YYYY-MM` date format.     \
     \                                                                            \
-    \                                               | \n| 05/09/2022           | Deprecated\
-    \ **Retrieve Merchant Totals V1** in favour of new **Retrieve Merchant Totals\
-    \ V2** endpoint |\n| 23/01/2023           | Deprecated **List Transactions V1**.\
-    \ Bud understands that many clients have integrated this endpoint in order to\
-    \ retrieve transactions held on the Bud platform. As a result, there is a **six\
-    \ month** deprecation window, meaning that support for this endpoint will cease\
-    \ on the **1st of August 2023**, meaning clients must have migrated over to the\
-    \ new and improved **List Transactions V2** endpoint by that point in time. |\n\
+    \                                                                            \
+    \                                                                            \
+    \            | \n| 05/09/2022           | Deprecated **Retrieve Merchant Totals\
+    \ V1** in favour of new **Retrieve Merchant Totals V2** endpoint             \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \          |\n| 23/01/2023           | Deprecated **List Transactions V1**. Bud\
+    \ understands that many clients have integrated this endpoint in order to retrieve\
+    \ transactions held on the Bud platform. As a result, there is a **six month**\
+    \ deprecation window, meaning that support for this endpoint will cease on the\
+    \ **1st of August 2023**, meaning clients must have migrated over to the new and\
+    \ improved **List Transactions V2** endpoint by that point in time.       |\n\
     | 23/01/2023           | Deprecated **Create Customers V1**. Support will continue\
     \ for this endpoint, however we recommend clients to migrate to V2 and for all\
-    \ new clients to integrate with the V2 endpoint. |\n| 24/03/2023           | Deprecated\
-    \ **Retrieve Accounts** endpoint. Bud understands that many clients have integrated\
-    \ this endpoint in order to retrieve accounts held on the Bud platform. As a result,\
-    \ there is a **six month** deprecation window, meaning that support for this endpoint\
-    \ will cease on the **24th of September 2023**, meaning clients must have migrated\
-    \ over to the new and improved **Retrieve Accounts V2** endpoint by that point\
-    \ in time. |\n| 28/03/2023           | Deprecated **Retrieve Financial Forecast**\
-    \ in favour of **Retrieve Forecasted Transactions V2**. |\n| 28/03/2023      \
-    \     | Deprecated **Create Transaction Rule(s)**. |\n| 28/03/2023           |\
-    \ Deprecated **Retrieve Trends** in favour of **Retrieve Category Totals**. |\n\
-    | 22/06/2023           | Deprecated **Retrieve Forecasted Transactions V1** in\
-    \ favour of **Retrieve Forecasted Transactions V2**. |\n\n## Changelog\n\nThis\
-    \ changelog represents a list of all changes that have been made to Bud’s API\
-    \ documentation. This includes both backward-compatible and backward-incompatible\
-    \ changes.\n\n**Version 2.8.4: 19/07/2023**\n> - Added `mobile_only` flag for\
-    \ providers in the __Retrieve OB Providers__ endpoint.\n\n**Version 2.8.3: 18/07/2023**\n\
+    \ new clients to integrate with the V2 endpoint.                             \
+    \                                                                            \
+    \                                                                            \
+    \                                                                 |\n| 24/03/2023\
+    \           | Deprecated **Retrieve Accounts** endpoint. Bud understands that\
+    \ many clients have integrated this endpoint in order to retrieve accounts held\
+    \ on the Bud platform. As a result, there is a **six month** deprecation window,\
+    \ meaning that support for this endpoint will cease on the **24th of September\
+    \ 2023**, meaning clients must have migrated over to the new and improved **Retrieve\
+    \ Accounts V2** endpoint by that point in time. |\n| 28/03/2023           | Deprecated\
+    \ **Retrieve Financial Forecast** in favour of **Retrieve Forecasted Transactions\
+    \ V2**.                                                                      \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \                                 |\n| 28/03/2023           | Deprecated **Create\
+    \ Transaction Rule(s)**.                                                     \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \                            |\n| 28/03/2023           | Deprecated **Retrieve\
+    \ Trends** in favour of **Retrieve Category Totals**.                        \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \                          |\n| 22/06/2023           | Deprecated **Retrieve Forecasted\
+    \ Transactions V1** in favour of **Retrieve Forecasted Transactions V2**.    \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \               |\n| 25/07/2023           | Deprecated **Retrieve Income Transactions\
+    \ V1** in favour of **Retrieve Income Transactions V2**.                     \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \      |\n| 25/07/2023           | Deprecated **Retrieve Salary Information V1**\
+    \ in favour of **Retrieve Income Transactions V2**.                          \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \                                                                            \
+    \  |\n## Changelog\n\nThis changelog represents a list of all changes that have\
+    \ been made to Bud’s API documentation. This includes both backward-compatible\
+    \ and backward-incompatible changes.\n\n**Version 2.8.6: 25/07/2023**\n> - Removed\
+    \ the __Retrieve Categories V1__ endpoint as the deprecation notice has expired.\n\
+    > - Deprecated the __Retrieve Income Transactions V1__ endpoint in favour of __Retrieve\
+    \ Income Transactions V2__\n> - Deprecated the __Retrieve Salary Information__\
+    \ endpoint in favour of __Retrieve Income Transactions V2__\n\n**Version 2.8.5:\
+    \ 19/07/2023**\n> - Added the __Category Totals V2__ endpoint.\n> - Added the\
+    \ __Category Totals V2__ trends endpoint.\n> - Fixed bug in v1 category totals\
+    \ schema.\n\n**Version 2.8.4: 19/07/2023**\n> - Added `mobile_only` flag for providers\
+    \ in the __Retrieve OB Providers__ endpoint.\n\n**Version 2.8.3: 18/07/2023**\n\
     > - Added link to guide to __Create Customers V3__ and __Create Customers V3 (Batch)__.\n\
     > - Added link to guide to __Retrieve Accounts V2__ and __Retrieve Accounts By\
     \ ID V2__.\n\n**Version 2.8.2: 10/07/2023**\n> - Added `skip_success_screen` to\
@@ -724,7 +781,7 @@ info:
     name: Bud Support
     url: https://www.thisisbud.com/
     email: help@thisisbud.com
-  version: 2.8.4
+  version: 2.8.6
   x-logo:
     url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATAAAABuCAQAAAAKAYdLAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAB3RJTUUH4wQDDggcbXcx7wAABeJJREFUeNrt3W2IFVUcx/HvXRW1VdQedy1bZVfoYX0osVQyfSGElKbRA5oFIaIlhAkWUYm6gvqqDMHMoBeKlhayCCZC2AMRPay7aJrSZmauZhQqaj7t7u1Fi965987s7D1n7pk7/j73zX2Y85//mXt2Zu45Z2ZBREREREREREREREREREREREREREREREREREREREREREREREREROIiZSFGH+YxgsOs5U/X1bFiPDPpQT3bu1DmcaZyg+vErWpjD+s47zoN6Mte0qRJc4Iq18lYMJv2jvosD11mRUeJpD32UO7664BFGQl94DoZY704fbU2rQwKVWYwbc6bQlSPBaYbtMz4K7nP53lpGkK/q8+7MTxUmeEWtmJcGX+j5psmM0I3l9vCirKAV36OuE46QsbfaHL/9opnL9tcpxBf3V0nkAgzWMRj9HadhrH+3Gk7pBqYDZdY3oXfnHE2gc1U2gyoQ6Rk+pKZdgOqgYnXF7TYDGe3gcWgW85QH9cJxMAVm8HsNrBqhhV1U9g33XUCzo1gsM1wdhtYio8ZWsytYdksFrpOwbGhbLYb0PavyLs5wA+c9v28lRa+Zzt/+y5RwwKqaOCdgCjZRvEit/A1a7jou8xwJjOMAb7D+ylqqCmw1imeZ0oCBrv7Mzp+/QofFTDCdZG13Jw3Wi1nOpbZT9+QGUziUkeZ3T49z+P4pqCRuCkhM1jjfMwwqsdG182rsAaWJs0JxuWJ9knGEq+EzODHjDLTcj5NsbjgwehwDazm6vyL5D2MG5i7booKdjE25917M57XhoxUG1hmJUsjrmWtlVl18ZQ2DeCyH6ycT7kpIJ+wuQWVeZJXI69HcpsXHDQN4LajtZIlkcbvzWqn9St1R3nPNIT93wzt/MSZPO+nqKA65699Nos5FdHmgZkMzHnvIj9zLm9+Q7jd0nqP8VtkdSqWNppYxT+u08g+yW8OnKRXw4ac08hnPUscyvjkw5AZXM4os9jzyY6sdZ3h5YC++jLm0lrASf50T5krzEn0QbOLbB8in2FvwKfNPJczCXd0hLV7wPPqL8bybt691//aWWfhkPo2681PjZPDbgP7lYZOl1nNJs9rW4elXD2zfkK8wIFOy2w1XuuWyOpTkuw2sHOhlqrzvIqu59gbuYEdIcqcjSyb65SLX5EHOepgrbuKtJ6nHNQtxtx0U5xM8DoXMkez7K5xM7Tp4iS4WOvszvss5feSP9Fvo5EVnDDfHGJfpd157Y48xFRGmfaEaWcu/qqYZxpCDcxcqR8Mg9xlGkANzNz+BDcx4zEJNTBzv5gPCSeXTvJtmM+3PJqIKdNj6GE3pJsG5mIwOMp1ptnABgd1sq+G7ebnXZncHCKjG3+M1zpLTzMz7AZ00cBG5pmlFb3JmkQTSpPd21HZbWD9Qy21zPPK/zricNH6+B7mvZFreTpEtAFWt0dpsnoWZreBVTG+kyVS1GVN4/vDd9lJVIRY5yzfPdPlrPHHdTwYItr1bkLcTia8M1qPM9F3yRRjcuaYprNmHxzyfNbQyQlnGTM47ynhndFan7WuCywLODz35I2sC9DCXheZHBNpsXvZmu1fkZXs5rjPnPzb8hyAzrIzINr9HOBIwNXat+ZcleS1hame1714izc55jNvbVDBtz7pyWuJuI15P/tnx1F0UwzsQpprO5nil2KIQSZbqcspnwp57+iu2MQT1mMmhNue/MMR3xfwMi8VYRhnmJqXP/MG1lZwyVNMy9l/FR4tf/mdvB553Uz2sXFn+n1YaGCNBZZr5mH25by7xzCb3PKrmM+lgmK1BV4hdc0+2g2zjq8m1wlAOY1dvqXGKep87oZYzUmDW3Vs8+myuIf6Am6AsiT0Nljp/CYl0Twaze9ZaaN3u5w5jAy5L2ylhe/4nAu+S1Qwl+oCsrjCV2wM2KXfwSPUcmPIGv9LPZ91Ye1TEnEb80ztNLE+Dv8MS0RERERERERERERERERERERERERERERERERERERERERERERERERs+Q/rhi5WauEgfQAAAABJRU5ErkJggg=="
 servers:
@@ -3954,242 +4011,6 @@ paths:
           description: An unexpected HTTP method was used
         "5XX":
           description: An unexpected error occurred on the server side
-  /v1/categories/double-cat:
-    get:
-      tags:
-      - Enrichment Resources
-      summary: Retrieve Categories
-      description: |
-        Retrieve a list of primary and secondary categories supported by Bud's current categorisation engine.
-      operationId: categories_double_cat_get
-      parameters:
-      - name: X-Client-Id
-        in: header
-        description: The API Client Identifier (Service Application Identifier).
-        required: true
-        schema:
-          type: string
-      - name: format
-        in: query
-        description: |
-          Determines if the response will be structured:
-            - As a flat object where all categories and subcategories are listed separately under different fields. See the example response `Flat Response`.
-            - As a map where all categories are listed as objects themselves with their respective subcategories listed in fields within the category objects. See the example response `Map Response`.
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-          default: flat
-          enum:
-          - map
-          - flat
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CategoriesResponse'
-              examples:
-                Flat Response:
-                  value:
-                    operation_id: categories_double_cat_get
-                    data:
-                      categories:
-                      - bills
-                      - eating_out
-                      - entertainment
-                      - expenses
-                      - finances
-                      - general
-                      - groceries
-                      - personal_care
-                      - services
-                      - shopping
-                      - transport
-                      - travel
-                      subcategories:
-                      - accommodation
-                      - activities
-                      - bars_and_pubs
-                      - beauty
-                      - benefits
-                      - boat
-                      - books_and_reading
-                      - bus
-                      - business_expenses
-                      - cafes_and_lunch
-                      - car_payments
-                      - car_sharing
-                      - care_provision
-                      - cash_withdrawals
-                      - charity
-                      - childcare
-                      - children_and_babies
-                      - cinema
-                      - cleaning
-                      - clothing
-                      - convenience_stores
-                      - credit_cards
-                      - cycling
-                      - department_stores
-                      - education_and_school_fees
-                      - electronics
-                      - events
-                      - fast_food
-                      - flights
-                      - furniture_and_appliances
-                      - gambling_and_betting
-                      - gaming
-                      - gardening
-                      - general_banking
-                      - gym_and_fitness
-                      - hardware_and_diy
-                      - healthcare
-                      - home_improvements
-                      - income
-                      - insurance
-                      - interest_payments
-                      - investments
-                      - laundry
-                      - loans
-                      - mobile_phone
-                      - mortgage_and_rent
-                      - museums_and_art_galleries
-                      - music
-                      - online_shopping
-                      - other_bills
-                      - other_eating_out
-                      - other_entertainment
-                      - other_expenses
-                      - other_finances
-                      - other_general
-                      - other_groceries
-                      - other_personal_care
-                      - other_services
-                      - other_shopping
-                      - other_transport
-                      - other_travel
-                      - package_holidays
-                      - parking_and_tolls
-                      - pensions
-                      - petrol
-                      - pets
-                      - pharmacies_and_health_products
-                      - postage_and_shipping
-                      - public_transport
-                      - refunds
-                      - repairs
-                      - restaurants
-                      - savings
-                      - service_stations
-                      - software_and_apps
-                      - speciality_food_and_drink_shops
-                      - sports
-                      - subscriptions
-                      - supermarkets
-                      - takeaway
-                      - taxes
-                      - taxi
-                      - train
-                      - transfers_in
-                      - transfers_out
-                      - travel_purchases
-                      - tv_broadband_and_phone
-                      - utilities
-                      - vehicle
-                      - vehicle_hire
-                Map Response:
-                  value:
-                    operation_id: categories_double_cat_get
-                    data:
-                    - name: bills
-                      subcategories:
-                      - name: taxes
-                      - name: mortgage_and_rent
-                      - name: utilities
-                      - name: other_bills
-                    - name: eating_out
-                      subcategories:
-                      - name: bars_and_pubs
-                      - name: restaurants
-                      - name: other_eating_out
-                    - name: entertainment
-                      subcategories:
-                      - name: books_and_reading
-                      - name: events
-                      - name: gambling_and_betting
-                      - name: subscriptions
-                      - name: cinema
-                      - name: other_entertainment
-                    - name: expenses
-                      subcategories:
-                      - name: business_expenses
-                      - name: other_expenses
-                    - name: finances
-                      subcategories:
-                      - name: income
-                      - name: savings
-                      - name: loans
-                      - name: other_finances
-                    - name: general
-                      subcategories:
-                      - name: other_general
-                    - name: groceries
-                      subcategories:
-                      - name: supermarkets
-                      - name: convenience_stores
-                    - name: personal_care
-                      subcategories:
-                      - name: healthcare
-                      - name: beauty
-                      - name: gym_and_fitness
-                      - name: pharmacies_and_health_products
-                      - name: other_personal_care
-                    - name: services
-                      subcategories:
-                      - name: other_services
-                    - name: shopping
-                      subcategories:
-                      - name: department_stores
-                      - name: other_shopping
-                    - name: transport
-                      subcategories:
-                      - name: public_transport
-                      - name: petrol
-                      - name: parking_and_tolls
-                      - name: service_stations
-                      - name: taxi
-                      - name: vehicle
-                      - name: vehicle_hire
-                      - name: other_transport
-                    - name: travel
-                      subcategories:
-                      - name: travel_purchases
-                      - name: flights
-                      - name: other_travel
-        "400":
-          description: The request contains an invalid payload
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              example:
-                operation_id: categories_double_cat_get
-                code_id: failed_validation
-                message: Failed validation
-                errors:
-                  client_id: This value should not be blank
-        "401":
-          description: Unauthorised request
-        "405":
-          description: An unexpected HTTP method was used
-        "5XX":
-          description: An unexpected error occurred on the server side
-      deprecated: true
-      security:
-      - OAuth2: []
   /v1/categories/totals:
     get:
       tags:
@@ -4300,6 +4121,301 @@ paths:
           description: An unauthenticated request was received
         "405":
           description: The request uses an unexpected HTTP method
+        "5XX":
+          description: An unexpected error occurred on the server side
+      deprecated: true
+      security:
+      - OAuth2: []
+  /aggregations/totals/categories:
+    get:
+      tags:
+      - Enrichment Totals
+      summary: Retrieve Category Totals V2
+      description: |
+        Provides a customer’s total income and expenditure for each l1 and l2 category, over a given time period.
+        L1 and l2 categories can be filtered using the category query parameter.
+        Example:
+          - 'shopping'
+          - 'shopping.groceries'
+
+        Each income and expenditure total is separated by currency, as we cannot sum totals in different currencies.
+      operationId: v2_category_totals_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: X-Customer-Id
+        in: header
+        description: Bud Customer identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Customer-Secret
+        in: header
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: |
+          The date from when results are to be retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+          Defaults to 6 months ago.
+
+          Examples:
+            - `2023-01-17T17:29:51Z`
+            - `2023-01-17T17:29:51-08:00`
+        schema:
+          type: string
+        example: 2023-05-21T07:20:50.52Z
+      - name: to
+        in: query
+        description: |
+          The date up to when results are to be retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+          Defaults to today.
+
+          Examples:
+            - `2023-03-17T17:29:51Z`
+            - `2023-03-17T17:29:51-08:00`
+        schema:
+          type: string
+        example: 2023-06-21T07:20:50.52Z
+      - name: category
+        in: query
+        description: |
+          Use this parameter to filter the results on l1 categories to include.
+          Accepts multiple values, or values separated by comma.
+
+          To specify l2 categories to include, use the following format: `l1.l2`.
+
+          Examples:
+            - `shopping` - Filters the result set to only include data where the l1 category is `shopping`.
+            - `shopping.groceries` - Filters the result set to only include data where the l1 category is `shopping` and the l2 category is `groceries`.
+        schema:
+          type: string
+        example: shopping
+      - name: currency
+        in: query
+        description: Use this parameter to filter the results returned on the `currency`
+          associated with each result. Multiple values are accepted. If this parameter
+          is not provided then results of any `currency` will be returned.
+        schema:
+          type: string
+        example: GBP
+      - name: include_l2
+        in: query
+        description: Whether to include the L2 categories where not specified in the
+          category filter. Defaults to false.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+        example: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoriesTotalV2Response'
+              example:
+                operation_id: v2_category_totals_get
+                data:
+                - name: shopping
+                  credit_amount:
+                  - amount:
+                      value: "357.90"
+                      currency: GBP
+                    transaction_count: 1
+                  debit_total:
+                  - amount:
+                      value: "397.80"
+                      currency: GBP
+                    transaction_count: 2
+                  l2_totals:
+                  - name: clothing
+                    credit_amount:
+                    - value: "357.90"
+                      currency: GBP
+                      transaction_count: 1
+                    debit_amount:
+                    - value: "397.80"
+                      currency: GBP
+                      transaction_count: 2
+        "400":
+          description: The request contains an invalid payload
+        "401":
+          description: An unauthenticated request was received
+        "5XX":
+          description: An unexpected error occurred on the server side
+      security:
+      - OAuth2: []
+  /aggregations/totals/categories/trends:
+    get:
+      tags:
+      - Enrichment Totals
+      summary: Retrieve Category Totals Trends
+      description: |
+        Provides category totals for desired categories over a given time period of time with a given granularity.
+
+        L1 and l2 categories can be filtered using the category query parameter.
+        Example:
+          - 'shopping'
+          - 'shopping.groceries'
+        Each income and expenditure total is separated by currency, as we cannot sum totals in different currencies.
+
+        Can be used for producing graphs of category totals over time.
+      operationId: v2_category_totals_trends_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: X-Customer-Id
+        in: header
+        description: Bud Customer identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Customer-Secret
+        in: header
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: |
+          The date from when results are to be retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+          Defaults to 6 months ago.
+
+          Examples:
+            - `2023-01-17T17:29:51Z`
+            - `2023-01-17T17:29:51-08:00`
+        schema:
+          type: string
+        example: 2023-05-21T07:20:50.52Z
+      - name: to
+        in: query
+        description: |
+          The date up to when results are to be retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+          Defaults to today.
+
+          Examples:
+            - `2023-03-17T17:29:51Z`
+            - `2023-03-17T17:29:51-08:00`
+        schema:
+          type: string
+        example: 2023-06-21T07:20:50.52Z
+      - name: currency
+        in: query
+        description: Use this parameter to filter the results returned on the `currency`
+          associated with each result. Multiple values are accepted. If this parameter
+          is not provided then results of any `currency` will be returned.
+        schema:
+          type: string
+        example: GBP
+      - name: category
+        in: query
+        description: |
+          Use this parameter to filter the results on l1 categories to include.
+          Accepts multiple values, or values separated by comma.
+
+          To specify l2 categories to include, use the following format: `l1.l2`.
+
+          Examples:
+            - `shopping` - Filters the result set to only include data where the l1 category is `shopping`.
+            - `shopping.groceries` - Filters the result set to only include data where the l1 category is `shopping` and the l2 category is `groceries`.
+        schema:
+          type: string
+        example: shopping
+      - name: include_l2
+        in: query
+        description: Whether to include the L2 categories where not specified in the
+          category filter. Defaults to false.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+        example: true
+      - name: granularity
+        in: query
+        description: |
+          Specifies in what interval the balance over time should be retrieved.
+
+          Currently supported values include (but are not necessarily limited to):
+            - `daily`
+            - `weekly`
+            - `biweekly`
+            - `monthly`
+            - `quarterly`
+            - `six_monthly`
+            - `annually`
+
+            Defaults to `monthly`.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: monthly
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoriesTotalTrendsV2Response'
+              example:
+                operation_id: v2_category_totals_get
+                data:
+                - from: 2023-05-21T07:20:50.52Z
+                  to: 2023-05-21T07:20:50.52Z
+                  data:
+                    name: shopping
+                    credit_amount:
+                    - amount:
+                        value: "357.90"
+                        currency: GBP
+                      transaction_count: 1
+                    debit_total:
+                    - amount:
+                        value: "397.80"
+                        currency: GBP
+                      transaction_count: 2
+                    l2_totals:
+                    - name: clothing
+                      credit_amount:
+                      - value: "357.90"
+                        currency: GBP
+                        transaction_count: 1
+                      debit_amount:
+                      - value: "397.80"
+                        currency: GBP
+                        transaction_count: 2
+        "400":
+          description: The request contains an invalid payload
+        "401":
+          description: An unauthenticated request was received
         "5XX":
           description: An unexpected error occurred on the server side
       security:
@@ -6682,96 +6798,6 @@ paths:
           description: An unexpected error occurred on the server side
       security:
       - OAuth2: []
-  /v1/future-transactions:
-    get:
-      tags:
-      - Regular Insights
-      summary: Retrieve Forecasted Transactions V1
-      description: |
-        Provides a list of transactions predicted to occur in the next three months. Currently the following periods are supported:
-        - `daily`
-        - `weekly`
-        - `biweekly`
-        - `monthly`
-        - `quarterly`
-        - `unknown`
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 22th of September 2023 - please complete your migration to the Retrieve Forecasted Transactions V2 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-      operationId: future_transactions_get
-      parameters:
-      - name: X-Client-Id
-        in: header
-        description: The API Client Identifier (Service Application Identifier).
-        required: true
-        schema:
-          type: string
-      - name: X-Customer-Id
-        in: header
-        description: Bud Customer identifier
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: X-Customer-Secret
-        in: header
-        description: The Bud Customer secret used to encrypt customer data. This is
-          optional only if the customer secret is already stored with Bud (i.e. the
-          `host_secret` was set to `true` in the Customer Context when the customer
-          was created).
-        required: false
-        schema:
-          type: string
-      responses:
-        "200":
-          description: The request was successfully processed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FutureTransactionsResponse'
-              example:
-                operation_id: future_transactions_get
-                data:
-                - transaction_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
-                  account_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
-                  transaction_description: Bud
-                  provider: Lloyds
-                  date: 2019-07-01T01:00:00+0100
-                  amount:
-                    amount: "1234.56"
-                    currency: GBP
-                  credit_debit_indicator: Credit
-                  label: 8a29913437a6d2e72a9576a15593f43d92cfc2eb-0
-                  period: monthly
-                  score: "0.9892"
-                  future_dates:
-                  - 2019-08-01T01:00:00+0100
-                  - 2019-09-01T01:00:00+0100
-                  - 2019-10-01T01:00:00+0100
-        "204":
-          description: No transactions found
-        "400":
-          description: The request contains an invalid payload
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              example:
-                operation_id: future_transactions_get
-                code_id: failed_validation
-                message: Failed validation
-                errors:
-                  client_id: This value should not be blank
-        "401":
-          description: Unauthorised request
-        "405":
-          description: An unexpected HTTP method was used
-        "5XX":
-          description: An unexpected error occurred on the server side
-      deprecated: true
-      security:
-      - OAuth2: []
   /v2/future-transactions:
     get:
       tags:
@@ -6881,14 +6907,24 @@ paths:
           description: Bad request
         "401":
           description: Unauthorized request
-  /v1/salary:
+  /v1/future-transactions:
     get:
       tags:
-      - Income Insights
-      summary: Retrieve Salary Information
+      - Regular Insights
+      summary: Retrieve Forecasted Transactions V1
       description: |
-        Provides a list of transactions most likely to be a customer’s salary.
-      operationId: salary_get
+        Provides a list of transactions predicted to occur in the next three months. Currently the following periods are supported:
+        - `daily`
+        - `weekly`
+        - `biweekly`
+        - `monthly`
+        - `quarterly`
+        - `unknown`
+
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 22th of September 2023 - please complete your migration to the Retrieve Forecasted Transactions V2 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
+      operationId: future_transactions_get
       parameters:
       - name: X-Client-Id
         in: header
@@ -6918,9 +6954,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SalaryResponse'
+                $ref: '#/components/schemas/FutureTransactionsResponse'
               example:
-                operation_id: salary_get
+                operation_id: future_transactions_get
                 data:
                 - transaction_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
                   account_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
@@ -6931,10 +6967,15 @@ paths:
                     amount: "1234.56"
                     currency: GBP
                   credit_debit_indicator: Credit
-                  confidence: "0.9998"
+                  label: 8a29913437a6d2e72a9576a15593f43d92cfc2eb-0
                   period: monthly
-                metadata:
-                  results: 1
+                  score: "0.9892"
+                  future_dates:
+                  - 2019-08-01T01:00:00+0100
+                  - 2019-09-01T01:00:00+0100
+                  - 2019-10-01T01:00:00+0100
+        "204":
+          description: No transactions found
         "400":
           description: The request contains an invalid payload
           content:
@@ -6942,123 +6983,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
               example:
-                operation_id: salary_get
+                operation_id: future_transactions_get
                 code_id: failed_validation
                 message: Failed validation
                 errors:
                   client_id: This value should not be blank
         "401":
           description: Unauthorised request
-        "404":
-          description: No transactions found
         "405":
           description: An unexpected HTTP method was used
         "5XX":
           description: An unexpected error occurred on the server side
-      security:
-      - OAuth2: []
-  /v1/income:
-    get:
-      tags:
-      - Income Insights
-      summary: Retrieve Income Transactions V1
-      description: |
-        Provides a list of a customer's income based transactions found within their connected accounts, and predicts whether each income transaction is related to a customer's `salary_or_wages`. Any income which is not salary or wages is given the type `other_income`, which can include other income sources such as investments or pension income.
-
-        **Notes:**
-        - Transactions are filtered to return the latest income transaction per transaction reference. For instance, if the customer has 4 salary transactions all with the same reference of `Monthly Salary`, only the latest will be returned.
-      operationId: v1_income_get
-      parameters:
-      - name: X-Client-Id
-        in: header
-        description: The API Client Identifier (Service Application Identifier).
-        required: true
-        schema:
-          type: string
-      - name: X-Customer-Id
-        in: header
-        description: Bud Customer identifier
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: X-Customer-Secret
-        in: header
-        description: The Bud Customer secret used to encrypt customer data. This is
-          optional only if the customer secret is already stored with Bud (i.e. the
-          `host_secret` was set to `true` in the Customer Context when the customer
-          was created).
-        required: false
-        schema:
-          type: string
-      - name: X-From
-        in: header
-        description: Transaction from date
-        schema:
-          type: string
-        example: 2022-01-29
-      - name: X-To
-        in: header
-        description: Transaction to date
-        schema:
-          type: string
-        example: 2022-03-29
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IncomeResponseV1'
-              example:
-                operation_id: v1_income_get
-                data:
-                - account_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
-                  transaction_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
-                  description: Bud
-                  date: 2021-01-11T01:00:00+0100
-                  amount:
-                    amount: "1234.56"
-                    currency: GBP
-                  credit_debit_indicator: Credit
-                  enrichment:
-                    categoriser:
-                      categories:
-                      - category_name: finances
-                        confidence: "0.8057"
-                        label: Finances
-                      subcategories:
-                      - subcategory_name: transfers_in
-                        confidence: "0.7811"
-                        label: Transfers In
-                      l3:
-                      - name: salary
-                        confidence: "0.6805"
-                        label: Salary
-                    merchant:
-                      id: bud
-                      merchant_name: Bud
-                      merchant_logo: https://thisisbud.com/merchants/bud.png
-                      merchant_confidence: "0.9501"
-                    income:
-                      label: salary_or_wages
-                      confidence: "0.9408"
-                metadata:
-                  from: 2020-01-01
-                  to: 2022-01-01
-                  results: 1
-        "204":
-          description: No transactions
-        "400":
-          description: Bad request
-        "401":
-          description: Unauthorised request
-        "404":
-          description: No transactions found
-        "405":
-          description: An unexpected HTTP method was used
-        "5XX":
-          description: An unexpected error occurred on the server side
+      deprecated: true
       security:
       - OAuth2: []
   /v2/income:
@@ -7180,6 +7116,196 @@ paths:
           description: An unexpected HTTP method was used
         "5XX":
           description: An unexpected error occurred on the server side
+      security:
+      - OAuth2: []
+  /v1/salary:
+    get:
+      tags:
+      - Income Insights
+      summary: Retrieve Salary Information
+      description: |
+        Provides a list of transactions most likely to be a customer’s salary.
+
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of November 2023 - please complete your migration to the Retrieve Income V2 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
+      operationId: salary_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: X-Customer-Id
+        in: header
+        description: Bud Customer identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Customer-Secret
+        in: header
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The request was successfully processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalaryResponse'
+              example:
+                operation_id: salary_get
+                data:
+                - transaction_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
+                  account_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
+                  transaction_description: Bud
+                  provider: Lloyds
+                  date: 2019-07-01T01:00:00+0100
+                  amount:
+                    amount: "1234.56"
+                    currency: GBP
+                  credit_debit_indicator: Credit
+                  confidence: "0.9998"
+                  period: monthly
+                metadata:
+                  results: 1
+        "400":
+          description: The request contains an invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: salary_get
+                code_id: failed_validation
+                message: Failed validation
+                errors:
+                  client_id: This value should not be blank
+        "401":
+          description: Unauthorised request
+        "404":
+          description: No transactions found
+        "405":
+          description: An unexpected HTTP method was used
+        "5XX":
+          description: An unexpected error occurred on the server side
+      deprecated: true
+      security:
+      - OAuth2: []
+  /v1/income:
+    get:
+      tags:
+      - Income Insights
+      summary: Retrieve Income Transactions V1
+      description: |
+        Provides a list of a customer's income based transactions found within their connected accounts, and predicts whether each income transaction is related to a customer's `salary_or_wages`. Any income which is not salary or wages is given the type `other_income`, which can include other income sources such as investments or pension income.
+
+        **Notes:**
+        - Transactions are filtered to return the latest income transaction per transaction reference. For instance, if the customer has 4 salary transactions all with the same reference of `Monthly Salary`, only the latest will be returned.
+
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of November 2023 - please complete your migration to the Retrieve Income V2 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
+      operationId: v1_income_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: X-Customer-Id
+        in: header
+        description: Bud Customer identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Customer-Secret
+        in: header
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
+        schema:
+          type: string
+      - name: X-From
+        in: header
+        description: Transaction from date
+        schema:
+          type: string
+        example: 2022-01-29
+      - name: X-To
+        in: header
+        description: Transaction to date
+        schema:
+          type: string
+        example: 2022-03-29
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomeResponseV1'
+              example:
+                operation_id: v1_income_get
+                data:
+                - account_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
+                  transaction_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
+                  description: Bud
+                  date: 2021-01-11T01:00:00+0100
+                  amount:
+                    amount: "1234.56"
+                    currency: GBP
+                  credit_debit_indicator: Credit
+                  enrichment:
+                    categoriser:
+                      categories:
+                      - category_name: finances
+                        confidence: "0.8057"
+                        label: Finances
+                      subcategories:
+                      - subcategory_name: transfers_in
+                        confidence: "0.7811"
+                        label: Transfers In
+                      l3:
+                      - name: salary
+                        confidence: "0.6805"
+                        label: Salary
+                    merchant:
+                      id: bud
+                      merchant_name: Bud
+                      merchant_logo: https://thisisbud.com/merchants/bud.png
+                      merchant_confidence: "0.9501"
+                    income:
+                      label: salary_or_wages
+                      confidence: "0.9408"
+                metadata:
+                  from: 2020-01-01
+                  to: 2022-01-01
+                  results: 1
+        "204":
+          description: No transactions
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorised request
+        "404":
+          description: No transactions found
+        "405":
+          description: An unexpected HTTP method was used
+        "5XX":
+          description: An unexpected error occurred on the server side
+      deprecated: true
       security:
       - OAuth2: []
   /v1/benefits:
@@ -15784,20 +15910,6 @@ components:
       description: A map of all the available categories and respective subcategories
       items:
         $ref: '#/components/schemas/Category_1'
-    CategoriesResponse:
-      title: Categories Response
-      required:
-      - data
-      - operation_id
-      type: object
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          oneOf:
-          - $ref: '#/components/schemas/CategoriesFlat'
-          - $ref: '#/components/schemas/CategoriesMap'
-      description: Expected response structure for the get categories endpoint.
     CategoriesTotalResponse:
       title: Categories Totals Response
       required:
@@ -15810,7 +15922,7 @@ components:
         data:
           $ref: '#/components/schemas/CategoriesTotalResponse_data'
       description: ""
-    CategoryTotalSpend:
+    LegacyCategoryTotalSpend:
       title: Category Total Object
       required:
       - category
@@ -15823,11 +15935,11 @@ components:
         credit_amount:
           type: array
           items:
-            $ref: '#/components/schemas/BudAmount'
+            $ref: '#/components/schemas/LegacyBudAmount'
         debit_amount:
           type: array
           items:
-            $ref: '#/components/schemas/BudAmount'
+            $ref: '#/components/schemas/LegacyBudAmount'
       description: Information regarding the total income and expenditure of a given
         category
     CategoryObject:
@@ -15844,6 +15956,78 @@ components:
           type: string
           description: The label (name) of the transaction category for display purposes
       description: Category information
+    CategoriesTotalV2Response:
+      title: Categories Totals Response
+      required:
+      - data
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoriesTotalV2'
+      description: ""
+    CategoriesTotalV2:
+      required:
+      - name
+      type: object
+      properties:
+        credit_amount:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+        debit_amount:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+        name:
+          type: string
+          description: Category id as slug.
+        l2_totals:
+          type: array
+          description: L2 category totals.
+          items:
+            $ref: '#/components/schemas/CategoriesTotalV2L2'
+    CategoryTotalAmountWithTrxCount:
+      title: Amount with transaction count
+      required:
+      - amount
+      - transaction_count
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        transaction_count:
+          type: integer
+      description: "Amount of money in the cash transaction entry, including the number\
+        \ of transactions used in the calculation."
+    CategoriesTotalV2L2:
+      title: Categories Totals Response
+      required:
+      - name
+      type: object
+      properties:
+        credit_amount:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+        debit_amount:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+        name:
+          type: string
+          description: Category id as slug.
+    CategoriesTotalTrendsV2Response:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoriesTotalTrendsV2Response_data'
     MerchantTotalsResponseV2:
       title: Merchant Totals
       required:
@@ -17125,6 +17309,83 @@ components:
           description: URL for logo of the detected merchant
       description: Details regarding a merchant associated with a transaction
       nullable: true
+    FutureTransactionV2Response:
+      allOf:
+      - required:
+        - data
+        - metadata
+        - operation_id
+        type: object
+        properties:
+          operation_id:
+            $ref: '#/components/schemas/OperationId'
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/FutureTransactionV2'
+          metadata:
+            $ref: '#/components/schemas/FutureTransactionV2Response_metadata'
+    FutureTransactionV2:
+      allOf:
+      - required:
+        - account_id
+        - amount
+        - confidence
+        - credit_debit_indicator
+        - date_time
+        - future_transactions
+        - label
+        - period
+        - transaction_description
+        - transaction_id
+        type: object
+        properties:
+          transaction_id:
+            type: string
+            description: Unique identifier for the transaction.
+          account_id:
+            type: string
+            description: Unique identifier for the account.
+          transaction_description:
+            type: string
+            description: "Further details of the transaction. This is the transaction\
+              \ narrative, which is unstructured text."
+          date_time:
+            type: string
+            description: The date of the transaction. In the following format RFC-3339
+              'Year-Month-Day Hour:Minute:Second'. E.g '2019-07-01T01:00:00'
+          amount:
+            $ref: '#/components/schemas/BudAmount'
+          credit_debit_indicator:
+            type: string
+            description: Indication as to whether the transaction was a credit or
+              debit. If credit then debtor is required. If debit then creditor required.
+            enum:
+            - credit
+            - debit
+          label:
+            type: string
+            description: Unique identifier for the regular transaction group
+          period:
+            type: string
+            description: To describe the frequency of each transaction
+            enum:
+            - daily
+            - weekly
+            - biweekly
+            - monthly
+            - quarterly
+            - six_monthly
+            - annually
+            - unknown
+          confidence:
+            type: string
+            description: Probability score
+          future_transactions:
+            type: array
+            items:
+              $ref: '#/components/schemas/FutureTransactionV2_future_transactions'
+        description: Expected transaction structure
     FutureTransactionsResponse:
       title: Future Transactions (Aggregated) Response
       type: object
@@ -17222,83 +17483,215 @@ components:
           items:
             type: string
       description: Details surrounding the regularity of the transaction
-    FutureTransactionV2Response:
+    IncomeResponseV2:
+      title: Income Finder Response V2
+      required:
+      - data
+      - metadata
+      - operation_id
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/Income_Finder_Response_Data'
+        metadata:
+          $ref: '#/components/schemas/TransactionsResultsMetadata'
+    IncomeTransactionV2:
       allOf:
-      - required:
-        - data
-        - metadata
-        - operation_id
-        type: object
+      - $ref: '#/components/schemas/BasicTransactionV2'
+      - title: Income Transaction
+        required:
+        - enrichment
         properties:
-          operation_id:
-            $ref: '#/components/schemas/OperationId'
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/FutureTransactionV2'
-          metadata:
-            $ref: '#/components/schemas/FutureTransactionV2Response_metadata'
-    FutureTransactionV2:
-      allOf:
-      - required:
-        - account_id
-        - amount
-        - confidence
-        - credit_debit_indicator
-        - date_time
-        - future_transactions
-        - label
-        - period
-        - transaction_description
-        - transaction_id
-        type: object
-        properties:
-          transaction_id:
-            type: string
-            description: Unique identifier for the transaction.
-          account_id:
-            type: string
-            description: Unique identifier for the account.
-          transaction_description:
-            type: string
-            description: "Further details of the transaction. This is the transaction\
-              \ narrative, which is unstructured text."
-          date_time:
-            type: string
-            description: The date of the transaction. In the following format RFC-3339
-              'Year-Month-Day Hour:Minute:Second'. E.g '2019-07-01T01:00:00'
-          amount:
-            $ref: '#/components/schemas/BudAmount'
-          credit_debit_indicator:
-            type: string
-            description: Indication as to whether the transaction was a credit or
-              debit. If credit then debtor is required. If debit then creditor required.
-            enum:
-            - credit
-            - debit
-          label:
-            type: string
-            description: Unique identifier for the regular transaction group
-          period:
-            type: string
-            description: To describe the frequency of each transaction
-            enum:
-            - daily
-            - weekly
-            - biweekly
-            - monthly
-            - quarterly
-            - six_monthly
-            - annually
-            - unknown
-          confidence:
-            type: string
-            description: Probability score
-          future_transactions:
-            type: array
-            items:
-              $ref: '#/components/schemas/FutureTransactionV2_future_transactions'
-        description: Expected transaction structure
+          enrichment:
+            $ref: '#/components/schemas/IncomeEnrichmentsV2'
+    BasicTransactionV2:
+      title: Basic Transaction Schema
+      required:
+      - account_id
+      - amount
+      - credit_debit_indicator
+      - date
+      - provider
+      - transaction_description
+      - transaction_id
+      type: object
+      properties:
+        transaction_id:
+          type: string
+          description: A unique identifier for the transaction
+        account_id:
+          type: string
+          description: A unique identifier for the Customer bank account
+        transaction_description:
+          type: string
+          description: "A description of the transaction, similar to the transaction\
+            \ information in Open Banking. e.g. a bank transfer reference\""
+        provider:
+          type: string
+          description: The name of the relevant provider relevant to the source of
+            the original transaction data
+        date:
+          type: string
+          description: |
+            The date of the transaction in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+            Examples:
+              - `2023-03-17T17:29:51Z`
+              - `2023-03-17T17:29:51-08:00`
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        credit_debit_indicator:
+          type: string
+          description: Indication as to whether the transaction was a credit or debit
+          enum:
+          - Credit
+          - Debit
+      description: Basic transaction schema
+    IncomeEnrichmentsV2:
+      title: Income Transaction Enrichments
+      type: object
+      properties:
+        categories:
+          $ref: '#/components/schemas/Categoriser_Enrichment'
+        merchant:
+          allOf:
+          - type: object
+            nullable: true
+          - $ref: '#/components/schemas/MerchantIdV2'
+        processor:
+          allOf:
+          - type: object
+            nullable: true
+          - $ref: '#/components/schemas/ProcessorIdV2'
+        income:
+          allOf:
+          - type: object
+            nullable: true
+          - $ref: '#/components/schemas/IncomeEnrichmentV2'
+      description: Results from required enrichment services for successful marking
+        of income transactions
+    CategoriserCategory:
+      title: Categoriser Category
+      required:
+      - confidence
+      - label
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Internal name (identifier) of the category
+        confidence:
+          type: string
+          description: The level of certainty that the model has predicted the category
+        label:
+          type: string
+          description: Humanised category name
+      description: "The details in relation to a specific category level, as taken\
+        \ from the output of Bud's categorsiation service."
+    MerchantIdV2:
+      title: Merchant ID Object
+      required:
+      - confidence
+      - id
+      - logo
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique ID for the identified merchant
+        name:
+          type: string
+          description: The clean name of the identified merchant
+        logo:
+          type: string
+          description: The merchant's logo image URL location
+        confidence:
+          type: string
+          description: The level of certainty that the model has predicted the merchant
+      description: Details surrounding the identified merchant of the transaction
+    ProcessorIdV2:
+      title: Processor ID Object
+      required:
+      - confidence
+      - id
+      - logo
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique ID for the identified processor
+        name:
+          type: string
+          description: The clean name of the identified processor
+        logo:
+          type: string
+          description: The processor's logo image URL location
+        confidence:
+          type: string
+          description: The level of certainty that the model has predicted the processor
+      description: Details surrounding the identified processor of the transaction
+    IncomeEnrichmentV2:
+      title: Income Enrichment
+      required:
+      - confidence
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: "The type of identified income type, either `salary_or_wages`\
+            \ or `other_incoming`"
+        confidence:
+          type: string
+          description: The level of certainty that the model has predicted an income
+            related transaction.
+      description: Results from Bud's Income Finder Service
+    IncomeStatistics:
+      title: Income statistics
+      required:
+      - average
+      type: object
+      properties:
+        average:
+          $ref: '#/components/schemas/IncomeAverage'
+    IncomeAverage:
+      title: Average income statistics
+      required:
+      - monthly
+      type: object
+      properties:
+        monthly:
+          allOf:
+          - description: average income per month
+          - $ref: '#/components/schemas/IncomeAverageOverPeriod'
+      description: "Averages of income amounts. These averages are calculated using\
+        \ the filters supplied in the `X-From` & `X-To` headers. \nFor instance, with\
+        \ 6 months of £1000/month and a date range of 6 months, the monthly average\
+        \ will be £1000. \nHowever, if the supplied date range is 12 months and there\
+        \ is no data for more than those 6 months, the average will be £500/month.\
+        \ \n\nNote that the number of months are calculated inclusively e.g. `months(2022-01-01,\
+        \ 2022-02-28) = 2` and `months(2022-01-01, 2022-03-01) = 3`."
+    IncomeAverageOverPeriod:
+      title: Average income statistics over time period
+      required:
+      - income
+      - regular_income
+      type: object
+      properties:
+        income:
+          allOf:
+          - description: average of all income transactions
+          - $ref: '#/components/schemas/BudAmount'
+        regular_income:
+          allOf:
+          - description: average income transactions that we have also detected as
+              regular
+          - $ref: '#/components/schemas/BudAmount'
     SalaryResponse:
       title: Salary Response
       type: object
@@ -17414,25 +17807,6 @@ components:
           $ref: '#/components/schemas/IncomeEnrichment'
       description: |
         Results from required enrichment services for successful marking of income transactions
-    CategoriserCategory:
-      title: Categoriser Category
-      required:
-      - confidence
-      - label
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-          description: Internal name (identifier) of the category
-        confidence:
-          type: string
-          description: The level of certainty that the model has predicted the category
-        label:
-          type: string
-          description: Humanised category name
-      description: "The details in relation to a specific category level, as taken\
-        \ from the output of Bud's categorsiation service."
     IncomeEnrichment:
       title: Income Enrichment
       required:
@@ -17449,196 +17823,6 @@ components:
           description: The level of certainty that the model has predicted an income
             related transaction.
       description: Results from Bud's Income Finder Service
-    IncomeResponseV2:
-      title: Income Finder Response V2
-      required:
-      - data
-      - metadata
-      - operation_id
-      type: object
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          $ref: '#/components/schemas/Income_Finder_Response_Data'
-        metadata:
-          $ref: '#/components/schemas/TransactionsResultsMetadata'
-    IncomeTransactionV2:
-      allOf:
-      - $ref: '#/components/schemas/BasicTransactionV2'
-      - title: Income Transaction
-        required:
-        - enrichment
-        properties:
-          enrichment:
-            $ref: '#/components/schemas/IncomeEnrichmentsV2'
-    BasicTransactionV2:
-      title: Basic Transaction Schema
-      required:
-      - account_id
-      - amount
-      - credit_debit_indicator
-      - date
-      - provider
-      - transaction_description
-      - transaction_id
-      type: object
-      properties:
-        transaction_id:
-          type: string
-          description: A unique identifier for the transaction
-        account_id:
-          type: string
-          description: A unique identifier for the Customer bank account
-        transaction_description:
-          type: string
-          description: "A description of the transaction, similar to the transaction\
-            \ information in Open Banking. e.g. a bank transfer reference\""
-        provider:
-          type: string
-          description: The name of the relevant provider relevant to the source of
-            the original transaction data
-        date:
-          type: string
-          description: |
-            The date of the transaction in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
-
-            Examples:
-              - `2023-03-17T17:29:51Z`
-              - `2023-03-17T17:29:51-08:00`
-        amount:
-          $ref: '#/components/schemas/BudAmount'
-        credit_debit_indicator:
-          type: string
-          description: Indication as to whether the transaction was a credit or debit
-          enum:
-          - Credit
-          - Debit
-      description: Basic transaction schema
-    IncomeEnrichmentsV2:
-      title: Income Transaction Enrichments
-      type: object
-      properties:
-        categories:
-          $ref: '#/components/schemas/Categoriser_Enrichment'
-        merchant:
-          allOf:
-          - type: object
-            nullable: true
-          - $ref: '#/components/schemas/MerchantIdV2'
-        processor:
-          allOf:
-          - type: object
-            nullable: true
-          - $ref: '#/components/schemas/ProcessorIdV2'
-        income:
-          allOf:
-          - type: object
-            nullable: true
-          - $ref: '#/components/schemas/IncomeEnrichmentV2'
-      description: Results from required enrichment services for successful marking
-        of income transactions
-    MerchantIdV2:
-      title: Merchant ID Object
-      required:
-      - confidence
-      - id
-      - logo
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-          description: A unique ID for the identified merchant
-        name:
-          type: string
-          description: The clean name of the identified merchant
-        logo:
-          type: string
-          description: The merchant's logo image URL location
-        confidence:
-          type: string
-          description: The level of certainty that the model has predicted the merchant
-      description: Details surrounding the identified merchant of the transaction
-    ProcessorIdV2:
-      title: Processor ID Object
-      required:
-      - confidence
-      - id
-      - logo
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-          description: A unique ID for the identified processor
-        name:
-          type: string
-          description: The clean name of the identified processor
-        logo:
-          type: string
-          description: The processor's logo image URL location
-        confidence:
-          type: string
-          description: The level of certainty that the model has predicted the processor
-      description: Details surrounding the identified processor of the transaction
-    IncomeEnrichmentV2:
-      title: Income Enrichment
-      required:
-      - confidence
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          description: "The type of identified income type, either `salary_or_wages`\
-            \ or `other_incoming`"
-        confidence:
-          type: string
-          description: The level of certainty that the model has predicted an income
-            related transaction.
-      description: Results from Bud's Income Finder Service
-    IncomeStatistics:
-      title: Income statistics
-      required:
-      - average
-      type: object
-      properties:
-        average:
-          $ref: '#/components/schemas/IncomeAverage'
-    IncomeAverage:
-      title: Average income statistics
-      required:
-      - monthly
-      type: object
-      properties:
-        monthly:
-          allOf:
-          - description: average income per month
-          - $ref: '#/components/schemas/IncomeAverageOverPeriod'
-      description: "Averages of income amounts. These averages are calculated using\
-        \ the filters supplied in the `X-From` & `X-To` headers. \nFor instance, with\
-        \ 6 months of £1000/month and a date range of 6 months, the monthly average\
-        \ will be £1000. \nHowever, if the supplied date range is 12 months and there\
-        \ is no data for more than those 6 months, the average will be £500/month.\
-        \ \n\nNote that the number of months are calculated inclusively e.g. `months(2022-01-01,\
-        \ 2022-02-28) = 2` and `months(2022-01-01, 2022-03-01) = 3`."
-    IncomeAverageOverPeriod:
-      title: Average income statistics over time period
-      required:
-      - income
-      - regular_income
-      type: object
-      properties:
-        income:
-          allOf:
-          - description: average of all income transactions
-          - $ref: '#/components/schemas/BudAmount'
-        regular_income:
-          allOf:
-          - description: average income transactions that we have also detected as
-              regular
-          - $ref: '#/components/schemas/BudAmount'
     BenefitsResponseV1:
       title: Benefits Finder Response
       required:
@@ -21856,13 +22040,34 @@ components:
           type: array
           description: A list of category total objects
           items:
-            $ref: '#/components/schemas/CategoryTotalSpend'
+            $ref: '#/components/schemas/LegacyCategoryTotalSpend'
         sub_categories:
           type: array
           description: A list of subcategory total objects
           items:
-            $ref: '#/components/schemas/CategoryTotalSpend'
+            $ref: '#/components/schemas/LegacyCategoryTotalSpend'
       description: Total spend by categories
+    CategoriesTotalTrendsV2Response_data:
+      required:
+      - data
+      - from
+      - to
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoriesTotalV2'
+        to:
+          type: string
+          description: RFC 3339 Compliant date stamp indicating the beginning of the
+            transaction window used in this calculation
+          example: 2023-05-21T07:20:50.52Z
+        from:
+          type: string
+          description: RFC 3339 Compliant date stamp indicating the end of the transaction
+            window used in this calculation
+          example: 2023-05-21T07:20:50.52Z
     BenefitsTotalsResponseV1_data:
       required:
       - benefit
@@ -22269,6 +22474,45 @@ components:
         amount:
           $ref: '#/components/schemas/BudAmount'
       description: Dates and amounts of the predicted future occurrences
+    Income_Finder_Response_Data:
+      title: Income_Finder_Response_Data
+      required:
+      - statistics
+      - transactions
+      type: object
+      properties:
+        transactions:
+          title: Income Transactions
+          type: array
+          items:
+            $ref: '#/components/schemas/IncomeTransactionV2'
+        statistics:
+          $ref: '#/components/schemas/IncomeStatistics'
+    Categoriser_Enrichment:
+      title: Categoriser_Enrichment
+      required:
+      - l1
+      - l2
+      - l3
+      type: object
+      properties:
+        l1:
+          type: array
+          description: Details on the Level One category associated with the transaction
+          items:
+            $ref: '#/components/schemas/CategoriserCategory'
+        l2:
+          type: array
+          description: Details on the Level Two category associated with the transaction
+          items:
+            $ref: '#/components/schemas/CategoriserCategory'
+        l3:
+          type: array
+          description: Details on the Level Three category associated with the transaction
+          items:
+            $ref: '#/components/schemas/CategoriserCategory'
+      description: Results from Bud's Categorisation Service
+      nullable: true
     IncomeTransactionEnrichmentsV1_categoriser_categories:
       required:
       - category_name
@@ -22324,45 +22568,6 @@ components:
           items:
             $ref: '#/components/schemas/CategoriserCategory'
       description: Results from Bud's Categorisation Service
-    Income_Finder_Response_Data:
-      title: Income_Finder_Response_Data
-      required:
-      - statistics
-      - transactions
-      type: object
-      properties:
-        transactions:
-          title: Income Transactions
-          type: array
-          items:
-            $ref: '#/components/schemas/IncomeTransactionV2'
-        statistics:
-          $ref: '#/components/schemas/IncomeStatistics'
-    Categoriser_Enrichment:
-      title: Categoriser_Enrichment
-      required:
-      - l1
-      - l2
-      - l3
-      type: object
-      properties:
-        l1:
-          type: array
-          description: Details on the Level One category associated with the transaction
-          items:
-            $ref: '#/components/schemas/CategoriserCategory'
-        l2:
-          type: array
-          description: Details on the Level Two category associated with the transaction
-          items:
-            $ref: '#/components/schemas/CategoriserCategory'
-        l3:
-          type: array
-          description: Details on the Level Three category associated with the transaction
-          items:
-            $ref: '#/components/schemas/CategoriserCategory'
-      description: Results from Bud's Categorisation Service
-      nullable: true
     Loan_Finder_Response_Data:
       title: Loan_Finder_Response_Data
       required:
@@ -23538,6 +23743,58 @@ components:
         enum:
         - "true"
         - "false"
+    CategoryTotalsQueryFromTimestamp:
+      name: from
+      in: query
+      description: |
+        The date from when results are to be retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+        Defaults to 6 months ago.
+
+        Examples:
+          - `2023-01-17T17:29:51Z`
+          - `2023-01-17T17:29:51-08:00`
+      schema:
+        type: string
+      example: 2023-05-21T07:20:50.52Z
+    CategoryTotalsQueryToTimestamp:
+      name: to
+      in: query
+      description: |
+        The date up to when results are to be retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+        Defaults to today.
+
+        Examples:
+          - `2023-03-17T17:29:51Z`
+          - `2023-03-17T17:29:51-08:00`
+      schema:
+        type: string
+      example: 2023-06-21T07:20:50.52Z
+    QueryBudCategory:
+      name: category
+      in: query
+      description: |
+        Use this parameter to filter the results on l1 categories to include.
+        Accepts multiple values, or values separated by comma.
+
+        To specify l2 categories to include, use the following format: `l1.l2`.
+
+        Examples:
+          - `shopping` - Filters the result set to only include data where the l1 category is `shopping`.
+          - `shopping.groceries` - Filters the result set to only include data where the l1 category is `shopping` and the l2 category is `groceries`.
+      schema:
+        type: string
+      example: shopping
+    QueryCurrency:
+      name: currency
+      in: query
+      description: Use this parameter to filter the results returned on the `currency`
+        associated with each result. Multiple values are accepted. If this parameter
+        is not provided then results of any `currency` will be returned.
+      schema:
+        type: string
+      example: GBP
     MerchantsTotalsIncludeCategories:
       name: X-Include-Categories
       in: header
@@ -23554,15 +23811,6 @@ components:
       schema:
         type: string
       example: "bills,finances"
-    QueryCurrency:
-      name: currency
-      in: query
-      description: Use this parameter to filter the results returned on the `currency`
-        associated with each result. Multiple values are accepted. If this parameter
-        is not provided then results of any `currency` will be returned.
-      schema:
-        type: string
-      example: GBP
     QueryProvider:
       name: provider
       in: query
