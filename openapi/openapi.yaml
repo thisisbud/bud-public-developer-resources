@@ -339,46 +339,47 @@ info:
     \                                                                            \
     \  |\n## Changelog\n\nThis changelog represents a list of all changes that have\
     \ been made to Bud’s API documentation. This includes both backward-compatible\
-    \ and backward-incompatible changes.\n\n**Version 2.8.6: 25/07/2023**\n> - Removed\
-    \ the __Retrieve Categories V1__ endpoint as the deprecation notice has expired.\n\
-    > - Deprecated the __Retrieve Income Transactions V1__ endpoint in favour of __Retrieve\
-    \ Income Transactions V2__\n> - Deprecated the __Retrieve Salary Information__\
-    \ endpoint in favour of __Retrieve Income Transactions V2__\n\n**Version 2.8.5:\
-    \ 19/07/2023**\n> - Added the __Category Totals V2__ endpoint.\n> - Added the\
-    \ __Category Totals V2__ trends endpoint.\n> - Fixed bug in v1 category totals\
-    \ schema.\n\n**Version 2.8.4: 19/07/2023**\n> - Added `mobile_only` flag for providers\
-    \ in the __Retrieve OB Providers__ endpoint.\n\n**Version 2.8.3: 18/07/2023**\n\
-    > - Added link to guide to __Create Customers V3__ and __Create Customers V3 (Batch)__.\n\
-    > - Added link to guide to __Retrieve Accounts V2__ and __Retrieve Accounts By\
-    \ ID V2__.\n\n**Version 2.8.2: 10/07/2023**\n> - Added `skip_success_screen` to\
-    \ the request body of the __Retrieve Authorisation Gateway URL V2__ endpoint.\n\
-    \n**Version 2.8.1: 07/07/2023**\n> - Added `loan` and `pending` tags as part of\
-    \ the __Retrieve Transactions V2__ endpoint.\n> - General bug fixes and improvements\
-    \ across examples and schemas.\n\n**Version 2.8.0: 29/06/2023**\n> - Added the\
-    \ new Characteristics API as part of the Engage product offering.\n\n**Version\
-    \ 2.7.9: 22/06/2023**\n> - Updated __Retrieve Forecasted Transactions V1__ to\
-    \ show descriptive deprecation notice.\n\n**Version 2.7.8: 19/06/2023**\n> - Updated\
-    \ descriptions for Payments related endpoints.\n\n**Version 2.7.7: 07/06/2023**\n\
-    > - Updated response parameters for __Ingest First Party Data__ endpoints.\n\n\
-    **Version 2.7.6: 01/06/2023**\n> - Updated optional headers for __Reconfirm Consent__\
-    \ endpoint to include `X-Customer-Ip-Address`.\n\n**Version 2.7.5: 22/05/2023**\n\
-    > - Updated the description and examples for the __Retrieve Balances Over Time__\
-    \ and __Retrieve Balances Over Time By Account__ endpoints.\n> - Updated the description\
-    \ and examples for the __Retrieve Transactions V2__ endpoint.\n> - Updated __Retrieve\
-    \ Accounts__ to show descriptive deprecation notice.\n> - Updated __Retrieve Accounts\
-    \ V2__ response HTTP codes, example transaction ID, `provider` query parameter\
-    \ description.\n\n**Version 2.7.4: 19/05/2023**\n> - Updated the description for\
-    \ the __Ingest Transactions V2__ endpoint.\n\n**Version 2.7.3: 18/05/2023**\n\
-    > - Updated the __Retrieve Authorisation Gateway URL (v2)__ endpoint with a new\
-    \ enable_async_connect option.\n> - Updated the __Ingest Transactions V2__ request\
-    \ examples.\n\n**Version 2.7.2: 18/05/2023**\n> - Updated the description for\
-    \ the __Reconfirm Consent__ endpoint.\n\n**Version 2.7.1: 16/05/2023**\n> - Added\
-    \ documentation for __Retrieve Auth Tokens__ endpoint.\n\n**Version 2.7.0: 11/05/2023**\n\
-    > - Adds two new endpoints: __Create Customers V3__ and __Create Customers V3\
-    \ (Batch)__.\n> - Introduces the concept of Hosted Customers, which makes Customer\
-    \ Secrets optional on all endpoints which previously required them.\n\n**Version\
-    \ 2.6.2: 05/05/2023**\n> - Documented default to from case in __Retrieve Financial\
-    \ Products V2__ and __Retrieve Financial Products__.\n> - Fixed documentation\
+    \ and backward-incompatible changes.\n\n**Version 2.8.7: 28/07/2023**\n> - Removed\
+    \ the __Retrieve Financial Products__ endpoint as the deprecation notice has expired.\n\
+    \n**Version 2.8.6: 25/07/2023**\n> - Removed the __Retrieve Categories V1__ endpoint\
+    \ as the deprecation notice has expired.\n> - Deprecated the __Retrieve Income\
+    \ Transactions V1__ endpoint in favour of __Retrieve Income Transactions V2__\n\
+    > - Deprecated the __Retrieve Salary Information__ endpoint in favour of __Retrieve\
+    \ Income Transactions V2__\n\n**Version 2.8.5: 19/07/2023**\n> - Added the __Category\
+    \ Totals V2__ endpoint.\n> - Added the __Category Totals V2__ trends endpoint.\n\
+    > - Fixed bug in v1 category totals schema.\n\n**Version 2.8.4: 19/07/2023**\n\
+    > - Added `mobile_only` flag for providers in the __Retrieve OB Providers__ endpoint.\n\
+    \n**Version 2.8.3: 18/07/2023**\n> - Added link to guide to __Create Customers\
+    \ V3__ and __Create Customers V3 (Batch)__.\n> - Added link to guide to __Retrieve\
+    \ Accounts V2__ and __Retrieve Accounts By ID V2__.\n\n**Version 2.8.2: 10/07/2023**\n\
+    > - Added `skip_success_screen` to the request body of the __Retrieve Authorisation\
+    \ Gateway URL V2__ endpoint.\n\n**Version 2.8.1: 07/07/2023**\n> - Added `loan`\
+    \ and `pending` tags as part of the __Retrieve Transactions V2__ endpoint.\n>\
+    \ - General bug fixes and improvements across examples and schemas.\n\n**Version\
+    \ 2.8.0: 29/06/2023**\n> - Added the new Characteristics API as part of the Engage\
+    \ product offering.\n\n**Version 2.7.9: 22/06/2023**\n> - Updated __Retrieve Forecasted\
+    \ Transactions V1__ to show descriptive deprecation notice.\n\n**Version 2.7.8:\
+    \ 19/06/2023**\n> - Updated descriptions for Payments related endpoints.\n\n**Version\
+    \ 2.7.7: 07/06/2023**\n> - Updated response parameters for __Ingest First Party\
+    \ Data__ endpoints.\n\n**Version 2.7.6: 01/06/2023**\n> - Updated optional headers\
+    \ for __Reconfirm Consent__ endpoint to include `X-Customer-Ip-Address`.\n\n**Version\
+    \ 2.7.5: 22/05/2023**\n> - Updated the description and examples for the __Retrieve\
+    \ Balances Over Time__ and __Retrieve Balances Over Time By Account__ endpoints.\n\
+    > - Updated the description and examples for the __Retrieve Transactions V2__\
+    \ endpoint.\n> - Updated __Retrieve Accounts__ to show descriptive deprecation\
+    \ notice.\n> - Updated __Retrieve Accounts V2__ response HTTP codes, example transaction\
+    \ ID, `provider` query parameter description.\n\n**Version 2.7.4: 19/05/2023**\n\
+    > - Updated the description for the __Ingest Transactions V2__ endpoint.\n\n**Version\
+    \ 2.7.3: 18/05/2023**\n> - Updated the __Retrieve Authorisation Gateway URL (v2)__\
+    \ endpoint with a new enable_async_connect option.\n> - Updated the __Ingest Transactions\
+    \ V2__ request examples.\n\n**Version 2.7.2: 18/05/2023**\n> - Updated the description\
+    \ for the __Reconfirm Consent__ endpoint.\n\n**Version 2.7.1: 16/05/2023**\n>\
+    \ - Added documentation for __Retrieve Auth Tokens__ endpoint.\n\n**Version 2.7.0:\
+    \ 11/05/2023**\n> - Adds two new endpoints: __Create Customers V3__ and __Create\
+    \ Customers V3 (Batch)__.\n> - Introduces the concept of Hosted Customers, which\
+    \ makes Customer Secrets optional on all endpoints which previously required them.\n\
+    \n**Version 2.6.2: 05/05/2023**\n> - Documented default to from case in __Retrieve\
+    \ Financial Products V2__ and __Retrieve Financial Products__.\n> - Fixed documentation\
     \ for get customers endpoints \n> - Fixed documentation for put customer context\
     \ endpoints \n\n**Version 2.6.1: 27/04/2023**\n> - Deprecated __Retrieve Financial\
     \ Products__.\n> - Corrected sample Financial Products in __Retrieve Financial\
@@ -781,7 +782,7 @@ info:
     name: Bud Support
     url: https://www.thisisbud.com/
     email: help@thisisbud.com
-  version: 2.8.6
+  version: 2.8.7
   x-logo:
     url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATAAAABuCAQAAAAKAYdLAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAB3RJTUUH4wQDDggcbXcx7wAABeJJREFUeNrt3W2IFVUcx/HvXRW1VdQedy1bZVfoYX0osVQyfSGElKbRA5oFIaIlhAkWUYm6gvqqDMHMoBeKlhayCCZC2AMRPay7aJrSZmauZhQqaj7t7u1Fi965987s7D1n7pk7/j73zX2Y85//mXt2Zu45Z2ZBREREREREREREREREREREREREREREREREREREREREREREREREROIiZSFGH+YxgsOs5U/X1bFiPDPpQT3bu1DmcaZyg+vErWpjD+s47zoN6Mte0qRJc4Iq18lYMJv2jvosD11mRUeJpD32UO7664BFGQl94DoZY704fbU2rQwKVWYwbc6bQlSPBaYbtMz4K7nP53lpGkK/q8+7MTxUmeEWtmJcGX+j5psmM0I3l9vCirKAV36OuE46QsbfaHL/9opnL9tcpxBf3V0nkAgzWMRj9HadhrH+3Gk7pBqYDZdY3oXfnHE2gc1U2gyoQ6Rk+pKZdgOqgYnXF7TYDGe3gcWgW85QH9cJxMAVm8HsNrBqhhV1U9g33XUCzo1gsM1wdhtYio8ZWsytYdksFrpOwbGhbLYb0PavyLs5wA+c9v28lRa+Zzt/+y5RwwKqaOCdgCjZRvEit/A1a7jou8xwJjOMAb7D+ylqqCmw1imeZ0oCBrv7Mzp+/QofFTDCdZG13Jw3Wi1nOpbZT9+QGUziUkeZ3T49z+P4pqCRuCkhM1jjfMwwqsdG182rsAaWJs0JxuWJ9knGEq+EzODHjDLTcj5NsbjgwehwDazm6vyL5D2MG5i7booKdjE25917M57XhoxUG1hmJUsjrmWtlVl18ZQ2DeCyH6ycT7kpIJ+wuQWVeZJXI69HcpsXHDQN4LajtZIlkcbvzWqn9St1R3nPNIT93wzt/MSZPO+nqKA65699Nos5FdHmgZkMzHnvIj9zLm9+Q7jd0nqP8VtkdSqWNppYxT+u08g+yW8OnKRXw4ac08hnPUscyvjkw5AZXM4os9jzyY6sdZ3h5YC++jLm0lrASf50T5krzEn0QbOLbB8in2FvwKfNPJczCXd0hLV7wPPqL8bybt691//aWWfhkPo2681PjZPDbgP7lYZOl1nNJs9rW4elXD2zfkK8wIFOy2w1XuuWyOpTkuw2sHOhlqrzvIqu59gbuYEdIcqcjSyb65SLX5EHOepgrbuKtJ6nHNQtxtx0U5xM8DoXMkez7K5xM7Tp4iS4WOvszvss5feSP9Fvo5EVnDDfHGJfpd157Y48xFRGmfaEaWcu/qqYZxpCDcxcqR8Mg9xlGkANzNz+BDcx4zEJNTBzv5gPCSeXTvJtmM+3PJqIKdNj6GE3pJsG5mIwOMp1ptnABgd1sq+G7ebnXZncHCKjG3+M1zpLTzMz7AZ00cBG5pmlFb3JmkQTSpPd21HZbWD9Qy21zPPK/zricNH6+B7mvZFreTpEtAFWt0dpsnoWZreBVTG+kyVS1GVN4/vDd9lJVIRY5yzfPdPlrPHHdTwYItr1bkLcTia8M1qPM9F3yRRjcuaYprNmHxzyfNbQyQlnGTM47ynhndFan7WuCywLODz35I2sC9DCXheZHBNpsXvZmu1fkZXs5rjPnPzb8hyAzrIzINr9HOBIwNXat+ZcleS1hame1714izc55jNvbVDBtz7pyWuJuI15P/tnx1F0UwzsQpprO5nil2KIQSZbqcspnwp57+iu2MQT1mMmhNue/MMR3xfwMi8VYRhnmJqXP/MG1lZwyVNMy9l/FR4tf/mdvB553Uz2sXFn+n1YaGCNBZZr5mH25by7xzCb3PKrmM+lgmK1BV4hdc0+2g2zjq8m1wlAOY1dvqXGKep87oZYzUmDW3Vs8+myuIf6Am6AsiT0Nljp/CYl0Twaze9ZaaN3u5w5jAy5L2ylhe/4nAu+S1Qwl+oCsrjCV2wM2KXfwSPUcmPIGv9LPZ91Ye1TEnEb80ztNLE+Dv8MS0RERERERERERERERERERERERERERERERERERERERERERERERERs+Q/rhi5WauEgfQAAAABJRU5ErkJggg=="
 servers:
@@ -937,6 +938,14 @@ tags:
     Create a link for a customer to follow, which will allow them to connect
     their bank accounts and submit their financial data for the application.
   x-displayName: Customer Application Links
+- name: Aggregation Buckets
+  description: |
+    Manage virtual "buckets" for grouping and aggregating transactions by their
+    underlying categories.
+
+    Use this for retrieving financial data for customers of the Assess Dashboard
+    (where the `bucket_id` is `assess-dashboard`) as it appears in said dashboard.
+  x-displayName: Aggregation Buckets
 - name: KYC API
   description: "Bud's Know Your Customer (KYC) API allows you to perform relevant\
     \ checks against businesses and customers. This API uses the \nNorthrow API in\
@@ -7802,104 +7811,6 @@ paths:
           description: An unexpected HTTP method was used
         "5XX":
           description: An unexpected error occurred on the server side
-  /v1/products:
-    get:
-      tags:
-      - Expenditure Insights
-      summary: Retrieve Financial Products
-      description: |
-        The Financial Product Finder creates a summary of a customer's financial products using their transaction history. Currently, it can detect:
-
-        - Loans
-        - Buy Now, Pay Later (BNPL)
-        - Mortgages
-        - Insurance products
-        - Credit Cards
-        - Private Pensions
-        - Savings & Investments
-
-        **Notes:**
-        - The Financial Product Finder currently only finds products from `debit` transactions.
-        - If X-From and X-To headers are not set, this endpoint will default to using transactions from the last six months.
-      operationId: v1_products_get
-      parameters:
-      - name: X-Client-Id
-        in: header
-        description: The API Client Identifier (Service Application Identifier).
-        required: true
-        schema:
-          type: string
-      - name: X-Customer-Id
-        in: header
-        description: Bud Customer identifier
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: X-Customer-Secret
-        in: header
-        description: The Bud Customer secret used to encrypt customer data. This is
-          optional only if the customer secret is already stored with Bud (i.e. the
-          `host_secret` was set to `true` in the Customer Context when the customer
-          was created).
-        required: false
-        schema:
-          type: string
-      - name: X-From
-        in: header
-        description: Transaction from date
-        schema:
-          type: string
-        example: 2022-01-29
-      - name: X-To
-        in: header
-        description: Transaction to date
-        schema:
-          type: string
-        example: 2022-03-29
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetProductsResponseV1'
-              example:
-                operation_id: v1_products_get
-                data:
-                - transaction_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
-                  account_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
-                  transaction_description: Nationwide Mortgage Payment
-                  provider: Barclays
-                  date: 2021-04-11T01:00:00+0100
-                  amount:
-                    value: "1000.00"
-                    currency: GBP
-                  credit_debit_indicator: Debit
-                  merchant:
-                    id: nationwidebuildingsociety
-                    logo: https://assets.thisisbud.com/bud-datasci-images/merchant_logos/e121c7aa-a254-41bb-ad3e-33b988f791be/v1/nationwidebuildingsociety.jpeg
-                    name: Nationwide Building Society
-                    confidence: "0.823456"
-                  product:
-                    type:
-                    - mortgage
-                    period: monthly
-                metadata:
-                  results: 1
-                  from: 2022-09-03T11:28:22.00Z
-                  to: 2023-03-03T11:28:22.00Z
-        "204":
-          description: No transactions found
-        "400":
-          description: The request contains an invalid payload
-        "401":
-          description: Unauthorised request
-        "405":
-          description: An unexpected HTTP method was used
-        "5XX":
-          description: An unexpected error occurred on the server side
-      deprecated: true
   /v1/energy-switching/energy-payments:
     post:
       tags:
@@ -9272,6 +9183,602 @@ paths:
           description: The request uses an unexpected HTTP method.
         "5XX":
           description: An unexpected error occurred on the server side.
+      security:
+      - OAuth2: []
+  /aggregation/v1/buckets/{bucket_id}:
+    get:
+      tags:
+      - Aggregation Buckets
+      summary: Retrieve Buckets
+      description: |
+        Retrieve the definition of a bucket, and retrieve helper metadata which can be used
+        for presenting options to customers.
+
+        For example, the `metadata.category_lookup` property can be used to show a dialog box
+        to customers for the customers to be able to correct their transactions (using the
+        [Correct Transaction Categories V2](https://docs.thisisbud.com/reference/corrections_v2_categories_post)),
+        and using the correct `category_l1/category_l2` pair.
+      operationId: v1_bucket_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: bucket_id
+        in: path
+        description: |
+          ID of the bucket (whose criteria can be used to calculate totals).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/bucket_id'
+      - name: category_lookup
+        in: query
+        description: |
+          Include to ensure that `category_lookup` is present in the `metadata` of the response.
+        required: false
+        allowEmptyValue: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      - name: bucket_lookup
+        in: query
+        description: |
+          Include to ensure that `bucket_lookup` is present in the `metadata` of the response.
+        required: false
+        allowEmptyValue: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      - name: unbucketed_categories
+        in: query
+        description: |
+          Include to ensure that `unbucketed_categories` is present in the `metadata` of the response.
+        required: false
+        allowEmptyValue: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBucketResponse'
+              example:
+                operation_id: v1_bucket_get
+                data:
+                  bucket_id: a95e911c-900a-437c-a91e-d31c09ffd3ce
+                  name: example-bucket
+                  categorisation_model: uk-v2
+                  buckets:
+                  - bucket_l1: housing_fuel_and_power
+                    criteria:
+                    - bucket_l2: mortgage_repayment
+                      category_l1: mortgage_and_rent
+                      category_l2: mortgage
+                    - bucket_l2: rent_payment
+                      category_l1: mortgage_and_rent
+                      category_l2: rent
+                    - bucket_l2: electricity_and_gas
+                      category_l1: utilities
+                      category_l2: utilities_energy
+                    - bucket_l2: other_fuels
+                      category_l1: utilities
+                      category_l2: other_utilities
+                  - bucket_l1: recreation_and_culture
+                    criteria:
+                    - bucket_l2: holiday
+                      category_l1: travel
+                      category_l2: holiday_and_travel_expenses
+                    - bucket_l2: pet_care
+                      category_l1: home
+                      category_l2: pets
+                    - bucket_l2: leisure_and_culture
+                      category_l1: entertainment
+                      category_l2: leisure_and_amusement_activities
+                    - bucket_l2: reading
+                      category_l1: entertainment
+                      category_l2: books_and_reading
+                metadata:
+                  category_lookup:
+                    housing_fuel_and_power:
+                      mortgage_repayment:
+                        category_l1: mortgage_and_rent
+                        category_l2: mortgage
+                      rent_payment:
+                        category_l1: mortgage_and_rent
+                        category_l2: rent
+                      electricity_and_gas:
+                        category_l1: utilities
+                        category_l2: utilities_energy
+                      other_fuels:
+                        category_l1: utilities
+                        category_l2: other_utilities
+                    recreation_and_culture:
+                      holiday:
+                        category_l1: travel
+                        category_l2: holiday_and_travel_expenses
+                      pet_care:
+                        category_l1: home
+                        category_l2: pets
+                      leisure_and_culture:
+                        category_l1: entertainment
+                        category_l2: leisure_and_amusement_activities
+                      reading:
+                        category_l1: entertainment
+                        category_l2: books_and_reading
+                  bucket_lookup:
+                    entertainment:
+                      leisure_and_amusement_activities:
+                        bucket_l1: recreation_and_culture
+                        bucket_l2: leisure_and_culture
+                      books_and_reading:
+                        bucket_l1: recreation_and_culture
+                        bucket_l2: reading
+                    home:
+                      pets:
+                        bucket_l1: recreation_and_culture
+                        bucket_l2: pet_care
+                    travel:
+                      holiday_and_travel_expenses:
+                        bucket_l1: recreation_and_culture
+                        bucket_l2: holiday
+                    utilities:
+                      utilities_energy:
+                        bucket_l1: housing_fuel_and_power
+                        bucket_l2: electricity_and_gas
+                      other_utilities:
+                        bucket_l1: housing_fuel_and_power
+                        bucket_l2: other_fuels
+                    mortgage_and_rent:
+                      mortgage:
+                        bucket_l1: housing_fuel_and_power
+                        bucket_l2: mortgage_repayment
+                      rent:
+                        bucket_l1: housing_fuel_and_power
+                        bucket_l2: rent_payment
+                  unbucketed_categories:
+                  - category_l1: education
+                    category_l2: driving_lessons
+                  - category_l1: utilities
+                    category_l2: waste_and_recycling
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+      security:
+      - OAuth2: []
+  /aggregation/v1/buckets/{bucket_id}/totals:
+    get:
+      tags:
+      - Aggregation Buckets
+      summary: Retrieve Bucket Totals
+      description: |
+        Retrieve the totals of a defined bucket for a particular customer.
+
+        Use the `group_by` property to configure how the totals are grouped together
+        (e.g. by `bucket_l1`, by `month`, etc...)
+      operationId: v1_bucket_totals_get
+      parameters:
+      - name: X-Client-Id
+        in: header
+        description: The API Client Identifier (Service Application Identifier).
+        required: true
+        schema:
+          type: string
+      - name: bucket_id
+        in: path
+        description: |
+          ID of the bucket (whose criteria can be used to calculate totals).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/bucket_id'
+      - name: X-Customer-Id
+        in: header
+        description: Bud Customer identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Customer-Secret
+        in: header
+        description: The Bud Customer secret used to encrypt customer data. This is
+          optional only if the customer secret is already stored with Bud (i.e. the
+          `host_secret` was set to `true` in the Customer Context when the customer
+          was created).
+        required: false
+        schema:
+          type: string
+      - name: month_from
+        in: query
+        description: "Month (`YYYY-MM`) from which the transactions should be returned\
+          \ from, this works in pair with the `month_to` parameter."
+        required: false
+        schema:
+          type: string
+        example: 2019-02
+      - name: month_to
+        in: query
+        description: "Month (`YYYY-MM`) from which the transactions should be returned\
+          \ to, this works in pair with the `month_from` parameter."
+        required: false
+        schema:
+          type: string
+        example: 2019-03
+      - name: currency
+        in: query
+        description: Use this parameter to filter the results returned on the `currency`
+          associated with each result. Multiple values are accepted. If this parameter
+          is not provided then results of any `currency` will be returned.
+        schema:
+          type: string
+        example: GBP
+      - name: timezone
+        in: query
+        schema:
+          $ref: '#/schemas/TimezoneIdentifier'
+      - name: group_by
+        in: query
+        description: |
+          Defines hierarchy of groupings for the resulting totals. For example:
+
+          ```
+          group_by=bucket_l1,bucket_l2
+          ```
+
+          Will result in getting groups by L1 buckets, then within those, their respective L2 buckets.
+        required: true
+        style: form
+        explode: false
+        schema:
+          minItems: 1
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupType'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBucketTotalsResponse'
+              examples:
+                Group By bucket_l1:
+                  value:
+                    operation_id: v1_bucket_totals_get
+                    data:
+                    - group_name: housing_fuel_and_power
+                      group_type: bucket_l1
+                      incoming:
+                        total:
+                          value: "0.00"
+                          currency: GBP
+                        monthly_average:
+                          value: "0.00"
+                          currency: GBP
+                        transaction_count: 0
+                        _links:
+                          transactions: /path/to/housing_fuel_and_power/transactions/incoming
+                      outgoing:
+                        total:
+                          value: "6000.00"
+                          currency: GBP
+                        monthly_average:
+                          value: "2000.00"
+                          currency: GBP
+                        transaction_count: 3
+                        _links:
+                          transactions: /path/to/housing_fuel_and_power/transactions/outgoing
+                      transaction_count: 3
+                      _links:
+                        transactions: /path/to/housing_fuel_and_power/transactions
+                    - group_name: recreation_and_culture
+                      group_type: bucket_l1
+                      incoming:
+                        total:
+                          value: "0.00"
+                          currency: GBP
+                        monthly_average:
+                          value: "0.00"
+                          currency: GBP
+                        transaction_count: 0
+                        _links:
+                          transactions: /path/to/recreation_and_culture/transactions/incoming
+                      outgoing:
+                        total:
+                          value: "9000.00"
+                          currency: GBP
+                        monthly_average:
+                          value: "3000.00"
+                          currency: GBP
+                        transaction_count: 3
+                        _links:
+                          transactions: /path/to/recreation_and_culture/transactions/outgoing
+                      transaction_count: 3
+                      _links:
+                        transactions: /path/to/recreation_and_culture/transactions
+                    metadata:
+                      date_from: 2023-01-01T00:00:00Z
+                      date_to: 2023-03-31T23:59:59Z
+                      group_by:
+                      - bucket_l1
+                      currency: GBP
+                Group By bucket_l1 then bucket_l2:
+                  value:
+                    operation_id: v1_bucket_totals_get
+                    data:
+                    - group_name: housing_fuel_and_power
+                      group_type: bucket_l1
+                      incoming:
+                        total:
+                          value: "0.00"
+                          currency: GBP
+                        monthly_average:
+                          value: "0.00"
+                          currency: GBP
+                        transaction_count: 0
+                        _links:
+                          transactions: /path/to/housing_fuel_and_power/transactions/incoming
+                      outgoing:
+                        total:
+                          value: "6000.00"
+                          currency: GBP
+                        monthly_average:
+                          value: "2000.00"
+                          currency: GBP
+                        transaction_count: 3
+                        _links:
+                          transactions: /path/to/housing_fuel_and_power/transactions/outgoing
+                      transaction_count: 3
+                      _links:
+                        transactions: /path/to/housing_fuel_and_power/transactions
+                      subtotals:
+                      - group_name: mortgage_repayment
+                        group_type: bucket_l2
+                        incoming:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/housing_fuel_and_power_mortgage_repayment/transactions/incoming
+                        outgoing:
+                          total:
+                            value: "6000.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "2000.00"
+                            currency: GBP
+                          transaction_count: 3
+                          _links:
+                            transactions: /path/to/housing_fuel_and_power_mortgage_repayment/transactions/outgoing
+                        transaction_count: 3
+                        _links:
+                          transactions: /path/to/housing_fuel_and_power_mortgage_repayment/transactions
+                      - group_name: rent_payment
+                        group_type: bucket_l2
+                        incoming:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/housing_fuel_and_power_rent_payment/transactions/incoming
+                        outgoing:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/housing_fuel_and_power_rent_payment/transactions/outgoing
+                        transaction_count: 0
+                        _links:
+                          transactions: /path/to/housing_fuel_and_power_rent_payment/transactions
+                      - group_name: electricity_and_gas
+                        group_type: bucket_l2
+                        incoming:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/housing_fuel_and_power_electricity_and_gas/transactions/incoming
+                        outgoing:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/housing_fuel_and_power_electricity_and_gas/transactions/outgoing
+                        transaction_count: 0
+                        _links:
+                          transactions: /path/to/housing_fuel_and_power_electricity_and_gas/transactions
+                      - group_name: other_fuels
+                        group_type: bucket_l2
+                        incoming:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/housing_fuel_and_power_other_fuels/transactions/incoming
+                        outgoing:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/housing_fuel_and_power_other_fuels/transactions/outgoing
+                        transaction_count: 0
+                        _links:
+                          transactions: /path/to/housing_fuel_and_power_other_fuels/transactions
+                    - group_name: recreation_and_culture
+                      group_type: bucket_l1
+                      incoming:
+                        total:
+                          value: "0.00"
+                          currency: GBP
+                        monthly_average:
+                          value: "0.00"
+                          currency: GBP
+                        transaction_count: 0
+                        _links:
+                          transactions: /path/to/recreation_and_culture/transactions/incoming
+                      outgoing:
+                        total:
+                          value: "9000.00"
+                          currency: GBP
+                        monthly_average:
+                          value: "3000.00"
+                          currency: GBP
+                        transaction_count: 3
+                        _links:
+                          transactions: /path/to/recreation_and_culture/transactions/outgoing
+                      transaction_count: 3
+                      _links:
+                        transactions: /path/to/recreation_and_culture/transactions
+                      subtotals:
+                      - group_name: holiday
+                        group_type: bucket_l2
+                        incoming:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/recreation_and_culture_holiday/transactions/incoming
+                        outgoing:
+                          total:
+                            value: "9000.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "3000.00"
+                            currency: GBP
+                          transaction_count: 3
+                          _links:
+                            transactions: /path/to/recreation_and_culture_holiday/transactions/outgoing
+                        transaction_count: 3
+                        _links:
+                          transactions: /path/to/recreation_and_culture_holiday/transactions
+                      - group_name: holiday
+                        group_type: bucket_l2
+                        incoming:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/recreation_and_culture_pet_care/transactions/incoming
+                        outgoing:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/recreation_and_culture_pet_care/transactions/outgoing
+                        transaction_count: 0
+                        _links:
+                          transactions: /path/to/recreation_and_culture_pet_care/transactions
+                      - group_name: leisure_and_culture
+                        group_type: bucket_l2
+                        incoming:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/recreation_and_culture_leisure_and_culture/transactions/incoming
+                        outgoing:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/recreation_and_culture_leisure_and_culture/transactions/outgoing
+                        transaction_count: 0
+                        _links:
+                          transactions: /path/to/recreation_and_culture_leisure_and_culture/transactions
+                      - group_name: reading
+                        group_type: bucket_l2
+                        incoming:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/recreation_and_culture_reading/transactions/incoming
+                        outgoing:
+                          total:
+                            value: "0.00"
+                            currency: GBP
+                          monthly_average:
+                            value: "0.00"
+                            currency: GBP
+                          transaction_count: 0
+                          _links:
+                            transactions: /path/to/recreation_and_culture_reading/transactions/outgoing
+                        transaction_count: 0
+                        _links:
+                          transactions: /path/to/recreation_and_culture_reading/transactions
+                    metadata:
+                      date_from: 2023-01-01T00:00:00Z
+                      date_to: 2023-03-31T23:59:59Z
+                      group_by:
+                      - bucket_l1
+                      - bucket_l2
+                      currency: GBP
       security:
       - OAuth2: []
   /v1/kyc/check/company:
@@ -13750,6 +14257,178 @@ components:
           $ref: '#/components/schemas/PostCustomerLinksResponse_metadata'
       description: Details provided back to the client when requesting a new link
         for a customer application.
+    GetBucketResponse:
+      required:
+      - data
+      - metadata
+      - operation_id
+      properties:
+        operation_id:
+          type: string
+          enum:
+          - v1_buckets_get
+        data:
+          $ref: '#/components/schemas/BucketDefinition'
+        metadata:
+          $ref: '#/components/schemas/GetBucketResponse_metadata'
+    BucketDefinition:
+      required:
+      - bucket_id
+      - buckets
+      - categorisation_model
+      - name
+      properties:
+        bucket_id:
+          type: string
+          description: |
+            Permanent ID for the bucket.
+        name:
+          $ref: '#/components/schemas/Slug'
+        categorisation_model:
+          type: string
+          description: |
+            Categorisation model that the categories in this bucket relate to.
+
+            See [V2 Categories](https://docs.thisisbud.com/reference/resources_v2_categories_get) for details.
+        buckets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bucket'
+    Bucket:
+      required:
+      - bucket_l1
+      - criteria
+      properties:
+        bucket_l1:
+          $ref: '#/components/schemas/Slug'
+        criteria:
+          type: array
+          items:
+            $ref: '#/components/schemas/Criteria'
+        additional_data:
+          $ref: '#/components/schemas/AdditionalData'
+    Criteria:
+      required:
+      - bucket_l2
+      - category_l1
+      - category_l2
+      properties:
+        bucket_l2:
+          $ref: '#/components/schemas/Slug'
+        category_l1:
+          $ref: '#/components/schemas/Slug'
+        category_l2:
+          $ref: '#/components/schemas/Slug'
+        additional_data:
+          $ref: '#/components/schemas/AdditionalData'
+    Slug:
+      pattern: "^[a-zA-Z-_0-9]*$"
+      type: string
+    AdditionalData:
+      description: |
+        Set your own additional properties for a bucket for your own use-cases, e.g.
+
+        ```json
+        {
+          "additional_data": {
+            "icon": "url-to-icon.svg",
+            "show_on_main_page": true
+          }
+        }
+        ```
+    CategoryPair:
+      required:
+      - category_l1
+      - category_l2
+      properties:
+        category_l1:
+          $ref: '#/components/schemas/Slug'
+        category_l2:
+          $ref: '#/components/schemas/Slug'
+    BucketPair:
+      required:
+      - bucket_l1
+      - bucket_l2
+      properties:
+        bucket_l1:
+          $ref: '#/components/schemas/Slug'
+        bucket_l2:
+          $ref: '#/components/schemas/Slug'
+    GroupType:
+      type: string
+      enum:
+      - bucket_l1
+      - bucket_l2
+      - month
+    GetBucketTotalsResponse:
+      required:
+      - data
+      - metadata
+      - operation_id
+      properties:
+        operation_id:
+          type: string
+          enum:
+          - v1_bucket_totals_get
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TotalGroup'
+        metadata:
+          $ref: '#/components/schemas/GetBucketTotalsResponse_metadata'
+    TotalGroup:
+      required:
+      - _links
+      - group_name
+      - group_type
+      - incoming
+      - outgoing
+      properties:
+        group_name:
+          $ref: '#/components/schemas/Slug'
+        group_type:
+          $ref: '#/components/schemas/GroupType'
+        incoming:
+          $ref: '#/components/schemas/GroupStatistic'
+        outgoing:
+          $ref: '#/components/schemas/GroupStatistic'
+        subtotals:
+          type: array
+          items:
+            $ref: '#/components/schemas/TotalGroup'
+        transaction_count:
+          type: integer
+          description: |
+            Total number of transactions within the group.
+        _links:
+          $ref: '#/components/schemas/GroupTransactionLinks'
+    GroupStatistic:
+      required:
+      - _links
+      - total
+      - transaction_count
+      properties:
+        total:
+          $ref: '#/components/schemas/BudAmount'
+        monthly_average:
+          $ref: '#/components/schemas/BudAmount'
+        transaction_count:
+          type: integer
+        _links:
+          $ref: '#/components/schemas/GroupTransactionLinks'
+    GroupTransactionLinks:
+      required:
+      - transactions
+      properties:
+        transactions:
+          type: string
+          description: |
+            An absolute path to the subset of transactions that derived this particular total.
+
+            Prepend with the API host to get a fully resolved URL.
+
+            The same headers as [Retrieve Transactions V2](https://docs.thisisbud.com/reference/v2_transactions_get) applies.
+          format: uri
     LowBalanceInsight:
       title: Low Balance
       required:
@@ -18020,81 +18699,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BasicTransactionV2'
-    GetProductsResponseV1:
-      title: Predicted Products Response
-      required:
-      - data
-      - metadata
-      - operation_id
-      type: object
-      properties:
-        operation_id:
-          type: string
-          enum:
-          - v1_products_get
-        data:
-          title: Product Finder Response Data
-          type: array
-          items:
-            $ref: '#/components/schemas/FinancialProductTransaction'
-        metadata:
-          title: Metadata
-          allOf:
-          - $ref: '#/components/schemas/BudDateRangeMetadata'
-          - required:
-            - results
-            type: object
-            properties:
-              results:
-                title: Results count
-                type: number
-                description: Number of products returned.
-      description: Transactions predicted as financial product payments for a customer
-    FinancialProductTransaction:
-      allOf:
-      - $ref: '#/components/schemas/BasicTransactionV2'
-      - title: Financial Product Transaction
-        required:
-        - merchant
-        - product
-        type: object
-        properties:
-          merchant:
-            $ref: '#/components/schemas/MerchantIdV2'
-          product:
-            $ref: '#/components/schemas/FinancialProduct'
-    FinancialProduct:
-      title: Financial Product Prediction
-      type: object
-      properties:
-        type:
-          type: array
-          description: The top predictions for the type of financial product
-          items:
-            title: Financial Product Type
-            type: string
-            description: The type of financial product
-            enum:
-            - loan
-            - bnpl
-            - mortgage
-            - insurance
-            - store_card
-            - credit_card
-            - private_pension
-            - savings_and_investment
-        period:
-          title: Period
-          type: string
-          description: "The regularity of the product, based on transaction history.\
-            \ If a product is not regular, it will have a period of `unknown`."
-          enum:
-          - weekly
-          - biweekly
-          - monthly
-          - quarterly
-          - unknown
-      description: Details of the predicted financial product
     EnergyPaymentSearch:
       title: Energy Payments Start Search
       required:
@@ -21199,6 +21803,20 @@ components:
       properties:
         customer_context:
           $ref: '#/components/schemas/CustomerContext'
+    bucket_id:
+      anyOf:
+      - title: Fixed ID
+        type: string
+        description: |
+          Fixed IDs for buckets that are usable in any environment for particular
+          use-cases (e.g. `assess-dashboard` for the Assess Dashboard).
+        enum:
+        - assess-dashboard
+      - title: UUID
+        type: string
+        description: |
+          UUID of buckets that you have generated.
+        format: uuid
     inline_response_200_1:
       required:
       - data
@@ -21752,6 +22370,76 @@ components:
             contained within the link in the payload).
           format: uuid
       description: Metadata associated with the customer link
+    GetBucketResponse_metadata:
+      properties:
+        category_lookup:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/CategoryPair'
+          description: |
+            A nested object mapping used to quickly find the category_l1/l2 pairings of a bucket.
+
+            E.g. if you know you have a bucket pairing `BL1`/`BL2`, you can find the `category_l1`/`l2`` it
+            belongs to by looking it up with `$.metadata.category_lookup[BL1][BL2]`, and it will return
+            the pairing
+
+            ```json
+            {
+              "category_l1": "...",
+              "category_l2": "..."
+            }
+            ```
+
+            Use this if you are planning to use category corrections, and want to ensure that your
+            totals correspond to the correct categories after the correction.
+        bucket_lookup:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/BucketPair'
+          description: |
+            A nested object mapping used to quickly find the bucket to which a particular category_l1/l2 pairing
+            belongs.
+
+            E.g. if you know you have a category pair `C1`/`C2`, you can find the `bucket_l1`/`l2`` it
+            belongs to by looking it up with `$.metadata.bucket_lookup[C1][C2]`, and it will return
+            the pairing
+
+            ```json
+            {
+              "bucket_l1": "...",
+              "bucket_l2": "..."
+            }
+            ```
+        unbucketed_categories:
+          type: array
+          description: |
+            List of categories from the model which do not fit within a category bucket.
+
+            Use this to see if your category bucket is possibly missing out on important
+            categories for your analysis.
+          items:
+            $ref: '#/components/schemas/CategoryPair'
+    GetBucketTotalsResponse_metadata:
+      required:
+      - currency
+      - date_from
+      - date_to
+      - group_by
+      properties:
+        date_from:
+          $ref: '#/components/schemas/DateTimeISO8601'
+        date_to:
+          $ref: '#/components/schemas/DateTimeISO8601'
+        group_by:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupType'
+        currency:
+          $ref: '#/components/schemas/BudCurrency'
     AuthGatewayURLResponse_data:
       required:
       - url
@@ -23582,6 +24270,69 @@ components:
       explode: false
       schema:
         $ref: '#/components/schemas/CustomerApplicationID'
+    BucketID:
+      name: bucket_id
+      in: path
+      description: |
+        ID of the bucket (whose criteria can be used to calculate totals).
+      required: true
+      style: simple
+      explode: false
+      schema:
+        $ref: '#/components/schemas/bucket_id'
+    CategoryLookup:
+      name: category_lookup
+      in: query
+      description: |
+        Include to ensure that `category_lookup` is present in the `metadata` of the response.
+      required: false
+      allowEmptyValue: true
+      style: form
+      explode: true
+      schema:
+        type: boolean
+    BucketLookup:
+      name: bucket_lookup
+      in: query
+      description: |
+        Include to ensure that `bucket_lookup` is present in the `metadata` of the response.
+      required: false
+      allowEmptyValue: true
+      style: form
+      explode: true
+      schema:
+        type: boolean
+    UnbucketedCategories:
+      name: unbucketed_categories
+      in: query
+      description: |
+        Include to ensure that `unbucketed_categories` is present in the `metadata` of the response.
+      required: false
+      allowEmptyValue: true
+      style: form
+      explode: true
+      schema:
+        type: boolean
+    GroupBy:
+      name: group_by
+      in: query
+      description: |
+        Defines hierarchy of groupings for the resulting totals. For example:
+
+        ```
+        group_by=bucket_l1,bucket_l2
+        ```
+
+        Will result in getting groups by L1 buckets, then within those, their respective L2 buckets.
+      required: true
+      style: form
+      explode: false
+      schema:
+        minItems: 1
+        uniqueItems: true
+        type: array
+        items:
+          $ref: '#/components/schemas/GroupType'
     OBProvidersQueryTypeFilter:
       name: types
       in: query
@@ -24305,6 +25056,7 @@ x-tagGroups:
   - Assess API
   - Customer Applications
   - Customer Application Links
+  - Aggregation Buckets
 - name: ""
   tags:
   - KYC API
