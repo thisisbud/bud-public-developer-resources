@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "5fe1e6a6-711e-427a-9459-e7058cddd5b9",
+		"_postman_id": "5cb55ed3-45ec-4249-ba50-46eafd8051e0",
 		"name": "Bud - API Collection",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29123469"
 	},
 	"item": [
 		{
@@ -497,8 +498,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		},
@@ -537,7 +537,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}v1/open-banking/providers?",
+									"raw": "{{proxy_url}}v1/open-banking/providers",
 									"host": [
 										"{{proxy_url}}v1"
 									],
@@ -1105,8 +1105,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Manage a Connection",
@@ -1233,7 +1232,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "8a16a163-9935-4d0c-8d97-3fa9ca6b7089",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"",
@@ -1308,7 +1306,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "b14ca38a-7339-4a34-9347-88f06879f25f",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"",
@@ -1487,8 +1484,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Ingest first party data",
@@ -1499,7 +1495,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "da78691f-9049-442d-adfd-875b6d7f15f3",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"pm.environment.set(\"account_ingestion_task_id\", jsonData.data.task_id);"
@@ -1597,7 +1592,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "8a212ed6-9bb9-42f4-8921-5ea539b37464",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"pm.environment.set(\"ingestion_task_id\", jsonData.data.task_id);"
@@ -1654,7 +1648,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "58956fdb-9267-42c1-bd71-5c3272c8e3f5",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"pm.environment.set(\"ingestion_task_id\", jsonData.metadata.task_id);"
@@ -1758,8 +1751,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		},
@@ -1775,7 +1767,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "183b9c79-7520-40fe-9d73-ff3f3a24a2d6",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"",
@@ -1826,7 +1817,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}financial/v2/accounts?",
+									"raw": "{{proxy_url}}financial/v2/accounts",
 									"host": [
 										"{{proxy_url}}financial"
 									],
@@ -1876,7 +1867,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "183b9c79-7520-40fe-9d73-ff3f3a24a2d6",
 										"exec": [
 											""
 										],
@@ -1979,7 +1969,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}financial/v2/balances?",
+									"raw": "{{proxy_url}}financial/v2/balances",
 									"host": [
 										"{{proxy_url}}financial"
 									],
@@ -2046,7 +2036,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}financial/v2/accounts/{{bank_account_id}}/balances?",
+									"raw": "{{proxy_url}}financial/v2/accounts/{{bank_account_id}}/balances",
 									"host": [
 										"{{proxy_url}}financial"
 									],
@@ -2083,7 +2073,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "ddd4ae2a-1b19-4f32-8c3f-95103b135849",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"pm.environment.set(\"transaction_id\", jsonData.data[0].transaction_id);"
@@ -2122,7 +2111,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}financial/v2/transactions?",
+									"raw": "{{proxy_url}}financial/v2/transactions",
 									"host": [
 										"{{proxy_url}}financial"
 									],
@@ -2192,7 +2181,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "0c4c5962-cd14-4701-b429-4d50419d9668",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"",
@@ -2267,7 +2255,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "5425d5db-1789-4436-b417-f0bbaa7d8068",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"pm.environment.set(\"transaction_id\", jsonData.data[0].id);"
@@ -2341,7 +2328,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "3235f9e6-f1cf-4b2d-a7b6-17a3d1052231",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -2351,15 +2337,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "d76ca0aa-a3bb-4570-8632-83ece3132e9f",
 								"type": "text/javascript",
 								"exec": [
 									""
 								]
 							}
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Manage Financial Data",
@@ -2566,8 +2550,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		},
@@ -2660,8 +2643,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Enrichment Totals",
@@ -3084,16 +3066,15 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		},
 		{
-			"name": "Financial Insights API",
+			"name": "Smart Finders API",
 			"item": [
 				{
-					"name": "Regular Insights",
+					"name": "Regular Payments Finder",
 					"item": [
 						{
 							"name": "Retrieve Regular transactions",
@@ -3234,11 +3215,10 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
-					"name": "Income Insights",
+					"name": "Income Finder",
 					"item": [
 						{
 							"name": "Retrieve salary info",
@@ -3453,11 +3433,10 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
-					"name": "Expenditure Insights",
+					"name": "Loan Finder",
 					"item": [
 						{
 							"name": "Retrieve Loan Transactions",
@@ -3511,7 +3490,12 @@
 								}
 							},
 							"response": []
-						},
+						}
+					]
+				},
+				{
+					"name": "Debt Finder",
+					"item": [
 						{
 							"name": "Retrieve Debt Collection Transactions",
 							"request": {
@@ -3564,7 +3548,12 @@
 								}
 							},
 							"response": []
-						},
+						}
+					]
+				},
+				{
+					"name": "Product Finder",
+					"item": [
 						{
 							"name": "Retrieve Financial Products",
 							"request": {
@@ -3677,59 +3666,6 @@
 							"response": []
 						},
 						{
-							"name": "Retrieve Subscriptions",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-From",
-										"value": "2020-01-29",
-										"disabled": true
-									},
-									{
-										"key": "X-To",
-										"value": "2023-01-29",
-										"disabled": true
-									},
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									},
-									{
-										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
-									},
-									{
-										"key": "X-Customer-Secret",
-										"type": "text",
-										"value": "{{customer_secret}}"
-									}
-								],
-								"url": {
-									"raw": "{{proxy_url}}v1/subscriptions",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"subscriptions"
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "Initiate Energy Payments Discovery (deprecated)",
 							"request": {
 								"auth": {
@@ -3818,15 +3754,71 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
+				},
+				{
+					"name": "Subscription Finder",
+					"item": [
+						{
+							"name": "Retrieve Subscriptions",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-From",
+										"value": "2020-01-29",
+										"disabled": true
+									},
+									{
+										"key": "X-To",
+										"value": "2023-01-29",
+										"disabled": true
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/subscriptions",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"subscriptions"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			],
 			"event": [
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "b49ddbd9-d61d-4167-8331-73bd637ccd4d",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -3836,7 +3828,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "fa7ad525-c6cc-456f-af44-72b2b58f81e3",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -3846,8 +3837,744 @@
 			]
 		},
 		{
-			"name": "Signal API",
+			"name": "Insights API",
 			"item": [
+				{
+					"name": "Retrieve Actionable Insights",
+					"item": [
+						{
+							"name": "Get Balances Insights",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/v1/actionable/balances",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"v1",
+										"actionable",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": null,
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": null,
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "enabled_insights",
+											"value": null,
+											"description": "A comma-separated list of insight types.",
+											"disabled": true
+										},
+										{
+											"key": "close_to_credit_limit.percentage_utilisation_threshold",
+											"value": null,
+											"description": "A minimum percentage utilisation of the credit limit.",
+											"disabled": true
+										},
+										{
+											"key": "low_balance.balance_threshold",
+											"value": null,
+											"description": "A balance threshold for the low balance insight.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Balances Insight Details",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/v1/actionable/balances/{{insight_type}}/{{insight_id}}/details",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"v1",
+										"actionable",
+										"balances",
+										"{{insight_type}}",
+										"{{insight_id}}",
+										"details"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "",
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "",
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "close_to_credit_limit.percentage_utilisation_threshold",
+											"value": "",
+											"description": "A minimum percentage utilisation of the credit limit.",
+											"disabled": true
+										},
+										{
+											"key": "low_balance.balance_threshold",
+											"value": "",
+											"description": "A balance threshold for the low balance insight.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Income Insights",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/v1/actionable/income",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"v1",
+										"actionable",
+										"income"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "",
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "",
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "enabled_insights",
+											"value": "",
+											"description": "A comma-separated list of insight types.",
+											"disabled": true
+										},
+										{
+											"key": "gambling_income.minimum_monthly_threshold",
+											"value": "",
+											"description": "A minimum absolute total of gambling income.",
+											"disabled": true
+										},
+										{
+											"key": "gambling_income.minimum_percentage_total_threshold",
+											"value": "",
+											"description": "A minimum percentage of all income that must be gambling income.",
+											"disabled": true
+										},
+										{
+											"key": "late_income.minimum_value_threshold",
+											"value": null,
+											"description": "A minimum value of a late transaction.",
+											"disabled": true
+										},
+										{
+											"key": "late_income.minimum_days_late_threshold",
+											"value": null,
+											"description": "A minimum number of days late for a transaction to be.",
+											"disabled": true
+										},
+										{
+											"key": "pension_income.minimum_monthly_threshold",
+											"value": null,
+											"description": "A minimum absolute total of pension income.",
+											"disabled": true
+										},
+										{
+											"key": "pension_income.minimum_percentage_total_threshold",
+											"value": null,
+											"description": "A minimum percentage of all income that must be pension income.",
+											"disabled": true
+										},
+										{
+											"key": "regular_income_changed.minimum_absoute_change_threshold",
+											"value": null,
+											"description": "A minimum absolute change between the previous and latest amounts.",
+											"disabled": true
+										},
+										{
+											"key": "regular_income_changed.minimum_percentage_change_threshold",
+											"value": null,
+											"description": "A minimum percentage change between the previous and latest amounts.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Income Insight Details",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/v1/actionable/income/{{insight_type}}/{{insight_id}}/details",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"v1",
+										"actionable",
+										"income",
+										"{{insight_type}}",
+										"{{insight_id}}",
+										"details"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "",
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "",
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "gambling_income.minimum_monthly_threshold",
+											"value": "",
+											"description": "A minimum absolute total of gambling income.",
+											"disabled": true
+										},
+										{
+											"key": "gambling_income.minimum_percentage_total_threshold",
+											"value": "",
+											"description": "A minimum percentage of all income that must be gambling income.",
+											"disabled": true
+										},
+										{
+											"key": "late_income.minimum_value_threshold",
+											"value": "",
+											"description": "A minimum value of a late transaction.",
+											"disabled": true
+										},
+										{
+											"key": "late_income.minimum_days_late_threshold",
+											"value": "",
+											"description": "A minimum number of days late for a transaction to be.",
+											"disabled": true
+										},
+										{
+											"key": "pension_income.minimum_monthly_threshold",
+											"value": "",
+											"description": "A minimum absolute total of pension income.",
+											"disabled": true
+										},
+										{
+											"key": "pension_income.minimum_percentage_total_threshold",
+											"value": "",
+											"description": "A minimum percentage of all income that must be pension income.",
+											"disabled": true
+										},
+										{
+											"key": "regular_income_changed.minimum_absoute_change_threshold",
+											"value": "",
+											"description": "A minimum absolute change between the previous and latest amounts.",
+											"disabled": true
+										},
+										{
+											"key": "regular_income_changed.minimum_percentage_change_threshold",
+											"value": "",
+											"description": "A minimum percentage change between the previous and latest amounts.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Spending Insights",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/v1/actionable/spending",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"v1",
+										"actionable",
+										"spending"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "",
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "",
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "enabled_insights",
+											"value": "",
+											"description": "A comma-separated list of insight types.",
+											"disabled": true
+										},
+										{
+											"key": "late_payment.minimum_value_threshold",
+											"value": "",
+											"description": "A minimum value of a late transaction.",
+											"disabled": true
+										},
+										{
+											"key": "late_payment.minimum_days_late_threshold",
+											"value": "",
+											"description": "A minimum number of days late for a transaction to be.",
+											"disabled": true
+										},
+										{
+											"key": "regular_payment_changed.minimum_absoute_change_threshold",
+											"value": "",
+											"description": "A minimum absolute change between the previous and latest amounts.",
+											"disabled": true
+										},
+										{
+											"key": "regular_payment_changed.minimum_percentage_change_threshold",
+											"value": "",
+											"description": "A minimum percentage change between the previous and latest amounts.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Spending Insight Details",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/v1/actionable/spending/{{insight_type}}/{{insight_id}}/details",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"v1",
+										"actionable",
+										"spending",
+										"{{insight_type}}",
+										"{{insight_id}}",
+										"details"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "",
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "",
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "late_payment.minimum_value_threshold",
+											"value": "",
+											"description": "A minimum value of a late transaction.",
+											"disabled": true
+										},
+										{
+											"key": "late_payment.minimum_days_late_threshold",
+											"value": "",
+											"description": "A minimum number of days late for a transaction to be.",
+											"disabled": true
+										},
+										{
+											"key": "regular_payment_changed.minimum_absoute_change_threshold",
+											"value": "",
+											"description": "A minimum absolute change between the previous and latest amounts.",
+											"disabled": true
+										},
+										{
+											"key": "regular_payment_changed.minimum_percentage_change_threshold",
+											"value": "",
+											"description": "A minimum percentage change between the previous and latest amounts.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Custom Signals",
+					"item": [
+						{
+							"name": "List Components",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/signal/custom/components",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"signal",
+										"custom",
+										"components"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Custom Insight",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"custom_insight_id\", jsonData.data.insight_id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"parent-with-kids\",\n\t\"description\": \"Matches customers with childcare expenses\",\n\t\"components\": [\n\t\t{\n\t\t\t\"name\": \"expenditure_l3s\",\n\t\t\t\"parameters\": {\n\t\t\t\t\"l3-categories\": [\"childcare_and_nursery\"],\n\t\t\t\t\"amount\": 400,\n\t\t\t\t\"period\": \"4M\"\n\t\t\t}\n\t\t}\n\t]\n}"
+								},
+								"url": {
+									"raw": "{{proxy_url}}v1/signal/custom/insights",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"signal",
+										"custom",
+										"insights"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Custom Insight",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/signal/custom/{{custom_insight_id}}/schema",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"signal",
+										"custom",
+										"{{custom_insight_id}}",
+										"schema"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Compare Custom Insight",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Customer-Id",
+										"type": "text",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"type": "text",
+										"value": "{{customer_secret}}"
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v1/signal/custom/{{custom_insight_id}}",
+									"host": [
+										"{{proxy_url}}v1"
+									],
+									"path": [
+										"signal",
+										"custom",
+										"{{custom_insight_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "Everyday Money Management",
 					"item": [
@@ -3923,8 +4650,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Customer Characteristics",
@@ -3997,8 +4723,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Income and Expenditure Insight",
@@ -4205,196 +4930,251 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "Custom Signals",
-					"item": [
-						{
-							"name": "List Components",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									}
-								],
-								"url": {
-									"raw": "{{proxy_url}}v1/signal/custom/components",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"signal",
-										"custom",
-										"components"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create Custom Insight",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"custom_insight_id\", jsonData.data.insight_id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [
-									{
-										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
-									},
-									{
-										"key": "X-Customer-Secret",
-										"type": "text",
-										"value": "{{customer_secret}}"
-									},
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"name\": \"parent-with-kids\",\n\t\"description\": \"Matches customers with childcare expenses\",\n\t\"components\": [\n\t\t{\n\t\t\t\"name\": \"expenditure_l3s\",\n\t\t\t\"parameters\": {\n\t\t\t\t\"l3-categories\": [\"childcare_and_nursery\"],\n\t\t\t\t\"amount\": 400,\n\t\t\t\t\"period\": \"4M\"\n\t\t\t}\n\t\t}\n\t]\n}"
-								},
-								"url": {
-									"raw": "{{proxy_url}}v1/signal/custom/insights",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"signal",
-										"custom",
-										"insights"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Retrieve Custom Insight",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									}
-								],
-								"url": {
-									"raw": "{{proxy_url}}v1/signal/custom/{{custom_insight_id}}/schema",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"signal",
-										"custom",
-										"{{custom_insight_id}}",
-										"schema"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Compare Custom Insight",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
-									},
-									{
-										"key": "X-Customer-Secret",
-										"type": "text",
-										"value": "{{customer_secret}}"
-									},
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									}
-								],
-								"url": {
-									"raw": "{{proxy_url}}v1/signal/custom/{{custom_insight_id}}",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"signal",
-										"custom",
-										"{{custom_insight_id}}"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		},
 		{
-			"name": "Financial Review",
+			"name": "Characteristics API",
+			"item": [
+				{
+					"name": "Retrieve Customer Characteristics",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Secret",
+								"value": "{{customer_secret}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}characteristics/v1/customer",
+							"host": [
+								"{{proxy_url}}characteristics"
+							],
+							"path": [
+								"v1",
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Customer Characteristics (Credit Card)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Secret",
+								"value": "{{customer_secret}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}characteristics/v1/customer/credit-card",
+							"host": [
+								"{{proxy_url}}characteristics"
+							],
+							"path": [
+								"v1",
+								"customer",
+								"credit-card"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Customer Characteristics (Loan)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"type": "text",
+								"value": "{{api_credentials_id}}"
+							},
+							{
+								"key": "X-Customer-Id",
+								"type": "text",
+								"value": "{{customer_id}}"
+							},
+							{
+								"key": "X-Customer-Secret",
+								"type": "text",
+								"value": "{{customer_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}characteristics/v1/customer/loan",
+							"host": [
+								"{{proxy_url}}characteristics"
+							],
+							"path": [
+								"v1",
+								"customer",
+								"loan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Customer Characteristics (Overdraft)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"type": "text",
+								"value": "{{api_credentials_id}}"
+							},
+							{
+								"key": "X-Customer-Id",
+								"type": "text",
+								"value": "{{customer_id}}"
+							},
+							{
+								"key": "X-Customer-Secret",
+								"type": "text",
+								"value": "{{customer_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}characteristics/v1/customer/overdraft",
+							"host": [
+								"{{proxy_url}}characteristics"
+							],
+							"path": [
+								"v1",
+								"customer",
+								"overdraft"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Customer Characteristics (Saver)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"type": "text",
+								"value": "{{api_credentials_id}}"
+							},
+							{
+								"key": "X-Customer-Id",
+								"type": "text",
+								"value": "{{customer_id}}"
+							},
+							{
+								"key": "X-Customer-Secret",
+								"type": "text",
+								"value": "{{customer_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}characteristics/v1/customer/saver",
+							"host": [
+								"{{proxy_url}}characteristics"
+							],
+							"path": [
+								"v1",
+								"customer",
+								"saver"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{auth_token}}",
+						"type": "string"
+					}
+				]
+			}
+		},
+		{
+			"name": "Assess API",
 			"item": [
 				{
 					"name": "Assess Affordability",
@@ -4460,8 +5240,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Retrieve Affordability Report",
@@ -4498,7 +5277,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}v1/affordability/report?",
+									"raw": "{{proxy_url}}v1/affordability/report",
 									"host": [
 										"{{proxy_url}}v1"
 									],
@@ -4590,7 +5369,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "eb7d1b00-5296-435f-a3fa-2e72d299ab3a",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -4600,15 +5378,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "818729cf-028e-4ded-bd12-adb4bb00cdf2",
 								"type": "text/javascript",
 								"exec": [
 									""
 								]
 							}
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		},
@@ -4836,8 +5612,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Initiate Payment - TSP",
@@ -5170,8 +5945,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Manage Payments",
@@ -5495,8 +6269,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		},
@@ -5642,245 +6415,6 @@
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "Characteristics API",
-			"item": [
-				{
-					"name": "Retrieve Customer Characteristics",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{auth_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "X-Client-Id",
-								"value": "{{api_credentials_id}}",
-								"type": "text"
-							},
-							{
-								"key": "X-Customer-Id",
-								"value": "{{customer_id}}",
-								"type": "text"
-							},
-							{
-								"key": "X-Customer-Secret",
-								"value": "{{customer_secret}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{proxy_url}}characteristics/v1/customer",
-							"host": [
-								"{{proxy_url}}characteristics"
-							],
-							"path": [
-								"v1",
-								"customer"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Retrieve Customer Characteristics (Credit Card)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{auth_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "X-Client-Id",
-								"value": "{{api_credentials_id}}",
-								"type": "text"
-							},
-							{
-								"key": "X-Customer-Id",
-								"value": "{{customer_id}}",
-								"type": "text"
-							},
-							{
-								"key": "X-Customer-Secret",
-								"value": "{{customer_secret}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{proxy_url}}characteristics/v1/customer/credit-card",
-							"host": [
-								"{{proxy_url}}characteristics"
-							],
-							"path": [
-								"v1",
-								"customer",
-								"credit-card"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Retrieve Customer Characteristics (Loan)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{auth_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "X-Client-Id",
-								"type": "text",
-								"value": "{{api_credentials_id}}"
-							},
-							{
-								"key": "X-Customer-Id",
-								"type": "text",
-								"value": "{{customer_id}}"
-							},
-							{
-								"key": "X-Customer-Secret",
-								"type": "text",
-								"value": "{{customer_secret}}"
-							}
-						],
-						"url": {
-							"raw": "{{proxy_url}}characteristics/v1/customer/loan",
-							"host": [
-								"{{proxy_url}}characteristics"
-							],
-							"path": [
-								"v1",
-								"customer",
-								"loan"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Retrieve Customer Characteristics (Overdraft)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{auth_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "X-Client-Id",
-								"type": "text",
-								"value": "{{api_credentials_id}}"
-							},
-							{
-								"key": "X-Customer-Id",
-								"type": "text",
-								"value": "{{customer_id}}"
-							},
-							{
-								"key": "X-Customer-Secret",
-								"type": "text",
-								"value": "{{customer_secret}}"
-							}
-						],
-						"url": {
-							"raw": "{{proxy_url}}characteristics/v1/customer/overdraft",
-							"host": [
-								"{{proxy_url}}characteristics"
-							],
-							"path": [
-								"v1",
-								"customer",
-								"overdraft"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Retrieve Customer Characteristics (Saver)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{auth_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "X-Client-Id",
-								"type": "text",
-								"value": "{{api_credentials_id}}"
-							},
-							{
-								"key": "X-Customer-Id",
-								"type": "text",
-								"value": "{{customer_id}}"
-							},
-							{
-								"key": "X-Customer-Secret",
-								"type": "text",
-								"value": "{{customer_secret}}"
-							}
-						],
-						"url": {
-							"raw": "{{proxy_url}}characteristics/v1/customer/saver",
-							"host": [
-								"{{proxy_url}}characteristics"
-							],
-							"path": [
-								"v1",
-								"customer",
-								"saver"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "{{auth_token}}",
-						"type": "string"
-					}
-				]
-			}
 		}
 	],
 	"event": [
