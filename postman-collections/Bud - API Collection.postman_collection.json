@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "5cb55ed3-45ec-4249-ba50-46eafd8051e0",
+		"_postman_id": "608a7487-47be-4c01-b2bc-810a32eeacfa",
 		"name": "Bud - API Collection",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29123469"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -3554,59 +3553,6 @@
 				{
 					"name": "Product Finder",
 					"item": [
-						{
-							"name": "Retrieve Financial Products",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-From",
-										"value": "2020-01-29",
-										"disabled": true
-									},
-									{
-										"key": "X-To",
-										"value": "2022-03-29",
-										"disabled": true
-									},
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									},
-									{
-										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
-									},
-									{
-										"key": "X-Customer-Secret",
-										"type": "text",
-										"value": "{{customer_secret}}"
-									}
-								],
-								"url": {
-									"raw": "{{proxy_url}}v1/products",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"products"
-									]
-								}
-							},
-							"response": []
-						},
 						{
 							"name": "Retrieve Financial Products V2",
 							"request": {
