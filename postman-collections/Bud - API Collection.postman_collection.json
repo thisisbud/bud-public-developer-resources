@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "608a7487-47be-4c01-b2bc-810a32eeacfa",
+		"_postman_id": "8080b2d4-4622-45ee-a2c3-5a9043b95332",
 		"name": "Bud - API Collection",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25466084"
 	},
 	"item": [
 		{
@@ -1529,7 +1530,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"accounts\": [\n      {\n        \"provider\": \"Barclays\",\n        \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n        \"currency\": \"GBP\",\n        \"account_type\": \"Personal\",\n        \"account_sub_type\": \"CurrentAccount\",\n        \"details\": [\n          {\n            \"scheme_name\": \"UK.OBIE.SortCodeAccountNumber\",\n            \"identification\": \"98765432165444\",\n            \"secondary_identification\": \"00021\",\n            \"name\": \"Mr Kevin\"\n          }\n        ],\n        \"balances\": [\n          {\n            \"amount\": {\n              \"value\": \"5.00\",\n              \"currency\": \"GBP\"\n            },\n            \"credit_debit_indicator\": \"incoming_credit\",\n            \"credit_line\": [\n              {\n                \"included\": true,\n                \"amount\": {\n                  \"value\": \"200.00\",\n                  \"currency\": \"GBP\"\n                },\n                \"type\": \"Credit\"\n              }\n            ],\n            \"date\": \"2023-04-04\",\n            \"time\": \"00:00:00\",\n            \"type\": \"InterimBooked\"\n          }\n        ]\n      }\n    ]\n  }\n ]"
+									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"customer_secret\": \"{{customer_secret}}\",\n    \"accounts\": [\n      {\n        \"provider\": \"Barclays\",\n        \"account_id\": \"{{account_id}}\",\n        \"currency\": \"GBP\",\n        \"account_type\": \"Personal\",\n        \"account_sub_type\": \"CurrentAccount\",\n        \"details\": [\n          {\n            \"scheme_name\": \"UK.OBIE.SortCodeAccountNumber\",\n            \"identification\": \"98765432165444\",\n            \"secondary_identification\": \"00021\",\n            \"name\": \"Mr Kevin\"\n          }\n        ],\n        \"balances\": [\n          {\n            \"amount\": {\n              \"value\": \"7400.00\",\n              \"currency\": \"GBP\"\n            },\n            \"credit_debit_indicator\": \"incoming_credit\",\n            \"credit_line\": [\n              {\n                \"included\": true,\n                \"amount\": {\n                  \"value\": \"200.00\",\n                  \"currency\": \"GBP\"\n                },\n                \"type\": \"Credit\"\n              }\n            ],\n            \"date\": \"2023-04-04\",\n            \"time\": \"00:00:00\",\n            \"type\": \"InterimBooked\"\n          }\n        ]\n      }\n    ]\n  }\n ]"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v1/ingest/accounts",
@@ -2321,6 +2322,47 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Retrieve Authorised Payments V2",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-ID",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-ID",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}financial/v2/authorised-payments",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v2",
+										"authorised-payments"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"event": [
@@ -2548,6 +2590,453 @@
 								}
 							},
 							"response": []
+						}
+					]
+				},
+				{
+					"name": "Goals",
+					"item": [
+						{
+							"name": "Savings",
+							"item": [
+								{
+									"name": "Edit Savings Goal",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"Car Savings\",\n    \"target_amount\": {\n        \"value\": \"3000.00\", \"currency\": \"GBP\"\n    },\n    \"target_date\": \"2023-12-30\"\n}"
+										},
+										"url": {
+											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}",
+											"host": [
+												"{{proxy_url}}goals"
+											],
+											"path": [
+												"v1",
+												"savings",
+												"{{savings_goal_id}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Edit savings goal action",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"amount\": {\n\t\t\"value\": \"15.00\"\n\t}\n}"
+										},
+										"url": {
+											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}/actions/{{savings_goal_action_id}}",
+											"host": [
+												"{{proxy_url}}goals"
+											],
+											"path": [
+												"v1",
+												"savings",
+												"{{savings_goal_id}}",
+												"actions",
+												"{{savings_goal_action_id}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create savings goal",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"pm.environment.set(\"savings_goal_id\", jsonData.data.id);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n    \"name\": \"Car Savings\",\n    \"target_amount\": {\n        \"value\": \"3000.00\", \"currency\": \"GBP\"\n    },\n    \"target_date\": \"2023-12-30\"\n}"
+										},
+										"url": {
+											"raw": "{{proxy_url}}goals/v1/savings",
+											"host": [
+												"{{proxy_url}}goals"
+											],
+											"path": [
+												"v1",
+												"savings"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create savings goal action",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"pm.environment.set(\"savings_goal_action_id\", jsonData.data.id);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\t\"amount\": {\n\t\t\t\"value\": \"10.00\", \"currency\": \"GBP\"\n\t\t},\n\t\t\"credit_debit_indicator\": \"credit\"\n\t}"
+										},
+										"url": {
+											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}/actions",
+											"host": [
+												"{{proxy_url}}goals"
+											],
+											"path": [
+												"v1",
+												"savings",
+												"{{savings_goal_id}}",
+												"actions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Fetch Savings Goals",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}"
+											}
+										],
+										"url": {
+											"raw": "{{proxy_url}}goals/v1/savings",
+											"host": [
+												"{{proxy_url}}goals"
+											],
+											"path": [
+												"v1",
+												"savings"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Fetch Savings Goal Actions",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}"
+											}
+										],
+										"url": {
+											"raw": "{{proxy_url}}goals/v1/savings/744b8c06-5932-11ee-9c75-6eff6a24aad4/actions",
+											"host": [
+												"{{proxy_url}}goals"
+											],
+											"path": [
+												"v1",
+												"savings",
+												"744b8c06-5932-11ee-9c75-6eff6a24aad4",
+												"actions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Savings Goal",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}"
+											}
+										],
+										"url": {
+											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}",
+											"host": [
+												"{{proxy_url}}goals"
+											],
+											"path": [
+												"v1",
+												"savings",
+												"{{savings_goal_id}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Savings Goal Action",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}"
+											}
+										],
+										"url": {
+											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}/actions/{{savings_goal_action_id}}",
+											"host": [
+												"{{proxy_url}}goals"
+											],
+											"path": [
+												"v1",
+												"savings",
+												"{{savings_goal_id}}",
+												"actions",
+												"{{savings_goal_action_id}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete All Goals",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}"
+											}
+										],
+										"url": {
+											"raw": "{{proxy_url}}goals/v1/savings",
+											"host": [
+												"{{proxy_url}}goals"
+											],
+											"path": [
+												"v1",
+												"savings"
+											]
+										}
+									},
+									"response": []
+								}
+							]
 						}
 					]
 				}
