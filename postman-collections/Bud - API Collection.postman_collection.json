@@ -1061,6 +1061,70 @@
 							"response": []
 						},
 						{
+							"name": "Submit Auth Codes V2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has connection_task_id\"] = jsonData.data.task_id;",
+											"",
+											"pm.environment.set(\"connection_task_id\", jsonData.data.task_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"state\": \"{{connection_task_id}}\",\n  \"code\": \"....\"\n}"
+								},
+								"url": {
+									"raw": "{{proxy_url}}v2/open-banking/authorisation-codes",
+									"host": [
+										"{{proxy_url}}v2"
+									],
+									"path": [
+										"open-banking",
+										"authorisation-codes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Retrieve connection status",
 							"request": {
 								"auth": {
