@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "8080b2d4-4622-45ee-a2c3-5a9043b95332",
+		"_postman_id": "c1c3c345-fc8c-4a4c-ba2e-dc693b7683c9",
 		"name": "Bud - API Collection",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25466084"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -157,6 +156,7 @@
 								{
 									"listen": "test",
 									"script": {
+										"id": "d753beb0-d7ff-4f94-8e81-4ae737b9a05b",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"pm.environment.set(\"customer_id\", jsonData.data.customer_id);",
@@ -185,8 +185,18 @@
 										"key": "X-Client-Id",
 										"value": "{{api_credentials_id}}",
 										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
 									}
 								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"customer_context\": {\n\t\t\"type\": \"personal\",\n\t\t\"region\": \"GB\"\n\t}\n}"
+								},
 								"url": {
 									"raw": "{{proxy_url}}platform/v3/customers",
 									"host": [
@@ -234,12 +244,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"number_of_customers\": 2\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
+									"raw": "{\n\t\"number_of_customers\": 2\n}"
 								},
 								"url": {
 									"raw": "{{proxy_url}}platform/v3/customers/batch",
@@ -252,113 +257,6 @@
 										"batch"
 									]
 								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create Customer",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"customer_id\", jsonData.data.customer_id);",
-											"pm.environment.set(\"customer_secret\", jsonData.data.customer_secret);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "{{proxy_url}}v1/customers",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"customers"
-									]
-								},
-								"description": "This endpoint is used to create a new Customer in order for them to consume the Bud services."
-							},
-							"response": []
-						},
-						{
-							"name": "Create Customer(s)",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"customer_id\", jsonData.data[0].customer_id);",
-											"pm.environment.set(\"customer_secret\", jsonData.data[0].customer_secret);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									},
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"number_of_customers\": 5\n}"
-								},
-								"url": {
-									"raw": "{{proxy_url}}v2/customers",
-									"host": [
-										"{{proxy_url}}v2"
-									],
-									"path": [
-										"customers"
-									]
-								},
-								"description": "This endpoint is used to create new Customers in order for them to consume the Bud services."
 							},
 							"response": []
 						},
@@ -498,7 +396,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -537,7 +436,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}v1/open-banking/providers",
+									"raw": "{{proxy_url}}v1/open-banking/providers?",
 									"host": [
 										"{{proxy_url}}v1"
 									],
@@ -618,95 +517,6 @@
 								}
 							},
 							"response": [
-								{
-									"name": "Retrieve Auth Gateway URL V2 - Filter by provider type",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json",
-												"type": "default"
-											},
-											{
-												"key": "X-Client-Id",
-												"value": "{{api_credentials_id}}",
-												"type": "default"
-											},
-											{
-												"key": "X-Customer-Id",
-												"value": "{{customer_id}}",
-												"type": "default"
-											},
-											{
-												"key": "X-Customer-Secret",
-												"value": "{{customer_secret}}",
-												"type": "default"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"redirect_url\": \"https://my-agent-webapp.com/connected?my-parameter=xyz\",\n  \"provider_types\": [\n    \"business\"\t\n  ]\n}"
-										},
-										"url": {
-											"raw": "{{proxy_url}}v2/open-banking/authorisation-gateway-url",
-											"host": [
-												"{{proxy_url}}v2"
-											],
-											"path": [
-												"open-banking",
-												"authorisation-gateway-url"
-											]
-										}
-									},
-									"status": "Created",
-									"code": 201,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "Date",
-											"value": "Thu, 30 Mar 2023 11:37:28 GMT"
-										},
-										{
-											"key": "Content-Type",
-											"value": "application/json"
-										},
-										{
-											"key": "Content-Length",
-											"value": "403"
-										},
-										{
-											"key": "Connection",
-											"value": "keep-alive"
-										},
-										{
-											"key": "x-envoy-upstream-service-time",
-											"value": "176"
-										},
-										{
-											"key": "x-upstream-request-id",
-											"value": "b141e39f-b42d-4e06-b1eb-e84b4476d385"
-										},
-										{
-											"key": "CF-Cache-Status",
-											"value": "DYNAMIC"
-										},
-										{
-											"key": "Strict-Transport-Security",
-											"value": "max-age=2592000; includeSubDomains"
-										},
-										{
-											"key": "Server",
-											"value": "cloudflare"
-										},
-										{
-											"key": "CF-RAY",
-											"value": "7b000f906a52889d-LHR"
-										}
-									],
-									"cookie": [],
-									"body": "{\n    \"operation_id\": \"v2_ob_authorisation_gateway_url_post\",\n    \"data\": {\n        \"url\": \"https://connect-sandbox.thisisbud.com/connect?nonce=wvpzUFr917&token=rseQrF6zONHuK6z25cVnyn1x1DQlc5MM9iddQmtzq1Zv3A5UNSBE2qav2AS4BI22KupogxFAosYDcbQ8Z67lU0VeGwYE3e22QZmlSa3DCxmjF0muBMfDUc0kRXTWEUmCOGSeEkYpS7wovIOPgbCnpicCQSG4u4vNxWKuSKuvxRfXPq857a3H29mahDsChwa0PhJDTsADKkn541P1rpr3BtpJvc5Uvk00R5s1xwhf6LEjUrSaFdXhSYuRIuIv0k9\"\n    }\n}"
-								},
 								{
 									"name": "Retrieve Auth Gateway URL V2",
 									"originalRequest": {
@@ -795,6 +605,95 @@
 									],
 									"cookie": [],
 									"body": "{\n    \"operation_id\": \"v2_ob_authorisation_gateway_url_post\",\n    \"data\": {\n        \"url\": \"https://connect-sandbox.thisisbud.com/connect?nonce=3NfQEp5jJR&token=rk0RJDCxo5tQ4jWVDHMUSZcagrUPw707eBPeq0L6GiYm3aRciQzUuolhKn7kNPiw17dLvCdJvnYYV2tPCoBDRClFtvlUOGe9FeDqywOFuuhA2JDO4bTMna7lRy8oI6qzzz17uHKQEkQlnf4syeMqITUIQQNsDWAr6yoeXI0Ygxp4xDbGVnQdhvmjzfxdou9XtJrHOvNRoVr0IBcthSzMgsp0MVdvMYZNYaLGLUMkl08gp29ziHk2OoDx6ZjwzdJ\"\n    }\n}"
+								},
+								{
+									"name": "Retrieve Auth Gateway URL V2 - Filter by provider type",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "default"
+											},
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}",
+												"type": "default"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}",
+												"type": "default"
+											},
+											{
+												"key": "X-Customer-Secret",
+												"value": "{{customer_secret}}",
+												"type": "default"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"redirect_url\": \"https://my-agent-webapp.com/connected?my-parameter=xyz\",\n  \"provider_types\": [\n    \"business\"\t\n  ]\n}"
+										},
+										"url": {
+											"raw": "{{proxy_url}}v2/open-banking/authorisation-gateway-url",
+											"host": [
+												"{{proxy_url}}v2"
+											],
+											"path": [
+												"open-banking",
+												"authorisation-gateway-url"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Thu, 30 Mar 2023 11:37:28 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "403"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-envoy-upstream-service-time",
+											"value": "176"
+										},
+										{
+											"key": "x-upstream-request-id",
+											"value": "b141e39f-b42d-4e06-b1eb-e84b4476d385"
+										},
+										{
+											"key": "CF-Cache-Status",
+											"value": "DYNAMIC"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=2592000; includeSubDomains"
+										},
+										{
+											"key": "Server",
+											"value": "cloudflare"
+										},
+										{
+											"key": "CF-RAY",
+											"value": "7b000f906a52889d-LHR"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"operation_id\": \"v2_ob_authorisation_gateway_url_post\",\n    \"data\": {\n        \"url\": \"https://connect-sandbox.thisisbud.com/connect?nonce=wvpzUFr917&token=rseQrF6zONHuK6z25cVnyn1x1DQlc5MM9iddQmtzq1Zv3A5UNSBE2qav2AS4BI22KupogxFAosYDcbQ8Z67lU0VeGwYE3e22QZmlSa3DCxmjF0muBMfDUc0kRXTWEUmCOGSeEkYpS7wovIOPgbCnpicCQSG4u4vNxWKuSKuvxRfXPq857a3H29mahDsChwa0PhJDTsADKkn541P1rpr3BtpJvc5Uvk00R5s1xwhf6LEjUrSaFdXhSYuRIuIv0k9\"\n    }\n}"
 								},
 								{
 									"name": "Retrieve Auth Gateway URL V2 - Filter by providers",
@@ -1169,7 +1068,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Manage a Connection",
@@ -1548,7 +1448,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Ingest first party data",
@@ -1815,7 +1716,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -1881,7 +1783,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}financial/v2/accounts",
+									"raw": "{{proxy_url}}financial/v2/accounts?",
 									"host": [
 										"{{proxy_url}}financial"
 									],
@@ -2033,7 +1935,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}financial/v2/balances",
+									"raw": "{{proxy_url}}financial/v2/balances?",
 									"host": [
 										"{{proxy_url}}financial"
 									],
@@ -2100,7 +2002,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}financial/v2/accounts/{{bank_account_id}}/balances",
+									"raw": "{{proxy_url}}financial/v2/accounts/{{bank_account_id}}/balances?",
 									"host": [
 										"{{proxy_url}}financial"
 									],
@@ -2175,7 +2077,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}financial/v2/transactions",
+									"raw": "{{proxy_url}}financial/v2/transactions?",
 									"host": [
 										"{{proxy_url}}financial"
 									],
@@ -2234,154 +2136,6 @@
 											"value": "",
 											"disabled": true
 										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Retrieve Accounts (deprecated)",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"",
-											"tests[\"Response has data\"] = jsonData.data;",
-											"var firstElement = jsonData.data[0]",
-											"",
-											"pm.environment.set(\"bank_account_id\", firstElement.account_id);",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									},
-									{
-										"key": "X-Customer-Id",
-										"type": "default",
-										"value": "{{customer_id}}"
-									},
-									{
-										"key": "X-Customer-Secret",
-										"type": "default",
-										"value": "{{customer_secret}}"
-									},
-									{
-										"key": "X-Account-Id",
-										"value": "{{bank_account_id}}",
-										"type": "text",
-										"disabled": true
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "{{proxy_url}}v1/open-banking/accounts",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"open-banking",
-										"accounts"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Retrieve Transactions (deprecated)",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"transaction_id\", jsonData.data[0].id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "text"
-									},
-									{
-										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "text"
-									},
-									{
-										"key": "X-Customer-Secret",
-										"value": "{{customer_secret}}",
-										"type": "text"
-									},
-									{
-										"key": "X-From",
-										"value": "2020-01-01",
-										"type": "text",
-										"disabled": true
-									},
-									{
-										"key": "X-To",
-										"value": "2021-05-01",
-										"type": "text",
-										"disabled": true
-									},
-									{
-										"key": "X-Account-Id",
-										"value": "{{bank_account_id}}",
-										"type": "text",
-										"disabled": true
-									}
-								],
-								"url": {
-									"raw": "{{proxy_url}}v1/open-banking/transactions",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"open-banking",
-										"transactions"
 									]
 								}
 							},
@@ -2448,7 +2202,8 @@
 								]
 							}
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Manage Financial Data",
@@ -2655,7 +2410,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Goals",
@@ -3100,9 +2856,11 @@
 									},
 									"response": []
 								}
-							]
+							],
+							"_postman_isSubFolder": true
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -3134,7 +2892,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}resources/v2/categories",
+									"raw": "{{proxy_url}}resources/v2/categories?",
 									"host": [
 										"{{proxy_url}}resources"
 									],
@@ -3195,7 +2953,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Enrichment Totals",
@@ -3308,7 +3067,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}aggregations/v2/totals/categories",
+									"raw": "{{proxy_url}}aggregations/v2/totals/categories?",
 									"host": [
 										"{{proxy_url}}aggregations"
 									],
@@ -3392,7 +3151,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}aggregations/v2/totals/categories/trends",
+									"raw": "{{proxy_url}}aggregations/v2/totals/categories/trends?",
 									"host": [
 										"{{proxy_url}}aggregations"
 									],
@@ -3618,7 +3377,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -3767,7 +3527,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Income Finder",
@@ -3985,7 +3746,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Loan Finder",
@@ -4043,7 +3805,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Debt Finder",
@@ -4101,7 +3864,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Product Finder",
@@ -4138,7 +3902,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v2/products",
+									"raw": "{{proxy_url}}insights/v2/products?",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4253,7 +4017,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Subscription Finder",
@@ -4311,7 +4076,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			],
 			"event": [
@@ -4373,7 +4139,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/actionable/balances",
+									"raw": "{{proxy_url}}insights/v1/actionable/balances?",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4450,7 +4216,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/actionable/balances/{{insight_type}}/{{insight_id}}/details",
+									"raw": "{{proxy_url}}insights/v1/actionable/balances/{{insight_type}}/{{insight_id}}/details?",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4524,7 +4290,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/actionable/income",
+									"raw": "{{proxy_url}}insights/v1/actionable/income?",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4637,7 +4403,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/actionable/income/{{insight_type}}/{{insight_id}}/details",
+									"raw": "{{proxy_url}}insights/v1/actionable/income/{{insight_type}}/{{insight_id}}/details?",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4747,7 +4513,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/actionable/spending",
+									"raw": "{{proxy_url}}insights/v1/actionable/spending?",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4836,7 +4602,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/actionable/spending/{{insight_type}}/{{insight_id}}/details",
+									"raw": "{{proxy_url}}insights/v1/actionable/spending/{{insight_type}}/{{insight_id}}/details?",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4890,7 +4656,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Custom Signals",
@@ -5072,7 +4839,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Everyday Money Management",
@@ -5149,7 +4917,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Customer Characteristics",
@@ -5222,7 +4991,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Income and Expenditure Insight",
@@ -5429,7 +5199,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -5739,7 +5510,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Retrieve Affordability Report",
@@ -5776,7 +5548,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}v1/affordability/report",
+									"raw": "{{proxy_url}}v1/affordability/report?",
 									"host": [
 										"{{proxy_url}}v1"
 									],
@@ -5883,7 +5655,8 @@
 								]
 							}
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -6111,7 +5884,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Initiate Payment - TSP",
@@ -6444,7 +6218,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Manage Payments",
@@ -6768,7 +6543,8 @@
 							},
 							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
