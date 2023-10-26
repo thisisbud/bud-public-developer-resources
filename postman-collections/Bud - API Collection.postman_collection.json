@@ -2861,6 +2861,314 @@
 						}
 					],
 					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Spending Budgets",
+					"item": [
+						{
+							"name": "Edit Spending Budget",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"amount\": {\"value\": \"350.00\"},\n    \"recurrency\": {\n        \"period\": \"monthly\",\n        \"starting_day\": 1\n    },\n    \"include\": {\n        \"categories\": [\n            {\n                \"l1\": \"entertainment\",\n                \"l2\": [\"cinema\", \"leisure_and_amusement_activities\", \"theatre_concerts_and_tickets\", \"sport_events\"]\n            }\n        ],\n        \"merchants\": {\n            \"slugs\": [\"uber\", \"addisonlee\"]\n        }\n    }\n}"
+								},
+								"url": {
+									"raw": "{{proxy_url}}goals/v1/spending-budgets/{{budget_id}}",
+									"host": [
+										"{{proxy_url}}goals"
+									],
+									"path": [
+										"v1",
+										"spending-budgets",
+										"{{budget_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Spending Budget",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"budget_id\", jsonData.data.id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Going Out Budget\",\n    \"amount\": {\"value\": \"250.00\", \"currency\": \"GBP\"},\n    \"account_id\": \"89e3e6fe2ccbb1bb41876a126472b66b\",\n    \"recurrency\": {\n        \"period\": \"monthly\",\n        \"starting_day\": 1\n    },\n    \"include\": {\n        \"categories\": [\n            {\n                \"l1\": \"entertainment\",\n                \"l2\": [\"cinema\", \"leisure_and_amusement_activities\", \"theatre_concerts_and_tickets\", \"sport_events\"]\n            },\n            {\n                \"l1\": \"food_and_drink\",\n                \"l2\": [\"bars_and_pubs\"]\n            }\n        ],\n        \"merchants\": {\n            \"slugs\": [\"uber\"]\n        }\n    }\n}"
+								},
+								"url": {
+									"raw": "{{proxy_url}}goals/v1/spending-budgets",
+									"host": [
+										"{{proxy_url}}goals"
+									],
+									"path": [
+										"v1",
+										"spending-budgets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch Spending Budgets",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}goals/v1/spending-budgets",
+									"host": [
+										"{{proxy_url}}goals"
+									],
+									"path": [
+										"v1",
+										"spending-budgets"
+									],
+									"query": [
+										{
+											"key": "day",
+											"value": "2023-10-24T00:00:00Z",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch Spending Budget Transactions",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}goals/v1/spending-budgets/{{budget_id}}/transactions",
+									"host": [
+										"{{proxy_url}}goals"
+									],
+									"path": [
+										"v1",
+										"spending-budgets",
+										"{{budget_id}}",
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "day",
+											"value": "2023-10-24T00:00:00Z",
+											"description": "ne",
+											"disabled": true
+										},
+										{
+											"key": "next_page_token",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "page_size",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Spending Budget",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}goals/v1/spending-budgets/{{budget_id}}",
+									"host": [
+										"{{proxy_url}}goals"
+									],
+									"path": [
+										"v1",
+										"spending-budgets",
+										"{{budget_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete All Spending Budgets",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}"
+									},
+									{
+										"key": "X-Customer-Secret",
+										"value": "{{customer_secret}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}goals/v1/spending-budgets",
+									"host": [
+										"{{proxy_url}}goals"
+									],
+									"path": [
+										"v1",
+										"spending-budgets"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
