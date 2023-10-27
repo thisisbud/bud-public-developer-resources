@@ -1511,7 +1511,7 @@
 							"response": []
 						},
 						{
-							"name": "Retrieve Account Ingestion Task Status",
+							"name": "Retrieve Account Ingestion Task Status (deprecated)",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -1552,7 +1552,7 @@
 							"response": []
 						},
 						{
-							"name": "Ingest Transactions",
+							"name": "Ingest Transactions (deprecated)",
 							"event": [
 								{
 									"listen": "test",
@@ -1669,7 +1669,7 @@
 							"response": []
 						},
 						{
-							"name": "Retrieve Transaction Ingestion Task Status",
+							"name": "Retrieve Transaction Ingestion Task Status (deprecated)",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -1710,6 +1710,41 @@
 									"path": [
 										"ingest",
 										"transactions",
+										"{{ingestion_task_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Ingestion Task Status",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}v2/ingest/status/{{ingestion_task_id}}",
+									"host": [
+										"{{proxy_url}}v2"
+									],
+									"path": [
+										"ingest",
+										"status",
 										"{{ingestion_task_id}}"
 									]
 								}

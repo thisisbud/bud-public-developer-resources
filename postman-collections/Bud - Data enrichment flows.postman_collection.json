@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "4023a6df-96e4-4ecc-a7c4-e87d5483b513",
+		"_postman_id": "28b40d86-76d8-44bd-a2f3-86e4f276e963",
 		"name": "Bud - Data enrichment flows",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30390585"
 	},
 	"item": [
 		{
@@ -389,7 +390,7 @@
 			"name": "Enrich first party data",
 			"item": [
 				{
-					"name": "Ingest Transactions V1",
+					"name": "Ingest Transactions V1 (deprecated)",
 					"event": [
 						{
 							"listen": "test",
@@ -511,7 +512,42 @@
 					"response": []
 				},
 				{
-					"name": "Retrieve Transaction Ingestion Task Status",
+					"name": "Retrieve Ingestion Task Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}v2/ingest/status/{{ingestion_task_id}}",
+							"host": [
+								"{{proxy_url}}v2"
+							],
+							"path": [
+								"ingest",
+								"status",
+								"{{ingestion_task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Transaction Ingestion Task Status (deprecated)",
 					"request": {
 						"auth": {
 							"type": "bearer",
