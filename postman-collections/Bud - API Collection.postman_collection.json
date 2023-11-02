@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "c1c3c345-fc8c-4a4c-ba2e-dc693b7683c9",
+		"_postman_id": "a6ae9d35-7bf5-4267-8e58-387d64904f9a",
 		"name": "Bud - API Collection",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25466084"
 	},
 	"item": [
 		{
@@ -156,7 +157,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "d753beb0-d7ff-4f94-8e81-4ae737b9a05b",
 										"exec": [
 											"var jsonData = JSON.parse(responseBody);",
 											"pm.environment.set(\"customer_id\", jsonData.data.customer_id);",
@@ -396,8 +396,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		},
@@ -436,7 +435,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}v1/open-banking/providers?",
+									"raw": "{{proxy_url}}v1/open-banking/providers",
 									"host": [
 										"{{proxy_url}}v1"
 									],
@@ -1068,8 +1067,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Manage a Connection",
@@ -1448,8 +1446,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Ingest first party data",
@@ -1751,8 +1748,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		},
@@ -1818,7 +1814,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}financial/v2/accounts?",
+									"raw": "{{proxy_url}}financial/v2/accounts",
 									"host": [
 										"{{proxy_url}}financial"
 									],
@@ -1970,7 +1966,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}financial/v2/balances?",
+									"raw": "{{proxy_url}}financial/v2/balances",
 									"host": [
 										"{{proxy_url}}financial"
 									],
@@ -2037,7 +2033,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}financial/v2/accounts/{{bank_account_id}}/balances?",
+									"raw": "{{proxy_url}}financial/v2/accounts/{{bank_account_id}}/balances",
 									"host": [
 										"{{proxy_url}}financial"
 									],
@@ -2112,7 +2108,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}financial/v2/transactions?",
+									"raw": "{{proxy_url}}financial/v2/transactions",
 									"host": [
 										"{{proxy_url}}financial"
 									],
@@ -2237,8 +2233,7 @@
 								]
 							}
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Manage Financial Data",
@@ -2445,8 +2440,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Goals",
@@ -2488,7 +2482,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"name\": \"Car Savings\",\n    \"target_amount\": {\n        \"value\": \"3000.00\", \"currency\": \"GBP\"\n    },\n    \"target_date\": \"2023-12-30\"\n}"
+											"raw": "{\n\t\"name\": \"Holiday Savings\",\n\t\"target_amount\": {\n\t\t\"value\": \"6000.00\",\n\t\t\"currency\": \"GBP\"\n\t},\n\t\"recurrent_amount\": {\n\t\t\"value\": \"1000.00\",\n\t\t\"currency\": \"GBP\"\n\t},\n\t\"target_datetime\": \"2024-12-23T00:00:00Z\"\n}"
 										},
 										"url": {
 											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}",
@@ -2538,7 +2532,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"amount\": {\n\t\t\"value\": \"15.00\"\n\t}\n}"
+											"raw": "{\n\t\"amount\": {\n\t\t\"value\": \"50.00\"\n\t}\n}"
 										},
 										"url": {
 											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}/actions/{{savings_goal_action_id}}",
@@ -2602,7 +2596,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"account_id\": \"99473c28-21cf-4a9a-b79e-fd643dd7a4bc\",\n    \"name\": \"Car Savings\",\n    \"target_amount\": {\n        \"value\": \"3000.00\", \"currency\": \"GBP\"\n    },\n    \"target_date\": \"2023-12-30\"\n}"
+											"raw": "{\n\t\"account_id\": \"{{account_id}}\",\n\t\"name\": \"Car Savings\",\n\t\"target_amount\": {\n\t\t\"value\": \"3000.00\",\n\t\t\"currency\": \"GBP\"\n\t},\n\t\"target_datetime\": \"2023-12-23T00:00:00Z\"\n}"
 										},
 										"url": {
 											"raw": "{{proxy_url}}goals/v1/savings",
@@ -2663,7 +2657,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\t\"amount\": {\n\t\t\t\"value\": \"10.00\", \"currency\": \"GBP\"\n\t\t},\n\t\t\"credit_debit_indicator\": \"credit\"\n\t}"
+											"raw": "{\n\t\"amount\": {\n\t\t\"value\": \"10.00\",\n\t\t\"currency\": \"GBP\"\n\t},\n\t\"credit_debit_indicator\": \"credit\"\n}"
 										},
 										"url": {
 											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}/actions",
@@ -2750,14 +2744,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{proxy_url}}goals/v1/savings/744b8c06-5932-11ee-9c75-6eff6a24aad4/actions",
+											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}/actions",
 											"host": [
 												"{{proxy_url}}goals"
 											],
 											"path": [
 												"v1",
 												"savings",
-												"744b8c06-5932-11ee-9c75-6eff6a24aad4",
+												"{{savings_goal_id}}",
 												"actions"
 											]
 										}
@@ -2891,11 +2885,9 @@
 									},
 									"response": []
 								}
-							],
-							"_postman_isSubFolder": true
+							]
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Spending Budgets",
@@ -3235,7 +3227,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}resources/v2/categories?",
+									"raw": "{{proxy_url}}resources/v2/categories",
 									"host": [
 										"{{proxy_url}}resources"
 									],
@@ -3296,8 +3288,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Enrichment Totals",
@@ -3410,7 +3401,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}aggregations/v2/totals/categories?",
+									"raw": "{{proxy_url}}aggregations/v2/totals/categories",
 									"host": [
 										"{{proxy_url}}aggregations"
 									],
@@ -3494,7 +3485,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}aggregations/v2/totals/categories/trends?",
+									"raw": "{{proxy_url}}aggregations/v2/totals/categories/trends",
 									"host": [
 										"{{proxy_url}}aggregations"
 									],
@@ -3720,8 +3711,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		},
@@ -3870,8 +3860,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Income Finder",
@@ -4089,8 +4078,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Loan Finder",
@@ -4148,8 +4136,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Debt Finder",
@@ -4207,8 +4194,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Product Finder",
@@ -4245,7 +4231,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v2/products?",
+									"raw": "{{proxy_url}}insights/v2/products",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4360,8 +4346,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Subscription Finder",
@@ -4419,8 +4404,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			],
 			"event": [
@@ -4482,7 +4466,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/actionable/balances?",
+									"raw": "{{proxy_url}}insights/v1/actionable/balances",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4559,7 +4543,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/actionable/balances/{{insight_type}}/{{insight_id}}/details?",
+									"raw": "{{proxy_url}}insights/v1/actionable/balances/{{insight_type}}/{{insight_id}}/details",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4633,7 +4617,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/actionable/income?",
+									"raw": "{{proxy_url}}insights/v1/actionable/income",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4746,7 +4730,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/actionable/income/{{insight_type}}/{{insight_id}}/details?",
+									"raw": "{{proxy_url}}insights/v1/actionable/income/{{insight_type}}/{{insight_id}}/details",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4856,7 +4840,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/actionable/spending?",
+									"raw": "{{proxy_url}}insights/v1/actionable/spending",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4945,7 +4929,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/actionable/spending/{{insight_type}}/{{insight_id}}/details?",
+									"raw": "{{proxy_url}}insights/v1/actionable/spending/{{insight_type}}/{{insight_id}}/details",
 									"host": [
 										"{{proxy_url}}insights"
 									],
@@ -4999,8 +4983,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Custom Signals",
@@ -5182,8 +5165,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Everyday Money Management",
@@ -5260,8 +5242,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Customer Characteristics",
@@ -5334,8 +5315,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Income and Expenditure Insight",
@@ -5542,8 +5522,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		},
@@ -5853,8 +5832,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Retrieve Affordability Report",
@@ -5891,7 +5869,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}v1/affordability/report?",
+									"raw": "{{proxy_url}}v1/affordability/report",
 									"host": [
 										"{{proxy_url}}v1"
 									],
@@ -5998,8 +5976,7 @@
 								]
 							}
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		},
@@ -6227,8 +6204,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Initiate Payment - TSP",
@@ -6561,8 +6537,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Manage Payments",
@@ -6886,8 +6861,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		}
