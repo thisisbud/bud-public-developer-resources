@@ -890,7 +890,6 @@ tags:
       Breakdown your customer's income and expenditure based on Bud's enrichments to help orientate their financial world.
   - name: Financial Data API
     description: |
-
       These endpoints handle the aggregation and retrieval of financial data. They are designed to be generic across
       a range of ingestion sources and regions.
     x-displayName: Financial Data API
