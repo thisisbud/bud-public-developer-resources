@@ -2,13 +2,7 @@ openapi: 3.0.3
 info:
   title: 'Bud API Services: Documentation'
   version: 2.8.24
-  contact:
-    name: Bud Support
-    url: https://www.thisisbud.com/
-    email: help@thisisbud.com
-  x-logo:
-    url: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATAAAABuCAQAAAAKAYdLAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAB3RJTUUH4wQDDggcbXcx7wAABeJJREFUeNrt3W2IFVUcx/HvXRW1VdQedy1bZVfoYX0osVQyfSGElKbRA5oFIaIlhAkWUYm6gvqqDMHMoBeKlhayCCZC2AMRPay7aJrSZmauZhQqaj7t7u1Fi965987s7D1n7pk7/j73zX2Y85//mXt2Zu45Z2ZBREREREREREREREREREREREREREREREREREREREREREREREREROIiZSFGH+YxgsOs5U/X1bFiPDPpQT3bu1DmcaZyg+vErWpjD+s47zoN6Mte0qRJc4Iq18lYMJv2jvosD11mRUeJpD32UO7664BFGQl94DoZY704fbU2rQwKVWYwbc6bQlSPBaYbtMz4K7nP53lpGkK/q8+7MTxUmeEWtmJcGX+j5psmM0I3l9vCirKAV36OuE46QsbfaHL/9opnL9tcpxBf3V0nkAgzWMRj9HadhrH+3Gk7pBqYDZdY3oXfnHE2gc1U2gyoQ6Rk+pKZdgOqgYnXF7TYDGe3gcWgW85QH9cJxMAVm8HsNrBqhhV1U9g33XUCzo1gsM1wdhtYio8ZWsytYdksFrpOwbGhbLYb0PavyLs5wA+c9v28lRa+Zzt/+y5RwwKqaOCdgCjZRvEit/A1a7jou8xwJjOMAb7D+ylqqCmw1imeZ0oCBrv7Mzp+/QofFTDCdZG13Jw3Wi1nOpbZT9+QGUziUkeZ3T49z+P4pqCRuCkhM1jjfMwwqsdG182rsAaWJs0JxuWJ9knGEq+EzODHjDLTcj5NsbjgwehwDazm6vyL5D2MG5i7booKdjE25917M57XhoxUG1hmJUsjrmWtlVl18ZQ2DeCyH6ycT7kpIJ+wuQWVeZJXI69HcpsXHDQN4LajtZIlkcbvzWqn9St1R3nPNIT93wzt/MSZPO+nqKA65699Nos5FdHmgZkMzHnvIj9zLm9+Q7jd0nqP8VtkdSqWNppYxT+u08g+yW8OnKRXw4ac08hnPUscyvjkw5AZXM4os9jzyY6sdZ3h5YC++jLm0lrASf50T5krzEn0QbOLbB8in2FvwKfNPJczCXd0hLV7wPPqL8bybt691//aWWfhkPo2681PjZPDbgP7lYZOl1nNJs9rW4elXD2zfkK8wIFOy2w1XuuWyOpTkuw2sHOhlqrzvIqu59gbuYEdIcqcjSyb65SLX5EHOepgrbuKtJ6nHNQtxtx0U5xM8DoXMkez7K5xM7Tp4iS4WOvszvss5feSP9Fvo5EVnDDfHGJfpd157Y48xFRGmfaEaWcu/qqYZxpCDcxcqR8Mg9xlGkANzNz+BDcx4zEJNTBzv5gPCSeXTvJtmM+3PJqIKdNj6GE3pJsG5mIwOMp1ptnABgd1sq+G7ebnXZncHCKjG3+M1zpLTzMz7AZ00cBG5pmlFb3JmkQTSpPd21HZbWD9Qy21zPPK/zricNH6+B7mvZFreTpEtAFWt0dpsnoWZreBVTG+kyVS1GVN4/vDd9lJVIRY5yzfPdPlrPHHdTwYItr1bkLcTia8M1qPM9F3yRRjcuaYprNmHxzyfNbQyQlnGTM47ynhndFan7WuCywLODz35I2sC9DCXheZHBNpsXvZmu1fkZXs5rjPnPzb8hyAzrIzINr9HOBIwNXat+ZcleS1hame1714izc55jNvbVDBtz7pyWuJuI15P/tnx1F0UwzsQpprO5nil2KIQSZbqcspnwp57+iu2MQT1mMmhNue/MMR3xfwMi8VYRhnmJqXP/MG1lZwyVNMy9l/FR4tf/mdvB553Uz2sXFn+n1YaGCNBZZr5mH25by7xzCb3PKrmM+lgmK1BV4hdc0+2g2zjq8m1wlAOY1dvqXGKep87oZYzUmDW3Vs8+myuIf6Am6AsiT0Nljp/CYl0Twaze9ZaaN3u5w5jAy5L2ylhe/4nAu+S1Qwl+oCsrjCV2wM2KXfwSPUcmPIGv9LPZ91Ye1TEnEb80ztNLE+Dv8MS0RERERERERERERERERERERERERERERERERERERERERERERERERs+Q/rhi5WauEgfQAAAABJRU5ErkJggg==
-  description: |
+  description: |-
     # Overview
 
     ## Introduction
@@ -51,7 +45,7 @@ info:
 
     To start interacting with Bud’s Sandbox API you have to sign up for a developer account [here](https://www.thisisbud.com/developers#developer-console).
 
-    Once you’ve completed the signup and activation process you will be able to create a new project in the [Developer Console](https://console.thisisbud.com) to receive API Credentials (client_id and client_secret). These can be used to obtain OAuth2 access and refresh tokens using authentication endpoint. The access token must be supplied as a Bearer token within every service API call made to the Bud Platform. Once the access token has expired, the refresh token must be used to obtain another access token.  
+    Once you’ve completed the signup and activation process you will be able to create a new project in the [Developer Console](https://console.thisisbud.com) to receive API Credentials (client_id and client_secret). These can be used to obtain OAuth2 access and refresh tokens using authentication endpoint. The access token must be supplied as a Bearer token within every service API call made to the Bud Platform. Once the access token has expired, the refresh token must be used to obtain another access token.
 
 
     Details on the authentication process can be found in the Authentication section of this documentation.
@@ -281,7 +275,7 @@ info:
     | 01/11/2021           | Deprecated **Retrieve Authorisation Gateway URL** endpoint in favour of new **Retrieve Authorisation Gateway URL (v2)** endpoint.                                                                                                                                                                                                                                                                                                          |
     | 01/11/2021           | Deprecated **Energy Switching API**, **Mortgage API**, **Home Insurance API** and **Broadband API** which formed Bud's marketplace offering.                                                                                                                                                                                                                                                                                               |
     | 14/03/2022           | Deprecated **Enrich Transaction** endpoints from the Ingest and Enrich API suite.                                                                                                                                                                                                                                                                                                                                                          |
-    | 01/08/2022           | Deprecated `YYYY-MM-DD` date format for `X-From` and `X-To` headers within `/v1/affordability/spending-groups`. Both `X-From` and `X-To` headers now follow the `YYYY-MM` date format.                                                                                                                                                                                                                                                     | 
+    | 01/08/2022           | Deprecated `YYYY-MM-DD` date format for `X-From` and `X-To` headers within `/v1/affordability/spending-groups`. Both `X-From` and `X-To` headers now follow the `YYYY-MM` date format.                                                                                                                                                                                                                                                     |
     | 05/09/2022           | Deprecated **Retrieve Merchant Totals V1** in favour of new **Retrieve Merchant Totals V2** endpoint                                                                                                                                                                                                                                                                                                                                       |
     | 23/01/2023           | Deprecated **List Transactions V1**. Bud understands that many clients have integrated this endpoint in order to retrieve transactions held on the Bud platform. As a result, there is a **six month** deprecation window, meaning that support for this endpoint will cease on the **1st of August 2023**, meaning clients must have migrated over to the new and improved **List Transactions V2** endpoint by that point in time.       |
     | 23/01/2023           | Deprecated **Create Customers V1**. Support will continue for this endpoint, however we recommend clients to migrate to V2 and for all new clients to integrate with the V2 endpoint.                                                                                                                                                                                                                                                      |
@@ -301,16 +295,8 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
-    **Version 2.8.25: 20/10/2023**
-    > - Added the  `idempotent_identifier` attribute to the __Create Customer V3__ endpoint.
-    > - Removed documentation for __List Transactions V1__ and __Retrieve Accounts V1__ endpoints as passed the deprecation due date.
-
-    **Version 2.8.24: 18/10/2023**
-    > - Deprecated __Retrieve Transaction Ingestion Task Status__ endpoint in favour of __Retrieve Ingestion Task Status__ endpoint.
-    > - Deprecated __Retrieve Accounts Ingestion Task Status__ endpoint in favour of __Retrieve Ingestion Task Status__ endpoint.
-
-    **Version 2.8.19: 06/10/2023**
-    > - Corrected __Goals API__ to utilise RFC-3339 timestamps
+    **Version 2.9.3: 26/10/2023**
+    > - Added Spending Budget endpoints (Create, Update, Delete, Retrieve and Retrieve Transactions) to the __Goals API__.
 
     **Version 2.9.2: 04/10/2023**
     > - Deprecated __Open Banking Sync Complete__ callback in favour of the task type specific callbacks __Connect Completed Notification Callback__ and __Refresh Completed Notification Callback__.
@@ -321,6 +307,17 @@ info:
 
     **Version 2.9.0: 21/09/2023**
     > - Add __Goals API__.
+
+    **Version 2.8.25: 20/10/2023**
+    > - Added the  `idempotent_identifier` attribute to the __Create Customer V3__ endpoint.
+    > - Removed documentation for __List Transactions V1__ and __Retrieve Accounts V1__ endpoints as passed the deprecation due date.
+
+    **Version 2.8.24: 18/10/2023**
+    > - Deprecated __Retrieve Transaction Ingestion Task Status__ endpoint in favour of __Retrieve Ingestion Task Status__ endpoint.
+    > - Deprecated __Retrieve Accounts Ingestion Task Status__ endpoint in favour of __Retrieve Ingestion Task Status__ endpoint.
+
+    **Version 2.8.19: 06/10/2023**
+    > - Corrected __Goals API__ to utilise RFC-3339 timestamps
 
     **Version 2.8.15: 20/09/2023**
     > - Added __Authorised Payments V2__
@@ -344,7 +341,7 @@ info:
 
     **Version 2.8.9: 08/08/2023**
     > - Added `download_data`, `reconfirm_consent` and `revoke_consent` to the `initial_screen` options for the __Retrieve Authorisation Gateway URL V2__ endpoint
-    > - Deprecated the `reconfirm_consent` body parameter for the __Retrieve Authorisation Gateway URL V2__ endpoint 
+    > - Deprecated the `reconfirm_consent` body parameter for the __Retrieve Authorisation Gateway URL V2__ endpoint
 
     **Version 2.8.8: 02/08/2023**
     > - Fixed error in __Category Totals V2__ path
@@ -417,8 +414,8 @@ info:
 
     **Version 2.6.2: 05/05/2023**
     > - Documented default to from case in __Retrieve Financial Products V2__ and __Retrieve Financial Products__.
-    > - Fixed documentation for get customers endpoints 
-    > - Fixed documentation for put customer context endpoints 
+    > - Fixed documentation for get customers endpoints
+    > - Fixed documentation for put customer context endpoints
 
     **Version 2.6.1: 27/04/2023**
     > - Deprecated __Retrieve Financial Products__.
@@ -581,8 +578,8 @@ info:
     > - Added a new __Recategorise Transactions V2__ endpoint within the Submit Corrections API.
 
     **Version 1.20.6: 07/11/2022**
-    >- Added a new field `customer_context` to the __Create Customers V1__ and __Create Customers V2__ endpoints, 
-    along with new __Retrieve Customer Context__ and __Update Customer Context__ endpoints. 
+    >- Added a new field `customer_context` to the __Create Customers V1__ and __Create Customers V2__ endpoints,
+    along with new __Retrieve Customer Context__ and __Update Customer Context__ endpoints.
     The Customer Context allows for the creation of a better user experience based on better knowledge of the customer themselves.
 
     **Version 1.20.5: 01/11/2022**
@@ -621,10 +618,10 @@ info:
     **Version 1.17.0: 06/09/2022**
     > - Added a new data field to the Retrieve Refresh Status endpoint as part of Bud's Connect (OB
     Aggregation) API. The field - `has_new_transactions` describes whether any new transactions have
-    been obtained as part of the latest refresh, thus providing details on whether you as the Client 
+    been obtained as part of the latest refresh, thus providing details on whether you as the Client
     are required to fetch the latest transacitons for that customer.
     > - Deprecated __Retrieve Merchant Totals V1__ in favour of the new __Retrieve Merchant Totals V2__ endpoint.
-    > - Added _Buy Now, Pay Later_ support to the __Get Financial Products__ endpoint, identified by 
+    > - Added _Buy Now, Pay Later_ support to the __Get Financial Products__ endpoint, identified by
     the enum value `bnpl`.
 
     **Version 1.16.2: 16/08/2022**
@@ -678,7 +675,7 @@ info:
     > - Fixed typos.
 
     **Version 1.11.3: 14/03/2022**
-    > - Deprecated __Enrich Transaction__ endpoints from the Ingest and Enrich API suite. 
+    > - Deprecated __Enrich Transaction__ endpoints from the Ingest and Enrich API suite.
     > - General improvements across examples, schemas, endpoints descriptions, names and sectioning titles.
 
     **Version 1.11.2: 31/01/2022**
@@ -697,7 +694,7 @@ info:
     > - Corrected the documentation of the List Accounts endpoint to ensure that the `account_type` field is shown as nullable.
 
     **Version 1.10.1: 22/11/2021**
-    > - Added a new __Custom Signals__ endpoint within the Signal API that allows you to segment and identify customers based on custom criteria. 
+    > - Added a new __Custom Signals__ endpoint within the Signal API that allows you to segment and identify customers based on custom criteria.
 
     **Version 1.10.0: 28/10/2021**
     > - Added a new __Delete Provider Data__ endpoint.
@@ -710,7 +707,7 @@ info:
 
     **Version 1.9.0: 14/10/2021**
     > - Addition of a new endpoint `/v2/open-banking/authorisation-gateway-url` to allow clients to use an updated
-    Bud Connect flow, allowing their customer's to go through a new Account Connection journey. The v2 journey is 
+    Bud Connect flow, allowing their customer's to go through a new Account Connection journey. The v2 journey is
     highly configurable via the use of different flags within the request payload.
 
     **Version 1.8.3: 06/10/2021**
@@ -729,7 +726,7 @@ info:
     > - Added a new __Financial Insight__ endpoint within the Signal API that allows clients to understand a customer's overall financial situation and affordability.
 
     **Version 1.7.10: 06/08/2021**
-    > - Updated the List Transaction Response schema to detail the addition of the new carbon tracker enrichment field. 
+    > - Updated the List Transaction Response schema to detail the addition of the new carbon tracker enrichment field.
 
     **Version 1.7.9: 03/08/2021**
     > - The `customer_secret` attribute is now a required attribute on the POST Ingest Accounts endpoint.
@@ -796,7 +793,7 @@ info:
 
     **Version: 1.6.2 - 16/07/2020**
      > - Addition of international updates to payments APIs
-     > - Updated energy switching meters example to ensure that it will return meter information for the address given in the example. 
+     > - Updated energy switching meters example to ensure that it will return meter information for the address given in the example.
 
     **Version: 1.6.0 - 15/06/2020**
      > - Financial Assistant service added to the Insights API. This includes three brand new endpoints that help customers to better manage their financial world.
@@ -817,21 +814,25 @@ info:
     # Authentication
 
     <SecurityDefinitions />
+  contact:
+    name: Bud Support
+    email: help@thisisbud.com
+    url: https://www.thisisbud.com/
+  x-logo:
+    url: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATAAAABuCAQAAAAKAYdLAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAB3RJTUUH4wQDDggcbXcx7wAABeJJREFUeNrt3W2IFVUcx/HvXRW1VdQedy1bZVfoYX0osVQyfSGElKbRA5oFIaIlhAkWUYm6gvqqDMHMoBeKlhayCCZC2AMRPay7aJrSZmauZhQqaj7t7u1Fi965987s7D1n7pk7/j73zX2Y85//mXt2Zu45Z2ZBREREREREREREREREREREREREREREREREREREREREREREREREROIiZSFGH+YxgsOs5U/X1bFiPDPpQT3bu1DmcaZyg+vErWpjD+s47zoN6Mte0qRJc4Iq18lYMJv2jvosD11mRUeJpD32UO7664BFGQl94DoZY704fbU2rQwKVWYwbc6bQlSPBaYbtMz4K7nP53lpGkK/q8+7MTxUmeEWtmJcGX+j5psmM0I3l9vCirKAV36OuE46QsbfaHL/9opnL9tcpxBf3V0nkAgzWMRj9HadhrH+3Gk7pBqYDZdY3oXfnHE2gc1U2gyoQ6Rk+pKZdgOqgYnXF7TYDGe3gcWgW85QH9cJxMAVm8HsNrBqhhV1U9g33XUCzo1gsM1wdhtYio8ZWsytYdksFrpOwbGhbLYb0PavyLs5wA+c9v28lRa+Zzt/+y5RwwKqaOCdgCjZRvEit/A1a7jou8xwJjOMAb7D+ylqqCmw1imeZ0oCBrv7Mzp+/QofFTDCdZG13Jw3Wi1nOpbZT9+QGUziUkeZ3T49z+P4pqCRuCkhM1jjfMwwqsdG182rsAaWJs0JxuWJ9knGEq+EzODHjDLTcj5NsbjgwehwDazm6vyL5D2MG5i7booKdjE25917M57XhoxUG1hmJUsjrmWtlVl18ZQ2DeCyH6ycT7kpIJ+wuQWVeZJXI69HcpsXHDQN4LajtZIlkcbvzWqn9St1R3nPNIT93wzt/MSZPO+nqKA65699Nos5FdHmgZkMzHnvIj9zLm9+Q7jd0nqP8VtkdSqWNppYxT+u08g+yW8OnKRXw4ac08hnPUscyvjkw5AZXM4os9jzyY6sdZ3h5YC++jLm0lrASf50T5krzEn0QbOLbB8in2FvwKfNPJczCXd0hLV7wPPqL8bybt691//aWWfhkPo2681PjZPDbgP7lYZOl1nNJs9rW4elXD2zfkK8wIFOy2w1XuuWyOpTkuw2sHOhlqrzvIqu59gbuYEdIcqcjSyb65SLX5EHOepgrbuKtJ6nHNQtxtx0U5xM8DoXMkez7K5xM7Tp4iS4WOvszvss5feSP9Fvo5EVnDDfHGJfpd157Y48xFRGmfaEaWcu/qqYZxpCDcxcqR8Mg9xlGkANzNz+BDcx4zEJNTBzv5gPCSeXTvJtmM+3PJqIKdNj6GE3pJsG5mIwOMp1ptnABgd1sq+G7ebnXZncHCKjG3+M1zpLTzMz7AZ00cBG5pmlFb3JmkQTSpPd21HZbWD9Qy21zPPK/zricNH6+B7mvZFreTpEtAFWt0dpsnoWZreBVTG+kyVS1GVN4/vDd9lJVIRY5yzfPdPlrPHHdTwYItr1bkLcTia8M1qPM9F3yRRjcuaYprNmHxzyfNbQyQlnGTM47ynhndFan7WuCywLODz35I2sC9DCXheZHBNpsXvZmu1fkZXs5rjPnPzb8hyAzrIzINr9HOBIwNXat+ZcleS1hame1714izc55jNvbVDBtz7pyWuJuI15P/tnx1F0UwzsQpprO5nil2KIQSZbqcspnwp57+iu2MQT1mMmhNue/MMR3xfwMi8VYRhnmJqXP/MG1lZwyVNMy9l/FR4tf/mdvB553Uz2sXFn+n1YaGCNBZZr5mH25by7xzCb3PKrmM+lgmK1BV4hdc0+2g2zjq8m1wlAOY1dvqXGKep87oZYzUmDW3Vs8+myuIf6Am6AsiT0Nljp/CYl0Twaze9ZaaN3u5w5jAy5L2ylhe/4nAu+S1Qwl+oCsrjCV2wM2KXfwSPUcmPIGv9LPZ91Ye1TEnEb80ztNLE+Dv8MS0RERERERERERERERERERERERERERERERERERERERERERERERERs+Q/rhi5WauEgfQAAAABJRU5ErkJggg==
 servers:
   - url: https://api-sandbox.thisisbud.com
 tags:
   - name: Authentication
-    x-displayName: Authentication
-    x-traitTag: true
     description: |
       Endpoints related to gaining access to the Bud platform via OAuth2 authentication.
+    x-displayName: Authentication
+    x-traitTag: true
   - name: OAuth2
     x-displayName: OAuth2
     description: |
       Retrieve and manage access and refresh tokens to authenticate to the Bud platform via OAuth2 protocol.
   - name: Connect API
-    x-displayName: Connect API
-    x-traitTag: true
     description: |
       These endpoints handle the connections to Open Banking providers (ASPSPs) and the ingestion of first party transaction data. Bud manages all of the connections to each of the individual ASPSPs and enables access to all of the providers via a single set of API endpoints.
 
@@ -844,6 +845,8 @@ tags:
         3. If you already have transactional data that you’re looking to enrich, you can use Bud’s [Ingest Endpoints](#tag/Ingest-Data) to push your data onto the Bud platform without needing your customers to connect their accounts via Open Banking. 
         
       Note: a number of the calls within this service are asynchronous, and as such, follow a pattern of sending a request and responding with a task ID. This task ID can then be tracked, allowing for a more efficient, cross network implementation.
+    x-displayName: Connect API
+    x-traitTag: true
   - name: Create a Connection
     x-displayName: Create a Connection
     description: |
@@ -863,20 +866,20 @@ tags:
     description: |
       Initiate the asynchronous process of pushing a customer's account information (i.e. first party data) onto the Bud platform. These asynchronous requests create a task to store the given accounts or transactions against the specified customers. The Task ID returned by this request can be used to verify the current status of the process.
   - name: Customers API
-    x-displayName: Customers API
-    x-traitTag: true
     description: |
 
       The Customers API allows for the manipulation of a client's "Customers" as registered on the Bud platform. The API is built around resource-oriented URLs, returns JSON-encoded responses, uses standard HTTP response codes and authentication.
+    x-displayName: Customers API
+    x-traitTag: true
   - name: Manage Customers
     x-displayName: Manage Customers
     description: |
       Manage the number of customers registered onto the Bud platform.
   - name: Enrichment API
-    x-displayName: Enrichment API
-    x-traitTag: true
     description: |
       Enrich transactional data you already hold, or have aggregated through Open Banking, using Bud's core enrichment services.
+    x-displayName: Enrichment API
+    x-traitTag: true
   - name: Enrichment Resources
     x-displayName: Enrichment Resources
     description: |
@@ -886,12 +889,12 @@ tags:
     description: |
       Breakdown your customer's income and expenditure based on Bud's enrichments to help orientate their financial world.
   - name: Financial Data API
-    x-displayName: Financial Data API
-    x-traitTag: true
     description: |
 
       These endpoints handle the aggregation and retrieval of financial data. They are designed to be generic across
       a range of ingestion sources and regions.
+    x-displayName: Financial Data API
+    x-traitTag: true
   - name: Retrieve Financial Data
     x-displayName: Retrieve Financial Data
     description: |
@@ -901,18 +904,21 @@ tags:
     description: |
       Manipulate Transactions held on the Bud platform by removing data, submitting corrections, or adding tags through different rulesets.
   - name: Goals API
+    description: |
+      Endpoints related to managing savings goals and spending budgets.
     x-displayName: Goals API
     x-traitTag: true
-    description: |
-      Endpoints related to managing savings goals.
   - name: Savings Goals
     x-displayName: Savings Goals
     description: Savings goals management API.
+  - name: Spending Budgets
+    x-displayName: Spending Budgets
+    description: Spending budgets management API.
   - name: Smart Finders API
-    x-displayName: Smart Finders API
-    x-traitTag: true
     description: |
       Find information about spending, identify key transactions and create your own custom transaction labels to dig deeper into the data and build new services for customers.
+    x-displayName: Smart Finders API
+    x-traitTag: true
   - name: Regular Payments Finder
     x-displayName: Regular Payments Finder
     description: |
@@ -938,8 +944,6 @@ tags:
     description: |
       Find information regarding your customer's subscriptions.
   - name: Assess API
-    x-displayName: Assess API
-    x-traitTag: true
     description: |
 
       These endpoints handle the origination of customer applications for the Assess
@@ -961,6 +965,8 @@ tags:
       can be used to collect a customer's financial data, which can then be
       retrieved and assessed (either using the API to pull in the data, or using
       the dashboard to make manual decisions regarding the application status).
+    x-displayName: Assess API
+    x-traitTag: true
   - name: Customer Applications
     x-displayName: Customer Applications
     description: |
@@ -989,8 +995,6 @@ tags:
     description: |
       Breakdown your customer's transactions by fixed/flexible spend and discretionary vs non discretionary high-level totals.
   - name: Payments API
-    x-displayName: Payments API
-    x-traitTag: true
     description: |
 
       These endpoints allow Bud's Clients to initiate (i.e. make) payments through the use of Open Banking Payment APIs.
@@ -1002,6 +1006,8 @@ tags:
         your own permissions, then use Bud's [TPP Initiation](#tag/TPP-Initiation) endpoints.
         2. If on the other hand, your are regulated as an Payment Initiation Service Provider (PISP), then you are able to use Bud
         as a Technical Service Provider (see [TSP Initiation](#tag/TSP-Initiation)).
+    x-displayName: Payments API
+    x-traitTag: true
   - name: Initiate Payment - Bud license
     x-displayName: Initiate Payment - Bud license
     description: |
@@ -1017,8 +1023,6 @@ tags:
     description: |
       Manage payments to initiated through Bud's Payments API      
   - name: Characteristics API
-    x-displayName: Characteristics API
-    x-traitTag: true
     description: |
 
       The Characteristics API provides endpoints for retrieving specific characteristics that apply to an individual
@@ -1032,16 +1036,18 @@ tags:
       | `saver`        | Customer has savings transactions                                                            |
 
       New characteristics will be released and added to this list without a breaking change notice.
+    x-displayName: Characteristics API
+    x-traitTag: true
   - name: Retrieve Customer Characteristics
     x-displayName: Retrieve Customer Characteristics
     description: |
       Retrieve Characteristics associated with an individual Customer based on their financial data.
   - name: Insights API
-    x-displayName: Insights API
-    x-traitTag: true
     description: |
       These endpoints handle the retrieval of actionable insights for a customer. An actionable insight is an indicator of
       the state of a customer's financial situation that could induce a change in behaviour.
+    x-displayName: Insights API
+    x-traitTag: true
   - name: Retrieve Actionable Insights
     x-displayName: Retrieve Actionable Insights
     description: |
@@ -1224,9 +1230,10 @@ paths:
                     items:
                       $ref: '#/components/schemas/OBProvider'
                   metadata:
-                    nullable: true
-                    allOf:
+                    oneOf:
                       - $ref: '#/components/schemas/ResultsMetadata'
+                      - type: object
+                        nullable: true
                 example:
                   operation_id: open_banking_providers_get
                   data:
@@ -1402,7 +1409,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation.
                 errors:
-                  redirect_url: This value should not be blank.
+                  redirect_url:
+                    - This value should not be blank.
         '401':
           description: An unauthorised request was received.
         '405':
@@ -1551,21 +1559,24 @@ paths:
                     code_id: failed_validation
                     message: Failed validation
                     errors:
-                      customer_id: This value should not be blank
+                      customer_id:
+                        - This value should not be blank
                 Resource not found:
                   value:
                     operation_id: open_banking_authorisation_url_post
                     code_id: resource_not_found
                     message: Consent ID could not be found.
                     errors:
-                      domain_error: Consent ID could not be found.
+                      domain_error:
+                        - Consent ID could not be found.
                 Provider in Maintenance:
                   value:
                     operation_id: open_banking_authorisation_url_post
                     code_id: provider_maintenance
                     message: The provider is in maintenance.
                     errors:
-                      provider: The provider is currently disabled due to planned maintenance or known issues.
+                      provider:
+                        - The provider is currently disabled due to planned maintenance or known issues.
         '401':
           description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
         '405':
@@ -1646,7 +1657,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  customer_id: This value should not be blank
+                  customer_id:
+                    - This value should not be blank
         '404':
           description: Task not found
         '405':
@@ -1730,7 +1742,8 @@ paths:
                     code_id: failed_body_decode
                     message: invalid request body
                     errors:
-                      customer_id: This value should not be blank
+                      customer_id:
+                        - This value should not be blank
                 Validation Failure:
                   description: Validation Error
                   value:
@@ -1738,7 +1751,8 @@ paths:
                     code_id: failed_validation
                     message: invalid request
                     errors:
-                      state: The field is required
+                      state:
+                        - The field is required
   /v2/open-banking/authorisation-codes:
     post:
       tags:
@@ -1817,7 +1831,8 @@ paths:
                     code_id: failed_body_decode
                     message: invalid request body
                     errors:
-                      customer_id: This value should not be blank
+                      customer_id:
+                        - This value should not be blank
                 Validation Failure:
                   description: Validation Error
                   value:
@@ -1825,7 +1840,8 @@ paths:
                     code_id: failed_validation
                     message: invalid request
                     errors:
-                      state: The field is required
+                      state:
+                        - The field is required
         '409':
           description: The code has already been submitted
           content:
@@ -1840,7 +1856,8 @@ paths:
                     code_id: auth_used
                     message: auth code has been used before
                     errors:
-                      code: already used
+                      code:
+                        - already used
       callbacks:
         ConnectCompletedCallBack:
           '{$request.body#/redirect_url}':
@@ -1971,7 +1988,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  customer_id: This value should not be blank
+                  customer_id:
+                    - This value should not be blank
         '404':
           description: Task not found
         '405':
@@ -2031,15 +2049,18 @@ paths:
                     code_id: failed_validation
                     message: Failed validation
                     errors:
-                      customer_id: This value should not be blank
-                      customer_secret: This value should not be blank
+                      customer_id:
+                        - This value should not be blank
+                      customer_secret:
+                        - This value should not be blank
                 Provider in Maintenance:
                   value:
                     operation_id: open_banking_refresh_post
                     code_id: provider_maintenance
                     message: The provider is in maintenance.
                     errors:
-                      provider: The provider is currently disabled due to planned maintenance or known issues.
+                      provider:
+                        - The provider is currently disabled due to planned maintenance or known issues.
         '405':
           description: The request uses an unexpected HTTP method
         5XX:
@@ -2231,7 +2252,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  customer_id: This value should not be blank
+                  customer_id:
+                    - This value should not be blank
         '405':
           description: The request uses an unexpected HTTP method
         5XX:
@@ -3024,9 +3046,11 @@ paths:
                     code_id: failed_validation
                     message: validation failure(s) in request payload
                     errors:
-                      customers[0]:
-                        customer_id: The customer ID is mandatory
-                        transactions: The transactions list is mandatory
+                      missing_fields:
+                        customers[0].customer_id:
+                          - The customer ID is mandatory
+                        transactions:
+                          - The transactions list is mandatory
                 PayloadValidationError:
                   summary: Transaction Validation Error
                   value:
@@ -3034,14 +3058,13 @@ paths:
                     code_id: failed_validation
                     message: validation failure(s) in request payload
                     errors:
-                      4cef424c-1d7f-4cab-8be2-aee7e1774a00:
-                        missing_fields:
-                          transactions[0]:
-                            - description
-                            - account_id
-                        invalid_fields:
-                          transactions[0]:
-                            - amount
+                      missing_fields:
+                        transactions[0]:
+                          - description
+                          - account_id
+                      invalid_fields:
+                        transactions[0]:
+                          - amount
         '401':
           description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
         '503':
@@ -3297,7 +3320,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation.
                 errors:
-                  client_id: This value should not be blank
+                  client_id:
+                    - This value should not be blank
         '401':
           description: An unauthenticated request was received.
         '405':
@@ -3369,7 +3393,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation.
                 errors:
-                  client_id: This value should not be blank
+                  client_id:
+                    - This value should not be blank
         '401':
           description: An unauthenticated request was received.
         '405':
@@ -3435,7 +3460,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation.
                 errors:
-                  client_id: This value should not be blank
+                  client_id:
+                    - This value should not be blank
         '401':
           description: An unauthenticated request was received.
         '405':
@@ -3530,7 +3556,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation.
                 errors:
-                  client_id: This value should not be blank
+                  client_id:
+                    - This value should not be blank
         '401':
           description: An unauthenticated request was received.
         '405':
@@ -3745,9 +3772,14 @@ paths:
                     data:
                       - name: travel
                         subcategories:
-                          - flights
-                          - insurance
-                          - other_travel
+                          - name: flights
+                          - name: insurance
+                          - name: other_travel
+                      - name: travel
+                        subcategories:
+                          - name: flights
+                          - name: insurance
+                          - name: other_travel
                     metadata:
                       model:
                         name: uk-v2
@@ -3820,24 +3852,24 @@ paths:
                         id: shopping
                         label: Shopping
                       credit_amount:
-                        - value: '15.90'
+                        - amount: '15.90'
                           currency: GBP
                       debit_amount:
-                        - value: '397.80'
+                        - amount: '397.80'
                           currency: GBP
                   sub_categories:
                     - category:
                         id: gaming
                         label: Gaming
                       credit_amount:
-                        - value: '9.99'
+                        - amount: '9.99'
                           currency: GBP
-                        - value: '3.99'
+                        - amount: '3.99'
                           currency: USD
                       debit_amount:
-                        - value: '0.00'
+                        - amount: '0.00'
                           currency: GBP
-                        - value: '32.99'
+                        - amount: '32.99'
                           currency: USD
         '400':
           description: The request contains an invalid payload
@@ -3850,7 +3882,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation.
                 errors:
-                  client_id: This value should not be blank
+                  client_id:
+                    - This value should not be blank
         '401':
           description: An unauthenticated request was received
         '405':
@@ -3903,7 +3936,7 @@ paths:
                           value: '357.90'
                           currency: GBP
                         transaction_count: 1
-                    debit_total:
+                    debit_amount:
                       - amount:
                           value: '397.80'
                           currency: GBP
@@ -3911,12 +3944,14 @@ paths:
                     l2_totals:
                       - name: clothing
                         credit_amount:
-                          - value: '357.90'
-                            currency: GBP
+                          - amount:
+                              value: '357.90'
+                              currency: GBP
                             transaction_count: 1
                         debit_amount:
-                          - value: '397.80'
-                            currency: GBP
+                          - amount:
+                              value: '397.80'
+                              currency: GBP
                             transaction_count: 2
         '400':
           description: The request contains an invalid payload
@@ -3987,27 +4022,29 @@ paths:
                   - from: '2023-05-21T07:20:50.52Z'
                     to: '2023-05-21T07:20:50.52Z'
                     data:
-                      name: shopping
-                      credit_amount:
-                        - amount:
-                            value: '357.90'
-                            currency: GBP
-                          transaction_count: 1
-                      debit_total:
-                        - amount:
-                            value: '397.80'
-                            currency: GBP
-                          transaction_count: 2
-                      l2_totals:
-                        - name: clothing
-                          credit_amount:
-                            - value: '357.90'
+                      - name: shopping
+                        credit_amount:
+                          - amount:
+                              value: '357.90'
                               currency: GBP
-                              transaction_count: 1
-                          debit_amount:
-                            - value: '397.80'
+                            transaction_count: 1
+                        debit_amount:
+                          - amount:
+                              value: '397.80'
                               currency: GBP
-                              transaction_count: 2
+                            transaction_count: 2
+                        l2_totals:
+                          - name: clothing
+                            credit_amount:
+                              - amount:
+                                  value: '357.90'
+                                  currency: GBP
+                                transaction_count: 1
+                            debit_amount:
+                              - amount:
+                                  value: '397.80'
+                                  currency: GBP
+                                transaction_count: 2
         '400':
           description: The request contains an invalid payload
         '401':
@@ -4103,7 +4140,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  client_id: This value should not be blank
+                  client_id:
+                    - This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -4181,7 +4219,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  client_id: This value should not be blank
+                  client_id:
+                    - This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -4335,7 +4374,9 @@ paths:
                               value: '1000.00'
                               currency: GBP
                     metadata:
-                      parameters: null
+                      parameters:
+                        currencies:
+                          - GBP
                       result_count: 1
         '400':
           description: Bad Request
@@ -4350,17 +4391,18 @@ paths:
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      error:
-                        X-Customer-Id: not present
+                      X-Customer-Id:
+                        - not present
                 CustomerID and CustomerSecret Not Sent:
                   value:
                     operation_id: financial_v2_accounts
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      error:
-                        X-Customer-Id: not present
-                        X-Customer-Secret: not present
+                      X-Customer-Id:
+                        - not present
+                      X-Customer-Secret:
+                        - not present
         '401':
           description: Unauthorised
           content:
@@ -4433,7 +4475,11 @@ paths:
                         credit_limit:
                           value: '1000.00'
                           currency: GBP
-                    metadata: null
+                    metadata:
+                      parameters:
+                        currencies:
+                          - GBP
+                      result_count: 1
                 Multiple Holder Joint Account:
                   value:
                     operation_id: financial_v2_accounts_account_id
@@ -4470,7 +4516,11 @@ paths:
                           amount:
                             value: '1000.00'
                             currency: GBP
-                    metadata: null
+                    metadata:
+                      parameters:
+                        currencies:
+                          - GBP
+                      result_count: 1
         '400':
           description: Bad Request
           content:
@@ -4484,17 +4534,18 @@ paths:
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      error:
-                        X-Customer-Id: not present
+                      X-Customer-Id:
+                        - not present
                 CustomerID and CustomerSecret Not Sent:
                   value:
                     operation_id: financial_v2_accounts_account_id
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      error:
-                        X-Customer-Id: not present
-                        X-Customer-Secret: not present
+                      X-Customer-Id:
+                        - not present
+                      X-Customer-Secret:
+                        - not present
         '401':
           description: Unauthorised
           content:
@@ -5077,7 +5128,8 @@ paths:
                             date: '2017-04-05T10:43:07+00:00'
                             type: previous_payment
                     metadata:
-                      results: 1
+                      parameters:
+                        results: '1'
         '400':
           description: Bad Request
           content:
@@ -5091,17 +5143,18 @@ paths:
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      error:
-                        X-Customer-Id: not present
+                      X-Customer-Id:
+                        - not present
                 CustomerID and CustomerSecret Not Sent:
                   value:
                     operation_id: financial_v2_authorised_payments_get
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      error:
-                        X-Customer-Id: not present
-                        X-Customer-Secret: not present
+                      X-Customer-Id:
+                        - not present
+                      X-Customer-Secret:
+                        - not present
         '401':
           description: Unauthorised
           content:
@@ -5209,7 +5262,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  category_name: This value should not be blank
+                  category_name:
+                    - This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -5272,7 +5326,8 @@ paths:
                 code_id: validation_error
                 message: Bad request payload
                 errors:
-                  X-Client-ID: This value should not be blank
+                  X-Client-ID:
+                    - This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -5338,7 +5393,8 @@ paths:
                 code_id: Bad Request
                 message: Required field in payload not set
                 errors:
-                  match_attributes[0].type: this field is required
+                  match_attributes[0].type:
+                    - this field is required
         '401':
           description: Unauthorised request
         '405':
@@ -5362,7 +5418,7 @@ paths:
         For example:
           If the date the goal is created is `2023-01-01T00:00:00Z`, if a savings goal is created with the `target_amount` of `£110`, and the `target_datetime` is `2023-12-01T00:00:00Z`, then the recurrent amount will be `£10`.
 
-        When performing this calculation, it is asusmed that a customer is not going to deposit their first savings payment within the month of creating the goal.
+        When performing this calculation, it is assumed that a customer is not going to deposit their first savings payment within the month of creating the goal.
         If this is the desired behaviour however, all three parameters can be supplied and the endpoint will accept this.
       operationId: goals_v1_savings_post
       security:
@@ -5453,7 +5509,7 @@ paths:
                 operation_id: unknown
                 code_id: unknown
                 message: Route or resource not found
-                errors: []
+                errors: {}
         '500':
           description: Internal Server Error - An unexpected error occurred.
           content:
@@ -5479,6 +5535,7 @@ paths:
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryBudAccountID'
+        - $ref: '#/components/parameters/QueryDay'
       responses:
         '200':
           description: OK - The goals were retrieved successfully.
@@ -5528,7 +5585,7 @@ paths:
                     data: []
                     metadata:
                       results: 0
-                      account_id: null
+                      account_id: RxsYshVGded4JeilkXgWKdXA
         '400':
           description: Bad Request - The request was invalid.
           content:
@@ -5602,7 +5659,7 @@ paths:
                 operation_id: unknown
                 code_id: unknown
                 message: Route or resource not found
-                errors: []
+                errors: {}
         '500':
           description: Internal Server Error - An unexpected error occurred.
           content:
@@ -5659,7 +5716,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UpdateSavingsGoalResponse'
               example:
-                operation_id: goals_v1_savings_post
+                operation_id: goals_v1_savings_patch
                 data:
                   id: 19d1def3-5860-11ee-9342-3e1d60bc76f9
                   account_id: RxsYshVGded4JeilkXgWKdXA
@@ -5720,7 +5777,7 @@ paths:
                 operation_id: unknown
                 code_id: unknown
                 message: Route or resource not found
-                errors: []
+                errors: {}
         '500':
           description: Internal Server Error - An unexpected error occurred.
           content:
@@ -5768,7 +5825,7 @@ paths:
                 operation_id: unknown
                 code_id: unknown
                 message: Route or resource not found
-                errors: []
+                errors: {}
         '500':
           description: Internal Server Error - An unexpected error occurred.
           content:
@@ -5811,8 +5868,6 @@ paths:
                   amount:
                     value: '10.00'
                     currency: GBP
-              Credit Debit Indicator:
-                value:
                   credit_debit_indicator: credit
       responses:
         '201':
@@ -5877,7 +5932,7 @@ paths:
                 operation_id: unknown
                 code_id: unknown
                 message: Route or resource not found
-                errors: []
+                errors: {}
         '500':
           description: Internal Server Error - An unexpected error occurred.
           content:
@@ -5997,7 +6052,7 @@ paths:
                 operation_id: unknown
                 code_id: unknown
                 message: Route or resource not found
-                errors: []
+                errors: {}
         '500':
           description: Internal Server Error - An unexpected error occurred.
           content:
@@ -6043,6 +6098,7 @@ paths:
                 value:
                   amount:
                     value: '100.00'
+                    currency: GBP
               Credit Debit Indicator Updated:
                 value:
                   credit_debit_indicator: debit
@@ -6109,7 +6165,7 @@ paths:
                 operation_id: unknown
                 code_id: unknown
                 message: Route or resource not found
-                errors: []
+                errors: {}
         '500':
           description: Internal Server Error - An unexpected error occurred.
           content:
@@ -6158,7 +6214,7 @@ paths:
                 operation_id: unknown
                 code_id: unknown
                 message: Route or resource not found
-                errors: []
+                errors: {}
         '500':
           description: Internal Server Error - An unexpected error occurred.
           content:
@@ -6169,6 +6225,359 @@ paths:
                 operation_id: unknown
                 code_id: unknown
                 message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
+  /goals/v1/spending-budgets:
+    post:
+      tags:
+        - Spending Budgets
+      summary: Create Spending Budget
+      description: |
+        Create a spending budget.
+      operationId: goals_v1_spending_budgets_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSpendingBudgetRequest'
+            example:
+              account_id: RxsYshVGded4JeilkXgWKdXA
+              name: Travel Budget
+              amount:
+                value: '300.00'
+                currency: GBP
+              recurrency:
+                period: monthly
+                starting_day: 1
+              include:
+                categories:
+                  - l1: travel
+                merchants:
+                  slugs:
+                    - uber
+      responses:
+        '201':
+          description: Created - The budget was created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSpendingBudgetResponse'
+              example:
+                operation_id: goals_v1_spending_budgets_post
+                data:
+                  id: f46d76c4-56d3-11ee-ac69-d6df71eb5902
+                  account_id: RxsYshVGded4JeilkXgWKdXA
+                  name: Travel Budget
+                  amount:
+                    value: '300.00'
+                    currency: GBP
+                  recurrency:
+                    period: monthly
+                    starting_day: 1
+                  include:
+                    categories:
+                      - l1: travel
+                    merchants:
+                      slugs:
+                        - uber
+                  spent:
+                    from: '2023-10-19'
+                    to: '2023-10-31'
+                    amount:
+                      value: '160.59'
+                      currency: GBP
+                    ratio: '0.54'
+                  created_at: '2023-10-03T09:20:30Z'
+                  _links:
+                    transactions: /goals/v1/spending-budgets/f46d76c4-56d3-11ee-ac69-d6df71eb5902/transactions
+        '400':
+          description: Bad Request - The request was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauthorized - The request was not authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+    get:
+      tags:
+        - Spending Budgets
+      summary: Retrieve Spending Budgets
+      description: |
+        Retrieve all spending budgets.
+      operationId: goals_v1_spending_budgets_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/QueryBudAccountID'
+        - $ref: '#/components/parameters/QueryDay'
+      responses:
+        '200':
+          description: OK - The spending budgets were retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveSpendingBudgetsResponse'
+        '400':
+          description: Bad Request - The request was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauthorized - The request was not authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+    delete:
+      tags:
+        - Spending Budgets
+      summary: Delete all Spending Budgets
+      description: |
+        Delete all of a customers' spending budgets.
+      operationId: goals_v1_spending_budgets_delete_all
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+      responses:
+        '204':
+          description: No Content - The budgets were removed successfully.
+        '401':
+          description: Unauthorized - The request was not authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+        '404':
+          description: Not Found - The customer has no budgets to be deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+  /goals/v1/spending-budgets/{budget_id}:
+    patch:
+      tags:
+        - Spending Budgets
+      summary: Patch a Spending Budget
+      description: |
+        Update a Spending Budget with a given `budget_id`.
+      operationId: goals_v1_spending_budgets_patch
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/PathSpendingBudgetID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchSpendingBudget'
+      responses:
+        '200':
+          description: OK - The budget was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateSpendingBudgetResponse'
+              example:
+                operation_id: goals_v1_spending_budgets_patch
+                data:
+                  id: f46d76c4-56d3-11ee-ac69-d6df71eb5902
+                  account_id: RxsYshVGded4JeilkXgWKdXA
+                  name: Travel Budget
+                  amount:
+                    value: '300.00'
+                    currency: GBP
+                  recurrency:
+                    period: monthly
+                    starting_day: 1
+                  include:
+                    categories:
+                      - l1: travel
+                    merchants:
+                      slugs:
+                        - uber
+                  spent:
+                    from: '2023-10-19'
+                    to: '2023-10-31'
+                    amount:
+                      value: '160.59'
+                      currency: GBP
+                    ratio: '0.54'
+                  created_at: '2023-10-03T09:20:30Z'
+                  _links:
+                    transactions: /goals/v1/spending-budgets/f46d76c4-56d3-11ee-ac69-d6df71eb5902/transactions
+        '400':
+          description: Bad Request - The request was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauthorized - The request was not authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+        '404':
+          description: Not Found - The goal ID could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+    delete:
+      tags:
+        - Spending Budgets
+      summary: Delete a Spending Budget
+      description: |
+        Delete a specific spending budget with the given `budget_id`
+      operationId: goals_v1_spending_budgets_delete
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/PathSpendingBudgetID'
+      responses:
+        '204':
+          description: No Content - The budget was removed successfully.
+        '401':
+          description: Unauthorized - The request was not authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+        '404':
+          description: Not Found - The budget could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+  /goals/v1/spending-budgets/{budget_id}/transactions:
+    get:
+      tags:
+        - Spending Budgets
+      summary: Retrieve Spending Budget Transactions
+      description: |
+        Retrieve all of the transactions associated with a spending budget. The results of this endpoint are paginated with a default page size of `100` and a maximum of `200`. 
+        The page size is configurable by the `page_size` query parameter.
+        The next page of results can be retrieved using the `page_token` query parameter.
+      operationId: goals_v1_spending_budget_transactions_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/PathSpendingBudgetID'
+        - $ref: '#/components/parameters/QueryDay'
+        - $ref: '#/components/parameters/QueryBudPageToken'
+        - $ref: '#/components/parameters/QueryBudPageSize'
+      responses:
+        '200':
+          description: OK - The spending budget transactions were retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveSpendingBudgetTransactionsResponse'
+              example:
+                operation_id: goals_v1_spending_budget_transactions_get
+                data:
+                  - transaction_id: fbdc28e82f0f137586a526a88ec4a6be
+                    account_id: RxsYshVGded4JeilkXgWKdXA
+                    provider: BankOfBud
+                    description: uber taxi
+                    credit_debit_indicator: debit
+                    status: booked
+                    amount:
+                      value: '16.39'
+                      currency: GBP
+                    date_time: '2023-10-03T10:00:00Z'
+                    enrichments:
+                      categories:
+                        l1:
+                          slug: transport
+                          confidence: '0.99'
+                        l2:
+                          slug: taxi
+                          confidence: '0.99'
+                      merchant:
+                        id: 9f345fcb-d1ee-4e79-a23e-510fb8dbd61f
+                        slug: uber
+                        display_name: Uber
+                        logo: https://url/uber_logo.jpeg
+                metadata:
+                  results: 1
+                  page_token: b21055a9a9f46fc794a2e6855c65abd7e317181039fc6930daabac5822911d14a84895ecd947e2b5abdcb22e4fcc2c594e1f661dc63e34b9ba88760724047990896f7581a0786c2605dce19c6a9d80d1044f963b74fea0a929c0a4465a6e67378a74dce38ec5e26ae4cc804b62fd666d5df4cf2e7f524bd99e5523bc5d471768065c036dc0c73122705b280817fbbd7d9aa31f271d72cd3877d999dcb9a5b1c0be0c05
+                  page_size: 100
+                  budget_id: 19d1def3-5860-11ee-9342-3e1d60bc76f9
+        '400':
+          description: Bad Request - The request was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauthorized - The request was not authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
   /v1/regular-transactions:
     get:
       tags:
@@ -6272,7 +6681,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  client_id: This value should not be blank
+                  client_id:
+                    - This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -6417,7 +6827,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  client_id: This value should not be blank
+                  client_id:
+                    - This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -6569,7 +6980,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  client_id: This value should not be blank
+                  client_id:
+                    - This value should not be blank
         '401':
           description: Unauthorised request
         '404':
@@ -6917,7 +7329,8 @@ paths:
                 code_id: failed_validation
                 message: Invalid request payload.
                 errors:
-                  - 'invalid ''from'' date: ''7th March 2023'''
+                  from:
+                    - 'invalid ''from'' date: ''7th March 2023'''
         '401':
           description: Unauthorised Request - the request was not authenticated or authorised
           content:
@@ -7408,7 +7821,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateBucketResponse'
               example:
-                operation_id: aggregations_v2_bucket_post
+                operation_id: aggregations_v2_buckets_post
                 data:
                   bucket_id: a95e911c-900a-437c-a91e-d31c09ffd3ce
         '400':
@@ -7492,7 +7905,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetBucketResponse'
               example:
-                operation_id: aggregations_v2_bucket_get
+                operation_id: aggregations_v2_buckets_get
                 data:
                   bucket_id: a95e911c-900a-437c-a91e-d31c09ffd3ce
                   name: example-bucket
@@ -8782,7 +9195,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListTransactionsResponse'
               example:
-                operation_id: v2_affordability_transactions_get
+                operation_id: v2_transactions_get
                 data:
                   - transaction_id: da4ad499c86956e65e811fc88f6b54af
                     account_id: 72fa858459bd32ce0b5fd9daf813fd07
@@ -8794,7 +9207,8 @@ paths:
                       value: '10.99'
                       currency: GBP
                     date_time: '2022-01-02T15:00:00Z'
-                metadata: []
+                metadata:
+                  results: 1
         '400':
           description: The request contains an invalid payload
         '401':
@@ -8929,7 +9343,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  redirect_url: This value should not be blank
+                  redirect_url:
+                    - This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -9028,7 +9443,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  redirect_url: This value should not be blank
+                  redirect_url:
+                    - This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -9125,7 +9541,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  redirect_url: This value should not be blank
+                  redirect_url:
+                    - This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -9240,7 +9657,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  recipient.sort_code: Sort code must match `^\d{6}$`
+                  recipient.sort_code:
+                    - Sort code must match `^\d{6}$`
         '401':
           description: Unauthorised request
         '405':
@@ -9458,7 +9876,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  payment_id: Value not found
+                  payment_id:
+                    - Value not found
         '405':
           description: An unexpected HTTP method was used
         5XX:
@@ -9520,7 +9939,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  payment: unable to find payment for [Payment ID]
+                  payment:
+                    - unable to find payment for [Payment ID]
         '500':
           description: An internal server error has occurred
           content:
@@ -9563,7 +9983,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  payment: Payment initiation failed
+                  payment:
+                    - Payment initiation failed
         '401':
           description: Unauthorised request
         '404':
@@ -9577,7 +9998,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  payment_id: Value not found
+                  payment_id:
+                    - Value not found
         '405':
           description: An unexpected HTTP method was used
         5XX:
@@ -9682,7 +10104,7 @@ paths:
                         - code: FAILED_FUNDS_CONFIRMATION
                           description: The call to the provider to confirm funds returned an error
                       created_at: '2020-02-02T12:29:33.428944815Z'
-                    metadata: []
+                    metadata: {}
                 Payment Status Europe:
                   value:
                     operation_id: v1_payments_single_payment_id_get
@@ -9765,7 +10187,7 @@ paths:
                         - code: FAILED_FUNDS_CONFIRMATION
                           description: The call to the provider to confirm funds returned an error
                       created_at: '2020-02-02T12:29:33.428944815Z'
-                    metadata: []
+                    metadata: {}
         '401':
           description: Unauthorised request
         '404':
@@ -9779,7 +10201,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  payment_id: Value not found
+                  payment_id:
+                    - Value not found
         '405':
           description: An unexpected HTTP method was used
         5XX:
@@ -9843,8 +10266,10 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  recipient.sort_code: Sort code must match `^\d{6}$`
-                  standing_order_details.recipient.name: Name must not be empty
+                  recipient.sort_code:
+                    - Sort code must match `^\d{6}$`
+                  standing_order_details.recipient.name:
+                    - Name must not be empty
         '401':
           description: Unauthorised request
         '405':
@@ -9947,7 +10372,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  filter: X-Date-From is in the wrong format (expected 2006-01-02T15:04:05Z)
+                  filter:
+                    - X-Date-From is in the wrong format (expected 2006-01-02T15:04:05Z)
         '401':
           description: Unauthorised request
         '405':
@@ -9984,7 +10410,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  payment: Payment initiation failed
+                  payment:
+                    - Payment initiation failed
         '401':
           description: Unauthorised request
         '404':
@@ -9998,7 +10425,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  payment_id: Value not found
+                  payment_id:
+                    - Value not found
         '405':
           description: An unexpected HTTP method was used
         5XX:
@@ -10078,7 +10506,7 @@ paths:
                   last_payment_date: '2021-02-02T12:29:33.428944815Z'
                   frequency: monthly
                   required_action: null
-                metadata: []
+                metadata: {}
         '401':
           description: Unauthorised request
         '404':
@@ -10092,7 +10520,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  payment_id: Value not found
+                  payment_id:
+                    - Value not found
         '405':
           description: An unexpected HTTP method was used
         5XX:
@@ -10154,8 +10583,10 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  recipient.sort_code: Sort code must match `^\d{6}$`
-                  standing_order_details.recipient.name: Name must not be empty
+                  recipient.sort_code:
+                    - Sort code must match `^\d{6}$`
+                  standing_order_details.recipient.name:
+                    - Name must not be empty
         '401':
           description: Unauthorised request
         '405':
@@ -10255,7 +10686,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  filter: X-Date-From is in the wrong format (expected 2006-01-02T15:04:05Z)
+                  filter:
+                    - X-Date-From is in the wrong format (expected 2006-01-02T15:04:05Z)
         '401':
           description: Unauthorised request
         '405':
@@ -10292,7 +10724,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  payment: Payment initiation failed
+                  payment:
+                    - Payment initiation failed
         '401':
           description: Unauthorised request
         '404':
@@ -10306,7 +10739,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  payment_id: Value not found
+                  payment_id:
+                    - Value not found
         '405':
           description: An unexpected HTTP method was used
         5XX:
@@ -10397,7 +10831,8 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  payment_id: Value not found
+                  payment_id:
+                    - Value not found
         '405':
           description: An unexpected HTTP method was used
         5XX:
@@ -10483,6 +10918,7 @@ paths:
                   credit_card_transactions:
                     - transaction_id: 864a3efc-6104-4dde-99a0-c3d91a8bcecf
                       account_id: ad7d5904-39ab-4736-b726-5792c7a2146e
+                      credit_debit_indicator: debit
                       description: CREDIT CARD PAYMENT
                       provider: BankOfBud
                       status: booked
@@ -10534,6 +10970,7 @@ paths:
                   loan_transactions:
                     - transaction_id: 864a3efc-6104-4dde-99a0-c3d91a8bcecf
                       account_id: ad7d5904-39ab-4736-b726-5792c7a2146e
+                      credit_debit_indicator: debit
                       description: CAR LOAN REPAYMENT
                       provider: BankOfBud
                       status: booked
@@ -10585,6 +11022,7 @@ paths:
                   overdraft_transactions:
                     - transaction_id: 864a3efc-6104-4dde-99a0-c3d91a8bcecf
                       account_id: ad7d5904-39ab-4736-b726-5792c7a2146e
+                      credit_debit_indicator: debit
                       description: OVERDRAFT FEE
                       provider: BankOfBud
                       status: booked
@@ -10636,6 +11074,7 @@ paths:
                   saver_transactions:
                     - transaction_id: 864a3efc-6104-4dde-99a0-c3d91a8bcecf
                       account_id: ad7d5904-39ab-4736-b726-5792c7a2146e
+                      credit_debit_indicator: debit
                       description: SAVINGS
                       provider: BankOfBud
                       status: booked
@@ -10704,8 +11143,8 @@ paths:
                         details: https://domain/insights/v1/actionable/balances/in_overdraft/in_overdraft_8789764a-df2f-4589-b550-00bcd0e9cb2c/details
                 metadata:
                   results: 1
-                  from: 1667260800
-                  to: 1684258200
+                  from: '2022-11-01T00:00:00Z'
+                  to: '2023-05-16T17:30:00Z'
                   options: []
   /insights/v1/actionable/balances/{type}/{id}/details:
     get:
@@ -10770,11 +11209,13 @@ paths:
                               value: '1000.00'
                               currency: GBP
                     transactions: []
-                  details: []
+                  details: {}
                 metadata:
-                  from: 1667260800
-                  to: 1684258200
+                  from: '2022-11-01T00:00:00Z'
+                  to: '2023-05-16T17:30:00Z'
                   options: []
+        '404':
+          description: Insight not found. This can occur if the returned insight was invalidated by an account refresh or other change to customer data.
   /insights/v1/actionable/income:
     get:
       tags:
@@ -10832,10 +11273,9 @@ paths:
                                 slug: employment_income
                                 confidence: '0.98'
                             regularity:
-                              slug: monthly
-                              confidence: '0.99'
+                              frequency: monthly
                               predicted_date_times:
-                                date_time: '2023-05-10T10:00:00Z'
+                                - '2023-05-10T10:00:00Z'
                       _links:
                         details: https://domain/insights/v1/actionable/income/late_income/late_income_8789764a-df2f-4589-b550-00bcd0e9cb2c/details
                   totals:
@@ -10847,8 +11287,8 @@ paths:
                         currency: GBP
                 metadata:
                   results: 1
-                  from: 1667260800
-                  to: 1684258200
+                  from: '2022-11-01T00:00:00Z'
+                  to: '2023-05-16T17:30:00Z'
                   options:
                     - insight_type: late_income
                       option: minimum_days_late_threshold
@@ -10949,8 +11389,8 @@ paths:
                     days_late: 11
                     expected_date_time: '2023-05-05T10:00:00Z'
                 metadata:
-                  from: 1667260800
-                  to: 1684258200
+                  from: '2022-11-01T00:00:00Z'
+                  to: '2023-05-16T17:30:00Z'
                   options:
                     - insight_type: late_income
                       option: minimum_days_late_threshold
@@ -10958,6 +11398,8 @@ paths:
                     - insight_type: late_income
                       option: minimum_value_threshold
                       value: '100.00'
+        '404':
+          description: Insight not found. This can occur if the returned insight was invalidated by an account refresh or other change to customer data.
   /insights/v1/actionable/spending:
     get:
       tags:
@@ -11011,10 +11453,9 @@ paths:
                                 slug: mortgage
                                 confidence: '0.98'
                             regularity:
-                              slug: monthly
-                              confidence: '0.99'
+                              frequency: monthly
                               predicted_date_times:
-                                date_time: '2023-05-10T10:00:00Z'
+                                - '2023-05-10T10:00:00Z'
                       _links:
                         details: https://domain/insights/v1/actionable/spending/late_income/late_income_8789764a-df2f-4589-b550-00bcd0e9cb2c/details
                   totals:
@@ -11026,8 +11467,8 @@ paths:
                         currency: GBP
                 metadata:
                   results: 1
-                  from: 1667260800
-                  to: 1684258200
+                  from: '2022-11-01T00:00:00Z'
+                  to: '2023-05-16T17:30:00Z'
                   options:
                     - insight_type: late_payment
                       option: minimum_days_late_threshold
@@ -11124,8 +11565,8 @@ paths:
                     days_late: 11
                     expected_date_time: '2023-05-05T10:00:00Z'
                 metadata:
-                  from: 1667260800
-                  to: 1684258200
+                  from: '2022-11-01T00:00:00Z'
+                  to: '2023-05-16T17:30:00Z'
                   options:
                     - insight_type: late_payment
                       option: minimum_days_late_threshold
@@ -11133,6 +11574,8 @@ paths:
                     - insight_type: late_payment
                       option: minimum_value_threshold
                       value: '10.00'
+        '404':
+          description: Insight not found. This can occur if the returned insight was invalidated by an account refresh or other change to customer data.
   /v1/signal/custom/components:
     get:
       tags:
@@ -12798,6 +13241,7 @@ components:
         - finished_connecting_accounts
         - expired
         - status
+      nullable: true
       properties:
         created_at:
           allOf:
@@ -12932,9 +13376,7 @@ components:
           description: |
             Total number of accounts the customer has connected.
         customer_link:
-          nullable: true
-          allOf:
-            - $ref: '#/components/schemas/CustomerLink'
+          $ref: '#/components/schemas/CustomerLink'
         review_status:
           $ref: '#/components/schemas/ReviewStatus'
         review_date:
@@ -14053,14 +14495,18 @@ components:
     Error:
       title: Error Object
       type: object
+      nullable: true
       description: Contains a field specific error message
       additionalProperties:
         type: string
     Errors:
       title: Array of Error Object
       description: Contains a list of error messages
-      items:
-        $ref: '#/components/schemas/Error'
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          type: string
     ServerErrorResponse:
       title: Server Error Response
       type: object
@@ -15334,7 +15780,6 @@ components:
           $ref: '#/components/schemas/IngestResponseStatus'
         error:
           $ref: '#/components/schemas/Error'
-          nullable: true
     IngestResponseTask:
       title: Ingest Response Task
       description: Expected response structure.
@@ -15356,8 +15801,9 @@ components:
             $ref: '#/components/schemas/IngestResponseSubTask'
     IngestStatusResponse:
       title: Ingest Response
-      type: object
       description: Expected response structure.
+      type: object
+      nullable: true
       required:
         - operation_id
         - data
@@ -16190,7 +16636,6 @@ components:
             $ref: '#/components/schemas/CustomerCreated'
         metadata:
           $ref: '#/components/schemas/ResultsMetadata'
-          nullable: true
     CustomerContextResponse:
       title: Customer Context Response
       description: Customer context response.
@@ -16316,7 +16761,7 @@ components:
         operation_id:
           $ref: '#/components/schemas/OperationId'
         data:
-          anyOf:
+          oneOf:
             - $ref: '#/components/schemas/CategoriesFlat'
             - $ref: '#/components/schemas/CategoriesMap'
         metadata:
@@ -16451,6 +16896,8 @@ components:
     CategoriesTotalTrendsV2Response:
       type: object
       properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
         data:
           type: array
           items:
@@ -17511,7 +17958,7 @@ components:
           description: |
             The number of results returned in the response.
 
-            Example: `1`
+            Example: 1
           example: 1
     RetrieveSavingsGoalsResponse:
       title: Retrieve Savings Goals Response
@@ -17743,11 +18190,12 @@ components:
               - `2023-01-17T17:29:51-08:00`
     BudNextPageTokenMetadata:
       title: Next Page Token
-      type: string
-      description: |
-        The token to use to fetch the next page of results. This is only set if there are more results to fetch.
-
-        Example: `b21055a9a9f46fc794a2e6855c65abd7e317181039fc6930daabac5822911d14a84895ecd947e2b5abdcb22e4fcc2c594e1f661dc63e34b9ba88760724047990896f7581a0786c2605dce19c6a9d80d1044f963b74fea0a929c0a4465a6e67378a74dce38ec5e26ae4cc804b62fd666d5df4cf2e7f524bd99e5523bc5d471768065c036dc0c73122705b280817fbbd7d9aa31f271d72cd3877d999dcb9a5b1c0be0c05`
+      type: object
+      properties:
+        next_page_token:
+          type: string
+          description: |
+            The token to use to fetch the next page of results. This is only set if there are more results to fetch.
       example: b21055a9a9f46fc794a2e6855c65abd7e317181039fc6930daabac5822911d14a84895ecd947e2b5abdcb22e4fcc2c594e1f661dc63e34b9ba88760724047990896f7581a0786c2605dce19c6a9d80d1044f963b74fea0a929c0a4465a6e67378a74dce38ec5e26ae4cc804b62fd666d5df4cf2e7f524bd99e5523bc5d471768065c036dc0c73122705b280817fbbd7d9aa31f271d72cd3877d999dcb9a5b1c0be0c05
     RetrieveSavingsGoalActionsResponse:
       title: Retrieve Savings Goal Actions Response
@@ -17891,6 +18339,504 @@ components:
 
                 Example: "81a68821-dca6-4771-80d4-002c7fce412e"
               example: 81a68821-dca6-4771-80d4-002c7fce412e
+    BaseSpendingBudget:
+      title: Spending Budget
+      type: object
+      required:
+        - name
+        - amount
+        - recurrency
+      properties:
+        name:
+          title: Name
+          type: string
+          description: |
+            The name of the spending budget.
+
+            Example: `Travel`
+          example: Travel
+        amount:
+          title: Amount
+          type: object
+          description: |
+            The amount of money to be budgeted for. Must be greater than 0.
+          required:
+            - value
+            - currency
+          properties:
+            value:
+              $ref: '#/components/schemas/BudMonetaryValue'
+            currency:
+              $ref: '#/components/schemas/BudCurrency'
+        recurrency:
+          title: Recurrency
+          type: object
+          description: |
+            Whether and/or how often the budget recurs.
+
+            The `starting_day` is only required for budgets with a recurring period e.g. `monthly`
+
+            New periods may be added without a breaking change notice.
+          required:
+            - period
+          properties:
+            period:
+              title: Period
+              type: string
+              description: |
+                The period at which a budget recurs (if at all).
+
+                Currently supported options are:
+                - `one-off`
+                - `monthly`
+
+                New periods may be added without a breaking change notice.
+            starting_day:
+              title: Starting Day
+              type: integer
+              description: |
+                The day of which the budget period starts. Not required if a budget is `one-off`.
+
+                Must be between 1 and 28 for `monthly` budgets.
+        account_id:
+          title: Account ID
+          type: string
+          description: |
+            The account id of the account the spending budget is associated with. 
+
+            Only transactions from this account will be included in budget calculations.
+
+            Example: `RxsYshVGded4JeilkXgWKdXA`
+          example: RxsYshVGded4JeilkXgWKdXA
+        include:
+          title: Include
+          type: object
+          description: |
+            The inclusion criteria for transactions to be included in the budget.
+          properties:
+            categories:
+              title: Categories
+              description: |
+                The categories of transactions to be included in the budget. 
+
+                If L2 categories are specified, they must be grouped underneath their corresponding L1 category.
+
+                All categories specified must be compatible with the category taxonomy used for that customer.
+              type: array
+              items:
+                required:
+                  - l1
+                properties:
+                  l1:
+                    title: L1
+                    type: string
+                    description: |
+                      L1 category to include in the filter. Must be specified if using category filtering.
+                  l2:
+                    title: L2
+                    type: array
+                    description: |
+                      L2 categories to include in the filter. Must all correspond to the parent L1 category specified.
+                    items:
+                      type: string
+            merchants:
+              title: Merchants
+              type: object
+              description: |
+                The merchants of transactions to be included in the budget.
+              properties:
+                slugs:
+                  title: Slugs
+                  type: array
+                  description: |
+                    The slugs of merchants to be included. E.g. `netflix` or `uber`
+                  items:
+                    type: string
+    SpendingBudget:
+      allOf:
+        - $ref: '#/components/schemas/BaseSpendingBudget'
+        - type: object
+          required:
+            - id
+            - name
+            - amount
+            - recurrency
+            - spent
+            - created_at
+          properties:
+            id:
+              title: ID
+              type: string
+              description: |
+                The ID of the spending budget.
+
+                Example: "81a68821-dca6-4771-80d4-002c7fce412e"
+            spent:
+              title: Spent
+              type: object
+              description: |
+                The amount of money spent from the budget for the given time period.
+              required:
+                - from
+                - to
+                - amount
+                - ratio
+              properties:
+                from:
+                  title: From
+                  type: string
+                  description: |
+                    The date from which the budgeting period began in the format [RFC-3339](https://www.ietf.org/rfc/rfc3339.txt).
+
+                    Example: `2023-10-01T00:00:00Z`
+                to:
+                  title: From
+                  type: string
+                  description: |
+                    The date to which the budgeting period ends in the format [RFC-3339](https://www.ietf.org/rfc/rfc3339.txt).
+
+                    Example: `2023-10-31T00:00:00Z`
+                amount:
+                  title: Amount
+                  type: object
+                  description: |
+                    The amount of money spent from the budget.
+                  required:
+                    - value
+                    - currency
+                  properties:
+                    value:
+                      $ref: '#/components/schemas/BudMonetaryValue'
+                    currency:
+                      $ref: '#/components/schemas/BudCurrency'
+                ratio:
+                  title: Ratio
+                  type: string
+                  description: |
+                    The ratio of spent money to the total budget amount.
+            created_at:
+              title: Created At
+              type: string
+              description: |
+                The date and time the budget was created in the format [RFC-3339](https://www.ietf.org/rfc/rfc3339.txt).
+
+                Example: `2023-10-17T00:00:00Z`
+            _links:
+              title: _links
+              type: object
+              description: |
+                Useful follow up links
+              properties:
+                transactions:
+                  title: Transactions Link
+                  type: string
+                  description: |
+                    Link to follow to get transactions included in the budget.
+    RetrieveSpendingBudgetsResponse:
+      title: Retrieve Spending Budgets Response
+      type: object
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          title: Operation ID
+          type: string
+          enum:
+            - goals_v1_spending_budgets_get
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpendingBudget'
+        metadata:
+          allOf:
+            - $ref: '#/components/schemas/BudResultsMetadata'
+            - type: object
+              properties:
+                account_id:
+                  title: Account ID
+                  type: string
+                  description: |
+                    The ID of the account used for filtering in the request.
+
+                    Example: "RxsYshVGded4JeilkXgWKdXA"
+                  example: RxsYshVGded4JeilkXgWKdXA
+    CreateSpendingBudgetRequest:
+      title: Create Spending Budget Request
+      allOf:
+        - $ref: '#/components/schemas/BaseSpendingBudget'
+    CreateSpendingBudgetResponse:
+      title: Create Spending Budget Response
+      type: object
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          title: Operation ID
+          type: string
+          enum:
+            - goals_v1_spending_budgets_post
+        data:
+          $ref: '#/components/schemas/SpendingBudget'
+    PatchSpendingBudget:
+      title: Patch Spending Budget
+      type: object
+      properties:
+        name:
+          title: Name
+          type: string
+          description: |
+            The name of the spending budget.
+
+            Example: `Travel`
+          example: Travel
+        amount:
+          title: Amount
+          type: object
+          description: |
+            The amount of money to be budgeted for. Must be greater than 0. 
+
+            Note: The Currency of a spending budget cannot be updated.
+          required:
+            - value
+          properties:
+            value:
+              $ref: '#/components/schemas/BudMonetaryValue'
+        recurrency:
+          title: Recurrency
+          type: object
+          description: |
+            Whether and/or how often the budget recurs.
+
+            The `starting_day` is only required for budgets with a recurring period e.g. `monthly`
+
+            New periods may be added without a breaking change notice.
+          required:
+            - period
+          properties:
+            period:
+              title: Period
+              type: string
+              description: |
+                The period at which a budget recurs (if at all).
+
+                Currently supported options are:
+                - `one-off`
+                - `monthly`
+
+                New periods may be added without a breaking change notice.
+            starting_day:
+              title: Starting Day
+              type: integer
+              description: |
+                The day of which the budget period starts. Not required if a budget is `one-off`.
+
+                Must be between 1 and 28 for `monthly` budgets.
+        account_id:
+          title: Account ID
+          type: string
+          description: |
+            The account id of the account the spending budget is associated with. 
+
+            Only transactions from this account will be included in budget calculations.
+
+            Example: `RxsYshVGded4JeilkXgWKdXA`
+          example: RxsYshVGded4JeilkXgWKdXA
+        include:
+          title: Include
+          type: object
+          description: |
+            The inclusion criteria for transactions to be included in the budget.
+          properties:
+            categories:
+              title: Categories
+              description: |
+                The categories of transactions to be included in the budget. 
+
+                If L2 categories are specified, they must be grouped underneath their corresponding L1 category.
+
+                All categories specified must be compatible with the category taxonomy used for that customer.
+              type: array
+              items:
+                required:
+                  - l1
+                properties:
+                  l1:
+                    title: L1
+                    type: string
+                    description: |
+                      L1 category to include in the filter. Must be specified if using category filtering.
+                  l2:
+                    title: L2
+                    type: array
+                    description: |
+                      L2 categories to include in the filter. Must all correspond to the parent L1 category specified.
+                    items:
+                      type: string
+            merchants:
+              title: Merchants
+              type: object
+              description: |
+                The merchants of transactions to be included in the budget.
+              properties:
+                slugs:
+                  title: Slugs
+                  type: array
+                  description: |
+                    The slugs of merchants to be included. E.g. `netflix` or `uber`
+                  items:
+                    type: string
+    UpdateSpendingBudgetResponse:
+      title: Update Spending Budget Response
+      type: object
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          title: Operation ID
+          type: string
+          enum:
+            - goals_v1_spending_budgets_patch
+        data:
+          $ref: '#/components/schemas/SpendingBudget'
+    schemas-Categories:
+      title: Categories
+      type: object
+      description: |
+        Categories enrichment associated with a Transaction, as generated by Bud's artificial intelligence models. 
+        Currently two levels of category are supported, with `l1` being a coarse-grained category level and `l2` being
+        more refined.
+      required:
+        - l1
+        - l2
+      properties:
+        l1:
+          $ref: '#/components/schemas/Category'
+          description: Level 1 Category
+        l2:
+          $ref: '#/components/schemas/Category'
+          description: Level 2 Category
+    goals-components_schemas-Merchant:
+      title: Merchant
+      type: object
+      description: |
+        Merchant enrichment associated with a Transaction, as generated using a combination of Bud's artificial 
+        intelligence models and database of known merchants.
+      required:
+        - id
+        - slug
+        - display_name
+      properties:
+        id:
+          type: string
+          description: UUID corresponding to the merchant, if available. Subject to version control.
+        slug:
+          type: string
+          description: Unique human readable identifier of the merchant. Not subject to version control.
+        display_name:
+          type: string
+          description: UI friendly display name for the merchant.
+        logo:
+          type: string
+          description: URL supplying merchant logo, if available.
+    schemas-Enrichments:
+      title: Enrichments
+      type: object
+      description: Contextual enrichments associated with a Transaction
+      properties:
+        categories:
+          $ref: '#/components/schemas/schemas-Categories'
+        merchant:
+          $ref: '#/components/schemas/goals-components_schemas-Merchant'
+    goals-components_schemas-Transaction:
+      title: Transaction
+      type: object
+      description: A financial transaction
+      required:
+        - transaction_id
+        - account_id
+        - description
+        - amount
+        - credit_debit_indicator
+        - status
+        - date_time
+      properties:
+        transaction_id:
+          type: string
+          description: Unique identifier for the transaction. May be mutable depending on original ingestion source.
+        account_id:
+          type: string
+          description: Identifier for the account associated with the transaction.
+        provider:
+          type: string
+          description: Name of the transaction source provider. Optional as it may not have been supplied when using first party data.
+        description:
+          type: string
+          description: Description of the transaction.
+        credit_debit_indicator:
+          type: string
+          description: Credit/Debit Indicator
+          enum:
+            - credit
+            - debit
+        status:
+          type: string
+          description: Status of the transaction. Defaults to booked.
+          enum:
+            - booked
+            - pending
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        date_time:
+          type: string
+          description: Date of the transaction compliant with RFC3339.
+        enrichments:
+          $ref: '#/components/schemas/schemas-Enrichments'
+    BudPageSizeMetadata:
+      title: Page Size
+      type: integer
+      description: |
+        The size of the page requested.
+
+        Example: `100`
+      example: 100
+    RetrieveSpendingBudgetTransactionsResponse:
+      title: Retrieve Spending Budget Transactions Response
+      type: object
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          title: Operation ID
+          type: string
+          enum:
+            - goals_v1_spending_budget_transactions_get
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/goals-components_schemas-Transaction'
+        metadata:
+          allOf:
+            - $ref: '#/components/schemas/BudResultsMetadata'
+            - type: object
+              properties:
+                budget_id:
+                  title: Budget ID
+                  type: string
+                  description: |
+                    The ID of the spending budget the transactions were retrieved for.
+
+                    Example: "81a68821-dca6-4771-80d4-002c7fce412e"
+                  example: 81a68821-dca6-4771-80d4-002c7fce412e
+                page_size:
+                  $ref: '#/components/schemas/BudPageSizeMetadata'
+                next_page_token:
+                  $ref: '#/components/schemas/BudNextPageTokenMetadata'
     RegularPaymentsConfirmed:
       title: Regular Payment Object
       type: object
@@ -19182,18 +20128,14 @@ components:
             Month (format `YYYY-MM`)
         amount:
           $ref: '#/components/schemas/BudAmount'
-    IncomeAndExpenditureTransactionsLinks:
-      title: Income & Expenditure Transactions Links
+    TransactionsLinks:
+      title: Affordability Transaction Links
       type: object
-      description: Income & Expenditure Transactions Links
+      description: Transaction Links
       required:
-        - income_transactions
-        - expenditure_transactions
+        - transactions
       properties:
-        income_transactions:
-          type: string
-          format: url
-        expenditure_transactions:
+        transactions:
           type: string
           format: url
     ReportTotal:
@@ -19215,7 +20157,21 @@ components:
         predicted_monthly:
           $ref: '#/components/schemas/BudAmount'
         _links:
-          $ref: '#/components/schemas/IncomeAndExpenditureTransactionsLinks'
+          $ref: '#/components/schemas/TransactionsLinks'
+    IncomeAndExpenditureTransactionsLinks:
+      title: Income & Expenditure Transactions Links
+      type: object
+      description: Income & Expenditure Transactions Links
+      required:
+        - income_transactions
+        - expenditure_transactions
+      properties:
+        income_transactions:
+          type: string
+          format: url
+        expenditure_transactions:
+          type: string
+          format: url
     MonthlyIncomeExpenditurePrediction:
       title: Monthly Income & Expenditure Predictions
       type: object
@@ -19239,16 +20195,6 @@ components:
           $ref: '#/components/schemas/BudAmount'
         _links:
           $ref: '#/components/schemas/IncomeAndExpenditureTransactionsLinks'
-    TransactionsLinks:
-      title: Affordability Transaction Links
-      type: object
-      description: Transaction Links
-      required:
-        - transactions
-      properties:
-        transactions:
-          type: string
-          format: url
     MonthlyRangePrediction:
       title: Monthly Range Prediction
       type: object
@@ -19559,8 +20505,10 @@ components:
             - active
             - inactive
         maintenance_window:
-          $ref: '#/components/schemas/MaintenanceWindowObject'
-          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/MaintenanceWindowObject'
+            - type: object
+              nullable: true
         country_code:
           type: string
           description: Provider country code following the ISO 3166 alpha-3 code format
@@ -22751,6 +23699,18 @@ components:
         Use this parameter to filter the results on data associated with the given account id.
 
         Example: `RxsYshVGded4JeilkXgWKdXA`
+    QueryDay:
+      in: query
+      name: day
+      schema:
+        type: string
+      example: '2019-02-29T12:23:00Z'
+      description: |
+        The day for which results are to be retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+        Examples:
+          - `2023-01-17T17:29:51Z`
+          - `2023-01-17T17:29:51-08:00`
     PathGoalID:
       name: goal_id
       in: path
@@ -22787,6 +23747,17 @@ components:
 
         Example: `884d3e01-757c-4963-8e97-c1be109bbbcc`
       example: 884d3e01-757c-4963-8e97-c1be109bbbcc
+    PathSpendingBudgetID:
+      name: budget_id
+      in: path
+      schema:
+        type: string
+      required: true
+      description: |
+        The ID of the spending budget.
+
+        Example: `81a68821-dca6-4771-80d4-002c7fce412e`
+      example: 81a68821-dca6-4771-80d4-002c7fce412e
     FutureTransactionsMonthsProjection:
       in: query
       name: months
@@ -23108,64 +24079,65 @@ components:
 x-tagGroups:
   - name: ''
     tags:
-      - Authentication
       - OAuth2
+      - Authentication
   - name: ''
     tags:
-      - Connect API
       - Create a Connection
       - Manage a Connection
       - Ingest First Party Data
+      - Connect API
   - name: ''
     tags:
-      - Customers API
       - Manage Customers
+      - Customers API
   - name: ''
     tags:
-      - Enrichment API
       - Enrichment Resources
       - Enrichment Totals
+      - Enrichment API
   - name: ''
     tags:
-      - Financial Data API
       - Retrieve Financial Data
       - Manage Financial Data
+      - Financial Data API
   - name: ''
     tags:
-      - Goals API
       - Savings Goals
+      - Spending Budgets
+      - Goals API
   - name: ''
     tags:
-      - Smart Finders API
       - Regular Payments Finder
       - Income Finder
       - Loan Finder
       - Debt Finder
       - Product Finder
       - Subscription Finder
+      - Smart Finders API
   - name: ''
     tags:
-      - Assess API
       - Customer Applications
       - Customer Application Links
       - Aggregation Buckets
       - Assess Affordability
       - Retrieve Affordability Report
+      - Assess API
   - name: ''
     tags:
-      - Payments API
       - Initiate Payment - Bud license
       - Initiate Payment - Client license
       - Manage Payments
+      - Payments API
   - name: ''
     tags:
-      - Characteristics API
       - Retrieve Customer Characteristics
+      - Characteristics API
   - name: ''
     tags:
-      - Insights API
       - Retrieve Actionable Insights
       - Custom Signals
       - Everyday Money Management
       - Customer Characteristics
       - Income and Expenditure Insight
+      - Insights API
