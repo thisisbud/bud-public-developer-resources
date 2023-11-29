@@ -295,6 +295,10 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.9.5: 29/11/2023**
+    > - Added the `categories` field to the __Retrieve Future Transactions V2__ endpoint.
+    > - Update the examples for the __Retrieve Subscriptions V1__ endpoint.
+
     **Version 2.9.4: 09/11/2023**
     > - Removed the deprecated __Retrieve Future Transactions V1__ endpoint.
     > - Removed the deprecated __Retrieve Income Transactions V1__ endpoint.
@@ -6651,15 +6655,21 @@ paths:
                 data:
                   - transaction_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
                     account_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
-                    transaction_description: Bud
+                    transaction_description: Energy Bill
                     label: 8a29913437a6d2e72a9576a15593f43d92cfc2eb-0
                     period: monthly
                     date_time: '2019-07-01T01:00:00Z'
                     amount:
                       value: '100.00'
                       currency: GBP
-                    credit_debit_indicator: credit
+                    credit_debit_indicator: debit
                     confidence: '0.9892'
+                    categories:
+                      l1:
+                        slug: utilities
+                        confidence: '1.00'
+                      l2:
+                        slug: utilities_energy
                     future_transactions:
                       - date: '2022-08-01'
                         amount:
@@ -6681,7 +6691,7 @@ paths:
                   results: 1
                   months: 4
                   change_percentages:
-                    - l2: bills
+                    - l2: utilities_energy
                       value: 2
         '204':
           description: No transactions
@@ -7166,11 +7176,11 @@ paths:
               example:
                 operation_id: v1_subscriptions_get
                 data:
-                  - subscription_type: tv_and_film
+                  - subscription_type: media_streaming
                     period: monthly
                     categories:
-                      l1: bills
-                      l2: tv_broadband_and_phone
+                      l1: media_and_telecoms
+                      l2: tv_streaming_services
                     merchant:
                       id: netflix
                       name: Netflix
@@ -18750,6 +18760,30 @@ components:
             confidence:
               type: string
               description: Probability score
+            categories:
+              type: object
+              description: Categories of the original transaction
+              properties:
+                l1:
+                  type: object
+                  description: Level 1 Category
+                  properties:
+                    slug:
+                      type: string
+                      description: Unique human readable identifier of the category
+                    confidence:
+                      type: string
+                      description: Degree of belief of correct assignment, expressed as a probability
+                l2:
+                  type: object
+                  description: Level 2 Category
+                  properties:
+                    slug:
+                      type: string
+                      description: Unique human readable identifier of the category
+                    confidence:
+                      type: string
+                      description: Degree of belief of correct assignment, expressed as a probability
             future_transactions:
               type: array
               items:
@@ -18792,7 +18826,7 @@ components:
                   description: The number of months for which the upcoming transactions have been projected
                 change_percentages:
                   type: array
-                  description: A list of all of the percentage value changes that have been applied to different Level 2 tegories
+                  description: A list of all of the percentage value changes that have been applied to different Level 2 categories
                   items:
                     type: object
                     required:
