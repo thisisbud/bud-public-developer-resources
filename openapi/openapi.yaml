@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: 'Bud API Services: Documentation'
-  version: 2.8.24
+  version: 2.9.8
   description: |-
     # Overview
 
@@ -294,6 +294,10 @@ info:
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
+
+
+    **Version 2.9.8: 05/12/2023**
+    > - Updated the description on __Retrieve Accounts V2__ endpoint to include new account types.
 
     **Version 2.9.5: 29/11/2023**
     > - Added the `categories` field to the __Retrieve Future Transactions V2__ endpoint.
@@ -4190,8 +4194,10 @@ paths:
               - `credit_card`
               - `current_account`
               - `e_money`
+              - `investment`
               - `loan`
               - `mortgage`
+              - `other`
               - `pre_paid_card`
               - `savings`
         - in: query
@@ -16910,8 +16916,10 @@ components:
               - `credit_card`
               - `current_account`
               - `e_money`
+              - `investment`
               - `loan`
               - `mortgage`
+              - `other`
               - `pre_paid_card`
               - `savings`
         usage_type:
@@ -17082,8 +17090,10 @@ components:
                       - `credit_card`
                       - `current_account`
                       - `e_money`
+                      - `investment`
                       - `loan`
                       - `mortgage`
+                      - `other`
                       - `pre_paid_card`
                       - `savings`
                   type: array
