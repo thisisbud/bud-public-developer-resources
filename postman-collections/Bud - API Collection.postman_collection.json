@@ -3796,7 +3796,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}v2/future-transactions?months=3&change_percentage[loans]=2.0",
+									"raw": "{{proxy_url}}v2/future-transactions?months=3&change_percentage\\[subcategory\\]=change_percentage[all]=2.0",
 									"host": [
 										"{{proxy_url}}v2"
 									],
@@ -3809,8 +3809,8 @@
 											"value": "3"
 										},
 										{
-											"key": "change_percentage[loans]",
-											"value": "2.0"
+											"key": "change_percentage\\[subcategory\\]",
+											"value": "change_percentage[all]=2.0"
 										}
 									]
 								}

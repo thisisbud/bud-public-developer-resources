@@ -211,6 +211,12 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 1.7.5: 07/12/2023**
+    > - Updated __Create Customer V3__ endpoint to include `created_at` and a new 200 response for existing customers.
+
+    **Version 1.7.4: 06/12/2023**
+    > - Fixed __Retrieve Future Transactions V2__ change\_percentage query parameter example.
+
     **Version 1.7.3: 05/12/2023**
     > - Updated __Retrieve Accounts V2__ and __Retrieve Account By ID V2__ endpoints with US currency example and updated guide reference.
 
@@ -516,6 +522,8 @@ paths:
         >
         > This allows you to associate your internal resource to the concept of the Bud Customer.
         >
+        > On subsequent requests for a customer with a given `idempotent_identifier`, Bud will return a 200 status code instead of a 201.
+        >
         > Please, make sure the `idempotent_identifier` is immutable on your application.
         > 
         > For more information on Customers in the Bud platform, please refer to our handy [guide](https://docs-us.thisisbud.com/docs/setup-customers).
@@ -542,6 +550,27 @@ paths:
               client_metadata:
                 idempotent_identifier: your_internal_id
       responses:
+        '200':
+          description: Returns the existing customer matching the idempotent identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerCreateV3Response'
+              example:
+                operation_id: platform_v3_customers_post
+                data:
+                  customer_id: 360e5821-4f18-4077-83f4-c9a7c1768bea
+                  customer_context:
+                    type: personal
+                    region: US
+                    locale: en-US
+                    host_secret: true
+                    models:
+                      categorisation: us-v1
+                  client_metadata:
+                    idempotent_identifier: your_internal_id
+                metadata:
+                  created_at: '2023-01-01T07:02:11Z'
         '201':
           description: The resource has been successfully created.
           content:
@@ -561,6 +590,8 @@ paths:
                       categorisation: us-v1
                   client_metadata:
                     idempotent_identifier: your_internal_id
+                metadata:
+                  created_at: '2023-01-01T07:02:11Z'
         '400':
           description: The request contains an invalid payload.
           content:
@@ -634,6 +665,8 @@ paths:
                       host_secret: true
                       models:
                         categorisation: us-v1
+                metadata:
+                  created_at: '2023-01-01T07:02:11Z'
         '400':
           description: The request contains an invalid payload.
           content:
@@ -4050,6 +4083,14 @@ components:
           $ref: '#/components/schemas/CustomerContext'
         client_metadata:
           $ref: '#/components/schemas/ClientMetadata'
+    CustomerCreatedV3Metadata:
+      title: Customer Created V3 Metadata
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the customer was created.
     CustomerCreateV3Response:
       title: Create Customer V3 Response
       type: object
@@ -4062,6 +4103,8 @@ components:
           $ref: '#/components/schemas/OperationId'
         data:
           $ref: '#/components/schemas/CustomerCreatedV3'
+        metadata:
+          $ref: '#/components/schemas/CustomerCreatedV3Metadata'
     BadRequestResponse:
       title: Bad Request Response
       type: object
@@ -4106,6 +4149,8 @@ components:
           description: An array of Customer Created objects.
           items:
             $ref: '#/components/schemas/CustomerCreatedV3'
+        metadata:
+          $ref: '#/components/schemas/CustomerCreatedV3Metadata'
     CustomerContextResponse:
       title: Customer Context Response
       description: Customer context response.
@@ -6182,8 +6227,8 @@ components:
       in: query
       name: change_percentage[subcategory]
       schema:
-        type: string
-        default: change_percentage[all]=0.0
+        type: number
+        default: 2
       required: false
       description: To set a percentage value used in the calculation of the forecasted amount for the future transactions categorised with specific transaction subcategory; for example `change_percentage[loans]=2.0`. This can be a positive or negative float number. To apply the same percentage to all transactions use the `subcategory=all`.
     From:
