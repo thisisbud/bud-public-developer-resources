@@ -295,6 +295,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.9.11: 12/12/2023**
+    > - Updated __Reconfirm Consent__ description to include a note about which clients can use the endpoint,
+
     **Version 2.9.10: 07/12/2023**
     > - Updated __Create Customer V3__ endpoint to include `created_at` and a new 200 response for existing customers.
 
@@ -2598,6 +2601,12 @@ paths:
         Reconfirm a customer's consent to extend the expiration date by 90 days. If the provider requires SCA authentication or the consent status is not showing "Authorised" or the consent is expired, the `reconnect_required` flag will show as true. 
         If true, you should make a call to the Retrieve Authoirsation Gateway URL endpoint with the `reconfirm_consent` flag set to true to direct your customer to the reconfirm consent journey.
         If false, the consent has been extended.
+
+        > 📘 Note:
+        >
+        > This endpoint should only be used by TSP clients (Technical Service Provider). 
+        >
+        > Requests to this endpoint from TPP clients (Third Party Provider) will fail, i.e. you are not yourself regulated as an PISP (Payment Initiation Service Provider).
       operationId: open_banking_consents_reconfirm_post
       security:
         - OAuth2: []
