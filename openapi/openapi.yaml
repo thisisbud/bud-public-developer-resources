@@ -1096,15 +1096,20 @@ paths:
         - OAuth2
       summary: OAuth2
       description: |
-        This endpoint is used to create access and refresh tokens.
+        This endpoint is used to create access and refresh tokens. 
 
-        When this endpoint is first called you must supply basic authentication credentials, your `client_id` and `client_secret`.
-        The response will contain an `access_token` and a `refresh_token`.
+        The access token is used as a bearer token to authenticate requests to Bud endpoints; 
+        the refresh token is used to generate a new access token without the need to supply your client credentials again.
 
-        The `access_token` is used as a bearer token in most calls to Bud endpoints following this point.
+        The access token usually expires after the `expires_in` time (in seconds) has elapsed. 
+        However this is not garuanteed, so it is recomended to integrate such as to handle the `401` response code and refresh the token when it this response code is seen.
 
-        To get a new `access_token`, you can use the `refresh_token` in a call to this endpoint. Your client_id will still be required, but it should be supplied as the header `X-Client-Id`. 
-        You will need to do this once your `access_token` expires.  
+        Refresh tokens typically expire after 24 hours, but this is not garuanteed.
+
+        > **🚧** Recognise the sensitive nature of access tokens. Implement appropriate security measures to prevent unauthorized access.
+
+        Related Guides:
+          - https://docs.thisisbud.com/docs/authentication
       operationId: oauth_token_post
       security:
         - Basic: []
@@ -1116,15 +1121,19 @@ paths:
             type: string
             enum:
               - application/x-www-form-urlencoded
+        - $ref: '#/components/parameters/ClientId'
         - in: header
-          name: X-Client-Id
-          description: |
-            The API Client Identifier (Service Application Identifier).
-
-            This paramater is only required when refreshing an auth token.
-          required: false
+          name: authorization
           schema:
             type: string
+            description: |
+              The `authorization` header is used to send the client credentials in the form of a base64 encoded string. 
+              The format of the string is `client_id:client_secret`.
+
+              This is only required when retrieving an auth token and not whilst refreshing an auth token.
+
+              Example: `Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ=`
+            example: Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ=
       requestBody:
         required: true
         content:
@@ -2294,7 +2303,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecretOptional'
+        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/ConsentStatus'
       responses:
         '200':
@@ -3284,6 +3293,10 @@ paths:
       description: |
         This endpoint is used to create a new Customer in order for them to consume the Bud services.
 
+        When we refer to a Customer, we're talking about the end-user of yours and Bud's technology. Customer entities in Bud have unique identifiers and this is used to store the customer data on the Bud platform.
+
+        For more information on how to manage your Bud Customers, please, refer to the following [guide](https://docs.thisisbud.com/docs/setup-customers)
+
         > 📘 Note:
         >
         > By specifying a `client_metadata.idempotent_identifier` value, Bud will associate that identifier to a Customer, 
@@ -3294,8 +3307,6 @@ paths:
         > On subsequent requests for a customer with a given `idempotent_identifier`, Bud will return a 200 status code instead of a 201.
         >
         > Please, make sure the `idempotent_identifier` is immutable on your application.
-        > 
-        > For more information on Customers in the Bud platform, please refer to our handy [guide](https://docs.thisisbud.com/docs/setup-customers).
       operationId: platform_v3_customers_post
       parameters:
         - $ref: '#/components/parameters/ClientId'
@@ -3368,12 +3379,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
               example:
-                operation_id: customers_create
+                operation_id: platform_v3_customers_post
                 code_id: failed_validation
-                message: Failed validation.
+                message: invalid body
                 errors:
-                  client_id:
-                    - This value should not be blank
+                  body:
+                    - invalid character 'a' looking for beginning of object key string
         '401':
           description: An unauthenticated request was received.
         '405':
@@ -3529,6 +3540,7 @@ paths:
       tags:
         - Manage Customers
       summary: Create Customer(s)
+      deprecated: true
       description: This endpoint is used to create one or many new Customers, in order for them to consume the Bud services.
       operationId: customers_create_v2
       parameters:
@@ -3625,15 +3637,13 @@ paths:
       tags:
         - Manage Customers
       summary: Remove Customer
-      description: This endpoint is used to delete an existing Customer. Calling this deletes all data associated with the customer.
+      description: |
+        This endpoint is used to delete an existing Customer. Calling this deletes all data associated with the customer including any Open Banking Consents.
+
+        If the customer with the given ID does not exist or has already been deleted, a 404 error is returned.
       operationId: customers_delete
       parameters:
-        - in: path
-          name: customer_id
-          schema:
-            type: string
-          required: true
-          description: The resource identifier.
+        - $ref: '#/components/parameters/PathCustomerID'
         - $ref: '#/components/parameters/ClientId'
       responses:
         '204':
@@ -3641,7 +3651,7 @@ paths:
         '401':
           description: An unauthenticated request was received.
         '404':
-          description: The resource was not found.
+          description: No customer was found with the given ID.
         '405':
           description: The request uses an unexpected HTTP method.
         5XX:
@@ -3656,12 +3666,7 @@ paths:
       description: Retrieve the customer level context, i.e. a set of parameters that defines their language, region and their customer type.
       operationId: v1_customer_context_get
       parameters:
-        - in: path
-          name: customer_id
-          schema:
-            type: string
-          required: true
-          description: The resource identifier.
+        - $ref: '#/components/parameters/PathCustomerID'
         - $ref: '#/components/parameters/ClientId'
       responses:
         '200':
@@ -3695,12 +3700,7 @@ paths:
       description: Set the customer level context.
       operationId: v1_customer_context_put
       parameters:
-        - in: path
-          name: customer_id
-          schema:
-            type: string
-          required: true
-          description: The resource identifier.
+        - $ref: '#/components/parameters/PathCustomerID'
         - $ref: '#/components/parameters/ClientId'
       requestBody:
         required: true
@@ -15360,7 +15360,6 @@ components:
     CustomerSecret:
       type: string
       description: The Bud Customer secret used to encrypt customer data. This is required only if the customer secret is not already stored with Bud.
-      example: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
     IngestAccountDetails:
       title: Ingest Account Details
       type: object
@@ -16315,7 +16314,7 @@ components:
           description: The name of the categorisation model to use for this customer at enrichment. See *List Categorisation Models V2* for available models.
     CustomerContextRequest:
       title: Customer Context
-      description: The context in which a customer is processed throughout the Bud platform. Default values can be populated using client configuration.
+      description: The context in which a customer is processed throughout the Bud platform.
       type: object
       properties:
         type:
@@ -16344,7 +16343,7 @@ components:
       description: Determines whether the customer secret key should be stored with Bud, meaning the API consumer does not need to store this and provide it on subsequent API calls related to that customer.
     CustomerContext:
       title: Customer Context
-      description: The context in which a customer is processed throughout the Bud platform. Default values can be populated using client configuration.
+      description: The context in which a customer is processed throughout the Bud platform.
       type: object
       properties:
         type:
@@ -16382,7 +16381,7 @@ components:
         created_at:
           type: string
           format: date-time
-          description: The date and time the customer was created.
+          description: The date and time the customer was created. Format ISO 8601.
     CustomerCreateV3Response:
       title: Create Customer V3 Response
       type: object
@@ -22811,6 +22810,7 @@ components:
         type: string
       required: true
       description: The API Client Identifier (Service Application Identifier).
+      example: 8711bbef-b357-4c2d-97ca-0d9df4206e9a
     MetadataFieldName:
       in: query
       name: metadata.{field_name}
@@ -23122,7 +23122,8 @@ components:
         type: string
         format: uuid
       required: true
-      description: Bud Customer identifier
+      description: A unique identifier for a Customer, as registered on Bud's platform.
+      example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
     CustomerSecret:
       in: header
       name: X-Customer-Secret
@@ -23160,13 +23161,6 @@ components:
         format: uuid
       required: true
       description: Unique identifier related to a specific connection task
-    CustomerSecretOptional:
-      in: header
-      name: X-Customer-Secret
-      schema:
-        type: string
-      required: false
-      description: The Bud Customer secret used to encrypt customer data. This is optional.
     ConsentStatus:
       in: query
       name: status
@@ -23230,6 +23224,15 @@ components:
         enum:
           - 'true'
           - 'false'
+    PathCustomerID:
+      in: path
+      name: customer_id
+      schema:
+        type: string
+        format: uuid
+      required: true
+      description: A unique identifier for a Customer, as registered on Bud's platform.
+      example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
     CategoryTotalsQueryFromTimestamp:
       in: query
       name: from
