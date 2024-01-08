@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "a6ae9d35-7bf5-4267-8e58-387d64904f9a",
+		"_postman_id": "5901bba4-b23b-4575-a44d-f18b2a50020f",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25466084"
+		"_exporter_id": "30390585"
 	},
 	"item": [
 		{
@@ -297,6 +297,99 @@
 									]
 								},
 								"description": "This endpoint is used to delete an existing Customer."
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Customer V3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has customer_delete_v3_task_id\"] = jsonData.data.task_id;",
+											"",
+											"pm.environment.set(\"customer_delete_v3_task_id\", jsonData.data.task_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}/platform/v3/customers/{{customer_id}}",
+									"host": [
+										"{{proxy_url}}"
+									],
+									"path": [
+										"platform",
+										"v3",
+										"customers",
+										"{{customer_id}}"
+									]
+								},
+								"description": "This endpoint is used to delete an existing Customer."
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Remove Customer V3 Status",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}platform/v3/customers/{{customer_id}}/{{customer_delete_v3_task_id}}",
+									"host": [
+										"{{proxy_url}}platform"
+									],
+									"path": [
+										"v3",
+										"customers",
+										"{{customer_id}}",
+										"{{customer_delete_v3_task_id}}"
+									]
+								}
 							},
 							"response": []
 						},
