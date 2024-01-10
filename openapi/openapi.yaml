@@ -2700,6 +2700,7 @@ paths:
                     The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
   /v1/ingest/accounts:
     post:
+      deprecated: true
       tags:
         - Ingest First Party Data
       summary: Ingest Accounts
@@ -2918,6 +2919,116 @@ paths:
                   next_url_delay: 50
         '400':
           description: Bad Request that fails validations on headers & payload
+        '401':
+          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
+        5XX:
+          description: An unexpected error occurred on the server side
+  /v2/ingest/accounts:
+    post:
+      tags:
+        - Ingest First Party Data
+      summary: Ingest Accounts V2
+      description: |
+        This endpoint is for pushing customer(s) account(s) and balance(s) through the Bud architecture.
+        It can ingest data for multiple customers per request.
+        By default, this is synchronous and will report any issue with the data in the response.
+        If a 'X-Disable-Synchronous' header is present and set to true, the process will create a task in the background and be enrirely 'non-blocking'.
+        In this scenario, the response metadata will contain a Task ID and the next URL which would then be used for finding out the operation's result.
+      operationId: v2_ingest_accounts_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/IngestAccountsContentType'
+        - name: X-Disable-Synchronous
+          in: header
+          description: If present and set to true, a task is created and a response is returned immediately
+          schema:
+            type: boolean
+            default: 'false'
+      requestBody:
+        required: true
+        content:
+          application/bud-accounts+json:
+            schema:
+              $ref: '#/components/schemas/IngestAccountsRequest'
+            example:
+              - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                accounts:
+                  - provider: Barclays
+                    account_id: 99473c28-21cf-4a9a-b79e-fd643dd7a4bc
+                    currency: GBP
+                    account_type: Personal
+                    account_sub_type: CurrentAccount
+                    details:
+                      - scheme_name: UK.OBIE.SortCodeAccountNumber
+                        identification: '98765432165444'
+                        secondary_identification: '00021'
+                        name: Mr Kevin
+                    balances:
+                      - amount:
+                          value: '7.00'
+                          currency: GBP
+                        credit_debit_indicator: outgoing_debit
+                        credit_line:
+                          - included: true
+                            amount:
+                              value: '200.00'
+                              currency: GBP
+                            type: Credit
+                        date: '2020-12-01'
+                        time: '00:00:00'
+                        type: InterimBooked
+              - customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
+                accounts:
+                  - provider: Lloyds
+                    account_id: bfd4ea71-58d7-4b24-8820-95029875cc9a
+                    currency: GBP
+                    account_type: Personal
+                    account_sub_type: CurrentAccount
+                    details:
+                      - scheme_name: UK.OBIE.SortCodeAccountNumber
+                        identification: '12312312313200'
+                        secondary_identification: '00022'
+                        name: Mr Kevin
+                    balances:
+                      - amount:
+                          value: '70005.00'
+                          currency: GBP
+                        credit_debit_indicator: incoming_credit
+                        credit_line:
+                          - included: true
+                            amount:
+                              value: '100.00'
+                              currency: GBP
+                            type: Credit
+                        date: '2020-12-01'
+                        time: '00:00:00'
+                        type: InterimBooked
+      responses:
+        '200':
+          description: The data has been ingested successfully. Response has no body
+        '202':
+          description: A new Task has been created to ingest the given accounts. The generated `task_id` can be used to check the Task's status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestV2AsyncResponse'
+              example:
+                operation_id: v2_ingest_accounts_post
+                metadata:
+                  task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                  next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                  next_url_delay: 250
+        '400':
+          description: Bad Request that fails validations on headers and/or payload
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/BodyDecodeError'
+                  - $ref: '#/components/schemas/FirstPartyIngestionGenericError'
+                  - $ref: '#/components/schemas/AccountsDataValidationError'
         '401':
           description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
         5XX:
@@ -15815,11 +15926,208 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/CustomerWithTransactions'
+    IngestV2Response:
+      type: object
+      required:
+        - operation_id
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+          example: v2_ingest_transactions_post
+    IngestV2Metadata:
+      title: Created Task Details
+      description: Metadata on the created task, including the task_id
+      type: object
+      required:
+        - task_id
+      properties:
+        task_id:
+          type: string
+          format: uuid
+          description: Can be used with the transaction status endpoint to retrieve the status of the full enriched process
+        next_url:
+          type: string
+          format: url
+          description: The URL to call to obtain the current status of the task.
+          example: /v1/enrich-transactions/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+        next_url_delay:
+          type: number
+          description: The time in milliseconds that the client should wait before trying to retrieve the current status of the task.
+          example: 50
+    IngestV2AsyncResponse:
+      title: Ingest Transactions V2 Async Response
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/IngestV2Response'
+        - type: object
+          required:
+            - operation_id
+            - metadata
+          properties:
+            metadata:
+              $ref: '#/components/schemas/IngestV2Metadata'
+    BodyDecodeError:
+      type: object
+      title: JSON Decoding Error
+      required:
+        - operation_id
+        - code_id
+        - message
+        - errors
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+          enum:
+            - failed_body_decode
+        message:
+          type: string
+          description: 'High level description on what has failed '
+        errors:
+          type: object
+          description: Contains more details on the decoding error
+          required:
+            - decode_error
+          properties:
+            decode_error:
+              type: string
+    FirstPartyIngestionGenericError:
+      type: object
+      title: Content Type Error
+      required:
+        - operation_id
+        - code_id
+        - message
+        - errors
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+          enum:
+            - failed_validation
+        message:
+          type: string
+          description: 'High level description on what has failed '
+        errors:
+          type: object
+          description: Error details
+          properties:
+            content_type:
+              type: string
+              description: The content type header provided in the request is unknown
+            <index>.customer_id:
+              type: string
+              description: Missing customer ID. Index prefix is the index of the customer in the request
+            <index>.customer_secret:
+              type: string
+              description: Missing customer secret. Index is the index of the customer in the request
+            <index>.accounts:
+              type: string
+              description: Missing customer accounts. Index is the index of the customer in the request
+      example:
+        operation_id: ingest_accounts_post
+        code_id: failed_validation
+        message: validation failure(s) in request payload
+        errors:
+          0.customer_secret: The customer secret is mandatory
+    ValidationMissing:
+      type: array
+      title: Missing Fields
+      description: list of required missing fields for a transaction
+      items:
+        type: string
+    ValidationInvalid:
+      type: array
+      title: Invalid Fields
+      description: list of invalid fields for a transaction
+      items:
+        type: string
+    AccountsDataValidationError:
+      type: object
+      title: Accounts validation error
+      required:
+        - operation_id
+        - code_id
+        - message
+        - errors
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+          enum:
+            - failed_validation
+        message:
+          type: string
+          description: High level description on what has failed
+        errors:
+          type: object
+          title: Map of customers
+          description: a map of customer IDs to account validation errors
+          properties:
+            missing_fields:
+              type: object
+              title: Map of Account
+              description: |
+                A map of accounts to missing fields array. 
+                The key contains the index of the account causing issues. 
+                See example
+              additionalProperties:
+                $ref: '#/components/schemas/ValidationMissing'
+            invalid_fields:
+              type: object
+              title: Map of Account
+              description: |
+                A map of accounts to invalid fields array. 
+                The key contains the index of the account causing issues. 
+                See example
+              additionalProperties:
+                $ref: '#/components/schemas/ValidationInvalid'
+      example:
+        operation_id: v2_ingest_accounts_post
+        code_id: failed_validation
+        message: validation failure(s) in request payload
+        errors:
+          1db8c4b5-e5ae-429e-947b-6a4616ffc717:
+            missing_fields:
+              accounts[0]:
+                - provider
+                - account_id
+              accounts[1]:
+                - account_id
+            invalid_fields:
+              accounts[0]:
+                - currency
     CustomerID:
       type: string
       format: uuid
       description: A unique identifier for a Customer, as registered on Bud's platform.
       example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+    SynchronousEnrichmentsList:
+      type: array
+      description: |
+        The list of enrichments product to execute during the synchronous execution of the request. Based on this list, the transactions sent 
+        will be processed through a number of enrichment flows, and this drives the amount of additional information attached to each transactions 
+        in the synchronous process.
+
+        The list of available enrichement products during the synchronous ingestion is the following:
+        - categories
+        - merchants
+
+        The default behaviour is to execute `categories` and `merchants`.
+              
+        Note: This attribute doesn't limit the execution of all Bud's enrichments, we'll still return a number of additional information (eg: tokens), 
+        but it switches on and off the two enrichments listed above.
+      example:
+        - categories
+        - merchants
+      items:
+        type: string
+        enum:
+          - categories
+          - merchants
     CustomerTransactionV3:
       title: Customer Transaction V3
       description: A schema for Bud V3 transaction format
@@ -15859,9 +16167,14 @@ components:
             Example: `"10.98"` or `"-10.98"`
         currency:
           $ref: '#/components/schemas/BudCurrency'
-    TransactionV3Window:
+    TransactionWindow:
       type: object
       title: Transaction Window
+      description: |
+        The transaction window is used to describe the entire period for which you have 
+        provided full coverage for the transactions within the request. It is used by Bud to 
+        ascertain periods of inactivity on the account(s) in question to ensure accurate data 
+        can be provided across downstream endpoints (e.g. Retrieve Balances Over Time).
       required:
         - account_id
         - start
@@ -15882,6 +16195,12 @@ components:
           format: datetime
           description: The date detailing the end of the transaction window, compliant with RFC3339
           example: '2022-10-10T23:00:00Z'
+    TransactionWindowArray:
+      type: array
+      description: |
+        If not provided, the transaction window is inferred from the date of the first and last transactions.
+      items:
+        $ref: '#/components/schemas/TransactionWindow'
     IngestTransactionsV3Request:
       title: Bud V3 Transactions Request
       description: Ingest transaction expected request body.
@@ -15896,6 +16215,8 @@ components:
             $ref: '#/components/schemas/CustomerID'
           customer_secret:
             $ref: '#/components/schemas/CustomerSecret'
+          sync_enrichments:
+            $ref: '#/components/schemas/SynchronousEnrichmentsList'
           transactions:
             type: array
             description: List of transactions belonging to the customer.
@@ -15903,22 +16224,7 @@ components:
             items:
               $ref: '#/components/schemas/CustomerTransactionV3'
           transaction_windows:
-            type: array
-            description: |
-              The transaction window is used to describe the entire period for which you have 
-              provided full coverage for the transactions within the request. It is used by Bud to 
-              ascertain periods of inactivity on the account(s) in question to ensure accurate data 
-              can be provided across downstream endpoints (e.g. Retrieve Balances Over Time).
-            items:
-              $ref: '#/components/schemas/TransactionV3Window'
-    IngestV2Response:
-      type: object
-      required:
-        - operation_id
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-          example: v2_ingest_transactions_post
+            $ref: '#/components/schemas/TransactionWindowArray'
     schemas-Transaction:
       title: Transaction
       type: object
@@ -15994,26 +16300,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/schemas-Transaction'
-    IngestV2Metadata:
-      title: Created Task Details
-      description: Metadata on the created task, including the task_id
-      type: object
-      required:
-        - task_id
-      properties:
-        task_id:
-          type: string
-          format: uuid
-          description: Can be used with the transaction status endpoint to retrieve the status of the full enriched process
-        next_url:
-          type: string
-          format: url
-          description: The URL to call to obtain the current status of the task.
-          example: /v1/enrich-transactions/4cef424c-1d7f-4cab-8be2-aee7e1774a00
-        next_url_delay:
-          type: number
-          description: The time in milliseconds that the client should wait before trying to retrieve the current status of the task.
-          example: 50
     IngestV2SyncResponse:
       title: Ingest Transactions V2 Sync Response
       type: object
@@ -16030,56 +16316,6 @@ components:
                 $ref: '#/components/schemas/IngestV2SyncResponseData'
             metadata:
               $ref: '#/components/schemas/IngestV2Metadata'
-    IngestV2AsyncResponse:
-      title: Ingest Transactions V2 Async Response
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/IngestV2Response'
-        - type: object
-          required:
-            - operation_id
-            - metadata
-          properties:
-            metadata:
-              $ref: '#/components/schemas/IngestV2Metadata'
-    BodyDecodeError:
-      type: object
-      title: JSON Decoding Error
-      required:
-        - operation_id
-        - code_id
-        - message
-        - errors
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        code_id:
-          type: string
-          enum:
-            - failed_body_decode
-        message:
-          type: string
-          description: 'High level description on what has failed '
-        errors:
-          type: object
-          description: Contains more details on the decoding error
-          required:
-            - decode_error
-          properties:
-            decode_error:
-              type: string
-    ValidationMissing:
-      type: array
-      title: Missing Fields
-      description: list of required missing fields for a transaction
-      items:
-        type: string
-    ValidationInvalid:
-      type: array
-      title: Invalid Fields
-      description: list of invalid fields for a transaction
-      items:
-        type: string
     ValidationError:
       type: object
       title: Validation Errors
