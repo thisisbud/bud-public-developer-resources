@@ -3577,6 +3577,110 @@ paths:
           description: The request uses an unexpected HTTP method.
         5XX:
           description: An unexpected error occurred on the server side.
+  /platform/v3/customers/{customer_id}:
+    delete:
+      security:
+        - OAuth2: []
+      tags:
+        - Manage Customers
+      summary: Remove Customer V3
+      description: This endpoint is used to delete an existing Customer. Calling this endpoint initiates deleting all data relating to a customer returning a task id that can be used to check the status of the delete task.
+      operationId: platform_v3_customers_delete
+      parameters:
+        - in: path
+          name: customer_id
+          schema:
+            type: string
+          required: true
+          description: The customer identifier.
+        - $ref: '#/components/parameters/ClientId'
+      responses:
+        '202':
+          description: The request was successfully accepted for processing and details of the task was returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDeleteV3Response'
+              example:
+                operation_id: platform_v3_customers_delete
+                data:
+                  task_id: e74efdd2-bd44-42b0-9562-106286664966
+                metadata:
+                  status: Pending
+                  next_url: /v3/customers/45cecf3f-8436-4b57-8953-cfdfbd2620d4/e74efdd2-bd44-42b0-9562-106286664966
+                  next_url_delay: 50
+        '401':
+          description: An unauthenticated request was received.
+        '404':
+          description: The resource was not found.
+        '405':
+          description: The request uses an unexpected HTTP method.
+        5XX:
+          description: An unexpected error occurred on the server side.
+  /platform/v3/customers/{customer_id}/{task_id}:
+    get:
+      security:
+        - OAuth2: []
+      tags:
+        - Manage Customers
+      summary: Retrieve Remove Customer V3 Status
+      description: |
+        Check the status and get the result of a Remove Customer V3 task. If the task is not yet completed, the data element will be null.
+      operationId: platform_v3_customers_delete_status
+      parameters:
+        - in: path
+          name: customer_id
+          schema:
+            type: string
+          required: true
+          description: The customer identifier.
+        - $ref: '#/components/parameters/TaskId'
+        - $ref: '#/components/parameters/ClientId'
+      responses:
+        '200':
+          description: The request was successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDeleteV3StatusResponse'
+              examples:
+                complete:
+                  summary: Completed
+                  value:
+                    operation_id: platform_v3_customers_delete_status
+                    data:
+                      task_id: e74efdd2-bd44-42b0-9562-106286664966
+                      result: success
+                    metadata:
+                      status: Completed
+                pending:
+                  summary: Pending
+                  value:
+                    operation_id: platform_v3_customers_delete_status
+                    data:
+                      status: Pending
+                      task_id: 16fa0748-8a6b-455b-9be9-30ae257965d8
+                    metadata:
+                      status: Pending
+                      next_url: /v3/customers/45cecf3f-8436-4b57-8953-cfdfbd2620d4/e74efdd2-bd44-42b0-9562-106286664966
+                      next_url_delay: 50
+                failed:
+                  summary: Failed
+                  value:
+                    operation_id: platform_v3_customers_delete_status
+                    data:
+                      task_id: e74efdd2-bd44-42b0-9562-106286664966
+                      result: failed
+                    metadata:
+                      status: Failed
+        '401':
+          description: An unauthenticated request was received.
+        '404':
+          description: The resource was not found.
+        '405':
+          description: The request uses an unexpected HTTP method.
+        5XX:
+          description: An unexpected error occurred on the server side.
   /v1/customers:
     post:
       security:
@@ -3743,6 +3847,7 @@ paths:
           description: An unexpected error occurred on the server side.
   /v1/customers/{customer_id}:
     delete:
+      deprecated: true
       security:
         - OAuth2: []
       tags:
@@ -14805,7 +14910,7 @@ components:
           type: string
           description: The provider (ASPSP) associated with this task
     AsyncTaskMetadata:
-      title: Created Task Metadata
+      title: Async Task Metadata
       type: object
       description: Metadata associated with an asynchronous task
       properties:
@@ -16659,6 +16764,81 @@ components:
             $ref: '#/components/schemas/CustomerCreatedV3'
         metadata:
           $ref: '#/components/schemas/CustomerCreatedV3Metadata'
+    CustomerDeleteV3:
+      title: Customer Delete V3
+      type: object
+      required:
+        - task_id
+      properties:
+        task_id:
+          $ref: '#/components/schemas/TaskId'
+    CustomerDeleteV3Response:
+      title: Delete Customer V3 Response
+      type: object
+      description: Expected response structure.
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/CustomerDeleteV3'
+        metadata:
+          $ref: '#/components/schemas/AsyncTaskMetadata'
+    DeleteResultCodes:
+      type: string
+      description: The result of the operation. Either success or failed.
+      enum:
+        - success
+        - failed
+    TaskCustomerDeleteV3:
+      title: Customer Delete Task Response
+      type: object
+      description: Result of GET customer delete taskId
+      required:
+        - task_id
+      properties:
+        result:
+          $ref: '#/components/schemas/DeleteResultCodes'
+        task_id:
+          $ref: '#/components/schemas/TaskId'
+    TaskCustomerDeleteV3MetaData:
+      title: Task Status Metadata
+      type: object
+      description: Standard metadata response from the Customer Delete V3
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          description: The status of the job associated with the specified task id
+          enum:
+            - Completed
+            - Pending
+            - Failed
+        next_url:
+          type: string
+          description: The url to try next if the `status` property returned is `Pending`
+        next_url_delay:
+          type: number
+          description: The time in milliseconds that the client should wait before polling the relevant GET endpoint with the above task id if the `status` property returned is `Pending`
+    CustomerDeleteV3StatusResponse:
+      title: Customer Delete Status Response
+      type: object
+      description: Expected response structure
+      required:
+        - operation_id
+        - metadata
+        - data
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/TaskCustomerDeleteV3'
+        metadata:
+          $ref: '#/components/schemas/TaskCustomerDeleteV3MetaData'
     CustomerCreateResponse:
       title: Create Customer Response
       type: object
