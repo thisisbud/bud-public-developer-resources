@@ -382,15 +382,20 @@ paths:
         - OAuth2
       summary: OAuth2
       description: |
-        This endpoint is used to create access and refresh tokens.
+        This endpoint is used to create access and refresh tokens. 
 
-        When this endpoint is first called you must supply basic authentication credentials, your `client_id` and `client_secret`.
-        The response will contain an `access_token` and a `refresh_token`.
+        The access token is used as a bearer token to authenticate requests to Bud endpoints; 
+        the refresh token is used to generate a new access token without the need to supply your client credentials again.
 
-        The `access_token` is used as a bearer token in most calls to Bud endpoints following this point.
+        The access token usually expires after the `expires_in` time (in seconds) has elapsed. 
+        However this is not garuanteed, so it is recomended to integrate such as to handle the `401` response code and refresh the token when it this response code is seen.
 
-        To get a new `access_token`, you can use the `refresh_token` in a call to this endpoint. Your client_id will still be required, but it should be supplied as the header `X-Client-Id`. 
-        You will need to do this once your `access_token` expires.  
+        Refresh tokens typically expire after 24 hours, but this is not garuanteed.
+
+        > **🚧** Recognise the sensitive nature of access tokens. Implement appropriate security measures to prevent unauthorized access.
+
+        Related Guides:
+          - https://docs.thisisbud.com/docs/authentication
       operationId: oauth_token_post
       security:
         - Basic: []
@@ -402,15 +407,19 @@ paths:
             type: string
             enum:
               - application/x-www-form-urlencoded
+        - $ref: '#/components/parameters/ClientId'
         - in: header
-          name: X-Client-Id
-          description: |
-            The API Client Identifier (Service Application Identifier).
-
-            This paramater is only required when refreshing an auth token.
-          required: false
+          name: authorization
           schema:
             type: string
+            description: |
+              The `authorization` header is used to send the client credentials in the form of a base64 encoded string. 
+              The format of the string is `client_id:client_secret`.
+
+              This is only required when retrieving an auth token and not whilst refreshing an auth token.
+
+              Example: `Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ=`
+            example: Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ=
       requestBody:
         required: true
         content:
@@ -515,6 +524,10 @@ paths:
       description: |
         This endpoint is used to create a new Customer in order for them to consume the Bud services.
 
+        When we refer to a Customer, we're talking about the end-user of yours and Bud's technology. Customer entities in Bud have unique identifiers and this is used to store the customer data on the Bud platform.
+
+        For more information on how to manage your Bud Customers, please, refer to the following [guide](https://docs-us.thisisbud.com/docs/setup-customers)
+
         > 📘 Note:
         >
         > By specifying a `client_metadata.idempotent_identifier` value, Bud will associate that identifier to a Customer, 
@@ -599,12 +612,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
               example:
-                operation_id: customers_create
+                operation_id: platform_v3_customers_post
                 code_id: failed_validation
-                message: Failed validation.
+                message: invalid body
                 errors:
-                  client_id:
-                    - This value should not be blank
+                  body:
+                    - invalid character 'a' looking for beginning of object key string
         '401':
           description: An unauthenticated request was received.
         '405':
@@ -696,12 +709,7 @@ paths:
       description: This endpoint is used to delete an existing Customer.
       operationId: customers_delete
       parameters:
-        - in: path
-          name: customer_id
-          schema:
-            type: string
-          required: true
-          description: The resource identifier.
+        - $ref: '#/components/parameters/PathCustomerID'
         - $ref: '#/components/parameters/ClientId'
       responses:
         '204':
@@ -724,12 +732,7 @@ paths:
       description: Retrieve the customer level customer context, i.e. a set of parameters that defines their language, region and their customer type.
       operationId: v1_customer_context_get
       parameters:
-        - in: path
-          name: customer_id
-          schema:
-            type: string
-          required: true
-          description: The resource identifier.
+        - $ref: '#/components/parameters/PathCustomerID'
         - $ref: '#/components/parameters/ClientId'
       responses:
         '200':
@@ -763,12 +766,7 @@ paths:
       description: Set the customer level customer context.
       operationId: v1_customer_context_put
       parameters:
-        - in: path
-          name: customer_id
-          schema:
-            type: string
-          required: true
-          description: The resource identifier.
+        - $ref: '#/components/parameters/PathCustomerID'
         - $ref: '#/components/parameters/ClientId'
       requestBody:
         required: true
@@ -1063,6 +1061,7 @@ paths:
                 message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
   /v1/ingest/accounts:
     post:
+      deprecated: true
       tags:
         - Ingest Data
       summary: Ingest Accounts
@@ -1197,6 +1196,69 @@ paths:
           description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
         5XX:
           description: An unexpected error occurred on the server side
+  /v2/ingest/accounts:
+    post:
+      tags:
+        - Ingest Data
+      summary: Ingest Accounts V2
+      description: |
+        This endpoint is for pushing customer(s) account(s) and balance(s) through the Bud architecture.
+        It can ingest data for multiple customers per request.
+        By default, this is synchronous and will report any issue with the data in the response.
+        If a 'X-Disable-Synchronous' header is present and set to true, the process will create a task in the background and be enrirely 'non-blocking'.
+        In this scenario, the response metadata will contain a Task ID and the next URL which would then be used for finding out the operation's result.
+      operationId: v2_ingest_accounts_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/parameters-IngestAccountsContentType'
+        - name: X-Disable-Synchronous
+          in: header
+          description: If present and set to true, a task is created and a response is returned immediately
+          schema:
+            type: boolean
+            default: 'false'
+      requestBody:
+        required: true
+        content:
+          application/bud-accounts+json:
+            schema:
+              $ref: '#/components/schemas/IngestAccountsRequest'
+          application/finicity-accounts-v1+json:
+            schema:
+              $ref: '#/components/schemas/IngestFinicityAccountsRequest'
+          application/plaid-accounts-v1+json:
+            schema:
+              $ref: '#/components/schemas/IngestPlaidAccountsRequest'
+      responses:
+        '200':
+          description: The data has been ingested successfully. Response has no body
+        '202':
+          description: A new Task has been created to ingest the given transactions. The generated `task_id` can be used to check the Task's status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestV2AsyncResponse'
+              example:
+                operation_id: v2_ingest_accounts_post
+                metadata:
+                  task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                  next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                  next_url_delay: 250
+        '400':
+          description: Bad Request that fails validations on headers and/or payload
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/BodyDecodeError'
+                  - $ref: '#/components/schemas/FirstPartyIngestionGenericError'
+                  - $ref: '#/components/schemas/AccountsDataValidationError'
+        '401':
+          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
+        5XX:
+          description: An unexpected error occurred on the server side
   /v2/ingest/transactions:
     post:
       tags:
@@ -1277,6 +1339,10 @@ paths:
                           region: NY
                           postal_code: '96858'
                           country: US
+                    transaction_windows:
+                      - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                        start: '2022-10-10T23:00:00Z'
+                        end: '2022-11-10T23:00:00Z'
               finicity-transaction-v1 Request:
                 summary: Finicity Transaction V1 Example
                 value:
@@ -1301,6 +1367,10 @@ paths:
                           state: NY
                           postal_code: '96858'
                           country: USA
+                    transaction_windows:
+                      - account_id: '3009327691'
+                        start: '2022-10-10T23:00:00Z'
+                        end: '2022-11-10T23:00:00Z'
       responses:
         '200':
           description: |
@@ -3074,18 +3144,19 @@ components:
         - transactions
       properties:
         customer_id:
-          type: string
-          format: uuid
-          description: Unique identifier for the Customer.
-          example: c3829683-b6b2-4988-a7f7-697a9fa201bc
+          $ref: '#/components/schemas/CustomerID'
         customer_secret:
           $ref: '#/components/schemas/CustomerSecret'
+        sync_enrichments:
+          $ref: '#/components/schemas/SynchronousEnrichmentsList'
         transactions:
           type: array
           description: List of transactions that belongs to the customer.
           minLength: 1
           items:
             $ref: '#/components/schemas/PlaidTransaction'
+        transaction_windows:
+          $ref: '#/components/schemas/TransactionWindowArray'
     PlaidTransaction:
       title: Plaid Customer Transaction
       type: object
@@ -3291,18 +3362,19 @@ components:
         - transactions
       properties:
         customer_id:
-          type: string
-          format: uuid
-          description: Unique identifier for the Customer.
-          example: c3829683-b6b2-4988-a7f7-697a9fa201bc
+          $ref: '#/components/schemas/CustomerID'
         customer_secret:
           $ref: '#/components/schemas/CustomerSecret'
+        sync_enrichments:
+          $ref: '#/components/schemas/SynchronousEnrichmentsList'
         transactions:
           type: array
           description: List of transactions that belongs to the customer.
           minLength: 1
           items:
             $ref: '#/components/schemas/FinicityTransaction'
+        transaction_windows:
+          $ref: '#/components/schemas/TransactionWindowArray'
     FinicityTransaction:
       title: Customer Transaction
       type: object
@@ -4023,7 +4095,7 @@ components:
           description: The name of the categorisation model to use for this customer at enrichment. See *List Categorisation Models V2* for available models.
     CustomerContextRequest:
       title: Customer Context
-      description: The context in which a customer is processed throughout the Bud platform. Default values can be populated using client configuration.
+      description: The context in which a customer is processed throughout the Bud platform.
       type: object
       properties:
         type:
@@ -4052,7 +4124,7 @@ components:
       description: Determines whether the customer secret key should be stored with Bud, meaning the API consumer does not need to store this and provide it on subsequent API calls related to that customer.
     CustomerContext:
       title: Customer Context
-      description: The context in which a customer is processed throughout the Bud platform. Default values can be populated using client configuration.
+      description: The context in which a customer is processed throughout the Bud platform.
       type: object
       properties:
         type:
@@ -4090,7 +4162,7 @@ components:
         created_at:
           type: string
           format: date-time
-          description: The date and time the customer was created.
+          description: The date and time the customer was created. Format ISO 8601.
     CustomerCreateV3Response:
       title: Create Customer V3 Response
       type: object
@@ -4535,7 +4607,6 @@ components:
     CustomerSecret:
       type: string
       description: The Bud Customer secret used to encrypt customer data. This is required only if the customer secret is not already stored with Bud.
-      example: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
     IngestAccountDetails:
       title: Ingest Account Details
       type: object
@@ -4777,11 +4848,208 @@ components:
               $ref: '#/components/schemas/TaskId'
         metadata:
           $ref: '#/components/schemas/AsyncTaskMetadata'
+    IngestV2Response:
+      type: object
+      required:
+        - operation_id
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+          example: v2_ingest_transactions_post
+    IngestV2Metadata:
+      title: Created Task Details
+      description: Metadata on the created task, including the task_id
+      type: object
+      required:
+        - task_id
+      properties:
+        task_id:
+          type: string
+          format: uuid
+          description: Can be used with the transaction status endpoint to retrieve the status of the full enriched process
+        next_url:
+          type: string
+          format: url
+          description: The URL to call to obtain the current status of the task.
+          example: /v1/enrich-transactions/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+        next_url_delay:
+          type: number
+          description: The time in milliseconds that the client should wait before trying to retrieve the current status of the task.
+          example: 50
+    IngestV2AsyncResponse:
+      title: Ingest Transactions V2 Async Response
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/IngestV2Response'
+        - type: object
+          required:
+            - operation_id
+            - metadata
+          properties:
+            metadata:
+              $ref: '#/components/schemas/IngestV2Metadata'
+    BodyDecodeError:
+      type: object
+      title: JSON Decoding Error
+      required:
+        - operation_id
+        - code_id
+        - message
+        - errors
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+          enum:
+            - failed_body_decode
+        message:
+          type: string
+          description: 'High level description on what has failed '
+        errors:
+          type: object
+          description: Contains more details on the decoding error
+          required:
+            - decode_error
+          properties:
+            decode_error:
+              type: string
+    FirstPartyIngestionGenericError:
+      type: object
+      title: Content Type Error
+      required:
+        - operation_id
+        - code_id
+        - message
+        - errors
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+          enum:
+            - failed_validation
+        message:
+          type: string
+          description: 'High level description on what has failed '
+        errors:
+          type: object
+          description: Error details
+          properties:
+            content_type:
+              type: string
+              description: The content type header provided in the request is unknown
+            <index>.customer_id:
+              type: string
+              description: Missing customer ID. Index prefix is the index of the customer in the request
+            <index>.customer_secret:
+              type: string
+              description: Missing customer secret. Index is the index of the customer in the request
+            <index>.accounts:
+              type: string
+              description: Missing customer accounts. Index is the index of the customer in the request
+      example:
+        operation_id: ingest_accounts_post
+        code_id: failed_validation
+        message: validation failure(s) in request payload
+        errors:
+          0.customer_secret: The customer secret is mandatory
+    ValidationMissing:
+      type: array
+      title: Missing Fields
+      description: list of required missing fields for a transaction
+      items:
+        type: string
+    ValidationInvalid:
+      type: array
+      title: Invalid Fields
+      description: list of invalid fields for a transaction
+      items:
+        type: string
+    AccountsDataValidationError:
+      type: object
+      title: Accounts validation error
+      required:
+        - operation_id
+        - code_id
+        - message
+        - errors
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+          enum:
+            - failed_validation
+        message:
+          type: string
+          description: High level description on what has failed
+        errors:
+          type: object
+          title: Map of customers
+          description: a map of customer IDs to account validation errors
+          properties:
+            missing_fields:
+              type: object
+              title: Map of Account
+              description: |
+                A map of accounts to missing fields array. 
+                The key contains the index of the account causing issues. 
+                See example
+              additionalProperties:
+                $ref: '#/components/schemas/ValidationMissing'
+            invalid_fields:
+              type: object
+              title: Map of Account
+              description: |
+                A map of accounts to invalid fields array. 
+                The key contains the index of the account causing issues. 
+                See example
+              additionalProperties:
+                $ref: '#/components/schemas/ValidationInvalid'
+      example:
+        operation_id: v2_ingest_accounts_post
+        code_id: failed_validation
+        message: validation failure(s) in request payload
+        errors:
+          1db8c4b5-e5ae-429e-947b-6a4616ffc717:
+            missing_fields:
+              accounts[0]:
+                - provider
+                - account_id
+              accounts[1]:
+                - account_id
+            invalid_fields:
+              accounts[0]:
+                - currency
     CustomerID:
       type: string
       format: uuid
       description: A unique identifier for a Customer, as registered on Bud's platform.
       example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+    SynchronousEnrichmentsList:
+      type: array
+      description: |
+        The list of enrichments product to execute during the synchronous execution of the request. Based on this list, the transactions sent 
+        will be processed through a number of enrichment flows, and this drives the amount of additional information attached to each transactions 
+        in the synchronous process.
+
+        The list of available enrichement products during the synchronous ingestion is the following:
+        - categories
+        - merchants
+
+        The default behaviour is to execute `categories` and `merchants`.
+              
+        Note: This attribute doesn't limit the execution of all Bud's enrichments, we'll still return a number of additional information (eg: tokens), 
+        but it switches on and off the two enrichments listed above.
+      example:
+        - categories
+        - merchants
+      items:
+        type: string
+        enum:
+          - categories
+          - merchants
     CustomerTransactionV3:
       title: Customer Transaction V3
       description: A schema for Bud V3 transaction format
@@ -4821,9 +5089,14 @@ components:
             Example: `"10.98"` or `"-10.98"`
         currency:
           $ref: '#/components/schemas/BudCurrency'
-    TransactionV3Window:
+    TransactionWindow:
       type: object
       title: Transaction Window
+      description: |
+        The transaction window is used to describe the entire period for which you have 
+        provided full coverage for the transactions within the request. It is used by Bud to 
+        ascertain periods of inactivity on the account(s) in question to ensure accurate data 
+        can be provided across downstream endpoints (e.g. Retrieve Balances Over Time).
       required:
         - account_id
         - start
@@ -4844,6 +5117,12 @@ components:
           format: datetime
           description: The date detailing the end of the transaction window, compliant with RFC3339
           example: '2022-10-10T23:00:00Z'
+    TransactionWindowArray:
+      type: array
+      description: |
+        If not provided, the transaction window is inferred from the date of the first and last transactions.
+      items:
+        $ref: '#/components/schemas/TransactionWindow'
     IngestTransactionsV3Request:
       title: Bud V3 Transactions Request
       description: Ingest transaction expected request body.
@@ -4858,6 +5137,8 @@ components:
             $ref: '#/components/schemas/CustomerID'
           customer_secret:
             $ref: '#/components/schemas/CustomerSecret'
+          sync_enrichments:
+            $ref: '#/components/schemas/SynchronousEnrichmentsList'
           transactions:
             type: array
             description: List of transactions belonging to the customer.
@@ -4865,22 +5146,7 @@ components:
             items:
               $ref: '#/components/schemas/CustomerTransactionV3'
           transaction_windows:
-            type: array
-            description: |
-              The transaction window is used to describe the entire period for which you have 
-              provided full coverage for the transactions within the request. It is used by Bud to 
-              ascertain periods of inactivity on the account(s) in question to ensure accurate data 
-              can be provided across downstream endpoints (e.g. Retrieve Balances Over Time).
-            items:
-              $ref: '#/components/schemas/TransactionV3Window'
-    IngestV2Response:
-      type: object
-      required:
-        - operation_id
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-          example: v2_ingest_transactions_post
+            $ref: '#/components/schemas/TransactionWindowArray'
     schemas-Categories:
       title: Categories
       type: object
@@ -5060,26 +5326,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/schemas-Transaction'
-    IngestV2Metadata:
-      title: Created Task Details
-      description: Metadata on the created task, including the task_id
-      type: object
-      required:
-        - task_id
-      properties:
-        task_id:
-          type: string
-          format: uuid
-          description: Can be used with the transaction status endpoint to retrieve the status of the full enriched process
-        next_url:
-          type: string
-          format: url
-          description: The URL to call to obtain the current status of the task.
-          example: /v1/enrich-transactions/4cef424c-1d7f-4cab-8be2-aee7e1774a00
-        next_url_delay:
-          type: number
-          description: The time in milliseconds that the client should wait before trying to retrieve the current status of the task.
-          example: 50
     IngestV2SyncResponse:
       title: Ingest Transactions V2 Sync Response
       type: object
@@ -5096,56 +5342,6 @@ components:
                 $ref: '#/components/schemas/IngestV2SyncResponseData'
             metadata:
               $ref: '#/components/schemas/IngestV2Metadata'
-    IngestV2AsyncResponse:
-      title: Ingest Transactions V2 Async Response
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/IngestV2Response'
-        - type: object
-          required:
-            - operation_id
-            - metadata
-          properties:
-            metadata:
-              $ref: '#/components/schemas/IngestV2Metadata'
-    BodyDecodeError:
-      type: object
-      title: JSON Decoding Error
-      required:
-        - operation_id
-        - code_id
-        - message
-        - errors
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        code_id:
-          type: string
-          enum:
-            - failed_body_decode
-        message:
-          type: string
-          description: 'High level description on what has failed '
-        errors:
-          type: object
-          description: Contains more details on the decoding error
-          required:
-            - decode_error
-          properties:
-            decode_error:
-              type: string
-    ValidationMissing:
-      type: array
-      title: Missing Fields
-      description: list of required missing fields for a transaction
-      items:
-        type: string
-    ValidationInvalid:
-      type: array
-      title: Invalid Fields
-      description: list of invalid fields for a transaction
-      items:
-        type: string
     ValidationError:
       type: object
       title: Validation Errors
@@ -6094,6 +6290,16 @@ components:
         type: string
       required: true
       description: The API Client Identifier (Service Application Identifier).
+      example: 8711bbef-b357-4c2d-97ca-0d9df4206e9a
+    PathCustomerID:
+      in: path
+      name: customer_id
+      schema:
+        type: string
+        format: uuid
+      required: true
+      description: A unique identifier for a Customer, as registered on Bud's platform.
+      example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
     CustomerId:
       in: header
       name: X-Customer-Id
@@ -6101,7 +6307,8 @@ components:
         type: string
         format: uuid
       required: true
-      description: Bud Customer identifier
+      description: A unique identifier for a Customer, as registered on Bud's platform.
+      example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
     CustomerSecret:
       in: header
       name: X-Customer-Secret
@@ -6130,6 +6337,15 @@ components:
         type: string
       required: true
       description: The account ID to retrieve data for.
+    parameters-IngestAccountsContentType:
+      in: header
+      name: Content-Type
+      required: true
+      schema:
+        type: string
+        enum:
+          - application/bud-accounts+json
+      description: Define the transactions' format for this request.
     DisableSynchronous:
       in: header
       name: X-Disable-Synchronous
