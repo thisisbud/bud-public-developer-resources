@@ -3006,8 +3006,6 @@ paths:
                         time: '00:00:00'
                         type: InterimBooked
       responses:
-        '200':
-          description: The data has been ingested successfully. Response has no body
         '202':
           description: A new Task has been created to ingest the given accounts. The generated `task_id` can be used to check the Task's status
           content:
@@ -3020,6 +3018,8 @@ paths:
                   task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
                   next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
                   next_url_delay: 250
+        '204':
+          description: The data has been ingested successfully. Response has no body
         '400':
           description: Bad Request that fails validations on headers and/or payload
           content:
