@@ -1559,6 +1559,7 @@ paths:
           description: An unexpected error occurred on the server side
   /v2/ingest/status/{task_id}:
     get:
+      deprecated: true
       tags:
         - Ingest Data
       summary: Retrieve Ingestion Task Status
@@ -1632,6 +1633,78 @@ paths:
                       ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
                       ingest_route: v2_ingest_transactions_post
                       ingest_schema: application/bud-transaction-v3+json
+        '401':
+          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
+        '404':
+          description: The task couldn't be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskNotFoundError'
+              example:
+                operation_id: v2_ingest_status_get
+                code_id: task_not_found
+                message: Task ID [6c7d06a7-5b40-4556-91d4-6b6d1a7db3f1] does not exist or it has expired
+        '405':
+          description: The request uses an unexpected HTTP method
+        5XX:
+          description: An unexpected error occurred on the server side
+  /ingestion/v3/tasks/{task_id}:
+    get:
+      tags:
+        - Ingest Data
+      summary: Retrieve Ingestion Task Status
+      description: |
+        Check the status of an ingest request. Please note that this works for both the Ingest Transactions endpoints And Ingest Accounts endpoints.
+        Reports status of the ingestion task, with details for each subtask (1 per customer).
+      operationId: v3_ingest_status_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: The request was successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestStatusV3Response'
+              examples:
+                Pending Task:
+                  value:
+                    operation_id: v3_ingest_status_get
+                    data:
+                      - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
+                        status: Pending
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
+                      status: Pending
+                      next_url: /ingestion/v3/tasks/3d592efc-493a-4548-8008-f738fd0877ab
+                      next_url_delay: 500
+                Successful Task:
+                  value:
+                    operation_id: v3_ingest_status_get
+                    data:
+                      - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
+                        status: Completed
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
+                      status: Completed
+                      ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
+                      ingest_route: v2_ingest_transactions_post
+                      ingest_schema: application/bud-transaction-v3+json
+                Failed Task:
+                  value:
+                    operation_id: v3_ingest_status_get
+                    data:
+                      - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
+                        status: Failed
+                        error:
+                          accounts[0].currency: 'unexpected currency code: GlkjlkjBP, expected ISO-4217 currency code'
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008
+                      status: Failed
         '401':
           description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
         '404':
@@ -5649,6 +5722,85 @@ components:
         operation_id: ingest_transactions_get
         code_id: not_found
         message: Task not found
+    IngestResponseV3SubTask:
+      title: Customer Ingest Task
+      description: A single customer ingest task status
+      type: object
+      required:
+        - customer_id
+        - status
+      properties:
+        customer_id:
+          type: string
+          format: uuid
+          description: A unique identifier for a Customer, as registered on Bud's platform.
+        status:
+          title: Ingest Response Status
+          description: Ingest response status.
+          type: string
+          enum:
+            - Completed
+            - Failed
+            - Pending
+        error:
+          description: Any error messages describing why a sub task has failed.
+          type: object
+          additionalProperties: true
+    schemas-IngestStatusTaskMetadata:
+      title: Ingest Task Metadata
+      description: Expected response structure.
+      type: object
+      required:
+        - task_id
+        - status
+      properties:
+        task_id:
+          type: string
+          format: uuid
+          description: Unique task identifier.
+        status:
+          $ref: '#/components/schemas/OverallIngestResponseStatus'
+        ingest_request_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the initial ingest request
+        ingest_route:
+          type: string
+          description: The endpoint used for this ingest task
+          enum:
+            - ingest_accounts_post
+            - ingest_transactions_post
+            - v2_ingest_transactions_post
+        ingest_schema:
+          type: string
+          description: The account/transaction schema used for the ingest
+          enum:
+            - application/bud-accounts+json
+            - application/bud-transaction-v2+json
+            - application/bud-transaction-v3+json
+        next_url:
+          description: The URL to call to obtain the results of the task
+          type: string
+        next_url_delay:
+          description: Recommended delay in milliseconds before next call
+          type: number
+    IngestStatusV3Response:
+      title: Ingestion Task Status Response
+      type: object
+      description: Report on the status of an ingestion task
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngestResponseV3SubTask'
+        metadata:
+          $ref: '#/components/schemas/schemas-IngestStatusTaskMetadata'
     CategoryObject:
       title: Category Object
       type: object
