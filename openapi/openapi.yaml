@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: 'Bud API Services: Documentation'
-  version: 2.9.8
+  version: 2.9.16
   description: |-
     # Overview
 
@@ -290,13 +290,19 @@ info:
     | 04/10/2023           | Deprecated **Open Banking Sync Complete** callback in favour the **Connect Completed Notification Callback** and **Refresh Completed Notification Callback** callbacks.                                                                                                                                                                                                                                                                    |
     | 18/10/2023           | Deprecated **Retrieve Transaction Ingestion Task Status** in favour of **Retrieve Ingestion Task Status**.                                                                                                                                                                                                                                                                                                                                 |
     | 18/10/2023           | Deprecated **Retrieve Accounts Ingestion Task Status** in favour of **Retrieve Ingestion Task Status**.                                                                                                                                                                                                                                                                                                                                    |
+    | 15/01/2024           | Deprecated **Remove Customer** in favour of **Remove Customer V3**.                                                                                                                                                                                                                                                                                                                                        |
+
 
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.9.12: 15/01/2024**
+    > - Deprecate __Remove Customer__ endpoint in favour of the __Remove Customer V3__ endpoint.
+    > - Added __Remove Customer V3__ and __Retrieve Remove Customer__ V3 Status endpoints.
+
     **Version 2.9.11: 12/12/2023**
-    > - Updated __Reconfirm Consent__ description to include a note about which clients can use the endpoint,
+    > - Updated __Reconfirm Consent__ description to include a note about which clients can use the endpoint.
 
     **Version 2.9.10: 07/12/2023**
     > - Updated __Create Customer V3__ endpoint to include `created_at` and a new 200 response for existing customers.
@@ -2875,54 +2881,6 @@ paths:
           description: The request uses an unexpected HTTP method
         5XX:
           description: An unexpected error occurred on the server side
-  /v1/ingest/transactions:
-    post:
-      tags:
-        - Ingest First Party Data
-      summary: Ingest Transactions
-      deprecated: true
-      description: |
-        Initiate the asynchronous process of pushing a customer's transaction(s) through the Bud architecture to apply Bud's enrichment and insights services to first party transactional data. This request creates a task that stores the given transactions against the specified customers and initiates the relevant enrichment process.
-
-        The enrichment services applied to the data will depend upon the relevant scopes assigned to your Client ID.
-
-        The Task ID returned by this request can be used to verify the current status of the process.
-
-        ** NOTE **
-
-        Currently deprecated, use `/v2/ingest/transactions`. 
-      operationId: ingest_transactions_post
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/IngestTransactionsContentType'
-      requestBody:
-        required: true
-        content:
-          application/bud-transaction-v2+json:
-            schema:
-              $ref: '#/components/schemas/IngestTransactionsRequest'
-      responses:
-        '202':
-          description: A new Task has been created to ingest the given transactions. The generated `task_id` can be used to check the Task's status
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IngestTransactionsResponse'
-              example:
-                operation_id: ingest_transactions_post
-                data:
-                  task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                metadata:
-                  next_url: /v1/ingest/transactions/4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url_delay: 50
-        '400':
-          description: Bad Request that fails validations on headers & payload
-        '401':
-          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
-        5XX:
-          description: An unexpected error occurred on the server side
   /v2/ingest/accounts:
     post:
       tags:
@@ -3017,7 +2975,7 @@ paths:
                 metadata:
                   task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
                   next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url_delay: 250
+                  next_url_delay: 500
         '204':
           description: The data has been ingested successfully. Response has no body
         '400':
@@ -3039,15 +2997,15 @@ paths:
         - Ingest First Party Data
       summary: Ingest Transactions V2
       description: |
-        This endpoint initiates a 'blocking' transaction ingestion and enrichment process. It will return partially enriched transactions and a Task ID which would then be used for finding out the current status of the full enrichment process. The complete enrichment services applied to the data will depend upon the relevant scopes assigned to your Client ID.
+        This endpoint should be used to ingest customer transactions into the Bud Platform.
 
-        If a 'X-Disable-Synchronous' header is present and set to true, the process will be entirely 'non-blocking', with the returned Task ID providing access to the status of the full enrichment process.
+        By default, this endpoint is synchronous but can be easily switched to asynchronous using the 'X-Disable-Synchronous' header. 
+        Please refer to the following [guide](https://docs.thisisbud.com/docs/setup_data_enrichment) to ensure you set up First Party Ingestion 
+        correctly for your organisation based on your use case.
 
-        There are a number of ingest schemas that can be used with this endpoint. These are described in the `Body Params` below. You will need to ensure the content-type header matches the schema used.
+        We accept a maximum of 1.000 transactions. If this threshold is not respected, a 400 error is returned.
 
-        **Note**
-
-        Compared to the V1 ingest endpoints, the data validation is performed up-front. As such if this endpoints returns a __200__ or __202__ then the data is correctly formatted.
+        We support the ingestion of transactions for multiple customers as part of the same request.
       operationId: v2_ingest_transactions_post
       security:
         - OAuth2: []
@@ -3058,11 +3016,9 @@ paths:
       requestBody:
         required: true
         content:
-          '*/*':
+          application/bud-transaction-v3+json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/IngestTransactionsV3Request'
-                - $ref: '#/components/schemas/IngestTransactionsRequest'
+              $ref: '#/components/schemas/IngestTransactionsV3Request'
             examples:
               bud-transaction-v3 Request:
                 value:
@@ -3085,28 +3041,6 @@ paths:
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         start: '2022-10-10T23:00:00Z'
                         end: '2022-11-10T23:00:00Z'
-              bud-transaction-v2 Request:
-                value:
-                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                    customer_secret: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
-                    transactions:
-                      - provider: Lloyds
-                        account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
-                        transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
-                        transaction_type: DEB
-                        date: '2020-01-31'
-                        time: '23:59:00'
-                        transaction_description: The RSPCA, Southwater
-                        credit_debit_indicator: incoming_credit
-                        status: booked
-                        counterparty:
-                          name: The RSPCA
-                          address: 1824, Strand, London
-                          scheme: SortCodeAccountNumber
-                          identifier: '20200811151300'
-                        amount:
-                          amount: '10.98'
-                          currency: GBP
       responses:
         '200':
           description: |
@@ -3155,8 +3089,8 @@ paths:
                             - jane doe
                 metadata:
                   task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url: /v1/ingest/transactions/4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url_delay: 50
+                  next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                  next_url_delay: 500
         '202':
           description: A new Task has been created to ingest the given transactions. The generated `task_id` can be used to check the Task's status
           content:
@@ -3167,8 +3101,8 @@ paths:
                 operation_id: v2_ingest_transactions_post
                 metadata:
                   task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url: /v1/ingest/transactions/4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url_delay: 50
+                  next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                  next_url_delay: 500
         '400':
           description: The server will not process the request due to a client error.
           content:
@@ -3220,96 +3154,13 @@ paths:
           description: An unexpected timeout occurred on the enrichment server. Sync Only
         5XX:
           description: An unexpected error occurred on the server side
-  /v1/ingest/transactions/{task_id}:
-    get:
-      deprecated: true
-      tags:
-        - Ingest First Party Data
-      summary: Retrieve Transaction Ingestion Task Status
-      description: |
-        Check the status of an ingest transactions request. Please note that this works for both the Ingest Transactions V1 and V2 endpoints.
-
-        The given status has an overall value and a specific status for each given customer.
-      operationId: ingest_transactions_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/TaskId'
-      responses:
-        '200':
-          description: The request was successfully processed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IngestStatusResponse'
-              examples:
-                Success:
-                  value:
-                    operation_id: ingest_transactions_get
-                    data:
-                      id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                      status: Completed
-                      sub_tasks:
-                        - id: e6277c5a-c73d-47f5-847f-36bff8618691
-                          customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                          status: Completed
-                          error: null
-                        - id: 661d6ec2-1b08-4f30-9ede-d4d18db26b09
-                          customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
-                          status: Completed
-                          error: null
-                Validation Failure:
-                  value:
-                    operation_id: ingest_transactions_get
-                    data:
-                      id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                      status: Failed
-                      sub_tasks:
-                        - id: e6277c5a-c73d-47f5-847f-36bff8618691
-                          customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                          status: Failed
-                          error:
-                            transactions.0.provider: provider is required
-                            transactions.0.account_id: account_id is required
-                            transactions.1.provider: provider is required
-                            transactions.2.transaction_id: transaction_id is required
-                        - id: 661d6ec2-1b08-4f30-9ede-d4d18db26b09
-                          customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
-                          status: Failed
-                          error:
-                            transactions.1.provider: provider is required
-                Transient Failure:
-                  value:
-                    operation_id: ingest_transactions_get
-                    data:
-                      id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                      status: Failed
-                      sub_tasks:
-                        - id: e6277c5a-c73d-47f5-847f-36bff8618691
-                          customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                          status: Failed
-                          error:
-                            error: unable to persist transactions
-        '400':
-          description: The server will not process the request due to a client error.
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/FailedValidationError'
-                  - $ref: '#/components/schemas/TaskNotFoundError'
-        '405':
-          description: The request uses an unexpected HTTP method
-        5XX:
-          description: An unexpected error occurred on the server side
   /v2/ingest/status/{task_id}:
     get:
       tags:
         - Ingest First Party Data
       summary: Retrieve Ingestion Task Status
       description: |
-        Check the status of an ingest request. Please note that this works for both the Ingest Transactions V1 and V2 endpoints And Ingest Accounts V1.
+        Check the status of an ingest request. Please note that this works for both the Ingest Transactions endpoints And Ingest Accounts endpoints.
 
         The given status has an overall value and a specific status for each given customer.
       operationId: v2_ingest_status_get
@@ -3625,7 +3476,7 @@ paths:
         - Manage Customers
       summary: Retrieve Remove Customer V3 Status
       description: |
-        Check the status and get the result of a Remove Customer V3 task. If the task is not yet completed, the data element will be null.
+        Check the status and get the result of a Remove Customer V3 task.
       operationId: platform_v3_customers_delete_status
       parameters:
         - in: path
@@ -15874,163 +15725,6 @@ components:
           $ref: '#/components/schemas/OperationId'
         data:
           $ref: '#/components/schemas/IngestResponseTask'
-    Counterparty:
-      title: Counterparty
-      type: object
-      description: Describes the party the money was deposited to or taken from.
-      required:
-        - name
-        - address
-        - scheme
-        - identifier
-      properties:
-        name:
-          type: string
-          description: The name of the party.
-          example: The RSPCA
-        address:
-          type: string
-          description: The address of the party.
-          example: 1824, Strand, London
-        scheme:
-          type: string
-          enum:
-            - SortCodeAccountNumber
-          description: The scheme used by the party.
-          example: SortCodeAccountNumber
-        identifier:
-          type: string
-          description: The identifier assigned by the party.
-          example: '20200811151300'
-    LegacyBudAmount:
-      title: Legacy Bud Amount
-      type: object
-      description: The monetary amount.
-      required:
-        - amount
-        - currency
-      properties:
-        amount:
-          $ref: '#/components/schemas/BudMonetaryValue'
-        currency:
-          $ref: '#/components/schemas/BudCurrency'
-    CustomerTransactionV2:
-      title: Customer Transaction
-      description: A transaction item.
-      type: object
-      required:
-        - provider
-        - account_id
-        - transaction_id
-        - transaction_type
-        - date
-        - transaction_description
-        - credit_debit_indicator
-        - status
-        - counterparty
-        - amount
-      properties:
-        provider:
-          type: string
-          description: The name of the provider.
-          example: Lloyds
-        account_id:
-          type: string
-          description: Unique identifier for the Customer bank account.
-          example: 44568cce263a
-        transaction_id:
-          type: string
-          description: Unique identifier for the transaction.
-          example: 8a5a3408bb9e
-        transaction_type:
-          type: string
-          enum:
-            - DEB
-            - CSQ
-            - CHG
-            - COR
-            - CPT
-            - INT
-            - OTH
-            - BAT
-            - DD
-            - SO
-          description: |
-            enum | Description
-            ---- | -----------
-            DEB  | Debit Card / Credit Card
-            CSQ  | Cash / Cheque(s)
-            CHG  | Charge
-            COR  | Correction
-            CPT  | Cashpoint / ATM
-            INT  | Interest
-            OTH  | Other
-            BAT  | Bank Transfer<br />e.g. FP/MP/IB/BACS/CHAPS/SWIFT
-            DD   | Direct Debit
-            SO   | Standing Order
-          example: DEB
-        date:
-          type: string
-          format: date
-          description: The date of the transaction. ISO 8601/RFC 3339 format `yyyy-mm-dd`.
-          example: '2020-01-31'
-        time:
-          type: string
-          description: The time of the transaction. ISO 8601/RFC 3339 format `hh:mm:ss`. Default `00:00:00`.
-          example: '23:59:00'
-          default: '00:00:00'
-        transaction_description:
-          type: string
-          description: Further details of the transaction.
-          example: The RSPCA, Southwater
-        credit_debit_indicator:
-          type: string
-          enum:
-            - incoming_credit
-            - outgoing_debit
-          description: Indication as to whether the transaction was a credit or debit.
-          example: incoming_credit
-        status:
-          type: string
-          enum:
-            - pending
-            - booked
-          description: The status of the transaction.
-          example: pending
-        counterparty:
-          $ref: '#/components/schemas/Counterparty'
-        amount:
-          $ref: '#/components/schemas/LegacyBudAmount'
-        local_amount:
-          allOf:
-            - description: The original/local monetary amount
-            - $ref: '#/components/schemas/LegacyBudAmount'
-    CustomerWithTransactions:
-      title: Customer With Transactions
-      description: A customer with a list of transactions.
-      type: object
-      required:
-        - customer_id
-        - transactions
-      properties:
-        customer_id:
-          type: string
-          format: uuid
-          description: A unique identifier for a Customer, as registered on Bud's platform.
-          example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-        customer_secret:
-          $ref: '#/components/schemas/CustomerSecret'
-        transactions:
-          type: array
-          description: List of transactions belonging to the customer.
-          items:
-            $ref: '#/components/schemas/CustomerTransactionV2'
-    IngestTransactionsRequest:
-      title: Bud V2 Transactions Request
-      description: Ingest transaction expected request body.
-      type: array
-      items:
-        $ref: '#/components/schemas/CustomerWithTransactions'
     IngestV2Response:
       type: object
       required:
@@ -16054,11 +15748,11 @@ components:
           type: string
           format: url
           description: The URL to call to obtain the current status of the task.
-          example: /v1/enrich-transactions/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+          example: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
         next_url_delay:
           type: number
           description: The time in milliseconds that the client should wait before trying to retrieve the current status of the task.
-          example: 50
+          example: 500
     IngestV2AsyncResponse:
       title: Ingest Transactions V2 Async Response
       type: object
@@ -16246,16 +15940,17 @@ components:
       properties:
         transaction_id:
           type: string
-          format: uuid
-          description: Unique, immutable transaction identifier
+          description: |
+            Unique, immutable transaction identifier. This can be of any format (not necessarily UUID), with a maximum of 255 characters. 
+            It's important this ID is immutable over time and unique as we use this ID as a key to store the transaction against your customer, 
+            so if more than one transaction has the same ID for the same customer, we will store only one of them.
           example: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
         description:
           type: string
           description: Free text string providing details on the transaction itself
         account_id:
           type: string
-          format: uuid
-          description: The account identifier that the transaction belongs to
+          description: The account identifier that the transaction belongs to. This can be of any format (not necessarily UUID), with a maximum of 255 characters.
           example: 2f5b2055-6253-4cd0-b646-06788342a609
         date_time:
           type: string
@@ -16483,52 +16178,6 @@ components:
                 - date
               ba466961-d623-4173-9001-2f6487a9a41e:
                 - date
-    FailedValidationError:
-      type: object
-      title: Failed Validation
-      required:
-        - operation_id
-        - code_id
-        - message
-        - errors
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        code_id:
-          type: string
-          enum:
-            - failed_validation
-        message:
-          type: string
-          description: High level description on what has failed
-        errors:
-          type: object
-          description: Contains a field specific error messages
-      example:
-        operation_id: ingest_transactions_get
-        code_id: failed_validation
-        message: Failed validation
-        errors:
-          task_id: A valid task ID URI parameter is required
-    TaskNotFoundError:
-      type: object
-      title: Task Not Found
-      required:
-        - operation_id
-        - code_id
-        - message
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        code_id:
-          type: string
-        message:
-          type: string
-          description: High level description on what has failed
-      example:
-        operation_id: ingest_transactions_get
-        code_id: not_found
-        message: Task not found
     IngestResponseV2SubTask:
       title: Customer Ingest Task
       description: A single customer ingest task status
@@ -16624,6 +16273,25 @@ components:
                     - Pending
         metadata:
           $ref: '#/components/schemas/IngestStatusTaskMetadata'
+    TaskNotFoundError:
+      type: object
+      title: Task Not Found
+      required:
+        - operation_id
+        - code_id
+        - message
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+        message:
+          type: string
+          description: High level description on what has failed
+      example:
+        operation_id: ingest_transactions_get
+        code_id: not_found
+        message: Task not found
     CustomerContextType:
       title: Customer Context Type
       type: string
@@ -17059,6 +16727,18 @@ components:
         label:
           type: string
           description: The label (name) of the transaction category for display purposes
+    LegacyBudAmount:
+      title: Legacy Bud Amount
+      type: object
+      description: The monetary amount.
+      required:
+        - amount
+        - currency
+      properties:
+        amount:
+          $ref: '#/components/schemas/BudMonetaryValue'
+        currency:
+          $ref: '#/components/schemas/BudCurrency'
     LegacyCategoryTotalSpend:
       title: Category Total Object
       type: object
@@ -23608,15 +23288,6 @@ components:
         type: string
         enum:
           - application/bud-accounts+json
-      description: Define the transactions' format for this request.
-    IngestTransactionsContentType:
-      in: header
-      name: Content-Type
-      required: true
-      schema:
-        type: string
-        enum:
-          - application/bud-transaction-v2+json
       description: Define the transactions' format for this request.
     IngestTransactionsV2ContentType:
       in: header
