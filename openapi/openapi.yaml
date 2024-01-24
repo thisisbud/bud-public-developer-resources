@@ -297,6 +297,21 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.10.1: 24/01/2024**
+    > - Removed the deprecated **Retrieve Financial Forecast** endpoint.
+    > - Removed the deprecated **Retrieve Trends** endpoint.
+    > - Removed the deprecated **Retrieve Financial Insights** endpoint.
+    > - Removed the deprecated **Retrieve Energy Payments** endpoint.
+    > - Removed the deprecated **Energy Payments Discover** endpoint.
+    > - Removed the deprecated **Retrieve Category Totals** endpoint.
+    > - Removed the deprecated **Create Transaction Rule** endpoint.
+    > - Removed the deprecated **Correct Transaction Categories** endpoint.
+    > - Removed the deprecated **Retrieve Money Management** endpoint.
+
+
+    **Version 2.9.13: 18/01/2024**
+    > - Updated description for __Retrieve Balances Over Time__ and __Retrieve Balances Over Time By Account__ endpoint.
+
     **Version 2.9.12: 15/01/2024**
     > - Deprecate __Remove Customer__ endpoint in favour of the __Remove Customer V3__ endpoint.
     > - Added __Remove Customer V3__ and __Retrieve Remove Customer__ V3 Status endpoints.
@@ -1083,18 +1098,10 @@ tags:
     x-displayName: Custom Signals
     description: |
       Understand and target messaging to your customers more effectively by defining your own custom segmentations.
-  - name: Everyday Money Management
-    x-displayName: Everyday Money Management
+  - name: Custom Insights
+    x-displayName: Custom Insights
     description: |
-      Help your customers stay on top of their financial situation with helpful and timely notifications
-  - name: Customer Characteristics
-    x-displayName: Customer Characteristics
-    description: |
-      Understand your customers profile and what type of services they could benefit from
-  - name: Income and Expenditure Insight
-    x-displayName: Income and Expenditure Insight
-    description: |
-      Understand your customers overall financial situation and affordability.
+      Understand and target messaging to your customers more effectively by defining your own custom insights.
 paths:
   /v1/oauth/token:
     post:
@@ -3156,6 +3163,7 @@ paths:
           description: An unexpected error occurred on the server side
   /v2/ingest/status/{task_id}:
     get:
+      deprecated: true
       tags:
         - Ingest First Party Data
       summary: Retrieve Ingestion Task Status
@@ -3229,6 +3237,78 @@ paths:
                       ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
                       ingest_route: v2_ingest_transactions_post
                       ingest_schema: application/bud-transaction-v3+json
+        '401':
+          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
+        '404':
+          description: The task couldn't be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskNotFoundError'
+              example:
+                operation_id: v2_ingest_status_get
+                code_id: task_not_found
+                message: Task ID [6c7d06a7-5b40-4556-91d4-6b6d1a7db3f1] does not exist or it has expired
+        '405':
+          description: The request uses an unexpected HTTP method
+        5XX:
+          description: An unexpected error occurred on the server side
+  /ingestion/v3/tasks/{task_id}:
+    get:
+      tags:
+        - Ingest First Party Data
+      summary: Retrieve Ingestion Task Status
+      description: |
+        Check the status of an ingest request. Please note that this works for both the Ingest Transactions endpoints And Ingest Accounts endpoints.
+        Reports status of the ingestion task, with details for each subtask (1 per customer).
+      operationId: v3_ingest_status_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: The request was successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestStatusV3Response'
+              examples:
+                Pending Task:
+                  value:
+                    operation_id: v3_ingest_status_get
+                    data:
+                      - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
+                        status: Pending
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
+                      status: Pending
+                      next_url: /ingestion/v3/tasks/3d592efc-493a-4548-8008-f738fd0877ab
+                      next_url_delay: 500
+                Successful Task:
+                  value:
+                    operation_id: v3_ingest_status_get
+                    data:
+                      - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
+                        status: Completed
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
+                      status: Completed
+                      ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
+                      ingest_route: v2_ingest_transactions_post
+                      ingest_schema: application/bud-transaction-v3+json
+                Failed Task:
+                  value:
+                    operation_id: v3_ingest_status_get
+                    data:
+                      - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
+                        status: Failed
+                        error:
+                          accounts[0].currency: 'unexpected currency code: GlkjlkjBP, expected ISO-4217 currency code'
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008
+                      status: Failed
         '401':
           description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
         '404':
@@ -3913,104 +3993,6 @@ paths:
           description: An unexpected HTTP method was used
         5XX:
           description: An unexpected error occurred on the server side
-  /v1/categories/totals:
-    get:
-      tags:
-        - Enrichment Totals
-      summary: Retrieve Category Totals
-      deprecated: true
-      description: |
-        Provides a customer’s total income and expenditure for each category and subcategory, over a given time period. 
-
-        Each income and expenditure total is separated by currency, as we cannot sum totals in different currencies.
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of December 2023 - please complete your migration to the Retrieve Category Totals V2 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-      operationId: v1_categories_totals_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - in: header
-          name: X-From
-          required: false
-          schema:
-            type: string
-          example: '2022-02-28'
-          description: |
-            The date from when results are to be retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
-
-            When ommited from the request, a default value of 30 days from before today's date will be used.
-
-            Example: `2022-02-28`
-        - in: header
-          name: X-To
-          required: false
-          schema:
-            type: string
-          example: '2022-01-28'
-          description: |
-            The date up to when results are to be retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
-
-            When ommited from the request, a default value of today's date will be used.
-
-            Example: `2022-01-28`
-      responses:
-        '200':
-          description: The operation was successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CategoriesTotalResponse'
-              example:
-                operation_id: v1_categories_totals_get
-                data:
-                  categories:
-                    - category:
-                        id: shopping
-                        label: Shopping
-                      credit_amount:
-                        - amount: '15.90'
-                          currency: GBP
-                      debit_amount:
-                        - amount: '397.80'
-                          currency: GBP
-                  sub_categories:
-                    - category:
-                        id: gaming
-                        label: Gaming
-                      credit_amount:
-                        - amount: '9.99'
-                          currency: GBP
-                        - amount: '3.99'
-                          currency: USD
-                      debit_amount:
-                        - amount: '0.00'
-                          currency: GBP
-                        - amount: '32.99'
-                          currency: USD
-        '400':
-          description: The request contains an invalid payload
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              example:
-                operation_id: v1_categories_totals_get
-                code_id: failed_validation
-                message: Failed validation.
-                errors:
-                  client_id:
-                    - This value should not be blank
-        '401':
-          description: An unauthenticated request was received
-        '405':
-          description: The request uses an unexpected HTTP method
-        5XX:
-          description: An unexpected error occurred on the server side
   /aggregations/v2/totals/categories:
     get:
       tags:
@@ -4622,8 +4604,13 @@ paths:
         and `from` dates provided. It then checks all the transactions within this range, calculating the balance at 
         the end of each day.
 
-        This endpoint limits the date from which it gets balances from either by the oldest `transaction_window` on the 
-        account if they are present, or by the oldest transaction within the requested date range available.
+        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the 
+        account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint
+        returns an empty list.
+
+        You can only request balances within transaction windows, therefore if you ingest transactions without a 
+        transaction window, you won't be able to request balance for that time range. However those transactions will be
+        used to calculate the balance as well.
 
         For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the 
         data supplied from this service by including the transaction_window field upon account ingestion.
@@ -4748,8 +4735,13 @@ paths:
         and `from` dates provided. It then checks all the transactions within this range, calculating the balance at 
         the end of each day.
 
-        This endpoint limits the date from which it gets balances from either by the oldest `transaction_window` on the 
-        account if they are present, or by the oldest transaction within the requested date range available.
+        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the 
+        account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint
+        returns an empty list.
+
+        You can only request balances within transaction windows, therefore if you ingest transactions without a 
+        transaction window, you won't be able to request balance for that time range. However those transactions will be
+        used to calculate the balance as well.
 
         For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the 
         data supplied from this service by including the transaction_window field upon account ingestion.
@@ -5245,75 +5237,6 @@ paths:
           description: The request uses an unexpected HTTP method.
         5XX:
           description: An unexpected error occurred on the server side.
-  /v1/recategorise/customer-corrections/double-cat:
-    post:
-      tags:
-        - Manage Financial Data
-      summary: Correct Transaction Categories V1
-      description: |
-        Allow a customer to change a transaction’s category and/or subcategory.
-
-        Tag all similar transactions (those that currently exist and those that happen in the future) with the new category and/or subcategory value for a given customer.
-
-        Similar transactions are determined based on transactions with similar descriptions & amounts.
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of December 2023 - please complete your migration to the Correct Transaction Categories V2 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-      deprecated: true
-      operationId: recategorise_customer_double_cat_post
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RecategoriseCustomerRequestDoublecat'
-            example:
-              - account_id: 5f44d9d6-8de0-4bc7-8db2-c26aea40ed62
-                transaction_id: 7affc586-5600-4434-ac5f-1a845260d7d9
-                category_name: eating_out
-                subcategory_name: other_eating_out
-      responses:
-        '200':
-          description: The request was successfully processed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RecategoriseCustomerResponseDoublecat'
-              example:
-                operation_id: recategorise_customer_double_cat_post
-                data:
-                  - account_id: 5f44d9d6-8de0-4bc7-8db2-c26aea40ed62
-                    transaction_id: 7affc586-5600-4434-ac5f-1a845260d7d9
-                    category_name: eating_out
-                    subcategory_name: other_eating_out
-                metadata:
-                  results: 1
-        '400':
-          description: The request contains an invalid payload
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              example:
-                operation_id: recategorise_customer_double_cat_post
-                code_id: failed_validation
-                message: Failed validation
-                errors:
-                  category_name:
-                    - This value should not be blank
-        '401':
-          description: Unauthorised request
-        '405':
-          description: An unexpected HTTP method was used
-        5XX:
-          description: An unexpected error occurred on the server side
   /corrections/v2/categories:
     post:
       tags:
@@ -5376,77 +5299,6 @@ paths:
           description: Unauthorised request
         '405':
           description: An unexpected HTTP method was used
-        5XX:
-          description: An unexpected error occurred on the server side
-  /v1/transactions/attributes/client-labels:
-    post:
-      tags:
-        - Manage Financial Data
-      summary: Create Transaction Rule(s)
-      deprecated: true
-      description: |-
-        Submit rules for adding custom attributes to transactions based on properties of the transaction. Rules can be a combination of an exact match on the amount, cdi, currency and description.
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of December 2023. For further details, contact your Bud account manager or email help@thisisbud.com.
-      operationId: v1_transactions_attributes_client_labels_post
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TransactionAttributesClientLabelsRequest'
-            example:
-              - match_attributes:
-                  - type: exact
-                    name: amount
-                    value: '1800.00'
-                  - type: exact
-                    name: cdi
-                    value: Credit
-                set_attribute:
-                  values:
-                    - freelance income
-                    - pocket money
-      responses:
-        '200':
-          description: The operation was successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TransactionAttributesClientLabelsResponse'
-              example:
-                operation_id: v1_transactions_attributes_client_labels_post
-                data:
-                  rules_created: 2
-        '400':
-          description: The request contains an invalid payload
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              example:
-                operation_id: v1_transactions_attributes_client_labels_post
-                code_id: Bad Request
-                message: Required field in payload not set
-                errors:
-                  match_attributes[0].type:
-                    - this field is required
-        '401':
-          description: Unauthorised request
-        '405':
-          description: An unexpected HTTP method was used
-        '413':
-          description: More than 1000 corrections were requested
-        '422':
-          description: Transaction(s) not found, corrections could not be processed
         5XX:
           description: An unexpected error occurred on the server side
   /goals/v1/savings:
@@ -7345,107 +7197,6 @@ paths:
           description: Unauthorised request
         '405':
           description: An unexpected HTTP method was used
-        5XX:
-          description: An unexpected error occurred on the server side
-  /v1/energy-switching/energy-payments:
-    post:
-      tags:
-        - Product Finder
-      summary: Initiate Energy Payments Discovery
-      deprecated: true
-      description: |-
-        Start the process of detecting a customer's energy payments from their aggregated transactional history.
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of December 2023. For further details, contact your Bud account manager or email help@thisisbud.com.
-      operationId: energy_switching_energy_payments_post
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-      responses:
-        '201':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EnergyPaymentSearch'
-              example:
-                operation_id: energy_switching_energy_payments_post
-                data:
-                  task_id: f85318cf-7cf3-4529-b9ff-0a87bd75fab1
-        '400':
-          description: Bad request
-        '401':
-          description: Unauthorised request
-        5XX:
-          description: An unexpected error occurred on the server side
-  /v1/energy-switching/energy-payments/{task_id}:
-    get:
-      tags:
-        - Product Finder
-      summary: Retrieve Energy Payments
-      description: |-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of December 2023. For further details, contact your Bud account manager or email help@thisisbud.com.
-      deprecated: true
-      operationId: energy_switching_energy_payments_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/TaskId'
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EnergyPaymentSearchResponse'
-              examples:
-                Payments detected:
-                  value:
-                    operation_id: energy_switching_energy_payments_get
-                    data:
-                      - transaction_id: cb28d018-147f-4ae9-a613-449d9fcf282b
-                        supplier:
-                          id: british-gas
-                          name: British Gas
-                          logo: https://assets.thisisbud.com/british-gas.jpg
-                        payment_type: 1
-                        amount:
-                          amount: '1250.25'
-                          currency: GBP
-                        provider: Barclays
-                      - transaction_id: 34cb968d-88f4-4b3b-a861-fcd97bc12680
-                        supplier:
-                          id: scottish-power
-                          name: Scottish Power
-                          logo: https://assets.thisisbud.com/scottish-power.jpg
-                        payment_type: 1
-                        amount:
-                          amount: '750.75'
-                          currency: GBP
-                        provider: Monzo
-                    metadata:
-                      status: complete
-                No energy payments detected:
-                  value:
-                    operation_id: energy_switching_energy_payments_get
-                    data: []
-                    metadata:
-                      status: failed
-                      reason: No energy transactions detected
-        '400':
-          description: Bad request
-        '401':
-          description: Unauthorised request
         5XX:
           description: An unexpected error occurred on the server side
   /assess/v1/customer-applications:
@@ -11495,8 +11246,14 @@ paths:
       tags:
         - Custom Signals
       summary: Retrieve Components
-      description: List the matching components which can be used to define custom insights.
+      description: |
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
+
+        List the matching components which can be used to define custom insights.
       operationId: v1_signal_custom_components_get
+      deprecated: true
       security:
         - OAuth2: []
       parameters:
@@ -11631,8 +11388,14 @@ paths:
     post:
       tags:
         - Custom Signals
-      summary: Create Custom Insight
+      summary: |
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
+
+        Create Custom Insight
       description: Create new custom insights using one or more components.
+      deprecated: true
       operationId: v1_signal_custom_create_post
       security:
         - OAuth2: []
@@ -11692,8 +11455,14 @@ paths:
     get:
       tags:
         - Custom Signals
-      summary: Retrieve Custom Insight
+      summary: |
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
+
+        Retrieve Custom Insight
       description: Retrieve a previously created custom insight.
+      deprecated: true
       operationId: v1_signal_custom_schema_get
       security:
         - OAuth2: []
@@ -11746,8 +11515,14 @@ paths:
     get:
       tags:
         - Custom Signals
-      summary: Compare Custom Insight
+      summary: |
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
+
+        Compare Custom Insight
       description: Compare a customer with an previously created custom insight, testing whether they match against it.
+      deprecated: true
       operationId: v1_signal_custom_get
       security:
         - OAuth2: []
@@ -11798,999 +11573,261 @@ paths:
           description: An unexpected HTTP method was used
         5XX:
           description: An unexpected error occurred on the server side
-  /v1/signal/money-management:
-    get:
+  /insights/v1/custom/manage:
+    post:
       tags:
-        - Everyday Money Management
-      summary: Retrieve Money Management
-      deprecated: true
-      description: |
-        Provides a list of potential scenarios where a customer might suffer some financial expense that cover the following:
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of December 2023 - please complete your migration to the Retrieve Actionable Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-
-        | Money Management                | Description                                                                            |
-        |:--------------------------------|:---------------------------------------------------------------------------------------|
-        | `overdraft`                     | Account is overdrawn (note that credit cards will not trigger this warning). |
-        | `cannot_cover_bills`            | The total upcoming payments for exceeds the current balance. The time range used for analysing past payments is `(X-From, X-Today)` and the period used for predicting upcoming payments is `(X-Today, X-To)`. |
-        | `late_income`                   | A regular incoming payment was expected to be received on the account and hasn't yet. |
-        | `late_payment`                  | A regular outgoing payment that was expected to come out of the account on a specific date but has been paid after expected date.  |
-        | `regular_payment_changed`       | The value of a regular payment has increased or decreased between the oldest and newest instance. |
-        | `suspected_duplicate_charge`    | A duplicate transaction is one of more transactions that are debit transactions, have a non-zero booking time, and have a non-zero amount. They must also have matching `account_id`, `transaction_reference`, `merchant_id` (if one exists), `amount`, `currency`, `date`, `booking_datetime`. |
-        | `regular_monthly_income_change` | The value of a regular income has increased or decreased based on the previous months income. As this is comparing income over whole months, only complete months are considered in the provided date range. For instance, if `X-From=2022-01-05` and `X-To=2022-04-05` then the range considered by this warning will be `(2022-01-01, 2022-03-31)`. In addition, the default treshold for a difference in amounts to trigger this warning is 10%. |
-      operationId: v1_signal_money_management_get
+        - Custom Insights
+      summary: Create new custom insight
       security:
         - OAuth2: []
+      operationId: custom_insight_v1_manage_post
       parameters:
         - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/HeaderFrom'
-        - $ref: '#/components/parameters/HeaderTo'
-        - $ref: '#/components/parameters/Today'
-        - $ref: '#/components/parameters/Delta'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - query
+              properties:
+                query:
+                  type: string
+                  description: |
+                    A valid budql query representing the desired insight, see Custom Insights Guide for more details.
+                  example: INFER risky_spender FROM transactions WHERE category_l2 = "crypto_platform_incoming"
+                active:
+                  type: boolean
+                  description: Whether the insight is 'active' or not, defaults to true.
       responses:
         '200':
-          description: The request was successfully processed
+          description: OK
           content:
             application/json:
               schema:
                 required:
                   - operation_id
                   - data
-                  - metadata
                 properties:
                   operation_id:
                     type: string
-                    enum:
-                      - v1_signal_money_management_get
                   data:
-                    $ref: '#/components/schemas/MoneyManagementResponse'
-                  metadata:
-                    $ref: '#/components/schemas/MoneyManagementMetaData'
-              examples:
-                Overdraft:
-                  value:
-                    operation_id: v1_signal_money_management_get
-                    data:
-                      - type: overdraft
-                        details:
-                          account_id: b464ede0-c871-4ec2-84f0-1f6903bc736b
-                          overdrawn_by:
-                            value: '200.00'
-                            currency: GBP
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Cannot Cover Bills:
-                  value:
-                    operation_id: v1_signal_money_management_get
-                    data:
-                      - type: cannot_cover_bills
-                        details:
-                          account_id: c9d6ab0b-93ba-450b-ac94-d9a72cbd668f
-                          total_expected_payments:
-                            value: '120.00'
-                            currency: GBP
-                          current_balance:
-                            value: '100.00'
-                            currency: GBP
-                            credit_debit_indicator: Credit
-                          transactions:
-                            - account_id: c9d6ab0b-93ba-450b-ac94-d9a72cbd668f
-                              description: EDF Energy Bill
-                              provider: Barclays
-                              date: '2020-02-15'
-                              label: 6ad51923-1532-43ba-9c70-35c37b8742f7
-                              credit_debit_indicator: Debit
-                              amount:
-                                value: '120.00'
-                                currency: GBP
-                              merchant:
-                                id: edf_energy
-                                name: EDF Energy
-                                logo: https://thisisbud.com/logos/edf_energy.png
-                              category_l1: bills
-                              category_l2: utilities
-                              category_l3: utilities_energy
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Late Income:
-                  value:
-                    operation_id: v1_signal_money_management_get
-                    data:
-                      - type: late_income
-                        details:
-                          account_id: c9d6ab0b-93ba-450b-ac94-d9a72cbd668f
-                          label: bf257b0c-0685-494e-96dd-663ee01c1b3d
-                          description: BUD SALARY
-                          expected_amount:
-                            value: '1200.00'
-                            currency: GBP
-                          expected_date: '2020-02-01'
-                          days_late: 2
-                          merchant:
-                            id: bud
-                            name: Bud Financial
-                            logo: https://thisisbud.com/logos/bud.jpg
-                          category_l1: income
-                          category_l2: salary
-                          category_l3: salary
-                      - type: late_income
-                        details:
-                          account_id: 242b67fd-5085-4b0b-8916-505db5f60125
-                          label: 2d00efc8-c324-49a7-8c34-794a45b6ce79
-                          description: BANK REWARD SCHEME
-                          expected_amount:
-                            value: '5.00'
-                            currency: GBP
-                          expected_date: '2020-02-02'
-                          days_late: 1
-                          merchant: null
-                          category_l1: income
-                          category_l2: other_income
-                          category_l3: other_income
-                    metadata:
-                      results: 2
-                      from: '2020-01-15'
-                      to: '2020-02-15'
-                      today: '2020-02-03'
-                Late Payment:
-                  value:
-                    operation_id: v1_signal_money_management_get
-                    data:
-                      - type: late_payment
-                        details:
-                          account_id: c9d6ab0b-93ba-450b-ac94-d9a72cbd668f
-                          label: 50fc920a-1175-4dae-82b1-d82a600007ce
-                          description: GYM MEMBERSHIP
-                          expected_amount:
-                            value: '80.00'
-                            currency: GBP
-                          expected_date: '2020-02-01'
-                          days_late: 3
-                          merchant:
-                            id: some_gym
-                            name: Some Gym
-                            logo: https://thisisbud.com/logos/some_gym.jpg
-                          category_l1: personal_care
-                          category_l2: gym_and_fitness
-                          category_l3: gym_membership
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-28'
-                      today: '2020-02-04'
-                Regular Payment Changed:
-                  value:
-                    operation_id: v1_signal_money_management_get
-                    data:
-                      - type: regular_payment_changed
-                        details:
-                          account_id: c9d6ab0b-93ba-450b-ac94-d9a72cbd668f
-                          provider: Barclays
-                          regular_payment_label: 6a6cd719f59534f9bb352e21ee541f8a85d3a93d-0
-                          description: Energy Bill
-                          change: increase
-                          delta:
-                            value: '100.00'
-                            currency: GBP
-                          transactions:
-                            - account_id: c9d6ab0b-93ba-450b-ac94-d9a72cbd668f
-                              transaction_id: 78c2e7d5ec7b00e07d8cdcd0037694733988850add8c65fa92f7134bf3143642-1
-                              description: Energy Bill
-                              date: '2020-06-01'
-                              label: 6ad51923-1532-43ba-9c70-35c37b8742f7
-                              credit_debit_indicator: Debit
-                              amount:
-                                value: '500.00'
-                                currency: GBP
-                              merchant:
-                                id: british_gas
-                                name: British Gas
-                                logo: https://thisisbud.com/logos/british_gas.png
-                              l1_category_name: bills
-                              l2_category_name: utilities
-                              l3_category_name: utilities_energy
-                            - account_id: c9d6ab0b-93ba-450b-ac94-d9a72cbd668f
-                              transaction_id: 1245359584085527da09acf52846e33e5b14034c4dd3458da17539e1ff710e59-1
-                              description: Energy Bill
-                              date: '2020-05-01'
-                              label: 9b52cd71-673b-4672-888c-360411a2bc19
-                              credit_debit_indicator: Debit
-                              amount:
-                                value: '400.00'
-                                currency: GBP
-                              merchant:
-                                id: british_gas
-                                name: British Gas
-                                logo: https://thisisbud.com/logos/british_gas.png
-                              l1_category_name: bills
-                              l2_category_name: utilities
-                              l3_category_name: utilities_energy
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Suspected Duplicate Charge:
-                  value:
-                    operation_id: v1_signal_money_management_get
-                    data:
-                      - type: suspected_duplicate_charge
-                        details:
-                          - account_id: c9d6ab0b-93ba-450b-ac94-d9a72cbd668f
-                            transaction_id: 78c2e7d5ec7b00e07d8cdcd0037694733988850add8c65fa92f7134bf3143642-1
-                            description: Energy Bill
-                            date: '2020-06-01'
-                            label: 6ad51923-1532-43ba-9c70-35c37b8742f7
-                            credit_debit_indicator: Debit
-                            amount:
-                              value: '500.00'
-                              currency: GBP
-                            merchant:
-                              id: british_gas
-                              name: British Gas
-                              logo: https://thisisbud.com/logos/british_gas.png
-                            l1_category_name: bills
-                            l2_category_name: utilities
-                            l3_category_name: utilities_energy
-                          - account_id: c9d6ab0b-93ba-450b-ac94-d9a72cbd668f
-                            transaction_id: 78c2e7d5ec7b00e07d8cdcd0037694733988850add8c65fa92f7134bf3143642-1
-                            description: Energy Bill
-                            date: '2020-06-01'
-                            label: 6ad51923-1532-43ba-9c70-35c37b8742f7
-                            credit_debit_indicator: Debit
-                            amount:
-                              value: '500.00'
-                              currency: GBP
-                            merchant:
-                              id: british_gas
-                              name: British Gas
-                              logo: https://thisisbud.com/logos/british_gas.png
-                            l1_category_name: bills
-                            l2_category_name: utilities
-                            l3_category_name: utilities_energy
-                    metadata:
-                      results: 2
-                      from: '2020-02-01'
-                      to: '2020-02-28'
-                      today: '2020-02-04'
-                Regular Monthly Income Changed:
-                  value:
-                    operation_id: v1_signal_money_management_get
-                    data:
-                      - type: regular_monthly_income_change
-                        details:
-                          month: 2020-02
-                          previous_month_income:
-                            value: '1500.00'
-                            currency: GBP
-                          current_month_income:
-                            value: '1000.00'
-                            currency: GBP
-                          proportion_change: '0.67'
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-28'
-                      today: '2020-02-04'
+                    type: object
+                    required:
+                      - custom_insight_id
+                    properties:
+                      custom_insight_id:
+                        type: string
+                        format: uuid
+              example:
+                operation_id: custom_insight_v1_manage_post
+                data:
+                  custom_insight_id: 123e4567-e89b-12d3-a456-426655440000
         '400':
-          description: Bad Request that fails validations on headers & payload
-        '401':
-          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
-        '403':
-          description: Forbidden
+          description: The request contained an invalid payload, in this case often a syntax error in the query.
         5XX:
-          description: An unexpected error occurred on the server side
-  /v1/signal/customer-characteristics:
+          description: An unexpected error occurred on the server side.
     get:
       tags:
-        - Customer Characteristics
-      summary: Retrieve Customer Characteristics
-      deprecated: true
-      description: |
-        Provides a list of potential scenarios where a customer might suffer some financial expense that cover the following:
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of December 2023 - please complete your migration to the Retrieve Customer Characteristics endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-
-        | Customer Characteristics             | Description |
-        |:---------------------|:---------------------------------------------------------------------------------------|
-        | `parent`             | User has childcare transactions |
-        | `student_loan`       | User is paying off a student loan |
-        | `pensioner`          | User receives pension income |                                                 
-        | `saver`              | User receives savings income and / or deposits money into a savings / investment account |
-        | `insurer`            | User has one or more insurance policies |
-        | `overdraft_user`     | User was in their overdraft at midnight on any day during a set period|
-        | `cash_user`          | User has made cash deposits and / or cash withdrawals |
-        | `subscriber`         | User has one or more subscriptions|
-      operationId: v1_signal_customer_characteristics_get
+        - Custom Insights
+      summary: List existing custom insights
+      deprecated: false
       security:
         - OAuth2: []
+      operationId: custom_insight_v1_manage_get
       parameters:
         - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/HeaderFrom'
-        - $ref: '#/components/parameters/HeaderTo'
-        - $ref: '#/components/parameters/Today'
-        - $ref: '#/components/parameters/Delta'
       responses:
         '200':
-          description: The request was successfully processed
+          description: OK
           content:
             application/json:
               schema:
                 required:
                   - operation_id
                   - data
-                  - metadata
                 properties:
                   operation_id:
                     type: string
-                    enum:
-                      - v1_signal_customer_characteristics_get
-                  data:
-                    $ref: '#/components/schemas/CustomerCharacteristicResponse'
-                  metadata:
-                    $ref: '#/components/schemas/CustomerCharacteristicMetaData'
-              examples:
-                Parent:
-                  value:
-                    operation_id: v1_signal_customer_characteristics_get
-                    data:
-                      - type: parent
-                        details:
-                          outgoing_categories:
-                            childcare_and_nursery:
-                              spending:
-                                value: '500.00'
-                                currency: GBP
-                              spending_ratio: '0.20'
-                              merchant:
-                                - Mothercare
-                              total_transactions: '1'
-                          income:
-                            value: '2500.00'
-                            currency: GBP
-                          expenditure:
-                            value: '1000.00'
-                            currency: GBP
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Student Loan:
-                  value:
-                    operation_id: v1_signal_customer_characteristics_get
-                    data:
-                      - type: student_loan
-                        details:
-                          outgoing_categories:
-                            student_loan_repayment:
-                              spending:
-                                value: '500.00'
-                                currency: GBP
-                              spending_ratio: '0.20'
-                              merchant: null
-                              total_transactions: '1'
-                          income:
-                            value: '2500.00'
-                            currency: GBP
-                          expenditure:
-                            value: '1000.00'
-                            currency: GBP
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Pensioner:
-                  value:
-                    operation_id: v1_signal_customer_characteristics_get
-                    data:
-                      - type: pensioner
-                        details:
-                          incoming_categories:
-                            pension_income:
-                              spending:
-                                value: '500.00'
-                                currency: GBP
-                              spending_ratio: '0.20'
-                              merchant:
-                                - Aviva
-                              total_transactions: '1'
-                          income:
-                            value: '2500.00'
-                            currency: GBP
-                          expenditure:
-                            value: '1000.00'
-                            currency: GBP
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Saver:
-                  value:
-                    operation_id: v1_signal_customer_characteristics_get
-                    data:
-                      - type: saver
-                        details:
-                          outgoing_categories:
-                            savings:
-                              spending:
-                                value: '500.00'
-                                currency: GBP
-                              spending_ratio: '0.20'
-                              merchant: null
-                              total_transactions: '1'
-                          income:
-                            value: '2500.00'
-                            currency: GBP
-                          expenditure:
-                            value: '1000.00'
-                            currency: GBP
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Insurer:
-                  value:
-                    operation_id: v1_signal_customer_characteristics_get
-                    data:
-                      - type: insurer
-                        details:
-                          outgoing_categories:
-                            vehicle_insurance:
-                              spending:
-                                value: '500.00'
-                                currency: GBP
-                              spending_ratio: '0.20'
-                              merchant:
-                                - Axa Insurance
-                              total_transactions: '1'
-                          income:
-                            value: '2500.00'
-                            currency: GBP
-                          expenditure:
-                            value: '1000.00'
-                            currency: GBP
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Overdraft:
-                  value:
-                    operation_id: v1_signal_customer_characteristics_get
-                    data:
-                      - type: overdraft
-                        details:
-                          account_id: 3a8454c8-e1de-4f21-98f9-571393f1c823
-                          days_in_overdraft: '30'
-                          ratio_days_in_overdraft: '1.00'
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Cash User:
-                  value:
-                    operation_id: v1_signal_customer_characteristics_get
-                    data:
-                      - type: cash_user
-                        details:
-                          outgoing_categories:
-                            cash_withdrawals:
-                              spending:
-                                value: '500.00'
-                                currency: GBP
-                              spending_ratio: '0.20'
-                              merchant: null
-                              total_transactions: '1'
-                          income:
-                            value: '2500.00'
-                            currency: GBP
-                          expenditure:
-                            value: '1000.00'
-                            currency: GBP
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Subscriber:
-                  value:
-                    operation_id: v1_signal_customer_characteristics_get
-                    data:
-                      - type: subscriber
-                        details:
-                          outgoing_categories:
-                            gym_membership:
-                              spending:
-                                value: '500.00'
-                                currency: GBP
-                              spending_ratio: '0.20'
-                              merchant:
-                                - Pure Gym
-                              total_transactions: '1'
-                          income:
-                            value: '2500.00'
-                            currency: GBP
-                          expenditure:
-                            value: '1000.00'
-                            currency: GBP
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-        '400':
-          description: Bad Request that fails validations on headers & payload
-        '401':
-          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
-        '403':
-          description: Forbidden
-        5XX:
-          description: An unexpected error occurred on the server side
-  /v1/signal/financial-insights:
-    get:
-      tags:
-        - Income and Expenditure Insight
-      summary: Retrieve Financial Insights
-      deprecated: true
-      description: |
-        Provides a list of potential scenarios where a customer might suffer some financial expense that cover the following:
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of December 2023 - please complete your migration to the Retrieve Actionable Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-
-         | Financial Insights   | Description                                                                            |
-         |:---------------------|:---------------------------------------------------------------------------------------|
-         | `gambling_income`             | Income indentified through gambling transactions |
-         | `pension_income`              | Income indentified through company pension(s) |
-         | `gambling_threshold`          | Overall spending on gambling exceeds the threshold (default to 20%) of all income over that same time period |                                                                 
-         | `new_insurance_expense`       | Any new insurance related expense identified |
-         | `subscription_expense`        | Any new subscription related expense identified  |
-      operationId: v1_signal_financial_insights_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/HeaderFrom'
-        - $ref: '#/components/parameters/HeaderTo'
-        - $ref: '#/components/parameters/Today'
-        - $ref: '#/components/parameters/Delta'
-      responses:
-        '200':
-          description: The request was successfully processed
-          content:
-            application/json:
-              schema:
-                required:
-                  - operation_id
-                  - data
-                  - metadata
-                properties:
-                  operation_id:
-                    type: string
-                    enum:
-                      - v1_signal_financial_insights_get
-                  data:
-                    $ref: '#/components/schemas/FinancialInsightResponse'
-                  metadata:
-                    $ref: '#/components/schemas/FinancialInsightMetaData'
-              examples:
-                Gambling Income:
-                  value:
-                    operation_id: v1_signal_financial_insights_get
-                    data:
-                      - type: gambling_income
-                        details:
-                          total:
-                            - value: '140.12'
-                              currency: GBP
-                          merchant_ids:
-                            - bet365
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Pension Income:
-                  value:
-                    operation_id: v1_signal_financial_insights_get
-                    data:
-                      - type: pension_income
-                        details:
-                          total:
-                            - value: '140.12'
-                              currency: GBP
-                          merchant_ids:
-                            - aviva
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Gambling Threshold:
-                  value:
-                    operation_id: v1_signal_financial_insights_get
-                    data:
-                      - type: gambling_threshold
-                        details:
-                          income:
-                            value: '1000.00'
-                            currency: GBP
-                          expenditure:
-                            value: '500.00'
-                            currency: GBP
-                          threshold: '0.20'
-                          ratio_to_income: '0.20'
-                          transactions:
-                            - transaction_id: 0bbf2ed39865278609b6c07d35bc0b3cb8fd7253cf10578f57c75457104e8823
-                              account_id: 525d0eb5-909c-4a9c-a191-2e9ad7fd40f8
-                              description: Casino
-                              booking_datetime: '2020-02-01'
-                              credit_debit_indicator: Debit
-                              amount:
-                                value: '500.00'
-                                currency: GBP
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Insurance Expense:
-                  value:
-                    operation_id: v1_signal_financial_insights_get
-                    data:
-                      - type: insurance_expense
-                        details:
-                          total:
-                            - value: '140.12'
-                              currency: GBP
-                          merchant_ids:
-                            - directline
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-                Subscription Expense:
-                  value:
-                    operation_id: v1_signal_financial_insights_get
-                    data:
-                      - type: subscription_expense
-                        details:
-                          transaction_id: 4145908d1d5c7104353c6835de38057065af341d8e4a2f41a06893b76f22f935-1
-                          account_id: 525d0eb5-909c-4a9c-a191-2e9ad7fd40f8
-                          merchant: Netflix
-                          l3_category_name: tv_and_film_streaming_services
-                          amount:
-                            value: '11.99'
-                            currency: GBP
-                    metadata:
-                      results: 1
-                      from: '2020-02-01'
-                      to: '2020-02-31'
-                      today: '2020-02-04'
-        '400':
-          description: Bad Request that fails validations on headers & payload
-        '401':
-          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
-        '403':
-          description: Forbidden
-        5XX:
-          description: An unexpected error occurred on the server side
-  /v1/signal/trends:
-    get:
-      tags:
-        - Income and Expenditure Insight
-      summary: Retrieve Trends
-      deprecated: true
-      description: |
-        Provides the key trends associated with a customer’s transactional data broken down by month
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of December 2023 - please complete your migration to the Retrieve Category Totals V2 endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-      operationId: v1_signal_trends_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/FromMonth'
-        - $ref: '#/components/parameters/ToMonth'
-      responses:
-        '200':
-          description: The request was successfully processed
-          content:
-            application/json:
-              schema:
-                required:
-                  - operation_id
-                  - data
-                  - metadata
-                properties:
-                  operation_id:
-                    type: string
-                    enum:
-                      - v1_signal_trends_get
-                  data:
-                    $ref: '#/components/schemas/TrendsResponse'
-                  metadata:
-                    $ref: '#/components/schemas/TrendsMetaData'
-                example:
-                  operation_id: v1_signal_trends_get
-                  data:
-                    2020-02:
-                      income:
-                        value: '2000.00'
-                        currency: GBP
-                      expenditure:
-                        value: '1800.00'
-                        currency: GBP
-                      spending_ratio: '0.90'
-                      categories:
-                        bills:
-                          credit:
-                            amount:
-                              value: '0.00'
-                              currency: GBP
-                            ratio_to_income: '0.00'
-                            ratio_to_expenditure: '0.00'
-                          debit:
-                            amount:
-                              value: '1800.00'
-                              currency: GBP
-                            ratio_to_income: '0.90'
-                            ratio_to_expenditure: '1.00'
-                          subcategories:
-                            mortgage_and_rent:
-                              credit:
-                                amount:
-                                  value: '0.00'
-                                  currency: GBP
-                                ratio_to_income: '0.00'
-                                ratio_to_expenditure: '0.00'
-                              debit:
-                                amount:
-                                  value: '1800.00'
-                                  currency: GBP
-                                ratio_to_income: '0.90'
-                                ratio_to_expenditure: '1.00'
-                      results: 2
-                  metadata:
-                    results: 1
-                    from: '2020-02-01'
-                    to: '2020-02-28'
-        '400':
-          description: Bad Request that fails validations on headers & payload
-        '401':
-          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
-        '403':
-          description: Forbidden
-        5XX:
-          description: An unexpected error occurred on the server side
-  /v1/signal/forecast:
-    get:
-      tags:
-        - Income and Expenditure Insight
-      summary: Retrieve Financial Forecast
-      deprecated: true
-      description: |
-        Provides a list of the regular and predicted transactions over a given period, noting whether they are booked, pending or predicted.
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of December 2023 - please complete your migration to the Retrieve Forecasted Transactions V2 endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-      operationId: v1_signal_forecast_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/HeaderFrom'
-        - $ref: '#/components/parameters/HeaderTo'
-        - $ref: '#/components/parameters/Delta'
-      responses:
-        '200':
-          description: The request was successfully processed
-          content:
-            application/json:
-              schema:
-                required:
-                  - operation_id
-                  - data
-                  - metadata
-                properties:
-                  operation_id:
-                    type: string
-                    enum:
-                      - v1_signal_forecast_get
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/ForecastedTransaction'
-                  metadata:
-                    $ref: '#/components/schemas/ForecastedMetaData'
-                example:
-                  operation_id: v1_signal_forecast_get
-                  data:
-                    - transaction_id: e559d2d1a38e7758c2b640ae29af576a0ed03a14ba2131eaa8b55c54f6be2828-1
-                      label: f39db9ff27181b809f124289af2e4375c585673c-0
-                      description: BT GROUP PLC
-                      status: Booked
-                      amount:
-                        value: '78.49'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-02'
-                    - transaction_id: ca634c18a6cbb73c25cce68d119a47bd75857a162214a03b55c3ba86e381ce15-1
-                      label: 963e2fe4610d4d70b4b2e908440f8a5ddd9ac416-0
-                      description: DVLA-EY05HKB
-                      status: Booked
-                      amount:
-                        value: '17.50'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-02'
-                    - transaction_id: abd3d0a16e19853776c62b780b02178f90ee81ecb05d77255f08ca1e6cf58475-1
-                      label: 776738cdc7011c7be809dc095e80e6331756de6f-0
-                      description: 9773 29FEB20 C    CO-OP GROUP 610109CHINGFORD GB
-                      status: Booked
-                      amount:
-                        value: '29.06'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-02'
-                    - transaction_id: 912e463dade24b51afc0daf1b3f9d69b8b6bf5030d6ab32dd67e40b04b8b31dd-1
-                      label: 3136746f94216e00f283c260ef0896d326ad2875-0
-                      description: NATIONWIDE B S
-                      status: Booked
-                      amount:
-                        value: '1381.03'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-02'
-                    - transaction_id: 8de94260f704b3ca1ef51c1ed7240e57b1a8fca3fba9c3658fc1bd2d46576f3f-1
-                      label: da39a3ee5e6b4b0d3255bfef95601890afd80709-0
-                      description: H3G
-                      status: Booked
-                      amount:
-                        value: '29.72'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-02'
-                    - transaction_id: 768c321c463700f1cc3be7b3ff6873daf7059f5ee8dc74a2bfc5f572cf2c8704-1
-                      label: b868161760980af4d0dd8653b80c23927e07257d-0
-                      description: THAMES WATER
-                      status: Booked
-                      amount:
-                        value: '29.00'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-02'
-                    - transaction_id: 1a82b2890a47675a1641b509591e642e58d9b57cea3078eae3bc3f8ae9c6e4ab-1
-                      label: 776738cdc7011c7be809dc095e80e6331756de6f-1
-                      description: 9773 01MAR20 C    CO-OP GROUP 610109CHINGFORD GB
-                      status: Booked
-                      amount:
-                        value: '25.29'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-02'
-                    - transaction_id: 3d5ee8c42b094ce0091cd3bd35f20dc8ada6ef59b0a2e234e8e812ea57ce979d-1
-                      label: 836cfe936b932a8277c7e0abc822ae8e8f1b3cc3-0
-                      description: 9773 02MAR20 C    MARKS&SPENCER PLC SACA              LONDON EC1V GB
-                      status: Booked
-                      amount:
-                        value: '10.00'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-03'
-                    - transaction_id: 2a1b07cf671dc0bc19b6e5152b5eebcdb0ad5298dcb88e18ad69d3b91f5f1dbb-1
-                      label: 41b0d188f2e71c009b8b746c040dab5befb40bef-0
-                      description: ROYAL SUNALLIANCE
-                      status: Booked
-                      amount:
-                        value: '46.40'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-03'
-                    - transaction_id: ''
-                      label: 0a829f5c1ec55c904e21dc3dfde4097ad599df84-0
-                      description: LB WALTHAM FOREST
-                      status: Predicted
-                      amount:
-                        value: '173.00'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-06'
-                    - transaction_id: ''
-                      label: 787e7a7fd179117bab6037233c531b28240c2389-0
-                      description: TV LICENCE MBP
-                      status: Predicted
-                      amount:
-                        value: '13.26'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-10'
-                    - transaction_id: ''
-                      label: edfb9515f80334b4747c5c4943bcfdb44058cc6d-0
-                      description: ARRANGED OD USAGE 22JAN A/C 21621268
-                      status: Predicted
-                      amount:
-                        value: '6.00'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-12'
-                    - transaction_id: ''
-                      label: 755e23ba3dbb93068f15d07ac4c9f54dcc85340f-1
-                      description: 22JAN A/C 21621268
-                      status: Predicted
-                      amount:
-                        value: '2.79'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-12'
-                    - transaction_id: ''
-                      label: 755e23ba3dbb93068f15d07ac4c9f54dcc85340f-0
-                      description: 22JAN A/C 21621268
-                      status: Predicted
-                      amount:
-                        value: '18.00'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-12'
-                    - transaction_id: ''
-                      label: a702a4542d63fd235c40810fc9e37e1fe35028cb-0
-                      description: BULB ENERGY
-                      status: Predicted
-                      amount:
-                        value: '108.00'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-13'
-                    - transaction_id: ''
-                      label: da39a3ee5e6b4b0d3255bfef95601890afd80709-1
-                      description: H3G
-                      status: Predicted
-                      amount:
-                        value: '20.08'
-                        currency: GBP
-                      credit_debit_indicator: Debit
-                      date: '2020-03-24'
-                  metadata:
-                    from: '2020-03-01'
-                    to: '2020-04-01'
+                      type: object
+                      required:
+                        - custom_insight_id
+                      properties:
+                        custom_insight_id:
+                          type: string
+                          format: uuid
+                          description: A uuid for the query
+                        identifier:
+                          type: string
+                          description: A human readable identifier set in the query INFER <identifier> FROM ...
+                        query:
+                          type: string
+                          description: The budql query representing the custom insight
+                        created_at:
+                          type: string
+                          format: date-time
+                        active:
+                          type: boolean
+                          description: whether the insight is 'active' or not
+              example:
+                operation_id: custom_insight_v1_manage_get
+                data:
+                  - custom_insight_id: 123e4567-e89b-12d3-a456-426655440000
+                    identifier: risky_spender
+                    query: INFER risky_spender FROM transactions WHERE category_l2 = "crypto_platform_incoming"
+                    created_at: '2023-10-20T13:36:58Z'
         '400':
-          description: The request contains an invalid payload
-        '401':
-          description: Unauthorised request
-        '405':
-          description: An unexpected HTTP method was used
+          description: Malformed request
         5XX:
           description: An unexpected error occurred on the server side
+  /api/v1/manage/{custom_insight_id}:
+    delete:
+      tags:
+        - Custom Insights
+      summary: Delete existing custom insight
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: custom_insight_v1_manage_delete
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathCustomInsightID'
+      responses:
+        '204':
+          description: OK
+        '404':
+          description: Custom insight doesn't exist, thus cannot be deleted
+        5XX:
+          description: An unexpected error occurred on the server side
+    patch:
+      tags:
+        - Custom Insights
+      summary: Update existing custom insight
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: custom_insight_v1_manage_patch
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathCustomInsightID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                query:
+                  type: string
+                  description: |
+                    A valid budql query representing the desired insight, see Custom Insights Guide for more details,
+                    defaults to the value of the existing insight.
+                  example: INFER risky_spender FROM transactions WHERE category_l2 = "crypto_platform_incoming"
+                active:
+                  type: boolean
+                  description: whether the insight is 'active' or not, defaults to the value of the existing insight
+      responses:
+        '204':
+          description: OK
+        '404':
+          description: Custom insight doesn't exist, thus cannot be patched
+        5XX:
+          description: An unexpected error occurred on the server side
+  /api/v1/manage/all:
+    delete:
+      tags:
+        - Custom Insights
+      summary: Delete all existing custom insights
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: custom_insight_v1_manage_delete_all
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      responses:
+        '204':
+          description: OK
+        5XX:
+          description: An unexpected error occurred on the server side
+  /api/v1/profile:
+    post:
+      tags:
+        - Custom Insights
+      summary: Build custom insights profile
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: custom_insight_v1_profile_post
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - in: header
+          name: X-Now
+          required: false
+          schema:
+            type: string
+            format: date-time
+            example: '2000-01-01T00:00:00.05Z'
+      responses:
+        '204':
+          description: OK
+    get:
+      tags:
+        - Custom Insights
+      summary: Retrieve custom insights profile
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: custom_insight_v1_profile_get
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                required:
+                  - operation_id
+                  - data
+                properties:
+                  operation_id:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - custom_insight_id
+                        - identifier
+                        - link
+                        - created_at
+                      properties:
+                        custom_insight_id:
+                          type: string
+                          format: uuid
+                          description: A uuid for the query used to generate the insight
+                        identifier:
+                          type: string
+                          description: A human readable identifier set in the query INFER <identifier> FROM ...
+                        created_at:
+                          type: string
+                          format: date-time
+                        link:
+                          description: link to a detail view of the insight
+                          type: string
+              example:
+                operation_id: custom_insight_v1_profile_get
+                data:
+                  - identifier: always_true
+                    custom_insight_id: 19ebab24-9c73-4802-b5d2-c401f3558d8d
+                    link: insights/v1/custom/detail/19ebab24-9c73-4802-b5d2-c401f3558d8d
+                    created_at: '2021-08-11T14:00:00Z'
 components:
   securitySchemes:
     Basic:
@@ -16249,6 +15286,12 @@ components:
             - application/bud-accounts+json
             - application/bud-transaction-v2+json
             - application/bud-transaction-v3+json
+        next_url:
+          description: The URL to call to obtain the results of the task
+          type: string
+        next_url_delay:
+          description: Recommended delay in milliseconds before next call
+          type: number
     IngestStatusV2Response:
       title: Ingest Response
       type: object
@@ -16292,6 +15335,47 @@ components:
         operation_id: ingest_transactions_get
         code_id: not_found
         message: Task not found
+    IngestResponseV3SubTask:
+      title: Customer Ingest Task
+      description: A single customer ingest task status
+      type: object
+      required:
+        - customer_id
+        - status
+      properties:
+        customer_id:
+          type: string
+          format: uuid
+          description: A unique identifier for a Customer, as registered on Bud's platform.
+        status:
+          title: Ingest Response Status
+          description: Ingest response status.
+          type: string
+          enum:
+            - Completed
+            - Failed
+            - Pending
+        error:
+          description: Any error messages describing why a sub task has failed.
+          type: object
+          additionalProperties: true
+    IngestStatusV3Response:
+      title: Ingestion Task Status Response
+      type: object
+      description: Report on the status of an ingestion task
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngestResponseV3SubTask'
+        metadata:
+          $ref: '#/components/schemas/IngestStatusTaskMetadata'
     CustomerContextType:
       title: Customer Context Type
       type: string
@@ -16713,76 +15797,6 @@ components:
           properties:
             model:
               $ref: '#/components/schemas/schemas-CategorisationModel'
-    CategoryObject:
-      title: Category Object
-      type: object
-      description: Category information
-      required:
-        - id
-        - label
-      properties:
-        id:
-          type: string
-          description: The identifier (slug) of the category
-        label:
-          type: string
-          description: The label (name) of the transaction category for display purposes
-    LegacyBudAmount:
-      title: Legacy Bud Amount
-      type: object
-      description: The monetary amount.
-      required:
-        - amount
-        - currency
-      properties:
-        amount:
-          $ref: '#/components/schemas/BudMonetaryValue'
-        currency:
-          $ref: '#/components/schemas/BudCurrency'
-    LegacyCategoryTotalSpend:
-      title: Category Total Object
-      type: object
-      description: Information regarding the total income and expenditure of a given category
-      required:
-        - category
-        - credit_amount
-        - debit_amount
-      properties:
-        category:
-          $ref: '#/components/schemas/CategoryObject'
-        credit_amount:
-          items:
-            $ref: '#/components/schemas/LegacyBudAmount'
-        debit_amount:
-          items:
-            $ref: '#/components/schemas/LegacyBudAmount'
-    CategoriesTotalResponse:
-      title: Categories Totals Response
-      type: object
-      description: ''
-      required:
-        - operation_id
-        - data
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: object
-          description: Total spend by categories
-          required:
-            - categories
-            - sub_categories
-          properties:
-            categories:
-              type: array
-              description: A list of category total objects
-              items:
-                $ref: '#/components/schemas/LegacyCategoryTotalSpend'
-            sub_categories:
-              type: array
-              description: A list of subcategory total objects
-              items:
-                $ref: '#/components/schemas/LegacyCategoryTotalSpend'
     CategoryTotalAmountWithTrxCount:
       type: object
       title: Amount with transaction count
@@ -17619,48 +16633,6 @@ components:
                 next_page_token:
                   description: Token is present if you have more pages.
                   type: string
-    RecategorisedCustomerRequestDoublecatPayload:
-      type: object
-      description: Expected recategorised transaction structure
-      required:
-        - account_id
-        - transaction_id
-        - category_name
-        - subcategory_name
-      properties:
-        transaction_id:
-          type: string
-          description: A unique identifier for the transaction
-        account_id:
-          type: string
-          description: A unique identifier for the Customer bank account
-        category_name:
-          type: string
-          description: 'The corrected transaction category name - please note: this must be a valid category name'
-        subcategory_name:
-          type: string
-          description: 'The corrected transaction subcategory name - please note: this must be a valid subcategory name'
-    RecategoriseCustomerRequestDoublecat:
-      type: array
-      description: Expected request structure for the recategorisation endpoint
-      items:
-        $ref: '#/components/schemas/RecategorisedCustomerRequestDoublecatPayload'
-    RecategoriseCustomerResponseDoublecat:
-      type: object
-      description: Expected response structure for the recategorise Customer transactions endpoint
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/RecategorisedCustomerRequestDoublecatPayload'
-        metadata:
-          $ref: '#/components/schemas/ResultsMetadata'
     CustomerCategoryCorrectionPayload:
       title: Customer Category Correction
       type: object
@@ -17704,75 +16676,6 @@ components:
             $ref: '#/components/schemas/CustomerCategoryCorrectionPayload'
         metadata:
           $ref: '#/components/schemas/ResultsMetadata'
-    TransactionAttributesClientLabelsRequest:
-      title: Transaction Attributes Client Labels
-      type: array
-      items:
-        type: object
-        required:
-          - match_attributes
-          - set_attribute
-        properties:
-          match_attributes:
-            type: array
-            description: Detailing the attributes and criteria from which to match against a customer's transactions.
-            items:
-              type: object
-              required:
-                - type
-                - name
-                - value
-              properties:
-                type:
-                  type: string
-                  description: The type of matching to be done to the transaction attribute in question.
-                  enum:
-                    - exact
-                name:
-                  type: string
-                  description: |
-                    | Name of Transaction Attribute | Description                    |
-                    |:-------------------------|:-----------------------------------------|
-                    | `cdi`         | Credit Debit Indicator of the transcation |
-                    | `amount`| The transaction amount    |
-                    | `currency` | The transaction currency |
-                    | `description` | The transaction description |
-                  enum:
-                    - cdi
-                    - amount
-                    - currency
-                    - description
-                value:
-                  type: string
-                  description: The value of the transaction attribute that will be used to match.
-          set_attribute:
-            type: object
-            description: Details on the value(s) of the client label attribute based on the result of the matching criteria.
-            required:
-              - values
-            properties:
-              values:
-                type: array
-                description: An array of values that can be set against the `client_labels` attribute if the above matching criteria are triggered.
-                items:
-                  type: string
-                  description: Free text defining one of the values of the `client_label` attribute
-    TransactionAttributesClientLabelsResponse:
-      type: object
-      required:
-        - operation_id
-        - data
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: object
-          required:
-            - rules_created
-          properties:
-            rules_created:
-              type: integer
-              description: The number of rules created in the above request
     SavingsGoal:
       title: Savings Goal
       required:
@@ -18780,6 +17683,18 @@ components:
         score:
           type: string
           description: A floating point number between 0 and 1, to define the confidence level that the transaction is regular or not.
+    LegacyBudAmount:
+      title: Legacy Bud Amount
+      type: object
+      description: The monetary amount.
+      required:
+        - amount
+        - currency
+      properties:
+        amount:
+          $ref: '#/components/schemas/BudMonetaryValue'
+        currency:
+          $ref: '#/components/schemas/BudCurrency'
     NullableMerchant:
       title: Bud Merchant Object
       type: object
@@ -19622,127 +18537,6 @@ components:
             $ref: '#/components/schemas/Subscription'
         metadata:
           $ref: '#/components/schemas/TransactionsResultsMetadata'
-    EnergyPaymentSearch:
-      title: Energy Payments Start Search
-      type: object
-      required:
-        - operation_id
-        - data
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: object
-          properties:
-            task_id:
-              $ref: '#/components/schemas/TaskId'
-    Supplier:
-      title: Energy Supplier
-      type: object
-      description: Expected supplier structure
-      required:
-        - id
-        - name
-        - logo
-      properties:
-        id:
-          type: string
-          description: ID of the given supplier
-        name:
-          type: string
-          description: Name of the given supplier
-        logo:
-          type: string
-          description: URL to logo of given supplier
-    PayType:
-      type: integer
-      description: |
-        | Value | Description                                                        |
-        |:------|:-------------------------------------------------------------------|
-        | 1     | Monthly Fixed Direct Debit                                         |
-        | 2     | Quarterly Variable Direct Debit                                    |
-        | 3     | Standing Order                                                     |
-        | 4     | Quarterly Cash/Cheque                                              |
-        | 5     | Prepayment Meter                                                   |
-        | 6     | Advance Payment                                                    |
-        | 7     | Monthly Card                                                       |
-        | 8     | Monthly Debit/Credit Card                                          |
-        | 9     | Monthly Variable Direct Debit                                      |
-        | 10    | Quarterly Equal Payments                                           |
-        | 11    | Monthly Cash/Cheque                                                |
-        | 12    | Regular Cash Payments                                              |
-        | 13    | Quarterly Debit Card                                               |
-        | 14    | Annual Advance Direct Debit Payment followed by MFDD (1) in year 2 |
-        | 15    | Pay as You Go (PAYG)                                               |
-      enum:
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
-        - 6
-        - 7
-        - 8
-        - 9
-        - 10
-        - 11
-        - 12
-        - 13
-        - 14
-        - 15
-    EnergyPayment:
-      type: object
-      required:
-        - transaction_id
-        - supplier
-        - payment_type
-        - amount
-        - provider
-      properties:
-        transaction_id:
-          type: string
-          description: Transaction ID for the payment (found in `GET /v1/transactions`)
-        supplier:
-          $ref: '#/components/schemas/Supplier'
-        payment_type:
-          $ref: '#/components/schemas/PayType'
-        amount:
-          $ref: '#/components/schemas/LegacyBudAmount'
-        provider:
-          type: string
-          description: Bank or provider name
-    TaskStatus:
-      title: The Task Status
-      type: string
-      description: The general status of a task
-      enum:
-        - pending
-        - complete
-        - failed
-    EnergyPaymentSearchResponse:
-      title: Energy Payments Search Response
-      type: object
-      description: Representation of a customer energy payment
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: array
-          items:
-            allOf:
-              - $ref: '#/components/schemas/EnergyPayment'
-        metadata:
-          title: Metadata
-          type: object
-          required:
-            - status
-          properties:
-            status:
-              $ref: '#/components/schemas/TaskStatus'
     TimezoneIdentifier:
       type: string
       description: |-
@@ -21777,1127 +20571,6 @@ components:
             - full
             - partial
             - 'false'
-    OverdraftMoneyMangementDetails:
-      title: Overdraft Warning Details
-      type: object
-      required:
-        - account_id
-        - overdrawn_by
-      properties:
-        account_id:
-          type: string
-          description: ID of the account that is overdrawn.
-        overdrawn_by:
-          allOf:
-            - description: Amount the account is overdrawn by.
-            - $ref: '#/components/schemas/BudAmount'
-    CannotCoverBillsMoneyManagementDetails:
-      title: Cannot Cover Bills Warning Details
-      type: object
-      required:
-        - account_id
-        - total_expected_payments
-        - current_balance
-        - transactions
-      properties:
-        account_id:
-          type: string
-          description: A unique identifier for the Customer bank account
-        total_expected_payments:
-          allOf:
-            - description: Total predicted amount expected to be spent (i.e. the total of all upcoming debit transaction amounts).
-            - $ref: '#/components/schemas/BudAmount'
-        transactions:
-          type: array
-          description: List of predicted upcoming transactions.
-          items:
-            type: object
-            required:
-              - account_id
-              - description
-              - provider
-              - date
-              - label
-              - credit_debit_indicator
-              - amount
-              - category_l1
-              - category_l2
-              - category_l3
-            properties:
-              account_id:
-                type: string
-                description: A unique identifier for the Customer bank account
-              description:
-                type: string
-                description: The raw transaction reference e.g. "bank transfer"
-              provider:
-                type: string
-                description: The name of the relevant provider relevant to the source of the original transaction data
-              date:
-                type: string
-                description: The timestamp of when the transaction is expected to be booked in the format `YYYY-MM-DD`
-              label:
-                type: string
-                description: The recurring transaction group identifier associating one set of regular transactions e.g. all Spotify transactions that are regular by the same monthly period will share the same label. This label comes from the group used to predict this upcoming transaction.
-              credit_debit_indicator:
-                type: string
-                description: Indication as to whether the transaction was a credit or debit
-                enum:
-                  - Credit
-                  - Debit
-              amount:
-                allOf:
-                  - description: The predicted transaction amount
-                  - $ref: '#/components/schemas/BudAmount'
-              merchant:
-                $ref: '#/components/schemas/NullableMerchant'
-              category_l1:
-                type: string
-                description: The name of the category returned by the Bud categorisation model.
-              category_l2:
-                type: string
-                description: The name of the subcategory returned by the Bud categorisation model.
-              category_l3:
-                type: string
-                description: The name of the 3rd level category returned by the Bud categorisation model.
-        current_balance:
-          allOf:
-            - type: object
-              description: The current balance of the account
-              required:
-                - credit_debit_indicator
-              properties:
-                credit_debit_indicator:
-                  type: string
-                  description: Indication as to whether the transaction was a credit or debit
-                  enum:
-                    - Credit
-                    - Debit
-            - $ref: '#/components/schemas/BudAmount'
-    LateIncomeMoneyManagementDetails:
-      title: Late Income Warning Details
-      type: object
-      required:
-        - account_id
-        - label
-        - description
-        - expected_amount
-        - expected_date
-        - days_late
-        - category_l1
-        - category_l2
-        - category_l3
-      properties:
-        account_id:
-          type: string
-          description: ID of the account that has not received its income yet.
-        label:
-          type: string
-          description: The recurring transaction group identifier associating one set of regular transactions e.g. all Salary transactions that are regular by the same monthly period will share the same label.
-        description:
-          type: string
-          description: Transaction description.
-        expected_amount:
-          $ref: '#/components/schemas/BudAmount'
-        expected_date:
-          type: string
-          description: Expected date of payment in ISO8601 format.
-        days_late:
-          type: integer
-          description: Number of days that the transaction is late by.
-        merchant:
-          $ref: '#/components/schemas/NullableMerchant'
-        category_l1:
-          type: string
-          description: The name of the category returned by the Bud categorisation model.
-        category_l2:
-          type: string
-          description: The name of the subcategory returned by the Bud categorisation model.
-        category_l3:
-          type: string
-          description: The name of the 3rd level category returned by the Bud categorisation model.
-    LatePaymentMoneyManagementDetails:
-      title: Late Payment Warning Details
-      type: object
-      description: Triggered when a payment has not been made by predicted date.
-      required:
-        - account_id
-        - label
-        - description
-        - expected_amount
-        - expected_date
-        - days_late
-        - category_l1
-        - category_l2
-        - category_l3
-      properties:
-        account_id:
-          type: string
-          description: ID of the account from where the income is expected to be debited.
-        label:
-          type: string
-          description: The recurring transaction group identifier associating one set of regular transactions e.g. all "Spotify" transactions that are regular by the same monthly period will share the same label.
-        description:
-          type: string
-          description: The transaction description string.
-        expected_amount:
-          $ref: '#/components/schemas/BudAmount'
-        expected_date:
-          type: string
-          description: Expected date of payment in ISO8601 format.
-        days_late:
-          type: integer
-          description: Number of days that the transaction is late by.
-        merchant:
-          $ref: '#/components/schemas/NullableMerchant'
-        category_l1:
-          type: string
-          description: The name of the category returned by the Bud categorisation model.
-        category_l2:
-          type: string
-          description: The name of the subcategory returned by the Bud categorisation model.
-        category_l3:
-          type: string
-          description: The name of the 3rd level category returned by the Bud categorisation model.
-    RegularPaymentChangedMoneyManagementDetails:
-      title: Regular Payment Changed Warning Details
-      type: object
-      required:
-        - account_id
-        - provider
-        - regular_payment_label
-        - description
-        - change
-        - delta
-      properties:
-        account_id:
-          type: string
-          description: Unique identifier of the account that the regular payment is made from.
-        provider:
-          type: string
-          description: Banking provider the account exists with.
-        regular_payment_label:
-          type: string
-          description: The recurring transaction group identifier associating one set of regular transactions e.g. all "Spotify" transactions that are regular by the same monthly period will share the same label.
-        description:
-          type: string
-          description: The description of the latest transaction of the regular payments group.
-        change:
-          type: string
-          enum:
-            - increase
-            - decrease
-          description: To denote whether the change in the amount associated with the regular payment has increased or decreased.
-        delta:
-          allOf:
-            - description: The difference in the transaction amount between latest transaction and the previous transaction.
-            - $ref: '#/components/schemas/BudAmount'
-        transactions:
-          type: array
-          description: The transactions making up this group of regular payments.
-          items:
-            type: object
-            required:
-              - account_id
-              - transaction_id
-              - description
-              - date
-              - credit_debit_indicator
-              - amount
-              - merchant
-            properties:
-              account_id:
-                type: string
-                description: The unique identifier of the account associated with the transaction.
-              transaction_id:
-                type: string
-                description: Unique identifier of the transaction.
-              description:
-                type: string
-                description: The transaction description string.
-              date:
-                type: string
-                description: The date of the transaction in YYYY-MM-DD format.
-              label:
-                type: string
-                description: The recurring transaction group identifier associating one set of regular transactions e.g. all "Spotify" transactions that are regular by the same monthly period will share the same label.
-              credit_debit_indicator:
-                type: string
-                description: Indicates whether the transaction is a credit or a debit entry.
-                enum:
-                  - Credit
-                  - Debit
-              amount:
-                $ref: '#/components/schemas/BudAmount'
-              merchant:
-                $ref: '#/components/schemas/schemas-Merchant'
-              l1_category_name:
-                type: string
-                description: The name of the category returned by the Bud categorisation model.
-              l2_category_name:
-                type: string
-                description: The name of the subcategory returned by the Bud categorisation model.
-              l3_category_name:
-                type: string
-                description: The name of the 3rd level category returned by the Bud categorisation model.
-    SuspectedDuplicateChargeMoneyManagementDetails:
-      title: Duplicate Charge Warning Details
-      type: array
-      items:
-        type: object
-        required:
-          - account_id
-          - transaction_id
-          - description
-          - date
-          - credit_debit_indicator
-          - amount
-          - merchant
-        properties:
-          account_id:
-            type: string
-            description: The unique identifier of the account associated with the transaction.
-          transaction_id:
-            type: string
-            description: Unique identifier of the transaction.
-          description:
-            type: string
-            description: The transaction description string.
-          date:
-            type: string
-            description: The date of the transaction in YYYY-MM-DD format.
-          label:
-            type: string
-            description: The recurring transaction group identifier associating one set of regular transactions e.g. all "Spotify" transactions that are regular by the same monthly period will share the same label.
-          credit_debit_indicator:
-            type: string
-            description: Indicates whether the transaction is a credit or a debit entry.
-            enum:
-              - Credit
-              - Debit
-          amount:
-            $ref: '#/components/schemas/BudAmount'
-          merchant:
-            $ref: '#/components/schemas/schemas-Merchant'
-          l1_category_name:
-            type: string
-            description: The name of the category returned by the Bud categorisation model.
-          l2_category_name:
-            type: string
-            description: The name of the subcategory returned by the Bud categorisation model.
-          l3_category_name:
-            type: string
-            description: The name of the 3rd level category returned by the Bud categorisation model.
-    RegularMonthlyIncomeChangedMoneyManagementDetails:
-      title: Regular Monthly Income Changed Warning Details
-      type: object
-      required:
-        - month
-        - previous_month_income
-        - current_month_income
-        - proportion_change
-      properties:
-        month:
-          type: string
-          description: The current month used in calculations, in `YYYY-MM` format.
-        previous_month_income:
-          allOf:
-            - description: The total income identified in the previous month.
-            - $ref: '#/components/schemas/BudAmount'
-        current_month_income:
-          allOf:
-            - description: The total income identified in the current month.
-            - $ref: '#/components/schemas/BudAmount'
-        proportion_change:
-          type: string
-          nullable: true
-          description: |-
-            The difference between the previous month's and the current month's income as a decimal rounded to 2 decimal places e.g. `"0.51"`. 
-            If there is no income in one of the months, it is not possible to calculate the value so it is set to `null`.
-    MoneyManagement:
-      title: Money Management Object
-      type: object
-      description: Bud money management response array
-      required:
-        - type
-        - details
-      properties:
-        type:
-          type: string
-          description: Money Management responses returned by API endpoint.
-          enum:
-            - overdraft
-            - cannot_cover_bills
-            - late_income
-            - late_payment
-            - regular_payment_changed
-            - suspected_duplicate_charge
-            - regular_monthly_income_change
-        details:
-          anyOf:
-            - $ref: '#/components/schemas/OverdraftMoneyMangementDetails'
-            - $ref: '#/components/schemas/CannotCoverBillsMoneyManagementDetails'
-            - $ref: '#/components/schemas/LateIncomeMoneyManagementDetails'
-            - $ref: '#/components/schemas/LatePaymentMoneyManagementDetails'
-            - $ref: '#/components/schemas/RegularPaymentChangedMoneyManagementDetails'
-            - $ref: '#/components/schemas/SuspectedDuplicateChargeMoneyManagementDetails'
-            - $ref: '#/components/schemas/RegularMonthlyIncomeChangedMoneyManagementDetails'
-    MoneyManagementResponse:
-      title: Money Management Response
-      type: array
-      description: |
-        | Money Management                | Description                                                                            |
-        |:--------------------------------|:---------------------------------------------------------------------------------------|
-        | `overdraft`                     | Account is overdrawn (note that credit cards will not trigger this warning). |
-        | `cannot_cover_bills`            | The total upcoming payments for exceeds the current balance. The time range used for analysing past payments is `(X-From, X-Today)` and the period used for predicting upcoming payments is `(X-Today, X-To)`. |
-        | `late_income`                   | A regular incoming payment was expected to be received on the account and hasn't yet. |
-        | `late_payment`                  | A regular outgoing payment that was expected to come out of the account on a specific date but has been paid after expected date. |
-        | `regular_payment_changed`       | The value of a regular payment has increased or decreased between the oldest and newest instance. |
-        | `suspected_duplicate_charge`    | A duplicate transaction is one of more transactions that are debit transactions, have a non-zero booking time, and have a non-zero amount. They must also have matching `account_id`, `transaction_reference`, `merchant_id` (if one exists), `amount`, `currency`, `date`, `booking_datetime`. |
-        | `regular_monthly_income_change` | The value of a regular income has increased or decreased based on the previous months income. As this is comparing income over whole months, only complete months are considered in the provided date range. For instance, if `X-From=2022-01-05` and `X-To=2022-04-05` then the range considered by this warning will be `(2022-01-01, 2022-03-31)`. In addition, the default treshold for a difference in amounts to trigger this warning is 10%. |
-      items:
-        $ref: '#/components/schemas/MoneyManagement'
-    MoneyManagementMetaData:
-      title: Warnings Metadata
-      type: object
-      description: Bud money management metadata
-      required:
-        - results
-        - from
-        - to
-        - today
-      properties:
-        results:
-          type: integer
-          description: Number of results returned.
-        from:
-          type: string
-          description: '`From` date used in query (`YYYY-MM-DD`)'
-        to:
-          type: string
-          description: '`To` date used in query (`YYYY-MM-DD`)'
-        today:
-          type: string
-          description: '`Today` date used in query (`YYYY-MM-DD`)'
-    ParentCustomerCharacteristicDetails:
-      title: Parent
-      type: object
-      required:
-        - outgoing_categories
-        - income
-        - expenditure
-      properties:
-        outgoing_categories:
-          type: object
-          description: |
-            An object keyed by an L3 category that triggered the characteristic that summarises
-            all the outgoing transactions which fall under the category.
-          additionalProperties:
-            type: object
-            properties:
-              spending:
-                $ref: '#/components/schemas/BudAmount'
-              spending_ratio:
-                nullable: true
-                type: string
-              merchants:
-                nullable: true
-                type: array
-                items:
-                  type: string
-        income:
-          $ref: '#/components/schemas/BudAmount'
-        expenditure:
-          $ref: '#/components/schemas/BudAmount'
-    StudentLoanCustomerCharacteristicDetails:
-      title: Student Loan
-      type: object
-      required:
-        - income
-        - expenditure
-      properties:
-        incoming_categories:
-          type: object
-          additionalProperties:
-            type: object
-            description: |
-              An object keyed by an L3 category that triggered the characteristic that summarises
-              all the incoming transactions which fall under the category.
-            properties:
-              incoming:
-                $ref: '#/components/schemas/BudAmount'
-              expenditure_ratio:
-                nullable: true
-                type: string
-              merchants:
-                nullable: true
-                type: array
-                items:
-                  type: string
-        outgoing_categories:
-          type: object
-          description: |
-            An object keyed by an L3 category that triggered the characteristic that summarises
-            all the outgoing transactions which fall under the category.
-          additionalProperties:
-            type: object
-            properties:
-              spending:
-                $ref: '#/components/schemas/BudAmount'
-              spending_ratio:
-                nullable: true
-                type: string
-              merchants:
-                nullable: true
-                type: array
-                items:
-                  type: string
-        income:
-          $ref: '#/components/schemas/BudAmount'
-        expenditure:
-          $ref: '#/components/schemas/BudAmount'
-    PensionerCustomerCharacteristicDetails:
-      title: Pensioner
-      type: object
-      required:
-        - incoming_categories
-        - income
-        - expenditure
-      properties:
-        incoming_categories:
-          type: object
-          additionalProperties:
-            type: object
-            description: |
-              An object keyed by an L3 category that triggered the characteristic that summarises
-              all the incoming transactions which fall under the category.
-            properties:
-              incoming:
-                $ref: '#/components/schemas/BudAmount'
-              expenditure_ratio:
-                nullable: true
-                type: string
-              merchants:
-                nullable: true
-                type: array
-                items:
-                  type: string
-        income:
-          $ref: '#/components/schemas/BudAmount'
-        expenditure:
-          $ref: '#/components/schemas/BudAmount'
-    SaverCustomerCharacteristicDetails:
-      title: Saver
-      type: object
-      required:
-        - income
-        - expenditure
-      properties:
-        incoming_categories:
-          type: object
-          additionalProperties:
-            type: object
-            description: |
-              An object keyed by an L3 category that triggered the characteristic that summarises
-              all the incoming transactions which fall under the category.
-            properties:
-              incoming:
-                $ref: '#/components/schemas/BudAmount'
-              expenditure_ratio:
-                nullable: true
-                type: string
-              merchants:
-                nullable: true
-                type: array
-                items:
-                  type: string
-        outgoing_categories:
-          type: object
-          description: |
-            An object keyed by an L3 category that triggered the characteristic that summarises
-            all the outgoing transactions which fall under the category.
-          additionalProperties:
-            type: object
-            properties:
-              spending:
-                $ref: '#/components/schemas/BudAmount'
-              spending_ratio:
-                nullable: true
-                type: string
-              merchants:
-                nullable: true
-                type: array
-                items:
-                  type: string
-        income:
-          $ref: '#/components/schemas/BudAmount'
-        expenditure:
-          $ref: '#/components/schemas/BudAmount'
-    InsurerCustomerCharacteristicDetails:
-      title: Insurer
-      type: object
-      required:
-        - income
-        - expenditure
-      properties:
-        incoming_categories:
-          type: object
-          additionalProperties:
-            type: object
-            description: |
-              An object keyed by an L3 category that triggered the characteristic that summarises
-              all the incoming transactions which fall under the category.
-            properties:
-              incoming:
-                $ref: '#/components/schemas/BudAmount'
-              expenditure_ratio:
-                nullable: true
-                type: string
-              merchants:
-                nullable: true
-                type: array
-                items:
-                  type: string
-        outgoing_categories:
-          type: object
-          description: |
-            An object keyed by an L3 category that triggered the characteristic that summarises
-            all the outgoing transactions which fall under the category.
-          additionalProperties:
-            type: object
-            properties:
-              spending:
-                $ref: '#/components/schemas/BudAmount'
-              spending_ratio:
-                nullable: true
-                type: string
-              merchants:
-                nullable: true
-                type: array
-                items:
-                  type: string
-        income:
-          $ref: '#/components/schemas/BudAmount'
-        expenditure:
-          $ref: '#/components/schemas/BudAmount'
-    OverdraftCustomerCharacteristicDetails:
-      title: Overdraft
-      type: object
-      required:
-        - account_id
-        - days_in_overdraft
-        - ratio_days_in_overdraft
-      properties:
-        account_id:
-          type: string
-          description: The account ID of the account which has been in overdraft
-        days_in_overdraft:
-          type: string
-          description: Total number of days in the time period spent in overdraft
-        ratio_days_in_overdraft:
-          nullable: true
-          type: string
-          description: The ratio of days spent in overdraft to the total days in the time period. Null if time period was over 0 days.
-    CashUserCustomerCharacteristicDetails:
-      title: Cash User
-      type: object
-      required:
-        - income
-        - expenditure
-      properties:
-        incoming_categories:
-          type: object
-          additionalProperties:
-            type: object
-            description: |
-              An object keyed by an L3 category that triggered the characteristic that summarises
-              all the incoming transactions which fall under the category.
-            properties:
-              incoming:
-                $ref: '#/components/schemas/BudAmount'
-              expenditure_ratio:
-                nullable: true
-                type: string
-              merchants:
-                nullable: true
-                type: array
-                items:
-                  type: string
-        outgoing_categories:
-          type: object
-          description: |
-            An object keyed by an L3 category that triggered the characteristic that summarises
-            all the outgoing transactions which fall under the category.
-          additionalProperties:
-            type: object
-            properties:
-              spending:
-                $ref: '#/components/schemas/BudAmount'
-              spending_ratio:
-                nullable: true
-                type: string
-              merchants:
-                nullable: true
-                type: array
-                items:
-                  type: string
-        income:
-          $ref: '#/components/schemas/BudAmount'
-        expenditure:
-          $ref: '#/components/schemas/BudAmount'
-    SubscriberCustomerCharacteristicDetails:
-      title: Subscriber
-      type: object
-      required:
-        - outgoing_categories
-        - income
-        - expenditure
-      properties:
-        outgoing_categories:
-          type: object
-          description: |
-            An object keyed by an L3 category that triggered the characteristic that summarises
-            all the outgoing transactions which fall under the category.
-          additionalProperties:
-            type: object
-            properties:
-              spending:
-                $ref: '#/components/schemas/BudAmount'
-              spending_ratio:
-                nullable: true
-                type: string
-              merchants:
-                nullable: true
-                type: array
-                items:
-                  type: string
-        income:
-          $ref: '#/components/schemas/BudAmount'
-        expenditure:
-          $ref: '#/components/schemas/BudAmount'
-    CustomerCharacteristic:
-      title: Customer Characteristic Object
-      type: object
-      required:
-        - type
-        - details
-      properties:
-        type:
-          type: string
-          description: Customer Characteristics responses returned by endpoint.
-          enum:
-            - parent
-            - student_loan
-            - pensioner
-            - saver
-            - insurer
-            - overdraft
-            - cash_user
-            - subscriber
-        details:
-          anyOf:
-            - $ref: '#/components/schemas/ParentCustomerCharacteristicDetails'
-            - $ref: '#/components/schemas/StudentLoanCustomerCharacteristicDetails'
-            - $ref: '#/components/schemas/PensionerCustomerCharacteristicDetails'
-            - $ref: '#/components/schemas/SaverCustomerCharacteristicDetails'
-            - $ref: '#/components/schemas/InsurerCustomerCharacteristicDetails'
-            - $ref: '#/components/schemas/OverdraftCustomerCharacteristicDetails'
-            - $ref: '#/components/schemas/CashUserCustomerCharacteristicDetails'
-            - $ref: '#/components/schemas/SubscriberCustomerCharacteristicDetails'
-    CustomerCharacteristicResponse:
-      title: Customer Characteristic Response
-      type: array
-      description: |
-        | Customer Characteristics             | Description |
-        |:---------------------|:---------------------------------------------------------------------------------------|
-        | `parent`             | User has childcare transactions |
-        | `student_loan`       | User is paying off a student loan |
-        | `pensioner`          | User receives pension income |                                                 
-        | `saver`              | User receives savings income and / or deposits money into a savings / investment account |
-        | `insurer`            | User has one or more insurance policies |
-        | `overdraft_user`     | User was in their overdraft at midnight on any day during a set period|
-        | `cash_user`          | User has made cash deposits and / or cash withdrawals |
-        | `subscriber`         | User has one or more subscriptions|                     
-      items:
-        $ref: '#/components/schemas/CustomerCharacteristic'
-    CustomerCharacteristicMetaData:
-      title: Customer Characteristics Metadata
-      type: object
-      required:
-        - results
-        - from
-        - to
-        - today
-      properties:
-        results:
-          type: integer
-          description: Number of results returned.
-        from:
-          type: string
-          description: '`From` date used in query (`YYYY-MM-DD`)'
-        to:
-          type: string
-          description: '`To` date used in query (`YYYY-MM-DD`)'
-        today:
-          type: string
-          description: '`Today` date used in query (`YYYY-MM-DD`)'
-    GamblingIncomeFinancialInsightDetails:
-      title: Gambling Income
-      type: object
-      required:
-        - total
-        - merchant_ids
-      properties:
-        total:
-          type: array
-          description: Income identified as pension transactions
-          items:
-            $ref: '#/components/schemas/BudAmount'
-        merchant_ids:
-          allOf:
-            - type: array
-              description: List of merchants associated to pension transactions
-              items:
-                type: string
-    PensionIncomeFinancialInsightDetails:
-      title: Pension Income
-      type: object
-      required:
-        - total
-        - merchant_ids
-      properties:
-        total:
-          type: array
-          description: Income identified as pension transactions
-          items:
-            $ref: '#/components/schemas/BudAmount'
-        merchant_ids:
-          allOf:
-            - type: array
-              description: List of merchants associated to pension transactions
-              items:
-                type: string
-    GamblingTransaction:
-      title: Gambling Transaction
-      type: object
-      required:
-        - transaction_id
-        - account_id
-        - description
-        - booking_datetime
-        - credit_debit_indicator
-        - amount
-      properties:
-        transaction_id:
-          type: string
-          description: A unique identifier for the transaction
-        account_id:
-          type: string
-          description: A unique identifier for the Customer bank account
-        description:
-          type: string
-          description: The raw transaction reference e.g. "bank transfer"
-        booking_datetime:
-          type: string
-          description: The timestamp of when the transactions was booked in ISO 8601/RFC 3339 format e.g. `"2022-06-10T15:30:02Z"`
-        credit_debit_indicator:
-          type: string
-          description: Indication as to whether the transaction was a credit or debit
-          enum:
-            - Credit
-            - Debit
-        amount:
-          $ref: '#/components/schemas/BudAmount'
-    GamblingThresholdFinancialInsightDetails:
-      title: Gambling Threshold
-      type: object
-      required:
-        - income
-        - expenditure
-        - threshold
-        - ratio_to_income
-        - transactions
-      properties:
-        income:
-          allOf:
-            - description: Total income amount
-            - $ref: '#/components/schemas/BudAmount'
-        expenditure:
-          allOf:
-            - description: Total expenditure amount
-            - $ref: '#/components/schemas/BudAmount'
-        threshold:
-          type: string
-          description: The fraction of income needed to spend on gambling to trigger the warning, formatted as a decimal numeric string
-        ratio_to_income:
-          type: string
-          description: |-
-            The ratio of gambling expenditure to income over the period. 
-            If there is no income in one of the months, it is not possible to calculate the value so it is set to `null`.
-          nullable: true
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/GamblingTransaction'
-    InsuranceExpenseFinancialInsightDetails:
-      title: Insurance Expenses
-      type: object
-      required:
-        - total
-        - merchant_ids
-      properties:
-        total:
-          type: array
-          description: Income identified as pension transactions
-          items:
-            $ref: '#/components/schemas/BudAmount'
-        merchant_ids:
-          allOf:
-            - type: array
-              description: List of merchants associated to pension transactions
-              items:
-                type: string
-    SubscriptionExpenseFinancialInsightDetails:
-      title: Subscription Expense
-      type: object
-      required:
-        - transaction_id
-        - account_id
-        - merchant
-        - l3_category_name
-        - amount
-      properties:
-        transaction_id:
-          type: string
-          description: trans id
-        account_id:
-          type: string
-          description: account id
-        merchant:
-          type: string
-          description: merchant
-        l3_category_name:
-          type: string
-          description: level 3 transaction category
-        amount:
-          allOf:
-            - description: Total amount of subscription related expenses.
-            - $ref: '#/components/schemas/BudAmount'
-    FinancialInsight:
-      title: Customer Characteristic Object
-      type: object
-      required:
-        - type
-        - details
-      properties:
-        type:
-          type: string
-          enum:
-            - subscription_expense
-            - insurance_expense
-            - gambling_threshold
-            - pension_income
-            - gambling_income
-        details:
-          anyOf:
-            - $ref: '#/components/schemas/GamblingIncomeFinancialInsightDetails'
-            - $ref: '#/components/schemas/PensionIncomeFinancialInsightDetails'
-            - $ref: '#/components/schemas/GamblingThresholdFinancialInsightDetails'
-            - $ref: '#/components/schemas/InsuranceExpenseFinancialInsightDetails'
-            - $ref: '#/components/schemas/SubscriptionExpenseFinancialInsightDetails'
-    FinancialInsightResponse:
-      title: Customer Characteristic Response
-      type: array
-      description: |
-        | Financial Insights   | Description                                                                            |
-        |:---------------------|:---------------------------------------------------------------------------------------|
-        | `gambling_income`             | Income indentified through gambling transactions |
-        | `pension_income`              | Income indentified through company pension(s) |
-        | `gambling_threshold`          | Overall spending on gambling exceeds the threshold (defaults to 20%) of all income over that same time period |
-        | `new_insurance_expense`       | Any new insurance related expense identified |
-        | `subscription_expense`        | Any new subscription related expense identified |
-      items:
-        $ref: '#/components/schemas/FinancialInsight'
-    FinancialInsightMetaData:
-      title: Financial Insight Metadata
-      type: object
-      required:
-        - results
-        - from
-        - to
-        - today
-      properties:
-        results:
-          type: integer
-          description: Number of results returned.
-        from:
-          type: string
-          description: '`From` date used in query (`YYYY-MM-DD`)'
-        to:
-          type: string
-          description: '`To` date used in query (`YYYY-MM-DD`)'
-        today:
-          type: string
-          description: '`Today` date used in query (`YYYY-MM-DD`)'
-    SubTotal:
-      title: Sub Total
-      type: object
-      required:
-        - amount
-        - ratio_to_income
-        - ratio_to_expenditure
-      properties:
-        amount:
-          $ref: '#/components/schemas/BudAmount'
-        ratio_to_income:
-          type: string
-          description: Ratio to income (to 2dp)
-        ratio_to_expenditure:
-          type: string
-          description: Ratio to expenditure (to 2dp)
-    SubCategoryTotal:
-      title: Subcategory Total
-      type: object
-      required:
-        - credit
-        - debit
-      properties:
-        credit:
-          allOf:
-            - description: Total credited in the account in the subcategory
-            - $ref: '#/components/schemas/SubTotal'
-        debit:
-          allOf:
-            - description: Total debited in the account in the subcategory
-            - $ref: '#/components/schemas/SubTotal'
-    CategoryTotal:
-      title: Category Total
-      type: object
-      required:
-        - credit
-        - debit
-        - subcategories
-      properties:
-        credit:
-          allOf:
-            - description: Total credited in the account in the category
-            - $ref: '#/components/schemas/SubTotal'
-        debit:
-          allOf:
-            - description: Total debited in the account in the category
-            - $ref: '#/components/schemas/SubTotal'
-        subcategories:
-          type: object
-          description: A breakdown of each subcategory. Each key corresponds to the subcategory name.
-          additionalProperties:
-            $ref: '#/components/schemas/SubCategoryTotal'
-    TrendsResponse:
-      title: Trends Response
-      type: object
-      description: |
-        Each key/value pair represents a month and the totals for that month. The keys will be of the form `YYYY-MM` for each month totalled.
-      additionalProperties:
-        type: object
-        required:
-          - income
-          - expenditure
-          - spending_ratio
-          - categories
-          - results
-        properties:
-          income:
-            allOf:
-              - description: Total income in the period
-              - $ref: '#/components/schemas/BudAmount'
-          expenditure:
-            allOf:
-              - description: Total expenses in the period
-              - $ref: '#/components/schemas/BudAmount'
-          spending_ratio:
-            type: string
-            description: Ratio of expenditure to income (to 2dp)
-          categories:
-            type: object
-            description: A spending breakdown of each category. Each key name corresponds to the category name.
-            additionalProperties:
-              $ref: '#/components/schemas/CategoryTotal'
-          results:
-            type: integer
-            description: Number of transactions that were totalled over.
-    TrendsMetaData:
-      title: Trends Response Metadata
-      type: object
-      description: Any relevant metadata associated wih the response from the Retrieve Trends endpoint
-      required:
-        - results
-        - from
-        - to
-      properties:
-        results:
-          type: integer
-          description: Number of results returned.
-        from:
-          type: string
-          description: '`From` date used in query (`YYYY-MM-DD`)'
-        to:
-          type: string
-          description: '`To` date used in query (`YYYY-MM-DD`)'
-    ForecastedTransaction:
-      title: Forecasted Transaction
-      type: object
-      description: Transaction object for the financial assistant forecast response
-      required:
-        - transaction_id
-        - label
-        - description
-        - status
-        - amount
-        - credit_debit_indicator
-        - date
-      properties:
-        transaction_id:
-          type: string
-          description: |
-            ID of the transaction if it is `Booked` or `Pending`. This will be empty if it corresponds to a predicted transaction 
-            that has not yet been seen on the account.
-        label:
-          type: string
-          description: Grouping label for the transaction if it is detected as a regular transaction.
-        description:
-          type: string
-          description: Transaction description (usually the user-provided reference)
-        status:
-          type: string
-          description: The transaction status
-          enum:
-            - Booked
-            - Pending
-            - Predicted
-        amount:
-          $ref: '#/components/schemas/BudAmount'
-        credit_debit_indicator:
-          type: string
-          description: Indication as to whether the transaction was a credit or debit
-          enum:
-            - Credit
-            - Debit
-        date:
-          type: string
-          description: Date (or predicted date) of the transaction in `YYYY-MM-DD` format.
-    ForecastedMetaData:
-      title: Forecasted Metadata
-      type: object
-      description: Metadata object for the financial assistant forecast response
-      required:
-        - from
-        - to
-      properties:
-        from:
-          type: string
-          description: From-date in `YYYY-MM-DD` format.
-        to:
-          type: string
-          description: From-date in `YYYY-MM-DD` format.
   parameters:
     ClientId:
       in: header
@@ -23178,6 +20851,13 @@ components:
       schema:
         type: number
         description: A balance threshold such that balances lower than this will trigger the low balance insight. If not specified, a configured value will be used.
+    PathCustomInsightID:
+      in: path
+      name: custom_insight_id
+      required: true
+      schema:
+        type: string
+        format: uuid
     OBProvidersQueryTypeFilter:
       in: query
       required: false
@@ -23768,54 +21448,6 @@ components:
       schema:
         type: string
         format: uuid
-    HeaderFrom:
-      in: header
-      name: X-From
-      required: false
-      schema:
-        type: string
-      example: '2022-02-28'
-      description: Date (YYYY-MM-DD) from which the transactions should be returned from, this works in pair with the 'X-To' parameter
-    HeaderTo:
-      in: header
-      name: X-To
-      required: false
-      schema:
-        type: string
-      example: '2022-03-30'
-      description: Date (YYYY-MM-DD) from which the transactions should be returned to, this works in pair with the 'X-From' parameter
-    Today:
-      in: header
-      name: X-Today
-      required: false
-      schema:
-        type: string
-      example: '2019-03-30'
-      description: Date (YYYY-MM-DD) to treat as the current day. Use this with `X-From` and `X-To` to find historical warnings (e.g. warnings that you would have received last week)
-    Delta:
-      in: header
-      name: X-Delta
-      schema:
-        type: number
-        minimum: 0
-        default: 3
-      description: Number of days error to match regular payments when they could be off by a few days from month to month. E.g. if your predicted rent payment is on `25th` but you paid it on `23rd`, a delta of `2` would treat your predicted transaction for `25th` as `Booked/Pending`.
-    FromMonth:
-      in: header
-      name: X-From
-      required: false
-      schema:
-        type: string
-      example: 2019-02
-      description: Month (`YYYY-MM`) from which the transactions should be returned from, this works in pair with the `X-To` parameter.
-    ToMonth:
-      in: header
-      name: X-To
-      required: false
-      schema:
-        type: string
-      example: 2019-03
-      description: Month (`YYYY-MM`) from which the transactions should be returned to, this works in pair with the `X-From` parameter.
 x-tagGroups:
   - name: ''
     tags:
@@ -23877,7 +21509,5 @@ x-tagGroups:
     tags:
       - Retrieve Actionable Insights
       - Custom Signals
-      - Everyday Money Management
-      - Customer Characteristics
-      - Income and Expenditure Insight
+      - Custom Insights
       - Insights API
