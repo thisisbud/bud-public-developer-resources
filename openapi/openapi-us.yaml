@@ -212,6 +212,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 1.8.1: 24/01/2024**
+    > - **Retrieve Category Totals**
+
     **Version 1.7.6: 15/01/2024**
     > - Deprecate __Remove Customer__ endpoint in favour of the __Remove Customer V3__ endpoint.
     > - Added __Remove Customer V3__ and __Retrieve Remove Customer V3__ Status endpoints.
@@ -1895,100 +1898,6 @@ paths:
           description: The request uses an unexpected HTTP method.
         5XX:
           description: An unexpected error occurred on the server side.
-  /v1/categories/totals:
-    get:
-      tags:
-        - Enrichment Totals
-      summary: Retrieve Category Totals
-      deprecated: true
-      description: |
-        Provides a customer’s total income and expenditure for each category and subcategory, over a given time period.
-
-        Each income and expenditure total is separated by currency, as we cannot sum totals in different currencies.
-      operationId: v1_categories_totals_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - in: header
-          name: X-From
-          required: false
-          schema:
-            type: string
-          example: '2022-02-28'
-          description: |
-            The date from when results are to be retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
-
-            When ommited from the request, a default value of 30 days from before today's date will be used.
-
-            Example: `2022-02-28`
-        - in: header
-          name: X-To
-          required: false
-          schema:
-            type: string
-          example: '2022-01-28'
-          description: |
-            The date up to when results are to be retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
-
-            When ommited from the request, a default value of today's date will be used.
-
-            Example: `2022-01-28`
-      responses:
-        '200':
-          description: The operation was successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CategoriesTotalResponse'
-              example:
-                operation_id: v1_categories_totals_get
-                data:
-                  categories:
-                    - category:
-                        id: shopping
-                        label: Shopping
-                      credit_amount:
-                        - amount: '15.90'
-                          currency: USD
-                      debit_amount:
-                        - amount: '397.80'
-                          currency: USD
-                  sub_categories:
-                    - category:
-                        id: online_shopping
-                        label: Online Shopping
-                      credit_amount:
-                        - amount: '0.00'
-                          currency: USD
-                        - amount: '9.99'
-                          currency: GBP
-                      debit_amount:
-                        - amount: '90.99'
-                          currency: USD
-                        - amount: '0.00'
-                          currency: GBP
-        '400':
-          description: The request contains an invalid payload
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              example:
-                operation_id: v1_categories_totals_get
-                code_id: failed_validation
-                message: Failed validation.
-                errors:
-                  client_id:
-                    - This value should not be blank
-        '401':
-          description: An unauthenticated request was received
-        '405':
-          description: The request uses an unexpected HTTP method
-        5XX:
-          description: An unexpected error occurred on the server side
   /aggregations/v2/totals/categories:
     get:
       tags:
@@ -5801,76 +5710,6 @@ components:
             $ref: '#/components/schemas/IngestResponseV3SubTask'
         metadata:
           $ref: '#/components/schemas/schemas-IngestStatusTaskMetadata'
-    CategoryObject:
-      title: Category Object
-      type: object
-      description: Category information
-      required:
-        - id
-        - label
-      properties:
-        id:
-          type: string
-          description: The identifier (slug) of the category
-        label:
-          type: string
-          description: The label (name) of the transaction category for display purposes
-    LegacyBudAmount:
-      title: Legacy Bud Amount
-      type: object
-      description: The monetary amount.
-      required:
-        - amount
-        - currency
-      properties:
-        amount:
-          $ref: '#/components/schemas/BudMonetaryValue'
-        currency:
-          $ref: '#/components/schemas/BudCurrency'
-    LegacyCategoryTotalSpend:
-      title: Category Total Object
-      type: object
-      description: Information regarding the total income and expenditure of a given category
-      required:
-        - category
-        - credit_amount
-        - debit_amount
-      properties:
-        category:
-          $ref: '#/components/schemas/CategoryObject'
-        credit_amount:
-          items:
-            $ref: '#/components/schemas/LegacyBudAmount'
-        debit_amount:
-          items:
-            $ref: '#/components/schemas/LegacyBudAmount'
-    CategoriesTotalResponse:
-      title: Categories Totals Response
-      type: object
-      description: ''
-      required:
-        - operation_id
-        - data
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: object
-          description: Total spend by categories
-          required:
-            - categories
-            - sub_categories
-          properties:
-            categories:
-              type: array
-              description: A list of category total objects
-              items:
-                $ref: '#/components/schemas/LegacyCategoryTotalSpend'
-            sub_categories:
-              type: array
-              description: A list of subcategory total objects
-              items:
-                $ref: '#/components/schemas/LegacyCategoryTotalSpend'
     CategoryTotalAmountWithTrxCount:
       type: object
       title: Amount with transaction count
@@ -6175,6 +6014,18 @@ components:
           oneOf:
             - $ref: '#/components/schemas/CategoriesFlat'
             - $ref: '#/components/schemas/CategoriesMap'
+    LegacyBudAmount:
+      title: Legacy Bud Amount
+      type: object
+      description: The monetary amount.
+      required:
+        - amount
+        - currency
+      properties:
+        amount:
+          $ref: '#/components/schemas/BudMonetaryValue'
+        currency:
+          $ref: '#/components/schemas/BudCurrency'
     BasicTransaction:
       title: Basic Transaction Schema
       type: object
