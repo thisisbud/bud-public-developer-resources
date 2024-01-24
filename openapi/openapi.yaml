@@ -291,11 +291,15 @@ info:
     | 18/10/2023           | Deprecated **Retrieve Transaction Ingestion Task Status** in favour of **Retrieve Ingestion Task Status**.                                                                                                                                                                                                                                                                                                                                 |
     | 18/10/2023           | Deprecated **Retrieve Accounts Ingestion Task Status** in favour of **Retrieve Ingestion Task Status**.                                                                                                                                                                                                                                                                                                                                    |
     | 15/01/2024           | Deprecated **Remove Customer** in favour of **Remove Customer V3**.                                                                                                                                                                                                                                                                                                                                        |
+    | 15/01/2024           | Deprecated __Compare Custom Insight__, __Retrieve Custom Insight__, __Create Custom Insight__                                                                                                                                                                                                                                                                                                                                        |
 
 
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
+
+    **Version 2.10.3** 24/10/2024:
+    > -
 
     **Version 2.10.2: 24/01/2024**
     > - Document has_new_transactions and reconnect_required Refresh Callback Webhook values.
@@ -11394,13 +11398,13 @@ paths:
     post:
       tags:
         - Custom Signals
-      summary: |
+      summary: Create Custom Insight
+      description: |
+        Create new custom insights using one or more components.
+
         > ❗️ Deprecation:
         >
-        > Support will cease for this endpoint on the 1st of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-
-        Create Custom Insight
-      description: Create new custom insights using one or more components.
+        > Support will cease for this endpoint on the 23rd of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
       deprecated: true
       operationId: v1_signal_custom_create_post
       security:
@@ -11461,13 +11465,12 @@ paths:
     get:
       tags:
         - Custom Signals
-      summary: |
+      summary: Retrieve Custom Insight
+      description: |
+        Retrieve a previously created custom insight.
         > ❗️ Deprecation:
         >
-        > Support will cease for this endpoint on the 1st of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-
-        Retrieve Custom Insight
-      description: Retrieve a previously created custom insight.
+        > Support will cease for this endpoint on the 23rd of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
       deprecated: true
       operationId: v1_signal_custom_schema_get
       security:
@@ -11521,13 +11524,13 @@ paths:
     get:
       tags:
         - Custom Signals
-      summary: |
+      summary: Compare Custom Insight
+      description: |
+        Compare a customer with an previously created custom insight, testing whether they match against it.
+
         > ❗️ Deprecation:
         >
-        > Support will cease for this endpoint on the 1st of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-
-        Compare Custom Insight
-      description: Compare a customer with an previously created custom insight, testing whether they match against it.
+        > Support will cease for this endpoint on the 23rd of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
       deprecated: true
       operationId: v1_signal_custom_get
       security:
