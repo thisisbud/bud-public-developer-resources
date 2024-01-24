@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: 'Bud API Services: Documentation'
-  version: 2.9.16
+  version: 2.10.2
   description: |-
     # Overview
 
@@ -297,6 +297,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.10.2: 24/01/2024**
+    > - Document has_new_transactions and reconnect_required Refresh Callback Webhook values.
+
     **Version 2.10.1: 24/01/2024**
     > - Removed the deprecated **Retrieve Financial Forecast** endpoint.
     > - Removed the deprecated **Retrieve Trends** endpoint.
@@ -307,7 +310,6 @@ info:
     > - Removed the deprecated **Create Transaction Rule** endpoint.
     > - Removed the deprecated **Correct Transaction Categories** endpoint.
     > - Removed the deprecated **Retrieve Money Management** endpoint.
-
 
     **Version 2.9.13: 18/01/2024**
     > - Updated description for __Retrieve Balances Over Time__ and __Retrieve Balances Over Time By Account__ endpoint.
@@ -2171,6 +2173,8 @@ paths:
                             result: success
                             task_type: refresh
                             customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
+                            reconnect_required: 'false'
+                            has_new_transactions: 'true'
                       Failure:
                         description: Failed refresh due to a consent being revoked
                         value:
@@ -2180,6 +2184,8 @@ paths:
                             result: connection_revoked
                             task_type: refresh
                             customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
+                            reconnect_required: 'true'
+                            has_new_transactions: 'false'
               responses:
                 '200':
                   description: Your server returns this code if it accepts the callback
@@ -13693,6 +13699,22 @@ components:
               description: The customer the event relates to
               type: string
               example: 19677d9f-90e7-44a6-a32e-566990623da4
+            has_new_transactions:
+              type: string
+              enum:
+                - 'true'
+                - 'false'
+              description: |
+                To describe whether new transactions have been pulled from the relevant
+                ASPSP during the refresh. Note that if this field is set to `false` then
+                there is no need to make a request to any other downstream endpoints to
+                collect the data related to that customer.
+            reconnect_required:
+              type: string
+              enum:
+                - 'true'
+                - 'false'
+              description: If true, the customer must re-connect to the specified provider
     ConnectResultCodes:
       type: string
       description: The result of the operation. Either success or various error codes.
@@ -13761,6 +13783,22 @@ components:
               example: 19677d9f-90e7-44a6-a32e-566990623da4
             result:
               $ref: '#/components/schemas/ConnectResultCodes'
+            has_new_transactions:
+              type: string
+              enum:
+                - 'true'
+                - 'false'
+              description: |
+                To describe whether new transactions have been pulled from the relevant
+                ASPSP during the refresh. Note that if this field is set to `false` then
+                there is no need to make a request to any other downstream endpoints to
+                collect the data related to that customer.
+            reconnect_required:
+              type: string
+              enum:
+                - 'true'
+                - 'false'
+              description: If true, the customer must re-connect to the specified provider
     OpenBankingAuthoriseRequest:
       title: Provider
       type: object
