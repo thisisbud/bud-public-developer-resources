@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Transaction Enrichment Service - API Documentation
-  version: 1.7.1
+  version: 1.7.9
   description: |-
     # Overview
 
@@ -206,10 +206,15 @@ info:
     |:---------------------|:-----------------------------------------------------------------------------------------------------------------|
     | 05/09/2022           | Deprecated **Retrieve Merchant Totals V1** in favour of new **Retrieve Merchant Totals V2** endpoint             |
     | 10/02/2023           | Deprecated **Retrieve Enriched Transactions V1** in favour of new **Retrieve Enriched Transactions V2** endpoint |
+    | 15/01/2024           | Deprecated **Remove Customer** in favour of **Remove Customer V3**                                               |
 
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
+
+    **Version 1.7.6: 15/01/2024**
+    > - Deprecate __Remove Customer__ endpoint in favour of the __Remove Customer V3__ endpoint.
+    > - Added __Remove Customer V3__ and __Retrieve Remove Customer V3__ Status endpoints.
 
     **Version 1.7.5: 07/12/2023**
     > - Updated __Create Customer V3__ endpoint to include `created_at` and a new 200 response for existing customers.
@@ -747,7 +752,7 @@ paths:
         - Manage Customers
       summary: Retrieve Remove Customer V3 Status
       description: |
-        Check the status and get the result of a Remove Customer V3 task. If the task is not yet completed, the data element will be null.
+        Check the status and get the result of a Remove Customer V3 task.
       operationId: platform_v3_customers_delete_status
       parameters:
         - in: path
@@ -1370,15 +1375,15 @@ paths:
         - Ingest Data
       summary: Ingest Transactions V2
       description: |
-        This endpoint initiates a 'blocking' transaction ingestion and enrichment process. It will return partially enriched transactions and a Task ID which would then be used for finding out the current status of the full enrichment process. The complete enrichment services applied to the data will depend upon the relevant scopes assigned to your Client ID.
+        This endpoint should be used to ingest customer transactions into the Bud Platform.
 
-        If a 'X-Disable-Synchronous' header is present and set to true, the process will be entirely 'non-blocking', with the returned Task ID providing access to the status of the full enrichment process.
+        By default, this endpoint is synchronous but can be easily switched to asynchronous using the 'X-Disable-Synchronous' header. 
+        Please refer to the following [guide](https://docs-us.thisisbud.com/docs/setup_data_enrichment) to ensure you set up First Party Ingestion 
+        correctly for your organisation based on your use case.
 
-        There are a number of ingest schemas that can be used with this endpoint. These are described in the `Body Params` below. You will need to ensure the content-type header matches the schema used.
+        We accept a maximum of 1.000 transactions. If this threshold is not respected, a 400 error is returned.
 
-        **Note**
-
-        Data validation is performed up-front, as such if this endpoints returns a __200__ or __202__ then the data is correctly formatted.
+        We support the ingestion of transactions for multiple customers as part of the same request.
       operationId: v2_ingest_transactions_post
       security:
         - OAuth2: []
@@ -1522,8 +1527,8 @@ paths:
                             - jane doe
                 metadata:
                   task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url: /v1/ingest/transactions/4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url_delay: 50
+                  next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                  next_url_delay: 500
         '202':
           description: A new Task has been created to ingest the given transactions. The generated `task_id` can be used to check the Task's status
           content:
@@ -1534,8 +1539,8 @@ paths:
                 operation_id: v2_ingest_transactions_post
                 metadata:
                   task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url: /v1/ingest/transactions/4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url_delay: 50
+                  next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                  next_url_delay: 500
         '400':
           description: The server will not process the request due to a client error.
           content:
@@ -3277,11 +3282,14 @@ components:
       properties:
         account_id:
           type: string
-          description: Unique identifier for the Customer bank account.
+          description: Unique identifier for the Customer bank account. Max length 255.
           example: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk
         transaction_id:
           type: string
-          description: Unique identifier for the transaction.
+          description: |
+            Unique, immutable transaction identifier. Maximum of 255 characters. 
+            It's important this ID is immutable over time and unique as we use this ID as key to store the transaction against your customer, 
+            so if more than one transaction has the same ID for the same customer, we will store only one of them.
           example: lPNjeW1nR6CDn5okmGQ6hEpMo4lLNoSrzqDje
         amount:
           type: number
@@ -3494,7 +3502,10 @@ components:
       properties:
         id:
           type: number
-          description: The ID of the transaction.
+          description: |
+            Unique, immutable transaction identifier. Maximum of 255 characters. 
+            It's important this ID is immutable over time and unique as we use this ID as key to store the transaction against your customer, 
+            so if more than one transaction has the same ID for the same customer, we will store only one of them.
           example: 100976507328
         amount:
           type: number
@@ -5051,11 +5062,11 @@ components:
           type: string
           format: url
           description: The URL to call to obtain the current status of the task.
-          example: /v1/enrich-transactions/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+          example: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
         next_url_delay:
           type: number
           description: The time in milliseconds that the client should wait before trying to retrieve the current status of the task.
-          example: 50
+          example: 500
     IngestV2AsyncResponse:
       title: Ingest Transactions V2 Async Response
       type: object
@@ -5243,16 +5254,17 @@ components:
       properties:
         transaction_id:
           type: string
-          format: uuid
-          description: Unique, immutable transaction identifier
+          description: |
+            Unique, immutable transaction identifier. This can be of any format (not necessarily UUID), with a maximum of 255 characters. 
+            It's important this ID is immutable over time and unique as we use this ID as a key to store the transaction against your customer, 
+            so if more than one transaction has the same ID for the same customer, we will store only one of them.
           example: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
         description:
           type: string
           description: Free text string providing details on the transaction itself
         account_id:
           type: string
-          format: uuid
-          description: The account identifier that the transaction belongs to
+          description: The account identifier that the transaction belongs to. This can be of any format (not necessarily UUID), with a maximum of 255 characters.
           example: 2f5b2055-6253-4cd0-b646-06788342a609
         date_time:
           type: string
