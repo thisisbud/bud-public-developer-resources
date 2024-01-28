@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Transaction Enrichment Service - API Documentation
-  version: 1.7.9
+  version: 1.8.2
   description: |-
     # Overview
 
@@ -207,10 +207,14 @@ info:
     | 05/09/2022           | Deprecated **Retrieve Merchant Totals V1** in favour of new **Retrieve Merchant Totals V2** endpoint             |
     | 10/02/2023           | Deprecated **Retrieve Enriched Transactions V1** in favour of new **Retrieve Enriched Transactions V2** endpoint |
     | 15/01/2024           | Deprecated **Remove Customer** in favour of **Remove Customer V3**                                               |
+    | 25/01/2024           | Deprecated **Retrieve Ingestion Task Status V2** in favour of **Retrieve Ingestion Task Status V3**              |
 
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
+
+    **Version 1.8.2: 25/10/2024**:
+    > - Deprecated __Retrieve Ingestion Task Status V2__ endpoint in favour of __Retrieve Ingestion Task Status V3__ endpoint.
 
     **Version 1.8.1: 24/01/2024**
     > - **Retrieve Category Totals**
@@ -1565,7 +1569,7 @@ paths:
       deprecated: true
       tags:
         - Ingest Data
-      summary: Retrieve Ingestion Task Status
+      summary: Retrieve Ingestion Task Status V2
       description: |
         Check the status of an ingest request. Please note that this works for both the Ingest Transactions endpoints And Ingest Accounts endpoints.
 
@@ -1656,7 +1660,7 @@ paths:
     get:
       tags:
         - Ingest Data
-      summary: Retrieve Ingestion Task Status
+      summary: Retrieve Ingestion Task Status V3
       description: |
         Check the status of an ingest request. Please note that this works for both the Ingest Transactions endpoints And Ingest Accounts endpoints.
         Reports status of the ingestion task, with details for each subtask (1 per customer).
