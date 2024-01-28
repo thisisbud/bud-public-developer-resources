@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: 'Bud API Services: Documentation'
-  version: 2.10.2
+  version: 2.10.3
   description: |-
     # Overview
 
@@ -290,30 +290,31 @@ info:
     | 04/10/2023           | Deprecated **Open Banking Sync Complete** callback in favour the **Connect Completed Notification Callback** and **Refresh Completed Notification Callback** callbacks.                                                                                                                                                                                                                                                                    |
     | 18/10/2023           | Deprecated **Retrieve Transaction Ingestion Task Status** in favour of **Retrieve Ingestion Task Status**.                                                                                                                                                                                                                                                                                                                                 |
     | 18/10/2023           | Deprecated **Retrieve Accounts Ingestion Task Status** in favour of **Retrieve Ingestion Task Status**.                                                                                                                                                                                                                                                                                                                                    |
-    | 15/01/2024           | Deprecated **Remove Customer** in favour of **Remove Customer V3**.                                                                                                                                                                                                                                                                                                                                        |
-    | 15/01/2024           | Deprecated __Compare Custom Insight__, __Retrieve Custom Insight__, __Create Custom Insight__                                                                                                                                                                                                                                                                                                                                        |
+    | 15/01/2024           | Deprecated **Remove Customer** in favour of **Remove Customer V3**.                                                                                                                                                                                                                                                                                                                                                                        |
+    | 15/01/2024           | Deprecated **Compare Custom Insight**, **Retrieve Custom Insight**, **Create Custom Insight**                                                                                                                                                                                                                                                                                                                                              |
+    | 25/01/2024           | Deprecated **Retrieve Ingestion Task Status V2** in favour of **Retrieve Ingestion Task Status V3**                                                                                                                                                                                                                                                                                                                                        |
 
 
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
-    **Version 2.10.3** 24/10/2024:
-    > -
+    **Version 2.10.3: 25/10/2024**:
+    > - Deprecated __Retrieve Ingestion Task Status V2__ endpoint in favour of __Retrieve Ingestion Task Status V3__ endpoint.
 
     **Version 2.10.2: 24/01/2024**
     > - Document has_new_transactions and reconnect_required Refresh Callback Webhook values.
 
     **Version 2.10.1: 24/01/2024**
-    > - Removed the deprecated **Retrieve Financial Forecast** endpoint.
-    > - Removed the deprecated **Retrieve Trends** endpoint.
-    > - Removed the deprecated **Retrieve Financial Insights** endpoint.
-    > - Removed the deprecated **Retrieve Energy Payments** endpoint.
-    > - Removed the deprecated **Energy Payments Discover** endpoint.
-    > - Removed the deprecated **Retrieve Category Totals** endpoint.
-    > - Removed the deprecated **Create Transaction Rule** endpoint.
-    > - Removed the deprecated **Correct Transaction Categories** endpoint.
-    > - Removed the deprecated **Retrieve Money Management** endpoint.
+    > - Removed the deprecated __Retrieve Financial Forecast__ endpoint.
+    > - Removed the deprecated __Retrieve Trends__ endpoint.
+    > - Removed the deprecated __Retrieve Financial Insights__ endpoint.
+    > - Removed the deprecated __Retrieve Energy Payments__ endpoint.
+    > - Removed the deprecated __Energy Payments Discover__ endpoint.
+    > - Removed the deprecated __Retrieve Category Totals__ endpoint.
+    > - Removed the deprecated __Create Transaction Rule__ endpoint.
+    > - Removed the deprecated __Correct Transaction Categories__ endpoint.
+    > - Removed the deprecated __Retrieve Money Management__ endpoint.
 
     **Version 2.9.13: 18/01/2024**
     > - Updated description for __Retrieve Balances Over Time__ and __Retrieve Balances Over Time By Account__ endpoint.
@@ -3176,7 +3177,7 @@ paths:
       deprecated: true
       tags:
         - Ingest First Party Data
-      summary: Retrieve Ingestion Task Status
+      summary: Retrieve Ingestion Task Status V2
       description: |
         Check the status of an ingest request. Please note that this works for both the Ingest Transactions endpoints And Ingest Accounts endpoints.
 
@@ -3267,7 +3268,7 @@ paths:
     get:
       tags:
         - Ingest First Party Data
-      summary: Retrieve Ingestion Task Status
+      summary: Retrieve Ingestion Task Status V3
       description: |
         Check the status of an ingest request. Please note that this works for both the Ingest Transactions endpoints And Ingest Accounts endpoints.
         Reports status of the ingestion task, with details for each subtask (1 per customer).
