@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: 'Bud API Services: Documentation'
-  version: 2.10.3
+  version: 2.10.5
   description: |-
     # Overview
 
@@ -298,6 +298,9 @@ info:
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
+
+    **Version 2.10.5: 25/10/2024**:
+    > - Add provider field to the __OBWebhookBody__ and __OBSyncWebhookBody__ schemas.
 
     **Version 2.10.3: 25/10/2024**:
     > - Deprecated __Retrieve Ingestion Task Status V2__ endpoint in favour of __Retrieve Ingestion Task Status V3__ endpoint.
@@ -13719,6 +13722,9 @@ components:
                 - 'true'
                 - 'false'
               description: If true, the customer must re-connect to the specified provider
+            provider:
+              type: string
+              description: Name of the provider (banking institution) the task interacted with
     ConnectResultCodes:
       type: string
       description: The result of the operation. Either success or various error codes.
@@ -13803,6 +13809,9 @@ components:
                 - 'true'
                 - 'false'
               description: If true, the customer must re-connect to the specified provider
+            provider:
+              type: string
+              description: Name of the provider (banking institution) the task interacted with
     OpenBankingAuthoriseRequest:
       title: Provider
       type: object
