@@ -299,10 +299,13 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.10.7: 02/02/2024**
+    > - Added new fields for __Retrieve Balances Over Time__ and __Retrieve Balances Over Time By Account__ endpoint.
+
     **Version 2.10.5: 25/10/2024**:
     > - Add provider field to the __OBWebhookBody__ and __OBSyncWebhookBody__ schemas.
 
-    **Version 2.10.3: 25/10/2024**:
+    **Version 2.10.3: 25/01/2024**:
     > - Deprecated __Retrieve Ingestion Task Status V2__ endpoint in favour of __Retrieve Ingestion Task Status V3__ endpoint.
 
     **Version 2.10.2: 24/01/2024**
@@ -4710,10 +4713,22 @@ paths:
                       balance_count: 2
                       from: '2022-11-14T23:59:59Z'
                       to: '2022-11-15T23:59:59Z'
+                      max_balance:
+                        value: '500.00'
+                        currency: JPY
+                      min_balance:
+                        value: '200.00'
+                        currency: GBP
                     b6e9ea3c-71f9-4572-983a-3e5e85470dad:
                       balance_count: 1
                       from: '2022-11-15T23:59:59Z'
                       to: '2022-11-15T23:59:59Z'
+                      max_balance:
+                        value: '500.12'
+                        currency: USD
+                      min_balance:
+                        value: '0.00'
+                        currency: GBP
                   parameters:
                     from: '2020-12-22T00:00:00Z'
                     to: '2022-11-15T00:00:00Z'
@@ -4830,6 +4845,12 @@ paths:
                     balance_count: 2
                     from: '2022-11-14T23:59:59Z'
                     to: '2022-11-15T23:59:59Z'
+                    max_balance:
+                      value: '500.12'
+                      currency: USD
+                    min_balance:
+                      value: '0.00'
+                      currency: GBP
                   parameters:
                     from: '2020-12-22T00:00:00Z'
                     to: '2022-11-15T00:00:00Z'
@@ -16476,6 +16497,16 @@ components:
                       balance_count:
                         type: number
                         description: The number of balances returned for the account
+                  - type: object
+                    properties:
+                      min_balance:
+                        description: The minimum balance in the returned period
+                        $ref: '#/components/schemas/BudAmount'
+                  - type: object
+                    properties:
+                      max_balance:
+                        description: The maximum balance in the returned period
+                        $ref: '#/components/schemas/BudAmount'
             parameters:
               title: The parameters used to calculated balances
               allOf:
@@ -16519,6 +16550,16 @@ components:
                     balance_count:
                       type: number
                       description: The number of balances returned for the account
+                - type: object
+                  properties:
+                    min_balance:
+                      description: The minimum balance in the returned period
+                      $ref: '#/components/schemas/BudAmount'
+                - type: object
+                  properties:
+                    max_balance:
+                      description: The maximum balance in the returned period
+                      $ref: '#/components/schemas/BudAmount'
             parameters:
               allOf:
                 - $ref: '#/components/schemas/BudDateRangeMetadata'
