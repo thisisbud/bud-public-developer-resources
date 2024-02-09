@@ -299,6 +299,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.10.8: 08/02/2024**
+    > - Fixed path for __Custom Insights__ endpoints.
+
     **Version 2.10.7: 02/02/2024**
     > - Added new fields for __Retrieve Balances Over Time__ and __Retrieve Balances Over Time By Account__ endpoint.
 
@@ -11717,7 +11720,7 @@ paths:
           description: Malformed request
         5XX:
           description: An unexpected error occurred on the server side
-  /api/v1/manage/{custom_insight_id}:
+  /insights/v1/custom/manage/{custom_insight_id}:
     delete:
       tags:
         - Custom Insights
@@ -11769,7 +11772,7 @@ paths:
           description: Custom insight doesn't exist, thus cannot be patched
         5XX:
           description: An unexpected error occurred on the server side
-  /api/v1/manage/all:
+  /insights/v1/custom/manage/all:
     delete:
       tags:
         - Custom Insights
@@ -11785,7 +11788,7 @@ paths:
           description: OK
         5XX:
           description: An unexpected error occurred on the server side
-  /api/v1/profile:
+  /insights/v1/custom/profile:
     post:
       tags:
         - Custom Insights
