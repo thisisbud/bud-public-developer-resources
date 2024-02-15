@@ -3107,13 +3107,51 @@ paths:
                             slug: specialty_coffee
                             display_name: Specialty Coffee Supplier Ltd.
                             logo: http://url/specialty_coffee_supplier_logo.jpeg
+                            tokens:
+                              - value: speciality coffee
+                                confidence: '0.98'
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
                             slug: paypal
                             display_name: PayPal
                             logo: http://url/paypal_logo.jpeg
+                            tokens:
+                              - value: paypal
+                                confidence: '0.92'
                           names:
                             - jane doe
+                      - transaction_id: a2294cebb45d2a6e0cfc70d270988d8c
+                        account_id: 37c633a71237b9a8282e09587109668e
+                        description: Tesco 2956 London GBR
+                        credit_debit_indicator: debit
+                        status: booked
+                        amount:
+                          value: '50.23'
+                          currency: GBP
+                        date_time: '2022-05-26T10:00:00Z'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            id: 0980cf54-6052-4527-84ff-e6f9b169884f
+                            slug: tesco_stores
+                            display_name: Tesco
+                            logo: http://url/tesco_stores_logo.jpeg
+                            tokens:
+                              - value: tesco
+                                confidence: '0.96'
+                          location:
+                            tokens:
+                              - london
+                              - portobello
+                          transaction_types:
+                            - card
+                            - debit
                 metadata:
                   task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
                   next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
@@ -5021,11 +5059,17 @@ paths:
                             slug: specialty_coffee
                             display_name: Specialty Coffee Supplier Ltd.
                             logo: http://url/specialty_coffee_supplier_logo.jpeg
+                            tokens:
+                              - value: speciality coffee
+                                confidence: '0.98'
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
                             slug: paypal
                             display_name: PayPal
                             logo: http://url/paypal_logo.jpeg
+                            tokens:
+                              - value: paypal
+                                confidence: '0.92'
                           regularity:
                             frequency: monthly
                             predicted_date_times:
@@ -5063,12 +5107,18 @@ paths:
                             slug: tesco_stores
                             display_name: Tesco
                             logo: http://url/tesco_stores_logo.jpeg
+                            tokens:
+                              - value: tesco
+                                confidence: '0.96'
                           location:
                             address:
                               address_lines:
                                 - 224-226 Portobello Rd
                                 - London
                               country: GBR
+                            tokens:
+                              - london
+                              - portobello
                           transaction_types:
                             - card
                             - debit
@@ -12095,6 +12145,13 @@ components:
         logo:
           type: string
           description: URL supplying merchant logo, if available.
+        tokens:
+          type: array
+          description: |
+            A list of tokens calculated from the transaction model, used to identify the Merchant. 
+            This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
+          items:
+            $ref: '#/components/schemas/Token'
     Processor:
       title: Processor
       type: object
@@ -12114,6 +12171,13 @@ components:
         logo:
           type: string
           description: URL supplying processor logo, if available.
+        tokens:
+          type: array
+          description: |
+            A list of tokens calculated from the transaction model, used to identify the Merchant. 
+            This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
+          items:
+            $ref: '#/components/schemas/Token'
     Regularity:
       title: Regularity
       type: object
@@ -12160,6 +12224,24 @@ components:
             country:
               type: string
               description: An ISO-3166 Alpha-3 country code representing the detected country the transaction was located.
+        tokens:
+          type: array
+          description: A list of tokenised location string. These could be anything from a full street address down to a simple town or city.
+          items:
+            type: string
+    Token:
+      title: Token
+      type: object
+      description: The token item.
+      required:
+        - value
+        - confidence
+      properties:
+        value:
+          type: string
+        confidence:
+          type: string
+          description: Degree of belief of correct assignment, expressed as a probability.
     ListTransactionsResponse:
       title: Retrieve Transactions Response
       type: object
@@ -12187,6 +12269,88 @@ components:
             next_page_token:
               type: string
               description: The token required to retrieve the next page of results. Will be omitted if no next page exists.
+    TransactionForSyncIngest:
+      title: Transaction
+      type: object
+      description: A financial transaction
+      required:
+        - transaction_id
+        - account_id
+        - description
+        - amount
+        - credit_debit_indicator
+        - status
+        - date_time
+      properties:
+        transaction_id:
+          type: string
+          description: Unique identifier for the transaction. May be mutable depending on original ingestion source.
+        account_id:
+          type: string
+          description: Identifier for the account associated with the transaction.
+        description:
+          type: string
+          description: Description of the transaction.
+        credit_debit_indicator:
+          type: string
+          description: Credit/Debit Indicator
+          enum:
+            - credit
+            - debit
+        status:
+          type: string
+          description: Status of the transaction. Defaults to booked.
+          enum:
+            - booked
+            - pending
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        date_time:
+          type: string
+          description: Date of the transaction compliant with RFC3339.
+        enrichments:
+          $ref: '#/components/schemas/SyncEnrichments'
+        tags:
+          type: array
+          description: |
+            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering.
+            Region and client specific.
+
+            | Value                   | Description                                               |
+            |:------------------------|:----------------------------------------------------------|
+            | `benefit`               | A government/non-profit benefit transaction               |
+            | `debt-collection`       | A transaction associated with a known debt-collector      |
+            | `loan`                  | A transaction associated with a loan                      |
+            | `income`                | A transaction associated with income                      |
+            | `pending`               | A transaction which has not been booked                   |
+            | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
+            | `salary`                | A transaction associated with a regular wage              |
+            | `subscription`          | A transaction associated with a subscription service      |
+          items:
+            type: string
+    SyncEnrichments:
+      title: Enrichments
+      type: object
+      description: Contextual enrichments associated with a Transaction
+      properties:
+        categories:
+          $ref: '#/components/schemas/Categories'
+        merchant:
+          $ref: '#/components/schemas/Merchant'
+        processor:
+          $ref: '#/components/schemas/Processor'
+        locations:
+          $ref: '#/components/schemas/Location'
+        transaction_types:
+          type: array
+          description: Transaction types associated with the transaction
+          items:
+            type: string
+        names:
+          type: array
+          description: Names that were detected in the transaction description
+          items:
+            type: string
     CustomerApplicationID:
       title: Customer Application ID
       type: string
@@ -15137,7 +15301,7 @@ components:
               $ref: '#/components/schemas/CustomerTransactionV3'
           transaction_windows:
             $ref: '#/components/schemas/TransactionWindowArray'
-    schemas-Transaction:
+    schemas-TransactionForSyncIngest:
       title: Transaction
       type: object
       description: A financial transaction
@@ -15156,9 +15320,6 @@ components:
         account_id:
           type: string
           description: Identifier for the account associated with the transaction.
-        provider:
-          type: string
-          description: Name of the transaction source provider. Optional as it may not have been supplied when using first party data.
         description:
           type: string
           description: Description of the transaction.
@@ -15180,7 +15341,7 @@ components:
           type: string
           description: Date of the transaction compliant with RFC3339.
         enrichments:
-          $ref: '#/components/schemas/Enrichments'
+          $ref: '#/components/schemas/SyncEnrichments'
         tags:
           type: array
           description: |
@@ -15211,7 +15372,7 @@ components:
         enriched_transactions:
           type: array
           items:
-            $ref: '#/components/schemas/schemas-Transaction'
+            $ref: '#/components/schemas/schemas-TransactionForSyncIngest'
     IngestV2SyncResponse:
       title: Ingest Transactions V2 Sync Response
       type: object
@@ -17667,7 +17828,7 @@ components:
           $ref: '#/components/schemas/schemas-Categories'
         merchant:
           $ref: '#/components/schemas/goals-components_schemas-Merchant'
-    goals-components_schemas-Transaction:
+    schemas-Transaction:
       title: Transaction
       type: object
       description: A financial transaction
@@ -17735,7 +17896,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/goals-components_schemas-Transaction'
+            $ref: '#/components/schemas/schemas-Transaction'
         metadata:
           allOf:
             - $ref: '#/components/schemas/BudResultsMetadata'
