@@ -3,9 +3,7 @@
 If you want to get started with Bud API with no code, 
 then you are at the right place.
 
-This repo contains two API collections
-- Bud - API Collection: This collection is regularly updated and contains almost all the public endpoints.
-- Bud - Data enrichment flows: This collection contains endpoints in an order that you need to call them if you want to onboard with us/enrich your data using a specific flow.
+The `Bud - API Collection` is regularly updated and contains all the public endpoints.
 
 ## Getting started
 
@@ -30,17 +28,13 @@ This repo contains two API collections
 ![postman_token](../images/obtain_token.png)
    2. If you performed all the previous steps you should have a valid token that is automatically saved, and you can use it for other requests.
 
-## Obtaining customer id and secret
+## Obtaining a customer id
 
-Some endpoints operate on customer data, for those endpoints you need `customer_id` and `customer_secret`.
-Customer secret is used to encrypt customer data, you can only obtain this during customer creation.
-
-How to obtain customer secret/ how to create a new customer
+Some endpoints operate on customer data, for those endpoints you need a `customer_id` that can be retrieved by sending a request to the Create Customer Endpoints:
 
 1. Get a valid token.
-2. Select customers API/Manage customers/Create customer request.
-3. In the request you can find the `customer_id` and `customer_secret`. These are saved as an environment variable.
-![create_customer](../images/customer_secret_obtain.png)
+2. Select customers API/Manage customers/Create customer request. Send.
+3. In the response you can find the `customer_id`. This is saved as an environment variable.
 
 ## Next steps
 
