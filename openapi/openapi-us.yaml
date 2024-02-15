@@ -1511,7 +1511,7 @@ paths:
                         amount:
                           value: '12.04'
                           currency: USD
-                        date_time: 2022-11-10T23:00:00Z00:00
+                        date_time: 2023-11-08T23:00:00Z00:00
                         enrichments:
                           categories:
                             l1:
@@ -1525,13 +1525,50 @@ paths:
                             slug: youtube
                             display_name: Youtube
                             logo: http://url/youtube.jpeg
+                            tokens:
+                              - value: youtube
+                                confidence: '0.92'
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
                             slug: paypal
                             display_name: PayPal
                             logo: http://url/paypal_logo.jpeg
+                            tokens:
+                              - value: paypal
+                                confidence: '0.96'
                           names:
                             - jane doe
+                          transaction_types:
+                            - card
+                            - debit
+                      - transaction_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                        description: STARBACKS NY0812C
+                        credit_debit_indicator: debit
+                        status: booked
+                        amount:
+                          value: '6.04'
+                          currency: USD
+                        date_time: 2023-11-10T23:00:00Z00:00
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            tokens:
+                              - value: starbacks
+                                confidence: '0.92'
+                              - value: nystar
+                                confidence: '0.25'
+                          locations:
+                            tokens:
+                              - NY
+                              - Main St
+                              - Queens
                 metadata:
                   task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
                   next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
@@ -1819,21 +1856,32 @@ paths:
                     operation_id: v2_transactions_get
                     data:
                       - transaction_id: '692529081002'
-                        account_id: '3009327691'
+                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
                         provider: finicity
                         description: NETFLIX
                         credit_debit_indicator: credit
+                        status: booked
                         amount:
                           value: '19.99'
                           currency: USD
-                        date_time: '2022-08-01T12:02:48Z'
-                        status: booked
+                        date_time: '2023-08-01T12:02:48Z'
                         enrichments:
                           merchant:
                             id: 60bf3a60-c872-4f45-909d-c84b140fc6e1
                             slug: netflix
                             display_name: Netflix
                             logo: https://url/netflix.jpeg
+                            tokens:
+                              - value: netflix
+                                confidence: '0.98'
+                            processor:
+                              id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                              slug: paypal
+                              display_name: PayPal
+                              logo: http://url/paypal_logo.jpeg
+                              tokens:
+                                - value: paypal
+                                  confidence: '0.96'
                           categories:
                             l1:
                               slug: entertainment
@@ -1851,15 +1899,15 @@ paths:
                         tags:
                           - regular-transaction
                       - transaction_id: '692529081000'
-                        account_id: '3009327691'
+                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
                         provider: finicity
                         description: John Doe
                         credit_debit_indicator: debit
+                        status: booked
                         amount:
                           value: '12.77'
                           currency: USD
-                        date_time: '2022-07-05T12:02:48Z'
-                        status: booked
+                        date_time: '2023-07-05T12:02:48Z'
                         enrichments:
                           categories:
                             l1:
@@ -1870,6 +1918,35 @@ paths:
                               confidence: '0.14'
                           names:
                             - john doe
+                      - transaction_id: '692529081001'
+                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                        provider: finicity
+                        description: STARBACKS NY0812C
+                        credit_debit_indicator: debit
+                        status: booked
+                        amount:
+                          value: '6.04'
+                          currency: USD
+                        date_time: 2023-11-10T23:00:00Z00:00
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            tokens:
+                              - value: starbacks
+                                confidence: '0.92'
+                              - value: nystar
+                                confidence: '0.25'
+                          locations:
+                            tokens:
+                              - NY
+                              - Main St
+                              - Queens
                     metadata:
                       results: 2
                       next_page_token: eyJvZmZzZXQiOjEwMH0
@@ -3593,271 +3670,6 @@ components:
           type: string
           description: The ISO 3166-1 country code where the transaction occurred.
           example: USA
-    IngestUSTransactionsRequest:
-      title: Ingest Transactions Request
-      description: Ingest transaction expected request body.
-      type: array
-      items:
-        $ref: '#/components/schemas/CustomerWithFinicityTransactions'
-    CustomerWithFinicityTransactions:
-      title: Customer With Transactions
-      description: A customer with a list of transactions.
-      type: object
-      required:
-        - customer_id
-        - customer_secret
-        - transactions
-      properties:
-        customer_id:
-          type: string
-          format: uuid
-          description: Unique identifier for a Customer, as registered on Bud's platform.
-          example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-        customer_secret:
-          type: string
-          description: Customer secret.
-          example: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
-        transactions:
-          type: array
-          description: List of transactions belonging to the customer.
-          items:
-            $ref: '#/components/schemas/MastercardTransaction'
-    EnrichedTransaction:
-      title: Enrich Transactions
-      description: A list of enriched transactions
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/MastercardTransaction'
-        - required:
-            - categories
-            - entities
-          properties:
-            categories:
-              description: A list of the different category levels associated with the transaction
-              title: Categories Enrichment
-              type: object
-              required:
-                - l1
-                - l2
-              properties:
-                l1:
-                  allOf:
-                    - description: Level 1 Category details
-                    - $ref: '#/components/schemas/MastercardCategoryEnrichment'
-                l2:
-                  allOf:
-                    - description: Level 2 Category details
-                    - $ref: '#/components/schemas/MastercardCategoryEnrichment'
-            entities:
-              allOf:
-                - description: Entity extraction and enrichment details
-                - $ref: '#/components/schemas/EntitiesEnrichment'
-    MastercardTransaction:
-      title: Transaction
-      type: object
-      required:
-        - id
-        - amount
-        - currency
-        - description
-        - memo
-        - account_type
-      properties:
-        id:
-          type: string
-          description: Unique transaction identifier
-        amount:
-          type: string
-          description: The value of the transaction in the corresponding currency including its sign (used to define Debit/Credit)
-        currency:
-          type: string
-          description: The currency (in ISO4217 format) of the transaction amount
-        description:
-          type: string
-          description: Free text string containing details of the transaction. This is the transaction narrative.
-        memo:
-          description: Further details related to the transaction.
-          nullable: true
-          type: string
-        account_type:
-          type: string
-          description: To define whether the transaction belongs to a 'business' or 'consumer' account.
-          enum:
-            - business
-            - consumer
-        date:
-          type: string
-          description: 'The date of the transaction, required if the transactions are to be  run through Bud''s Regular Transactions service. Note, date must be in the following format:  ''Year-Month-Day Hour:Minute:Second''. E.g ''2022-02-01T11:32:00-0600''.'
-    MastercardCategoryEnrichment:
-      title: Category Enrichment
-      type: object
-      required:
-        - name
-        - confidence
-      properties:
-        name:
-          type: string
-          description: The name of the category
-        confidence:
-          type: string
-          description: The confidence association with the category prediction
-    EntitiesEnrichment:
-      title: Entities Enrichment
-      type: object
-      required:
-        - merchants
-        - other_organisations
-        - transaction_types
-        - locations
-        - names
-        - dates
-      properties:
-        merchants:
-          nullable: true
-          type: array
-          items:
-            $ref: '#/components/schemas/OrganisationPrediction'
-        other_organisations:
-          nullable: true
-          type: array
-          items:
-            $ref: '#/components/schemas/OrganisationPrediction'
-        transaction_types:
-          nullable: true
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionTypePrediction'
-        names:
-          nullable: true
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityPrediction'
-        dates:
-          nullable: true
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityPrediction'
-    OrganisationPrediction:
-      title: Organisation prediction
-      type: object
-      required:
-        - text
-        - confidence
-      properties:
-        text:
-          type: string
-          description: Segment of text taken from the transaction description predicted to relevant to an organisation
-        confidence:
-          type: string
-          description: Confidence value for the predicted text
-        id:
-          type: string
-          description: Bud's unique organisation id -- always present if organisation is matched
-        name:
-          type: string
-          description: Standardised Organization name -- always present if organisation is matched
-        website:
-          type: string
-          description: Primary organisation website present where available
-        logo:
-          type: string
-          description: Organization logo link website present where available
-    TransactionTypePrediction:
-      title: Transaction Type Prediction
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/EntityPrediction'
-        - type: object
-          properties:
-            type:
-              type: string
-              description: Transaction Type name where available
-              enum:
-                - DEBIT_CARD
-                - CREDIT_CARD
-                - WIRE_TRANSFER
-                - TRANSFER
-                - ACH
-                - ATM
-                - POS
-                - CHECK
-                - PAYROLL
-                - BILL_PAY
-                - REFUND_AND_REVERSAL
-                - MOBILE_PAYMENTS_AND_DEPOSITS
-    EntityPrediction:
-      title: Entity prediction
-      type: object
-      required:
-        - text
-        - confidence
-      properties:
-        text:
-          type: string
-          description: Segment of text taken from the transaction description predicted to relevant to an entity
-        confidence:
-          type: string
-          description: Confidence value for the predicted text
-    EnrichedTransactionsResponse:
-      title: Transactions Response
-      type: object
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: array
-          description: The data associated with the response payload
-          items:
-            allOf:
-              - $ref: '#/components/schemas/EnrichedTransaction'
-              - type: object
-                properties:
-                  regular_payments:
-                    type: object
-                    description: Information detailing any regularity found to be associated with the transaction.
-                    allOf:
-                      - $ref: '#/components/schemas/RegularPaymentsUSJuly22'
-        metadata:
-          allOf:
-            - $ref: '#/components/schemas/ResultsMetadata'
-            - type: object
-              required:
-                - task_id
-              properties:
-                task_id:
-                  description: Bud Task identifier
-                  type: string
-                  format: uuid
-    RegularPaymentsUSJuly22:
-      title: Regular Payment Object
-      type: object
-      description: Details surrounding the regularity of the transaction
-      properties:
-        label:
-          type: string
-          nullable: true
-          description: A recurring transaction group identifier label associating regular transactions e.g. all Spotify transactions that are regular by the same monthly period will share the same label. If a transaction is irregular it will have a label of -1. All regular payments will be grouped by a label identifier. The format of the label includes a hash of the transaction description and the amount, followed by an integer corresponding to the number of regular groups found, i.e. <hash>-<i>. Null if this field is not applicable.
-        score:
-          nullable: true
-          type: string
-          description: A floating point number between 0 and 1, to define the confidence level that the transaction is regular or not. Null if this field is not applicable.
-        period:
-          nullable: true
-          type: string
-          description: 'To describe the period between each transaction in a regular group. Null if this field is not applicable. '
-          enum:
-            - daily
-            - weekly
-            - biweekly
-            - monthly
-            - quarterly
-            - six monthly
-            - annually
-            - unknown
     ListTransactionsResponse:
       title: Retrieve Transactions Response
       type: object
@@ -4012,6 +3824,13 @@ components:
         logo:
           type: string
           description: URL supplying merchant logo, if available.
+        tokens:
+          type: array
+          description: |
+            A list of tokens calculated from the transaction model, used to identify the Merchant. 
+            This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
+          items:
+            $ref: '#/components/schemas/Token'
     Processor:
       title: Processor
       type: object
@@ -4029,6 +3848,13 @@ components:
         logo:
           type: string
           description: URL supplying processor logo, if available.
+        tokens:
+          type: array
+          description: |
+            A list of tokens calculated from the transaction model, used to identify the Merchant. 
+            This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
+          items:
+            $ref: '#/components/schemas/Token'
     Regularity:
       title: Regularity
       type: object
@@ -4073,6 +3899,24 @@ components:
             country:
               type: string
               description: An ISO-3166 Alpha-3 country code representing the detected country the transaction was located.
+        tokens:
+          type: array
+          description: A list of tokenised location string. These could be anything from a full street address down to a simple town or city.
+          items:
+            type: string
+    Token:
+      title: Token
+      type: object
+      description: The token item.
+      required:
+        - value
+        - confidence
+      properties:
+        value:
+          type: string
+        confidence:
+          type: string
+          description: Degree of belief of correct assignment, expressed as a probability.
     RegularTransactionsResponse:
       title: Regular Transactions Response
       type: object
@@ -5358,6 +5202,13 @@ components:
         logo:
           type: string
           description: URL supplying merchant logo, if available.
+        tokens:
+          type: array
+          description: |
+            A list of tokens calculated from the transaction model, used to identify the Merchant. 
+            This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
+          items:
+            $ref: '#/components/schemas/Token'
     schemas-Processor:
       title: Processor
       type: object
@@ -5377,34 +5228,14 @@ components:
         logo:
           type: string
           description: URL supplying processor logo, if available.
-    schemas-Regularity:
-      title: Regularity
-      type: object
-      description: |
-        Regularity enrichment associated with a Transaction, as generated by Bud's artificial intelligence models. 
-        Transactions that are similar and have a known frequency will all have the same regularity enrichment.
-      properties:
-        frequency:
-          type: string
-          description: Detected frequency of the Transaction.
-          enum:
-            - unknown
-            - daily
-            - weekly
-            - biweekly
-            - monthly
-            - quarterly
-            - six_monthly
-            - annually
-        predicted_date_times:
+        tokens:
           type: array
-          description: Expected date times for the Transaction to repeat.
+          description: |
+            A list of tokens calculated from the transaction model, used to identify the Merchant. 
+            This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
           items:
-            type: string
-        group_label:
-          type: string
-          description: Unique label applied to multiple transactions in the same group.
-    schemas-Enrichments:
+            $ref: '#/components/schemas/Token'
+    SyncEnrichments:
       title: Enrichments
       type: object
       description: Contextual enrichments associated with a Transaction
@@ -5415,8 +5246,6 @@ components:
           $ref: '#/components/schemas/schemas-Merchant'
         processor:
           $ref: '#/components/schemas/schemas-Processor'
-        regularity:
-          $ref: '#/components/schemas/schemas-Regularity'
         locations:
           $ref: '#/components/schemas/Location'
         transaction_types:
@@ -5429,7 +5258,7 @@ components:
           description: Names that were detected in the transaction description
           items:
             type: string
-    schemas-Transaction:
+    TransactionForSyncIngest:
       title: Transaction
       type: object
       description: A financial transaction
@@ -5448,9 +5277,6 @@ components:
         account_id:
           type: string
           description: Identifier for the account associated with the transaction.
-        provider:
-          type: string
-          description: Name of the transaction source provider. Optional as it may not have been supplied when using first party data.
         description:
           type: string
           description: Description of the transaction.
@@ -5472,7 +5298,7 @@ components:
           type: string
           description: Date of the transaction compliant with RFC3339.
         enrichments:
-          $ref: '#/components/schemas/schemas-Enrichments'
+          $ref: '#/components/schemas/SyncEnrichments'
         tags:
           type: array
           description: |
@@ -5503,7 +5329,7 @@ components:
         enriched_transactions:
           type: array
           items:
-            $ref: '#/components/schemas/schemas-Transaction'
+            $ref: '#/components/schemas/TransactionForSyncIngest'
     IngestV2SyncResponse:
       title: Ingest Transactions V2 Sync Response
       type: object
