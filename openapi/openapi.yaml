@@ -6761,6 +6761,9 @@ paths:
       description: |
         Provides a list of a customer's income based transactions found within their connected accounts, and predicts whether each income transaction is related to a customer's `salary_or_wages`. Any income which is not salary or wages is given the type `other_incoming`, which can include other income sources such as investments or pension income.
 
+        When `X-From` is omitted from the request, a default value of 9 months from before today's date will be used.
+        When `X-To` is omitted from the request, a default value of today's date will be used.
+
         **Notes:**
         - Transactions with multiple currencies are supported, but the statistics are currently only calculated for one currency. The endpoint takes the currency of the first transaction and ignores non-matching currencies in its calculations.
         - In contrast to the V1 endpoint, Income Finder V2 no longer filters income transactions to only return the latest per reference.
@@ -6771,8 +6774,8 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/parameters-From'
-        - $ref: '#/components/parameters/parameters-To'
+        - $ref: '#/components/parameters/SmartFinderFrom'
+        - $ref: '#/components/parameters/SmartFinderTo'
       responses:
         '200':
           description: OK
@@ -6852,6 +6855,9 @@ paths:
       summary: Retrieve Benefits Transactions
       description: |
         Provides a list of a customer's benefits based transactions found within their connected accounts.
+
+        When `X-From` is omitted from the request, a default value of 30 days from before today's date will be used.
+        When `X-To` is omitted from the request, a default value of today's date will be used.
       operationId: v1_benefits_get
       security:
         - OAuth2: []
@@ -6859,8 +6865,8 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/parameters-From'
-        - $ref: '#/components/parameters/parameters-To'
+        - $ref: '#/components/parameters/SmartFinderFrom'
+        - $ref: '#/components/parameters/SmartFinderTo'
       responses:
         '200':
           description: OK
@@ -6903,7 +6909,10 @@ paths:
         - Income Finder
       summary: Retrieve Benefits Totals
       description: |
-        Provides a customers' total income under each detected benefit type
+        Provides a customers' total income under each detected benefit type.
+
+        When `X-From` is omitted from the request, a default value of 30 days from before today's date will be used.
+        When `X-To` is omitted from the request, a default value of today's date will be used.
       operationId: v1_benefits_totals_get
       security:
         - OAuth2: []
@@ -6911,30 +6920,8 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerSecret'
-        - in: header
-          name: X-From
-          required: false
-          schema:
-            type: string
-          example: '2022-02-28'
-          description: |
-            The date from when results are to be retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
-
-            When omitted from the request, a default value of 30 days from before today's date will be used.
-
-            Example: `2022-02-28`
-        - in: header
-          name: X-To
-          required: false
-          schema:
-            type: string
-          example: '2022-01-28'
-          description: |
-            The date up to when results are to be retrieved in the format [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html).
-
-            When omitted from the request, a default value of today's date will be used.
-
-            Example: `2022-01-28`
+        - $ref: '#/components/parameters/SmartFinderFrom'
+        - $ref: '#/components/parameters/SmartFinderTo'
       responses:
         '200':
           description: OK
@@ -6984,6 +6971,9 @@ paths:
       description: |
         Provides a list of a customers' outgoing loan transactions found within their connected accounts.
 
+        When `X-From` is omitted from the request, a default value of 30 days from before today's date will be used.
+        When `X-To` is omitted from the request, a default value of today's date will be used.
+
         **Notes:**
         - Transactions with multiple currencies are supported, but the statistics are currently only calculated for one currency. The endpoint takes the currency of the first transaction and ignores non-matching currencies in its calculations.
       operationId: v1_loans_get
@@ -6993,8 +6983,8 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/parameters-From'
-        - $ref: '#/components/parameters/parameters-To'
+        - $ref: '#/components/parameters/SmartFinderFrom'
+        - $ref: '#/components/parameters/SmartFinderTo'
       responses:
         '200':
           description: OK
@@ -7046,8 +7036,12 @@ paths:
       description: |
         Provides a list of a customers' outgoing debt collection transactions found within their connected accounts.
 
+        When `X-From` is omitted from the request, a default value of 30 days from before today's date will be used.
+        When `X-To` is omitted from the request, a default value of today's date will be used.
+
         **Notes:**
-        - Transactions with multiple currencies are supported, but the statistics are currently only calculated for one currency. The endpoint takes the currency of the first transaction and ignores non-matching currencies in its calculations.
+        - Transactions with multiple currencies are supported, but the statistics are currently only calculated for one currency. 
+          The endpoint takes the currency of the first transaction and ignores non-matching currencies in its calculations.
       operationId: v1_debt_collection_get
       security:
         - OAuth2: []
@@ -7055,8 +7049,8 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/parameters-From'
-        - $ref: '#/components/parameters/parameters-To'
+        - $ref: '#/components/parameters/SmartFinderFrom'
+        - $ref: '#/components/parameters/SmartFinderTo'
       responses:
         '200':
           description: OK
@@ -7210,7 +7204,11 @@ paths:
       tags:
         - Subscription Finder
       summary: Retrieve Subscriptions
-      description: This endpoint is used to retrieve information about a user's subscriptions
+      description: |
+        This endpoint is used to retrieve information about a user's subscriptions
+
+        When `X-From` is omitted from the request, a default value of 30 days from before today's date will be used.
+        When `X-To` is omitted from the request, a default value of today's date will be used.
       operationId: v1_subscriptions_get
       security:
         - OAuth2: []
@@ -7218,8 +7216,8 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/parameters-From'
-        - $ref: '#/components/parameters/parameters-To'
+        - $ref: '#/components/parameters/SmartFinderFrom'
+        - $ref: '#/components/parameters/SmartFinderTo'
       responses:
         '200':
           description: OK
@@ -7335,6 +7333,7 @@ paths:
                 operation_id: v1_customer_applications_post
                 data:
                   application_id: 48ac72d0-a829-4896-a067-dcb1c2b0f30c
+                  customer_id: 160c0c4b-9966-4dc1-a916-8407eb10d74e
                   expires_at: '2023-05-11T15:30:39Z'
         '401':
           description: An unauthenticated request was received.
@@ -7409,6 +7408,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerApplicationID'
+        - $ref: '#/components/parameters/Timezone'
+        - $ref: '#/components/parameters/DateRangeEnd'
+        - $ref: '#/components/parameters/DateRangeDurations'
       responses:
         '200':
           description: The request was successfully processed.
@@ -7442,6 +7444,22 @@ paths:
                   review_date: '2023-05-11T15:30:39Z'
                   metadata:
                     loan_product_code: credit_card_1234
+                metadata:
+                  timezone: Europe/London
+                  date_range_end: latest_calendar_month
+                  date_ranges:
+                    - from: '2023-04-01T00:00:00+01:00'
+                      to: '2023-04-31T23:59:59+01:00'
+                      duration: P1M
+                    - from: '2023-02-01T00:00:00Z'
+                      to: '2023-04-31T23:59:59+01:00'
+                      duration: P3M
+                    - from: '2022-11-01T00:00:00Z'
+                      to: '2023-04-31T23:59:59+01:00'
+                      duration: P6M
+                    - from: '2022-05-01T00:00:00+01:00'
+                      to: '2023-04-31T23:59:59+01:00'
+                      duration: P12M
         '401':
           description: An unauthenticated request was received.
         '405':
@@ -7482,7 +7500,7 @@ paths:
         information.
 
         If a valid email is specified in the request, Bud will automatically
-        send an email to the customer with the link embedded, and with 
+        send an email to the customer with the link embedded, and with
         instructions for the customer to proceed.
       operationId: v1_customer_applications_customer_links_post
       security:
@@ -7877,11 +7895,13 @@ paths:
         - $ref: '#/components/parameters/BucketID'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/URLMonthFrom'
-        - $ref: '#/components/parameters/URLMonthTo'
+        - $ref: '#/components/parameters/DateFrom'
+        - $ref: '#/components/parameters/DateTo'
         - $ref: '#/components/parameters/QueryCurrency'
         - $ref: '#/components/parameters/Timezone'
         - $ref: '#/components/parameters/GroupBy'
+        - $ref: '#/components/parameters/DeprecatedURLMonthFrom'
+        - $ref: '#/components/parameters/DeprecatedURLMonthTo'
       responses:
         '200':
           description: OK
@@ -8213,6 +8233,12 @@ paths:
                         - bucket_l1
                         - bucket_l2
                       currency: GBP
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Bucket not found
   /v1/affordability/spending-groups:
     post:
       tags:
@@ -8228,8 +8254,8 @@ paths:
 
         ❗️ Deprecation:
         >
-        > Please note: support will cease for this endpoint on the 16/11/2023 - please complete your migration to the 
-        > [aggregations_v2_buckets_post](https://docs.thisisbud.com/reference/aggregations_v2_buckets_post) 
+        > Please note: support will cease for this endpoint on the 16/11/2023 - please complete your migration to the
+        > [aggregations_v2_buckets_post](https://docs.thisisbud.com/reference/aggregations_v2_buckets_post)
         > endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com
       operationId: v1_affordability_spending_groups_post
       deprecated: true
@@ -12604,9 +12630,13 @@ components:
         data:
           required:
             - application_id
+            - customer_id
+            - expires_at
           properties:
             application_id:
               $ref: '#/components/schemas/CustomerApplicationID'
+            customer_id:
+              $ref: '#/components/schemas/CustomerID'
             expires_at:
               $ref: '#/components/schemas/DateTimeISO8601'
     GetCustomerApplicationResponse:
@@ -12616,11 +12646,61 @@ components:
       required:
         - operation_id
         - data
+        - metadata
       properties:
         operation_id:
           $ref: '#/components/schemas/OperationId'
         data:
           $ref: '#/components/schemas/CustomerApplication'
+        metadata:
+          required:
+            - timezone
+            - date_range_end
+            - date_ranges
+          properties:
+            timezone:
+              $ref: '#/components/schemas/TimezoneIdentifier'
+            date_range_end:
+              $ref: '#/components/schemas/DateRangeEnd'
+            date_ranges:
+              type: array
+              items:
+                $ref: '#/components/schemas/DateRange'
+              description: |
+                Date ranges corresponding to the choice of `date_range_end`, `timezone` and `date_period` parameters
+                in the URL query.
+
+                These from/to dates can be used for querying other financial data endpoints to within
+                specific periods of time (e.g. 1 month, 5 months, etc...), with timezones accounted for.
+    DateRangeEnd:
+      type: string
+      enum:
+        - latest_calendar_month
+        - latest_date
+      description: |
+        Determines whether the date range corresponds to a full calendar month or months to the date of the most
+        recent account connection.
+
+        **Example**: if the customer connects their accounts on `13th July`, then under `latest_calendar_month`, the end date
+        taken will be `30th June`, and the months back from there will be full calendar months (e.g. 1 month would be
+        `1st June` to `30th June`). Under `latest_date`, the dates would be `14th June` to `13th July`.
+    DateRange:
+      required:
+        - from
+        - to
+        - duration
+      properties:
+        from:
+          $ref: '#/components/schemas/schemas-DateTimeISO8601'
+        to:
+          $ref: '#/components/schemas/schemas-DateTimeISO8601'
+        duration:
+          $ref: '#/components/schemas/DayOrMonth'
+    DayOrMonth:
+      type: string
+      pattern: ^P[0-9]+M|D$
+      description: |
+        ISO 8601 date period string representing `n` months or days (e.g. 3 months = `P3M`, 4 days = `P4D`).
     PostCustomerLinksRequest:
       title: Post Customer Links Request Object
       type: object
@@ -12943,7 +13023,18 @@ components:
         - _links
       properties:
         group_name:
-          $ref: '#/components/schemas/Slug'
+          type: string
+          description: |
+            Name for the particular grouping, corresponding to the `group_type`.
+
+            If `group_type` is:
+
+            - `bucket_l1`: the name will be the corresponding `bucket_l1`.
+            - `bucket_l2`: the name will be the corresponding `bucket_l2`.
+            - `month`: then the name will be the date range for that full month.
+              - If the date range in this group is a full month (e.g. 1st to the last day of the month)
+                then it will be shortened to `YYYY-MM` (e.g. `2024-03`)
+              - Otherwise it is a conjunction of full ISO timestamps (e.g. `2024-01-05T00:00:00Z|2024-02-04T23:59:59Z`)
         group_type:
           $ref: '#/components/schemas/GroupType'
         incoming:
@@ -12988,7 +13079,7 @@ components:
 
             Prepend with the API host to get a fully resolved URL.
 
-            The same headers as [Retrieve Transactions V2](https://docs.thisisbud.com/reference/v2_transactions_get) applies.
+            The same headers as [Retrieve Transactions V2](https://docs.thisisbud.com/reference/v2_transactions_get) apply.
     IncomeInsightsResponse:
       title: Income Insights Response
       description: Income insights response, providing identified income insights for this customer.
@@ -13761,7 +13852,7 @@ components:
           type: array
           nullable: true
           description: |
-            Specify a list of one or more providers that will be displayed to the customer during the connection flow. If only a single provider is given, the customer will no longer be shown the select provider screen. 
+            Specify a list of one or more providers that will be displayed to the customer during the connection flow. If only a single provider is given, the customer will no longer be shown the select provider screen.
 
             Note, that these must match the `provider_id` returned by the Retrieve OB Providers endpoint.
           items:
@@ -14766,7 +14857,7 @@ components:
             local_value:
               allOf:
                 - description: |
-                    The original value of the payment in the local currency. The value is formatted with the number of decimal places for the respective currency. 
+                    The original value of the payment in the local currency. The value is formatted with the number of decimal places for the respective currency.
 
                     Example: `10.98`
                 - $ref: '#/components/schemas/BudMonetaryValue'
@@ -15146,8 +15237,8 @@ components:
               type: object
               title: Map of Account
               description: |
-                A map of accounts to missing fields array. 
-                The key contains the index of the account causing issues. 
+                A map of accounts to missing fields array.
+                The key contains the index of the account causing issues.
                 See example
               additionalProperties:
                 $ref: '#/components/schemas/ValidationMissing'
@@ -15155,8 +15246,8 @@ components:
               type: object
               title: Map of Account
               description: |
-                A map of accounts to invalid fields array. 
-                The key contains the index of the account causing issues. 
+                A map of accounts to invalid fields array.
+                The key contains the index of the account causing issues.
                 See example
               additionalProperties:
                 $ref: '#/components/schemas/ValidationInvalid'
@@ -15183,8 +15274,8 @@ components:
     SynchronousEnrichmentsList:
       type: array
       description: |
-        The list of enrichments product to execute during the synchronous execution of the request. Based on this list, the transactions sent 
-        will be processed through a number of enrichment flows, and this drives the amount of additional information attached to each transactions 
+        The list of enrichments product to execute during the synchronous execution of the request. Based on this list, the transactions sent
+        will be processed through a number of enrichment flows, and this drives the amount of additional information attached to each transactions
         in the synchronous process.
 
         The list of available enrichement products during the synchronous ingestion is the following:
@@ -15192,8 +15283,8 @@ components:
         - merchants
 
         The default behaviour is to execute `categories` and `merchants`.
-              
-        Note: This attribute doesn't limit the execution of all Bud's enrichments, we'll still return a number of additional information (eg: tokens), 
+
+        Note: This attribute doesn't limit the execution of all Bud's enrichments, we'll still return a number of additional information (eg: tokens),
         but it switches on and off the two enrichments listed above.
       example:
         - categories
@@ -15217,8 +15308,8 @@ components:
         transaction_id:
           type: string
           description: |
-            Unique, immutable transaction identifier. This can be of any format (not necessarily UUID), with a maximum of 255 characters. 
-            It's important this ID is immutable over time and unique as we use this ID as a key to store the transaction against your customer, 
+            Unique, immutable transaction identifier. This can be of any format (not necessarily UUID), with a maximum of 255 characters.
+            It's important this ID is immutable over time and unique as we use this ID as a key to store the transaction against your customer,
             so if more than one transaction has the same ID for the same customer, we will store only one of them.
           example: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
         description:
@@ -15247,9 +15338,9 @@ components:
       type: object
       title: Transaction Window
       description: |
-        The transaction window is used to describe the entire period for which you have 
-        provided full coverage for the transactions within the request. It is used by Bud to 
-        ascertain periods of inactivity on the account(s) in question to ensure accurate data 
+        The transaction window is used to describe the entire period for which you have
+        provided full coverage for the transactions within the request. It is used by Bud to
+        ascertain periods of inactivity on the account(s) in question to ensure accurate data
         can be provided across downstream endpoints (e.g. Retrieve Balances Over Time).
       required:
         - account_id
@@ -15416,8 +15507,8 @@ components:
               type: object
               title: Map of transaction IDs
               description: |
-                A map of transaction IDs to missing fields array. 
-                If the transaction ID was missing use the request transaction array index to identify it. 
+                A map of transaction IDs to missing fields array.
+                If the transaction ID was missing use the request transaction array index to identify it.
                 See example
               additionalProperties:
                 $ref: '#/components/schemas/ValidationMissing'
@@ -15425,8 +15516,8 @@ components:
               type: object
               title: Map of transaction IDs
               description: |
-                A map of transaction IDs to invalid fields array. 
-                If the transaction ID was missing use the request transaction array index to identify it. 
+                A map of transaction IDs to invalid fields array.
+                If the transaction ID was missing use the request transaction array index to identify it.
                 See example
               additionalProperties:
                 $ref: '#/components/schemas/ValidationInvalid'
@@ -16251,7 +16342,7 @@ components:
           description: |
             The account holder. This field is only present if parties data **is not** available.
 
-            Parties data will only be present if you are a Check customer, and the provider is support by Check. 
+            Parties data will only be present if you are a Check customer, and the provider is support by Check.
             Providers that support Check can be found in the Connect coverage table in Guides, under Connect.
           type: object
           properties:
@@ -16276,7 +16367,7 @@ components:
           description: |
             The account holders. This field is only present if parties data **is** available.
 
-            Parties data will only be present if you are a Check customer, and the provider is supported by Check. 
+            Parties data will only be present if you are a Check customer, and the provider is supported by Check.
             Providers that support Check can be found in the Connect coverage table in Guides, under Connect.
           items:
             title: Account_Holder
@@ -16766,7 +16857,7 @@ components:
           description: |
             The type of the transaction.
 
-            Examples: 
+            Examples:
              - `previous_payment`
              - `first_payment`
              - `next_payment`
@@ -18360,9 +18451,9 @@ components:
       title: Average income statistics
       type: object
       description: |-
-        Averages of income amounts. These averages are calculated using the filters supplied in the `X-From` & `X-To` headers. 
-        For instance, with 6 months of £1000/month and a date range of 6 months, the monthly average will be £1000. 
-        However, if the supplied date range is 12 months and there is no data for more than those 6 months, the average will be £500/month. 
+        Averages of income amounts. These averages are calculated using the filters supplied in the `X-From` & `X-To` headers.
+        For instance, with 6 months of £1000/month and a date range of 6 months, the monthly average will be £1000.
+        However, if the supplied date range is 12 months and there is no data for more than those 6 months, the average will be £500/month.
 
         Note that the number of months are calculated inclusively e.g. `months(2022-01-01, 2022-02-28) = 2` and `months(2022-01-01, 2022-03-01) = 3`.
       required:
@@ -18796,12 +18887,25 @@ components:
     TimezoneIdentifier:
       type: string
       description: |-
-        Timezone identifier (e.g. `Europe/London`) to make `month_from`/`month_to` dates relativised to the correct location.
+        Timezone identifier (e.g. `Europe/London`) to make dates relativised to the target location.
 
         In the case of daylight savings in a location, this ensures that the overall start/end date accounts for those shifts.
 
         See [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for list of valid timezone identifiers under `TZ identifier`.
       default: Etc/UTC
+    schemas-DateTimeISO8601:
+      title: Date/Time (ISO 8601)
+      type: string
+      description: ISO Date Format
+      example: '2022-03-05T13:34:33Z'
+    schema:
+      type: string
+      example: 2019-02
+      description: Month (`YYYY-MM`) from which the transactions should be returned from, this works in pair with the `month_to` parameter.
+    URLMonthTo-schema:
+      type: string
+      example: 2019-03
+      description: Month (`YYYY-MM`) from which the transactions should be returned to, this works in pair with the `month_from` parameter.
     AffordabilitySpendRequestSchema:
       title: Affordability Spending Groups Request Schema
       type: array
@@ -19129,11 +19233,6 @@ components:
             - v1_affordability_report
         data:
           $ref: '#/components/schemas/AffordabilityReport'
-    schemas-DateTimeISO8601:
-      title: Date/Time (ISO 8601)
-      type: string
-      description: ISO Date Format
-      example: '2022-03-05T13:34:33Z'
     CriteriaNetDisposableIncome:
       type: string
       description: |
@@ -19149,7 +19248,7 @@ components:
     CriteriaFlexibleExpenditure:
       type: string
       description: |
-        Flexible expenditure criteria will include all transactions which fall under the categories defined/expected to be inconsistent. inconsistent in the sense of both time and financial commitment, i.e. transactions falling under  food_and_drink/eating_out_and_takeaways
+        Flexible expenditure criteria will include all transactions which fall under the categories defined/expected to be inconsistent. inconsistent in the sense of both time and financial commitment, i.e. transactions falling under food_and_drink/eating_out_and_takeaways
       enum:
         - flexible_expenditure
     CriteriaEssentialExpenditure:
@@ -19167,7 +19266,7 @@ components:
     CriteriaInternalTransfers:
       type: string
       description: |
-        Internal transfers criteria returns all credit/debit transactions deemed to be made between an individual  financial pool. If we drill down to the account level, wealth has been gained/lost however if we drill up we see no change in net sum.
+        Internal transfers criteria returns all credit/debit transactions deemed to be made between an individual financial pool. If we drill down to the account level, wealth has been gained/lost however if we drill up we see no change in net sum.
       enum:
         - internal_transfers
     AffordabilityCriteria:
@@ -20501,6 +20600,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomerCharacteristicSimple'
+    components_schemas-Categories:
+      title: Categories
+      type: object
+      description: |
+        Categories enrichment associated with a Transaction, as generated by Bud's artificial intelligence models.
+        Currently two levels of category are supported, with `l1` being a coarse-grained category level and `l2` being
+        more refined.
+      properties:
+        l1:
+          $ref: '#/components/schemas/Category'
+          description: Level 1 Category
+        l2:
+          $ref: '#/components/schemas/Category'
+          description: Level 2 Category
     CustomerCharacteristicTransaction:
       title: Customer Characteristic Transaction
       type: object
@@ -20548,7 +20661,7 @@ components:
           description: Contextual enrichments associated with a Transaction
           properties:
             categories:
-              $ref: '#/components/schemas/Categories'
+              $ref: '#/components/schemas/components_schemas-Categories'
     TransactionTotal:
       type: object
       description: Totals of all included transactions for the specified currency.
@@ -20828,6 +20941,30 @@ components:
             - partial
             - 'false'
   parameters:
+    SmartFinderFrom:
+      in: header
+      name: X-From
+      required: false
+      schema:
+        type: string
+      examples:
+        date_only:
+          value: '2022-02-28'
+        RFC3339:
+          value: '2019-02-28T07:20:50.52Z'
+      description: Transaction from date, this works in pair with the 'X-To' parameter
+    SmartFinderTo:
+      in: header
+      name: X-To
+      required: false
+      schema:
+        type: string
+      examples:
+        date_only:
+          value: '2022-03-30'
+        RFC3339:
+          value: '2019-03-30T07:20:50.52Z'
+      description: Transaction to date, this works in pair with the 'X-From' parameter
     ClientId:
       in: header
       name: X-Client-Id
@@ -20939,6 +21076,27 @@ components:
         items:
           $ref: '#/components/schemas/GroupType'
         uniqueItems: true
+    DateRangeEnd:
+      in: query
+      name: date_range_end
+      schema:
+        allOf:
+          - $ref: '#/components/schemas/DateRangeEnd'
+          - default: latest_calendar_month
+    DateRangeDurations:
+      in: query
+      name: date_range_durations
+      style: form
+      explode: false
+      description: |
+        Used with `timezone` and `date_range_end` to determine the list of `date_ranges` that appear in the
+        metadata of the response. Use this to configure the specific periods of time that you wish to assess
+        a customer's application data over.
+      schema:
+        type: array
+        default: P1M,P3M,P6M,P12M
+        items:
+          $ref: '#/components/schemas/DayOrMonth'
     From:
       in: query
       name: from
@@ -21451,20 +21609,6 @@ components:
         default: 2
       required: false
       description: To set a percentage value used in the calculation of the forecasted amount for the future transactions categorised with specific transaction subcategory; for example `change_percentage[loans]=2.0`. This can be a positive or negative float number. To apply the same percentage to all transactions use the `subcategory=all`.
-    parameters-From:
-      in: header
-      name: X-From
-      schema:
-        type: string
-      example: '2022-01-29'
-      description: Transaction from date
-    parameters-To:
-      in: header
-      name: X-To
-      schema:
-        type: string
-      example: '2022-03-29'
-      description: Transaction to date
     QueryFromDate:
       in: query
       name: from
@@ -21479,27 +21623,39 @@ components:
         type: string
       example: '2019-02-29'
       description: 'Filter to this date (format: `YYYY-MM-DD`).'
-    URLMonthFrom:
-      in: query
-      name: month_from
-      required: false
-      schema:
-        type: string
-      example: 2019-02
-      description: Month (`YYYY-MM`) from which the transactions should be returned from, this works in pair with the `month_to` parameter.
-    URLMonthTo:
-      in: query
-      name: month_to
-      required: false
-      schema:
-        type: string
-      example: 2019-03
-      description: Month (`YYYY-MM`) from which the transactions should be returned to, this works in pair with the `month_from` parameter.
     Timezone:
       in: query
       name: timezone
       schema:
         $ref: '#/components/schemas/TimezoneIdentifier'
+    DateFrom:
+      in: query
+      name: date_from
+      schema:
+        $ref: '#/components/schemas/schemas-DateTimeISO8601'
+    DateTo:
+      in: query
+      name: date_to
+      schema:
+        $ref: '#/components/schemas/schemas-DateTimeISO8601'
+    DeprecatedURLMonthFrom:
+      in: query
+      name: month_from
+      required: false
+      deprecated: true
+      description: |
+        Use `date_from` instead.
+      schema:
+        $ref: '#/components/schemas/schema'
+    DeprecatedURLMonthTo:
+      in: query
+      name: month_to
+      required: false
+      deprecated: true
+      description: |
+        Use `date_to` instead.
+      schema:
+        $ref: '#/components/schemas/URLMonthTo-schema'
     FromMonthSpendingGroups:
       in: header
       name: X-From-Month
@@ -21520,7 +21676,7 @@ components:
         type: string
       example: 2019-03
       description: |
-        Month (`YYYY-MM`) from which the transactions should be returned to, this works in pair with the `X-From` parameter. 
+        Month (`YYYY-MM`) from which the transactions should be returned to, this works in pair with the `X-From` parameter.
         This X-To-Month format of (YYYY-MM) will become the default format in 3 months see the release notes for more details.
 
         Default behaviour: Set `X-To-Month` to be today's date.
@@ -21542,7 +21698,7 @@ components:
         type: string
       example: '2022-02-28'
       description: |
-        Date (`YYYY-MM-DD`) from which the transactions should be returned from, this works in pair with the `X-To` parameter. 
+        Date (`YYYY-MM-DD`) from which the transactions should be returned from, this works in pair with the `X-To` parameter.
         This X-From format of (YYYY-MM-DD) will still be backwards compatible for 3 months see the release notes for more details.
         Header will be replaced by #/parameters/FromMonthSpendingGroups.
 
@@ -21556,11 +21712,27 @@ components:
         type: string
       example: '2022-03-30'
       description: |
-        Date (`YYYY-MM-DD`) from which the transactions should be returned to, this works in pair with the `X-From` parameter. 
+        Date (`YYYY-MM-DD`) from which the transactions should be returned to, this works in pair with the `X-From` parameter.
         This X-To format of (YYYY-MM-DD) will still be backwards compatible for 3 months see the release notes for more details.
         Header will be replaced by #/parameters/ToMonthSpendingGroups.
 
         Default behaviour: Set `X-To` to be today's date.
+    URLMonthFrom:
+      in: query
+      name: month_from
+      required: false
+      schema:
+        type: string
+        example: 2019-02
+        description: Month (`YYYY-MM`) from which the transactions should be returned from, this works in pair with the `month_to` parameter.
+    URLMonthTo:
+      in: query
+      name: month_to
+      required: false
+      schema:
+        type: string
+        example: 2019-03
+        description: Month (`YYYY-MM`) from which the transactions should be returned to, this works in pair with the `month_from` parameter.
     OverallTotals:
       in: query
       name: overall_totals
@@ -21575,16 +21747,6 @@ components:
         type: boolean
         description: |
           If `true`, shows the monthly totals in the affordability report (under `monthly_totals` property).
-    DateFrom:
-      in: query
-      name: date_from
-      schema:
-        $ref: '#/components/schemas/schemas-DateTimeISO8601'
-    DateTo:
-      in: query
-      name: date_to
-      schema:
-        $ref: '#/components/schemas/schemas-DateTimeISO8601'
     Criteria:
       in: query
       name: criteria
