@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "3708148a-34d5-4b5d-8532-5ddf8fa81e30",
+		"_postman_id": "25edd436-d52e-4846-bbaf-05d2db15d936",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "5983757"
+		"_exporter_id": "7747870"
 	},
 	"item": [
 		{
@@ -5163,6 +5163,584 @@
 		{
 			"name": "Assess API",
 			"item": [
+				{
+					"name": "Customer Applications",
+					"item": [
+						{
+							"name": "Create Customer Application",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"customer_application_id\", jsonData.data.application_id);",
+											"pm.environment.set(\"customer_id\", jsonData.data.customer_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"primary_applicant\": {\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\"\n  },\n  \"secondary_applicants\": [\n    {\n      \"first_name\": \"Jane\",\n      \"last_name\": \"Doe\"\n    }\n  ],\n  \"metadata\": {\n    \"loan_product_code\": \"credit_card_1234\"\n  }\n}\n"
+								},
+								"url": {
+									"raw": "{{proxy_url}}assess/v1/customer-applications",
+									"host": [
+										"{{proxy_url}}assess"
+									],
+									"path": [
+										"v1",
+										"customer-applications"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Customer Applications",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}assess/v1/customer-applications",
+									"host": [
+										"{{proxy_url}}assess"
+									],
+									"path": [
+										"v1",
+										"customer-applications"
+									],
+									"query": [
+										{
+											"key": "metadata.loan_product_code",
+											"value": "credit_card_1234",
+											"description": "Search by exact-match on the field_name of metadata properties.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Customer Application",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}assess/v1/customer-applications/{{customer_application_id}}",
+									"host": [
+										"{{proxy_url}}assess"
+									],
+									"path": [
+										"v1",
+										"customer-applications",
+										"{{customer_application_id}}"
+									],
+									"query": [
+										{
+											"key": "timezone",
+											"value": "Europe/London",
+											"description": "Timezone identifier (e.g. `Europe/London`) to make dates relativised to the target location.",
+											"disabled": true
+										},
+										{
+											"key": "date_range_durations",
+											"value": "P1M,P3M,P6M,P12M",
+											"description": "Used with `timezone` and `date_range_end` to determine the list of `date_ranges` that appear in the metadata of the response.",
+											"disabled": true
+										},
+										{
+											"key": "date_range_end",
+											"value": "latest_date",
+											"description": "Determines whether the date range corresponds to a full calendar month or months to the date of the most recent account connection.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Customer Application",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}assess/v1/customer-applications/{{customer_application_id}}",
+									"host": [
+										"{{proxy_url}}assess"
+									],
+									"path": [
+										"v1",
+										"customer-applications",
+										"{{customer_application_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Customer Application Links",
+					"item": [
+						{
+							"name": "Retrieve Customer Application URL",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \n}\n"
+								},
+								"url": {
+									"raw": "{{proxy_url}}assess/v1/customer-applications/{{customer_application_id}}/customer-links",
+									"host": [
+										"{{proxy_url}}assess"
+									],
+									"path": [
+										"v1",
+										"customer-applications",
+										"{{customer_application_id}}",
+										"customer-links"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Aggregation Buckets",
+					"item": [
+						{
+							"name": "Create Buckets",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"aggregations_bucket_id\", jsonData.data.bucket_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"example-bucket\",\n  \"categorisation_model\": \"uk-v2\",\n  \"buckets\": [\n    {\n      \"bucket_l1\": \"housing_fuel_and_power\",\n      \"criteria\": [\n        {\n          \"bucket_l2\": \"mortgage_repayment\",\n          \"category_l1\": \"mortgage_and_rent\",\n          \"category_l2\": \"mortgage\"\n        },\n        {\n          \"bucket_l2\": \"rent_payment\",\n          \"category_l1\": \"mortgage_and_rent\",\n          \"category_l2\": \"rent\"\n        },\n        {\n          \"bucket_l2\": \"electricity_and_gas\",\n          \"category_l1\": \"utilities\",\n          \"category_l2\": \"utilities_energy\"\n        },\n        {\n          \"bucket_l2\": \"other_fuels\",\n          \"category_l1\": \"utilities\",\n          \"category_l2\": \"other_utilities\"\n        }\n      ]\n    },\n    {\n      \"bucket_l1\": \"recreation_and_culture\",\n      \"criteria\": [\n        {\n          \"bucket_l2\": \"holiday\",\n          \"category_l1\": \"travel\",\n          \"category_l2\": \"holiday_and_travel_expenses\"\n        },\n        {\n          \"bucket_l2\": \"pet_care\",\n          \"category_l1\": \"home\",\n          \"category_l2\": \"pets\"\n        },\n        {\n          \"bucket_l2\": \"leisure_and_culture\",\n          \"category_l1\": \"entertainment\",\n          \"category_l2\": \"leisure_and_amusement_activities\"\n        },\n        {\n          \"bucket_l2\": \"reading\",\n          \"category_l1\": \"entertainment\",\n          \"category_l2\": \"books_and_reading\"\n        }\n      ]\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}aggregations/v2/buckets",
+									"host": [
+										"{{proxy_url}}aggregations"
+									],
+									"path": [
+										"v2",
+										"buckets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve All Buckets",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}aggregations/v2/buckets",
+									"host": [
+										"{{proxy_url}}aggregations"
+									],
+									"path": [
+										"v2",
+										"buckets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Bucket",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}aggregations/v2/buckets/{{aggregations_bucket_id}}",
+									"host": [
+										"{{proxy_url}}aggregations"
+									],
+									"path": [
+										"v2",
+										"buckets",
+										"{{aggregations_bucket_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Bucket Totals",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}aggregations/v2/buckets/{{aggregations_bucket_id}}/totals",
+									"host": [
+										"{{proxy_url}}aggregations"
+									],
+									"path": [
+										"v2",
+										"buckets",
+										"{{aggregations_bucket_id}}",
+										"totals"
+									],
+									"query": [
+										{
+											"key": "date_from",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "date_to",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "currency",
+											"value": "GBP",
+											"disabled": true
+										},
+										{
+											"key": "timezone",
+											"value": "UTC",
+											"disabled": true
+										},
+										{
+											"key": "group_by",
+											"value": "bucket_l1",
+											"description": "Defines hierarchy of groupings for the resulting totals.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Bucket",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"example-bucket-updated\",\n  \"categorisation_model\": \"uk-v2\",\n  \"buckets\": [\n    {\n      \"bucket_l1\": \"housing_fuel_and_power\",\n      \"additional_data\": {\n        \"display_name\": \"Housing, fuel & power\"\n      },\n      \"criteria\": [\n        {\n          \"bucket_l2\": \"mortgage_repayment\",\n          \"category_l1\": \"mortgage_and_rent\",\n          \"category_l2\": \"mortgage\",\n          \"additional_data\": {\n            \"display_name\": \"Mortgage repayment\"\n          }\n        },\n        {\n          \"bucket_l2\": \"rent_payment\",\n          \"category_l1\": \"mortgage_and_rent\",\n          \"additional_data\": {\n            \"display_name\": \"Rent repayment\"\n          },\n          \"category_l2\": \"rent\"\n        },\n        {\n          \"bucket_l2\": \"electricity_and_gas\",\n          \"category_l1\": \"utilities\",\n          \"category_l2\": \"utilities_energy\",\n          \"additional_data\": {\n            \"display_name\": \"Electricity & gas\"\n          }\n        },\n        {\n          \"bucket_l2\": \"other_fuels\",\n          \"category_l1\": \"utilities\",\n          \"category_l2\": \"other_utilities\",\n          \"additional_data\": {\n            \"display_name\": \"Other fuels\"\n          }\n        }\n      ]\n    },\n    {\n      \"bucket_l1\": \"recreation_and_culture\",\n      \"additional_data\": {\n        \"display_name\": \"Recreation & Culture\"\n      },\n      \"criteria\": [\n        {\n          \"bucket_l2\": \"holiday\",\n          \"category_l1\": \"travel\",\n          \"category_l2\": \"holiday_and_travel_expenses\",\n          \"additional_data\": {\n            \"display_name\": \"Holiday\"\n          }\n        },\n        {\n          \"bucket_l2\": \"pet_care\",\n          \"category_l1\": \"home\",\n          \"category_l2\": \"pets\",\n          \"additional_data\": {\n            \"display_name\": \"Pet care\"\n          }\n        },\n        {\n          \"bucket_l2\": \"leisure_and_culture\",\n          \"category_l1\": \"entertainment\",\n          \"category_l2\": \"leisure_and_amusement_activities\",\n          \"additional_data\": {\n            \"display_name\": \"Leisure & culture\"\n          }\n        },\n        {\n          \"bucket_l2\": \"reading\",\n          \"category_l1\": \"entertainment\",\n          \"category_l2\": \"books_and_reading\",\n          \"additional_data\": {\n            \"display_name\": \"Reading\"\n          }\n        }\n      ]\n    }\n  ]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}aggregations/v2/buckets/{{aggregations_bucket_id}}",
+									"host": [
+										"{{proxy_url}}aggregations"
+									],
+									"path": [
+										"v2",
+										"buckets",
+										"{{aggregations_bucket_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Bucket",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}aggregations/v2/buckets/{{aggregations_bucket_id}}",
+									"host": [
+										"{{proxy_url}}aggregations"
+									],
+									"path": [
+										"v2",
+										"buckets",
+										"{{aggregations_bucket_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "Assess Affordability",
 					"item": [
