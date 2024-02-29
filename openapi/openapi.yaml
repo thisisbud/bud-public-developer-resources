@@ -13020,6 +13020,7 @@ components:
         - group_type
         - incoming
         - outgoing
+        - transaction_count
         - _links
       properties:
         group_name:
@@ -13044,7 +13045,38 @@ components:
         subtotals:
           type: array
           items:
-            $ref: '#/components/schemas/TotalGroup'
+            type: object
+            description: |
+              Nested subgroups if the query has multiple `group_by` options.
+
+              E.g. if `group_by=bucket_l1,bucket_l2`, then `subtotals` will contain the array of `bucket_l2` subtotals
+              within this `bucket_l1` grouping.
+
+              Schema for this object recursive (and so has properties `group_name`, `group_type`, `subtotals`, etc...)
+            required:
+              - group_name
+              - group_type
+              - incoming
+              - outgoing
+              - transaction_count
+              - _links
+            properties:
+              group_name:
+                type: string
+              group_type:
+                $ref: '#/components/schemas/GroupType'
+              incoming:
+                $ref: '#/components/schemas/GroupStatistic'
+              outgoing:
+                $ref: '#/components/schemas/GroupStatistic'
+              subtotals:
+                type: array
+                items:
+                  type: object
+              transaction_count:
+                type: integer
+              _links:
+                $ref: '#/components/schemas/GroupTransactionLinks'
         transaction_count:
           type: integer
           description: |
