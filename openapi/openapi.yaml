@@ -11691,6 +11691,8 @@ paths:
       tags:
         - Custom Insights
       summary: Create new custom insight
+      description: |
+        Create a custom insight to be applied to all customers upon ingestion or refresh of transactions
       security:
         - OAuth2: []
       operationId: custom_insight_v1_manage_post
@@ -11744,6 +11746,8 @@ paths:
       tags:
         - Custom Insights
       summary: List existing custom insights
+      description: |
+        Retrieve a list of created custom insights, if they are currently active, and when they were created
       deprecated: false
       security:
         - OAuth2: []
@@ -11801,6 +11805,8 @@ paths:
       tags:
         - Custom Insights
       summary: Delete existing custom insight
+      description: |
+        Permanently deletes a custom insight query
       deprecated: false
       security:
         - OAuth2: []
@@ -11820,6 +11826,8 @@ paths:
         - Custom Insights
       summary: Update existing custom insight
       deprecated: false
+      description: |
+        Patches a custom insight, updating the query, or setting it to active/inactive
       security:
         - OAuth2: []
       operationId: custom_insight_v1_manage_patch
@@ -11853,6 +11861,8 @@ paths:
       tags:
         - Custom Insights
       summary: Delete all existing custom insights
+      description: |
+        Permanently deletes all custom insight queries
       deprecated: false
       security:
         - OAuth2: []
@@ -11869,6 +11879,8 @@ paths:
       tags:
         - Custom Insights
       summary: Build custom insights profile
+      description: |
+        Manually builds a custom insight profile for a customer, is automatically called after successful ingestion and enrichment.
       deprecated: false
       security:
         - OAuth2: []
@@ -11891,6 +11903,9 @@ paths:
       tags:
         - Custom Insights
       summary: Retrieve custom insights profile
+      description: |
+        Lists the insights which applied to a customer at \'created_at\'.
+        To recompute make a call to Build custom insights profile.
       deprecated: false
       security:
         - OAuth2: []
