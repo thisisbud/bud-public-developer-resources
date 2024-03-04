@@ -2077,7 +2077,7 @@ paths:
               $ref: '#/components/schemas/OpenBankingRefreshRequest'
             example:
               provider: Barclays
-              from: '2019-01-01T00:00:00+00:00'
+              from: '2019-03-01T00:00:00+00:00'
               to: '2019-06-01T00:00:00+00:00'
       responses:
         '202':
@@ -14407,10 +14407,15 @@ components:
           description: The name of the provider the task is trying to connect to
         from:
           type: string
-          description: The datetime (ISO 8601) that defines the time since when the Customer's data needs to be collected. Defaults to the datetime of the last pull of transactions less seven days to account for any potential changes to the most recent set of transactions
+          description: |
+            The datetime (ISO 8601) that defines the time since when the Customer's data needs to be collected. 
+            Defaults to the datetime of the last pull of transactions less seven days to account for any potential changes to the most recent set of transactions. 
+            Refreshes can only go back to a maximum of 90 days from the current date.
         to:
           type: string
-          description: The datetime (ISO 8601) that defines the time up to which the Customer's data needs to be collected. Defaults to the current datetime
+          description: |
+            The datetime (ISO 8601) that defines the time up to which the Customer's data needs to be collected. Defaults to the current datetime. 
+            Refreshes can only go back to a maximum of 90 days from the current date.
     TaskStatusCaps:
       title: The Task Status
       type: string
