@@ -14056,29 +14056,41 @@ components:
       description: The result of the operation. Either success or various error codes.
       enum:
         - success
-        - task_not_found
-        - account_not_found
+        - account_closed
+        - auth_denied
+        - auth_expired
+        - auth_invalid
+        - auth_used
+        - awaiting_authorisation
+        - bad_request
+        - connection_expired
+        - connection_not_found
+        - connection_permission
+        - connection_reauthenticate
+        - connection_revoked
+        - connection_status
+        - consent_not_found
+        - enrichment_failed
+        - extension_not_permitted
+        - failed_body_decode
+        - failed_validation
+        - internal_auth_error
         - internal_error
         - internal_timeout
         - internal_transient_error
-        - failed_validation
-        - request_validation
-        - auth_denied
-        - auth_expired
-        - connection_not_found
-        - connection_expired
-        - connection_revoked
-        - connection_status
-        - connection_permission
-        - provider_not_found
-        - provider_failure
-        - provider_timeout
-        - provider_maintenance
-        - provider_request_limit
-        - provider_endpoint_unimplemented
         - provider_endpoint_deprecated
-        - provider_reauthenticate
-        - failed_body_decode
+        - provider_endpoint_unimplemented
+        - provider_endpoint_unsupported
+        - provider_failure
+        - provider_invalid
+        - provider_maintenance
+        - provider_marked_account_invalid
+        - provider_not_found
+        - provider_request_limit
+        - provider_timeout
+        - request_validation
+        - resource_not_found
+        - task_not_found
     OBWebhookBody:
       title: OB Webhook Payload
       type: object
@@ -15037,6 +15049,9 @@ components:
             - Mortgage
             - PrePaidCard
             - Savings
+        holder_name:
+          type: string
+          description: The name of the account holder
         details:
           type: array
           description: Provides the details to identify an account
@@ -15657,6 +15672,7 @@ components:
           enum:
             - ingest_accounts_post
             - ingest_transactions_post
+            - v2_ingest_accounts_post
             - v2_ingest_transactions_post
         ingest_schema:
           type: string
