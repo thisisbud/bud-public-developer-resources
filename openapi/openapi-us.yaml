@@ -935,7 +935,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryCurrencyUSD'
         - $ref: '#/components/parameters/QueryProvider'
         - in: query
@@ -1044,16 +1043,6 @@ paths:
                     errors:
                       X-Customer-Id:
                         - not present
-                CustomerID and CustomerSecret Not Sent:
-                  value:
-                    operation_id: financial_v2_accounts
-                    code_id: failed_validation
-                    message: Invalid request payload.
-                    errors:
-                      X-Customer-Id:
-                        - not present
-                      X-Customer-Secret:
-                        - not present
         '401':
           description: Unauthorised
           content:
@@ -1091,7 +1080,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/PathAccountID'
       responses:
         '200':
@@ -1146,16 +1134,6 @@ paths:
                     errors:
                       X-Customer-Id:
                         - not present
-                CustomerID and CustomerSecret Not Sent:
-                  value:
-                    operation_id: financial_v2_accounts_account_id
-                    code_id: failed_validation
-                    message: Invalid request payload.
-                    errors:
-                      X-Customer-Id:
-                        - not present
-                      X-Customer-Secret:
-                        - not present
         '401':
           description: Unauthorised
           content:
@@ -1204,7 +1182,6 @@ paths:
                 summary: Bud Accounts V1 Example
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                    customer_secret: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
                     accounts:
                       - provider: Barclays
                         account_id: 99473c28-21cf-4a9a-b79e-fd643dd7a4bc
@@ -1231,7 +1208,6 @@ paths:
                             time: '00:00:00'
                             type: InterimBooked
                   - customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
-                    customer_secret: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
                     accounts:
                       - provider: Lloyds
                         account_id: bfd4ea71-58d7-4b24-8820-95029875cc9a
@@ -1261,7 +1237,6 @@ paths:
                 summary: Plaid Accounts V1 Example
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                    customer_secret: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
                     accounts:
                       - account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk
                         balances:
@@ -1279,7 +1254,6 @@ paths:
                 description: A sample finicity v1 accounts ingest request
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                    customer_secret: 95793c357ce9f3738f302db9579e453d03ce44eba814512d0c8038f7c376f586
                     accounts:
                       - id: '1014136057'
                         name: Super Checking
@@ -1322,7 +1296,7 @@ paths:
         This endpoint is for pushing customer(s) account(s) and balance(s) through the Bud architecture.
         It can ingest data for multiple customers per request.
         By default, this is synchronous and will report any issue with the data in the response.
-        If a 'X-Disable-Synchronous' header is present and set to true, the process will create a task in the background and be enrirely 'non-blocking'.
+        If a 'X-Disable-Synchronous' header is present and set to true, the process will create a task in the background and be entirely 'non-blocking'.
         In this scenario, the response metadata will contain a Task ID and the next URL which would then be used for finding out the operation's result.
       operationId: v2_ingest_accounts_post
       security:
@@ -1339,15 +1313,103 @@ paths:
       requestBody:
         required: true
         content:
-          application/bud-accounts+json:
+          '*/*':
             schema:
-              $ref: '#/components/schemas/IngestAccountsRequest'
-          application/finicity-accounts-v1+json:
-            schema:
-              $ref: '#/components/schemas/IngestFinicityAccountsRequest'
-          application/plaid-accounts-v1+json:
-            schema:
-              $ref: '#/components/schemas/IngestPlaidAccountsRequest'
+              oneOf:
+                - $ref: '#/components/schemas/IngestAccountsRequest'
+                - $ref: '#/components/schemas/IngestPlaidAccountsRequest'
+                - $ref: '#/components/schemas/IngestFinicityAccountsRequest'
+            examples:
+              bud-accounts-v1 Request:
+                summary: Bud Accounts V1 Example
+                value:
+                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                    accounts:
+                      - provider: Barclays
+                        account_id: 99473c28-21cf-4a9a-b79e-fd643dd7a4bc
+                        currency: GBP
+                        account_type: Personal
+                        account_sub_type: CurrentAccount
+                        details:
+                          - scheme_name: UK.OBIE.SortCodeAccountNumber
+                            identification: '98765432165444'
+                            secondary_identification: '00021'
+                            name: Mr Kevin
+                        balances:
+                          - amount:
+                              value: '7.00'
+                              currency: GBP
+                            credit_debit_indicator: outgoing_debit
+                            credit_line:
+                              - included: true
+                                amount:
+                                  value: '200.00'
+                                  currency: GBP
+                                type: Credit
+                            date: '2020-12-01'
+                            time: '00:00:00'
+                            type: InterimBooked
+                  - customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
+                    accounts:
+                      - provider: Lloyds
+                        account_id: bfd4ea71-58d7-4b24-8820-95029875cc9a
+                        currency: GBP
+                        account_type: Personal
+                        account_sub_type: CurrentAccount
+                        details:
+                          - scheme_name: UK.OBIE.SortCodeAccountNumber
+                            identification: '12312312313200'
+                            secondary_identification: '00022'
+                            name: Mr Kevin
+                        balances:
+                          - amount:
+                              value: '70005.00'
+                              currency: GBP
+                            credit_debit_indicator: incoming_credit
+                            credit_line:
+                              - included: true
+                                amount:
+                                  value: '100.00'
+                                  currency: GBP
+                                type: Credit
+                            date: '2020-12-01'
+                            time: '00:00:00'
+                            type: InterimBooked
+              plaid-accounts-v1 Request:
+                summary: Plaid Accounts V1 Example
+                value:
+                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                    accounts:
+                      - account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk
+                        balances:
+                          available: 100
+                          current: 120
+                          limit: 1200
+                          iso_currency_code: USD
+                          last_updated_datetime: '2022-07-13T15:30:00Z'
+                        name: Plaid Checking
+                        official_name: Plaid Gold Standard 0% Interest Checking
+                        type: depository
+                        subtype: checking
+              finicity-accounts-v1 Request:
+                summary: Finicity V1 Accounts Request
+                description: A sample finicity v1 accounts ingest request
+                value:
+                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                    customer_secret: 95793c357ce9f3738f302db9579e453d03ce44eba814512d0c8038f7c376f586
+                    accounts:
+                      - id: '1014136057'
+                        name: Super Checking
+                        balance: 7456
+                        type: checking
+                        status: active
+                        institutionId: '102224'
+                        balanceDate: 1588797048
+                        currency: USD
+                        detail:
+                          availableBalanceAmount: 5678.78
+                          creditAvailableAmount: 10200
+                          creditMaxAmount: 12000
       responses:
         '202':
           description: A new Task has been created to ingest the given transactions. The generated `task_id` can be used to check the Task's status
@@ -1412,7 +1474,6 @@ paths:
                 summary: Bud Transaction V3 Example
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                    customer_secret: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
                     transactions:
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
@@ -1434,7 +1495,6 @@ paths:
                 summary: Plaid Transaction V1 Example
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                    customer_secret: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
                     transactions:
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
@@ -1464,7 +1524,6 @@ paths:
                 summary: Finicity Transaction V1 Example
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                    customer_secret: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
                     transactions:
                       - accountId: 3009327691
                         id: 100976507328
@@ -1778,7 +1837,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - in: query
           name: date_from
           schema:
@@ -1998,7 +2056,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/CategoryTotalsQueryFromTimestamp'
         - $ref: '#/components/parameters/CategoryTotalsQueryToTimestamp'
         - $ref: '#/components/parameters/QueryBudCategory'
@@ -2069,7 +2126,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/CategoryTotalsQueryFromTimestamp'
         - $ref: '#/components/parameters/CategoryTotalsQueryToTimestamp'
         - $ref: '#/components/parameters/QueryCurrency'
@@ -2153,7 +2209,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - in: header
           name: X-From
           required: false
@@ -2666,7 +2721,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '200':
           description: The request was successfully processed
@@ -2761,7 +2815,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/FutureTransactionsMonthsProjection'
         - $ref: '#/components/parameters/FutureTransactionsChangePercentage'
       responses:
@@ -2826,7 +2879,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/From'
         - $ref: '#/components/parameters/To'
       responses:
@@ -2923,7 +2975,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryFromDate'
         - $ref: '#/components/parameters/QueryToDate'
       responses:
@@ -3170,8 +3221,6 @@ components:
           format: uuid
           description: Unique identifier for the Customer.
           example: c3829683-b6b2-4988-a7f7-697a9fa201bc
-        customer_secret:
-          $ref: '#/components/schemas/CustomerSecret'
         accounts:
           type: array
           description: List of accounts that belongs to the customer.
@@ -3318,8 +3367,6 @@ components:
       properties:
         customer_id:
           $ref: '#/components/schemas/CustomerID'
-        customer_secret:
-          $ref: '#/components/schemas/CustomerSecret'
         sync_enrichments:
           $ref: '#/components/schemas/SynchronousEnrichmentsList'
         transactions:
@@ -3437,8 +3484,6 @@ components:
           format: uuid
           description: Unique identifier for the Customer.
           example: c3829683-b6b2-4988-a7f7-697a9fa201bc
-        customer_secret:
-          $ref: '#/components/schemas/CustomerSecret'
         accounts:
           type: array
           description: List of accounts that belongs to the customer.
@@ -3452,7 +3497,6 @@ components:
         - id
         - name
         - type
-        - status
         - institutionId
         - currency
         - balance
@@ -3539,8 +3583,6 @@ components:
       properties:
         customer_id:
           $ref: '#/components/schemas/CustomerID'
-        customer_secret:
-          $ref: '#/components/schemas/CustomerSecret'
         sync_enrichments:
           $ref: '#/components/schemas/SynchronousEnrichmentsList'
         transactions:
@@ -4355,7 +4397,7 @@ components:
           description: |
             The account holder. This field is only present if parties data **is not** available.
 
-            Parties data will only be present if you are a Check customer, and the provider is support by Check. 
+            Parties data will only be present if you are a Check customer, and the provider is support by Check.
             Providers that support Check can be found in the Connect coverage table in Guides, under Connect.
           type: object
           properties:
@@ -4380,7 +4422,7 @@ components:
           description: |
             The account holders. This field is only present if parties data **is** available.
 
-            Parties data will only be present if you are a Check customer, and the provider is supported by Check. 
+            Parties data will only be present if you are a Check customer, and the provider is supported by Check.
             Providers that support Check can be found in the Connect coverage table in Guides, under Connect.
           items:
             title: Account_Holder
@@ -4687,7 +4729,7 @@ components:
             local_value:
               allOf:
                 - description: |
-                    The original value of the payment in the local currency. The value is formatted with the number of decimal places for the respective currency. 
+                    The original value of the payment in the local currency. The value is formatted with the number of decimal places for the respective currency.
 
                     Example: `10.98`
                 - $ref: '#/components/schemas/BudMonetaryValue'
@@ -4815,6 +4857,9 @@ components:
             - Mortgage
             - PrePaidCard
             - Savings
+        holder_name:
+          type: string
+          description: The name of the account holder
         details:
           type: array
           description: Provides the details to identify an account
@@ -5014,8 +5059,8 @@ components:
               type: object
               title: Map of Account
               description: |
-                A map of accounts to missing fields array. 
-                The key contains the index of the account causing issues. 
+                A map of accounts to missing fields array.
+                The key contains the index of the account causing issues.
                 See example
               additionalProperties:
                 $ref: '#/components/schemas/ValidationMissing'
@@ -5023,8 +5068,8 @@ components:
               type: object
               title: Map of Account
               description: |
-                A map of accounts to invalid fields array. 
-                The key contains the index of the account causing issues. 
+                A map of accounts to invalid fields array.
+                The key contains the index of the account causing issues.
                 See example
               additionalProperties:
                 $ref: '#/components/schemas/ValidationInvalid'
@@ -5051,8 +5096,8 @@ components:
     SynchronousEnrichmentsList:
       type: array
       description: |
-        The list of enrichments product to execute during the synchronous execution of the request. Based on this list, the transactions sent 
-        will be processed through a number of enrichment flows, and this drives the amount of additional information attached to each transactions 
+        The list of enrichments product to execute during the synchronous execution of the request. Based on this list, the transactions sent
+        will be processed through a number of enrichment flows, and this drives the amount of additional information attached to each transactions
         in the synchronous process.
 
         The list of available enrichement products during the synchronous ingestion is the following:
@@ -5060,8 +5105,8 @@ components:
         - merchants
 
         The default behaviour is to execute `categories` and `merchants`.
-              
-        Note: This attribute doesn't limit the execution of all Bud's enrichments, we'll still return a number of additional information (eg: tokens), 
+
+        Note: This attribute doesn't limit the execution of all Bud's enrichments, we'll still return a number of additional information (eg: tokens),
         but it switches on and off the two enrichments listed above.
       example:
         - categories
@@ -5085,8 +5130,8 @@ components:
         transaction_id:
           type: string
           description: |
-            Unique, immutable transaction identifier. This can be of any format (not necessarily UUID), with a maximum of 255 characters. 
-            It's important this ID is immutable over time and unique as we use this ID as a key to store the transaction against your customer, 
+            Unique, immutable transaction identifier. This can be of any format (not necessarily UUID), with a maximum of 255 characters.
+            It's important this ID is immutable over time and unique as we use this ID as a key to store the transaction against your customer,
             so if more than one transaction has the same ID for the same customer, we will store only one of them.
           example: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
         description:
@@ -5115,9 +5160,9 @@ components:
       type: object
       title: Transaction Window
       description: |
-        The transaction window is used to describe the entire period for which you have 
-        provided full coverage for the transactions within the request. It is used by Bud to 
-        ascertain periods of inactivity on the account(s) in question to ensure accurate data 
+        The transaction window is used to describe the entire period for which you have
+        provided full coverage for the transactions within the request. It is used by Bud to
+        ascertain periods of inactivity on the account(s) in question to ensure accurate data
         can be provided across downstream endpoints (e.g. Retrieve Balances Over Time).
       required:
         - account_id
@@ -5373,8 +5418,8 @@ components:
               type: object
               title: Map of transaction IDs
               description: |
-                A map of transaction IDs to missing fields array. 
-                If the transaction ID was missing use the request transaction array index to identify it. 
+                A map of transaction IDs to missing fields array.
+                If the transaction ID was missing use the request transaction array index to identify it.
                 See example
               additionalProperties:
                 $ref: '#/components/schemas/ValidationMissing'
@@ -5382,8 +5427,8 @@ components:
               type: object
               title: Map of transaction IDs
               description: |
-                A map of transaction IDs to invalid fields array. 
-                If the transaction ID was missing use the request transaction array index to identify it. 
+                A map of transaction IDs to invalid fields array.
+                If the transaction ID was missing use the request transaction array index to identify it.
                 See example
               additionalProperties:
                 $ref: '#/components/schemas/ValidationInvalid'
@@ -5509,6 +5554,7 @@ components:
           enum:
             - ingest_accounts_post
             - ingest_transactions_post
+            - v2_ingest_accounts_post
             - v2_ingest_transactions_post
         ingest_schema:
           type: string
@@ -6342,13 +6388,6 @@ components:
       required: true
       description: A unique identifier for a Customer, as registered on Bud's platform.
       example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-    CustomerSecret:
-      in: header
-      name: X-Customer-Secret
-      schema:
-        type: string
-      required: false
-      description: The Bud Customer secret used to encrypt customer data. This is required only if the customer secret is not already stored with Bud.
     QueryCurrencyUSD:
       in: query
       name: currency
