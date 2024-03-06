@@ -11164,9 +11164,14 @@ paths:
                             l2:
                               slug: employment_income
                               confidence: '0.98'
+                          regularity:
+                            frequency: monthly
+                            confidence:
+                              predicted_date_times:
+                                - '2023-05-10T10:00:00Z'
                   details:
-                    days_late: 11
-                    expected_date_time: '2023-05-05T10:00:00Z'
+                    days_late: 6
+                    expected_date_time: '2023-05-10T10:00:00Z'
                 metadata:
                   from: '2022-11-01T00:00:00Z'
                   to: '2023-05-16T17:30:00Z'
@@ -11340,9 +11345,14 @@ paths:
                             l2:
                               slug: mortgage
                               confidence: '0.98'
+                          regularity:
+                            frequency: monthly
+                            confidence: '0.99'
+                            predicted_date_times:
+                              - '2023-05-10T10:00:00Z'
                   details:
-                    days_late: 11
-                    expected_date_time: '2023-05-05T10:00:00Z'
+                    days_late: 6
+                    expected_date_time: '2023-05-10T10:00:00Z'
                 metadata:
                   from: '2022-11-01T00:00:00Z'
                   to: '2023-05-16T17:30:00Z'
@@ -21225,56 +21235,56 @@ components:
       required: false
       schema:
         type: number
-        description: A minimum absolute total of gambling income for the insight to trigger. Both `gambling_income.minimum_monthly_threshold` and `gambling_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used.
+        description: A minimum absolute total of gambling income for the insight to trigger. Both `gambling_income.minimum_monthly_threshold` and `gambling_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
     GamblingIncomeMinimumPercentageTotalThreshold:
       in: query
       name: gambling_income.minimum_percentage_total_threshold
       required: false
       schema:
         type: number
-        description: A minimum percentage of all income that must be gambling income for the insight to trigger.. Both `gambling_income.minimum_monthly_threshold` and `gambling_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used.
+        description: A minimum percentage of all income that must be gambling income for the insight to trigger. Both `gambling_income.minimum_monthly_threshold` and `gambling_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
     LateIncomeMinimumValueThreshold:
       in: query
       name: late_income.minimum_value_threshold
       required: false
       schema:
         type: number
-        description: A minimum value of a late transaction in that transaction's currency for the insight to trigger. Both `late_income.minimum_value_threshold` and `late_income.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used.
+        description: A minimum value of a late transaction in that transaction's currency for the insight to trigger. Both `late_income.minimum_value_threshold` and `late_income.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
     LateIncomeMinimumDaysLateThreshold:
       in: query
       name: late_income.minimum_days_late_threshold
       required: false
       schema:
         type: number
-        description: A minimum number of days late for a transaction to be for the insight to trigger. Both `late_income.minimum_value_threshold` and `late_income.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used.
+        description: A minimum number of days late for a transaction to be for the insight to trigger. Both `late_income.minimum_value_threshold` and `late_income.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
     PensionIncomeMinimumMonthlyThreshold:
       in: query
       name: pension_income.minimum_monthly_threshold
       required: false
       schema:
         type: number
-        description: A minimum absolute total of pension income for the insight to trigger. Both `pension_income.minimum_monthly_threshold` and `pension_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used.
+        description: A minimum absolute total of pension income for the insight to trigger. Both `pension_income.minimum_monthly_threshold` and `pension_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
     PensionIncomeMinimumPercentageTotalThreshold:
       in: query
       name: pension_income.minimum_percentage_total_threshold
       required: false
       schema:
         type: number
-        description: A minimum percentage of all income that must be pension income for the insight to trigger.. Both `pension_income.minimum_monthly_threshold` and `pension_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used.
+        description: A minimum percentage of all income that must be pension income for the insight to trigger.. Both `pension_income.minimum_monthly_threshold` and `pension_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
     RegularIncomeChangedMinimumAbsoluteChangeThreshold:
       in: query
       name: regular_income_changed.minimum_absolute_change_threshold
       required: false
       schema:
         type: number
-        description: A minimum absolute change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_income_changed.minimum_absolute_change_threshold` and `regular_income_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used.
+        description: A minimum absolute change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_income_changed.minimum_absolute_change_threshold` and `regular_income_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
     RegularIncomeChangedMinimumPercentageChangeThreshold:
       in: query
       name: regular_income_changed.minimum_percentage_change_threshold
       required: false
       schema:
         type: number
-        description: A minimum percentage change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_income_changed.minimum_absolute_change_threshold` and `regular_income_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used.
+        description: A minimum percentage change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_income_changed.minimum_absolute_change_threshold` and `regular_income_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
     SpendingEnabledInsights:
       in: query
       name: enabled_insights
@@ -21289,7 +21299,7 @@ components:
       required: false
       schema:
         type: number
-        description: A minimum value of a late transaction in that transaction's currency for the insight to trigger. Both `late_payment.minimum_value_threshold` and `late_payment.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used.
+        description: A minimum value of a late transaction in that transaction's currency for the insight to trigger. Both `late_payment.minimum_value_threshold` and `late_payment.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
     LatePaymentMinimumDaysLateThreshold:
       in: query
       name: late_payment.minimum_days_late_threshold
@@ -21303,21 +21313,21 @@ components:
       required: false
       schema:
         type: number
-        description: A minimum absolute change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_payment_changed.minimum_absolute_change_threshold` and `regular_payment_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used.
+        description: A minimum absolute change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_payment_changed.minimum_absolute_change_threshold` and `regular_payment_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
     RegularPaymentChangedMinimumPercentageChangeThreshold:
       in: query
       name: regular_payment_changed.minimum_percentage_change_threshold
       required: false
       schema:
         type: number
-        description: A minimum percentage change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_payment_changed.minimum_absolute_change_threshold` and `regular_payment_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used.
+        description: A minimum percentage change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_payment_changed.minimum_absolute_change_threshold` and `regular_payment_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
     BalancesEnabledInsights:
       in: query
       name: enabled_insights
       required: false
       schema:
         type: string
-        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
+        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
         example: in_overdraft
     CloseToCreditLimitPercentageUtilisationThreshold:
       in: query
@@ -21325,14 +21335,14 @@ components:
       required: false
       schema:
         type: number
-        description: A minimum percentage utilisation of the credit limit for this insight to trigger. If not specified, a configured value will be used.
+        description: A minimum percentage utilisation of the credit limit for this insight to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
     LowBalanceBalanceThreshold:
       in: query
       name: low_balance.balance_threshold
       required: false
       schema:
         type: number
-        description: A balance threshold such that balances lower than this will trigger the low balance insight. If not specified, a configured value will be used.
+        description: A balance threshold such that balances lower than this will trigger the low balance insight. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
     PathCustomInsightID:
       in: path
       name: custom_insight_id
