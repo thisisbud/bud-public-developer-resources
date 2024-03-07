@@ -299,6 +299,10 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.10.9: 05/03/2024**
+    > - Added insight type as a string on Balances, Income and Spending insights endpoints.
+    > - Added link to Actionable Insights guide as a note on Balances, Income and Spending insights endpoints.
+
     **Version 2.10.8: 08/02/2024**
     > - Fixed path for __Custom Insights__ endpoints.
 
@@ -1438,10 +1442,6 @@ paths:
                 value:
                   redirect_url: https://my-agent-webapp.com/connected?my-parameter=xyz
                   initial_screen": accounts_summary
-              Enable account data mangement:
-                value:
-                  redirect_url: https://my-agent-webapp.com/connected?my-parameter=xyz
-                  enable_account_data_management": true
               Enable a asynchronous connection:
                 value:
                   redirect_url: https://my-agent-webapp.com/connected?my-parameter=xyz
@@ -10883,7 +10883,12 @@ paths:
       tags:
         - Retrieve Actionable Insights
       summary: Retrieve Balances Actionable Insights
-      description: Generate balances actionable insights.
+      description: |
+        Generate balances actionable insights.
+
+        > 📘 Note:
+        >
+        > For more information about Actionable Insights, please refer to our [guide](https://docs.thisisbud.com/docs/actionable-insights).
       operationId: insights_v1_actionable_balances_get
       security:
         - OAuth2: []
@@ -10930,7 +10935,12 @@ paths:
       tags:
         - Retrieve Actionable Insights
       summary: Retrieve Balances Actionable Insight Details
-      description: Retrieve insight-specific details and transaction and account data responsible for the triggered balances insight of the given type and ID.
+      description: |
+        Retrieve insight-specific details and transaction and account data responsible for the triggered balances insight of the given type and ID.
+
+        > 📘 Note:
+        >
+        > For more information about Actionable Insights, please refer to our [guide](https://docs.thisisbud.com/docs/actionable-insights).
       operationId: insights_v1_actionable_balances_details_get
       security:
         - OAuth2: []
@@ -11000,7 +11010,12 @@ paths:
       tags:
         - Retrieve Actionable Insights
       summary: Retrieve Income Actionable Insights
-      description: Generate income actionable insights.
+      description: |
+        Generate income actionable insights.
+
+        > 📘 Note:
+        >
+        > For more information about Actionable Insights, please refer to our [guide](https://docs.thisisbud.com/docs/actionable-insights).
       operationId: insights_v1_actionable_income_get
       security:
         - OAuth2: []
@@ -11080,7 +11095,12 @@ paths:
       tags:
         - Retrieve Actionable Insights
       summary: Retrieve Income Actionable Insight Details
-      description: Retrieve insight-specific details and transaction and account data responsible for the triggered income insight of the given type and ID.
+      description: |
+        Retrieve insight-specific details and transaction and account data responsible for the triggered income insight of the given type and ID.
+
+        > 📘 Note:
+        >
+        > For more information about Actionable Insights, please refer to our [guide](https://docs.thisisbud.com/docs/actionable-insights).
       operationId: insights_v1_actionable_income_details_get
       security:
         - OAuth2: []
@@ -11189,7 +11209,12 @@ paths:
       tags:
         - Retrieve Actionable Insights
       summary: Retrieve Spending Actionable Insights
-      description: Generate spending actionable insights.
+      description: |
+        Generate spending actionable insights.
+
+        > 📘 Note:
+        >
+        > For more information about Actionable Insights, please refer to our [guide](https://docs.thisisbud.com/docs/actionable-insights).
       operationId: insights_v1_actionable_spending_get
       security:
         - OAuth2: []
@@ -11265,7 +11290,12 @@ paths:
       tags:
         - Retrieve Actionable Insights
       summary: Retrieve Spending Actionable Insight Details
-      description: Retrieve insight-specific details and transaction and account data responsible for the triggered income insight of the given type and ID.
+      description: |
+        Retrieve insight-specific details and transaction and account data responsible for the triggered income insight of the given type and ID.
+
+        > 📘 Note:
+        >
+        > For more information about Actionable Insights, please refer to our [guide](https://docs.thisisbud.com/docs/actionable-insights).
       operationId: insights_v1_actionable_spending_details_get
       security:
         - OAuth2: []
@@ -13934,10 +13964,6 @@ components:
             - reconfirm_consent
             - revoke_consent
           nullable: true
-        enable_account_data_management:
-          type: boolean
-          nullable: true
-          description: When enabled, the customer can download their data in a JSON file. The user can download their data by selecting the burger menu in the right-hand corner, above their connected accounts. This will open up a menu with the option to ‘Download Data’.
         reconfirm_consent:
           deprecated: true
           type: boolean
@@ -21197,6 +21223,11 @@ components:
         type: string
         description: A type of income insight available on the platform.
         example: late_income
+        enum:
+          - late_income
+          - regular_monthly_income_changed
+          - gambling_income
+          - pension_income
     SpendingInsightType:
       in: path
       name: type
@@ -21205,6 +21236,11 @@ components:
         type: string
         description: A type of spending insight available on the platform.
         example: late_payment
+        enum:
+          - late_payment
+          - suspected_duplicate_charge
+          - regular_payment_changed
+          - new_insurance_expense
     BalancesInsightType:
       in: path
       name: type
@@ -21213,6 +21249,11 @@ components:
         type: string
         description: A type of balances insight available on the platform.
         example: in_overdraft
+        enum:
+          - cannot_cover_bills
+          - in_overdraft
+          - close_to_credit_limit
+          - low_balance
     InsightID:
       in: path
       name: id
@@ -21229,6 +21270,11 @@ components:
         type: string
         description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
         example: late_income
+        enum:
+          - late_income
+          - regular_monthly_income_changed
+          - gambling_income
+          - pension_income
     GamblingIncomeMinimumMonthlyThreshold:
       in: query
       name: gambling_income.minimum_monthly_threshold
@@ -21293,6 +21339,11 @@ components:
         type: string
         description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
         example: late_payment
+        enum:
+          - late_payment
+          - suspected_duplicate_charge
+          - regular_payment_changed
+          - new_insurance_expense
     LatePaymentMinimumValueThreshold:
       in: query
       name: late_payment.minimum_value_threshold
@@ -21327,8 +21378,13 @@ components:
       required: false
       schema:
         type: string
-        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
         example: in_overdraft
+        enum:
+          - cannot_cover_bills
+          - in_overdraft
+          - close_to_credit_limit
+          - low_balance
     CloseToCreditLimitPercentageUtilisationThreshold:
       in: query
       name: close_to_credit_limit.percentage_utilisation_threshold
