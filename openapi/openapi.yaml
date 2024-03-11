@@ -14363,10 +14363,41 @@ components:
               type: string
               enum:
                 - success
-                - auth_invalid
+                - account_closed
+                - auth_denied
                 - auth_expired
-                - provider_failure
+                - auth_invalid
+                - auth_used
+                - awaiting_authorisation
+                - bad_request
+                - connection_expired
+                - connection_not_found
+                - connection_permission
+                - connection_reauthenticate
+                - connection_revoked
+                - connection_status
+                - consent_not_found
+                - enrichment_failed
+                - extension_not_permitted
+                - failed_body_decode
+                - failed_validation
+                - internal_auth_error
                 - internal_error
+                - internal_timeout
+                - internal_transient_error
+                - provider_endpoint_deprecated
+                - provider_endpoint_unimplemented
+                - provider_endpoint_unsupported
+                - provider_failure
+                - provider_invalid
+                - provider_maintenance
+                - provider_marked_account_invalid
+                - provider_not_found
+                - provider_request_limit
+                - provider_timeout
+                - request_validation
+                - resource_not_found
+                - task_not_found
     GetOBConnectData:
       title: Open Banking Synchronisation Status
       type: object
