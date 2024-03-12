@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "25edd436-d52e-4846-bbaf-05d2db15d936",
+		"_postman_id": "22f3192f-f2ff-470c-99a1-18e167d83a76",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "7747870"
+		"_exporter_id": "28818977"
 	},
 	"item": [
 		{
@@ -5736,67 +5736,6 @@
 										"{{aggregations_bucket_id}}"
 									]
 								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Assess Affordability",
-					"item": [
-						{
-							"name": "Create Spending Groups",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "text"
-									},
-									{
-										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "text"
-									},
-									{
-										"key": "X-To-Month",
-										"value": "2022-12"
-									},
-									{
-										"key": "X-Currency",
-										"value": "GBP"
-									},
-									{
-										"key": "X-From-Month",
-										"value": "2019-02"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "[\n\t{\n\t\t\"name\": \"total_income\",\n\t\t\"transaction_categories\": [\n\t\t\t\"employment_income\",\n\t\t\t\"benefits\",\n\t\t\t\"other_income\"\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"essential_spending\",\n\t\t\"transaction_categories\": [\n\t\t\t\"mortgage_repayment\",\n\t\t\t\"utilities_water\",\n\t\t\t\"utilities_energy\",\n\t\t\t\"public_transport\"\n\t\t]\n\t}\n]"
-								},
-								"url": {
-									"raw": "{{proxy_url}}v1/affordability/spending-groups",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"affordability",
-										"spending-groups"
-									]
-								},
-								"description": "Provide a list of groups and categories to be returned as a breakdown of spending, along with all sources of income. If no groups are specified by the client, return the Bud default standar of most commonly used categories and groups.\n\nThe header parameters X-From and X-To allow you to filter the result to a specified datetime range."
 							},
 							"response": []
 						}
