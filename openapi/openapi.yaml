@@ -14324,6 +14324,9 @@ components:
         last_consented_on:
           type: string
           description: Date and time when the consent was last consented on. ISODateTime.
+        revoked_at:
+          type: string
+          description: Date and time when the consent was revoked. ISODateTime.
         status:
           type: string
           description: To describe the status of the consent. Note that the query parameter `status=all` must be provided to be shown consents that have a status of anything but `authorised`
