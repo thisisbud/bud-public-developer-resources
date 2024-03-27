@@ -23,7 +23,9 @@ info:
 
     ## Environments and API Base URIs
 
-    Bud supports the use of a single environment on its US based platform: https://api-us.thisisbud.com
+    1.  Bud’s Sandbox Environment - [https://api-sandbox.thisisbud.com/](https://api-sandbox.thisisbud.com/)
+
+    2.  Bud’s US Production Environment - [https://api-us.thisisbud.com](https://api-us.thisisbud.com)
 
     #### About
 
@@ -453,10 +455,6 @@ tags:
     x-displayName: Retrieve Actionable Insights
     description: |
       Retrieve a customer's actionable insights generated from their financial data.
-  - name: Custom Signals
-    x-displayName: Custom Signals
-    description: |
-      Understand and target messaging to your customers more effectively by defining your own custom segmentations.
   - name: Custom Insights
     x-displayName: Custom Insights
     description: |
@@ -1024,9 +1022,7 @@ paths:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/OBProvidersQueryTypeFilter'
         - $ref: '#/components/parameters/USBankingProvidersQueryRegionFilter'
-        - $ref: '#/components/parameters/USBankingProvidersQueryScopesFilter'
       responses:
         '200':
           description: List of providers available via Bud's Bank Aggregation APIs
@@ -1136,33 +1132,34 @@ paths:
         - Create a Connection
       summary: Retrieve Authorisation Gateway URL (v2)
       description: |
-        Allow customers to authorise with, and connect to, a provider, using Bud’s __Bud Connect__. Bud Connect is a piece of frontend UI that can be integrated into any mobile or web experience, and allows your customers to connect to and authorise with their chosen provider, allowing Bud to pull their account information.
+        Allow customers to authorise with, and connect to, a provider, using Bud’s __Bud Connect__. Bud Connect is a UI component hosted by Bud that can be integrated into any mobile or web experience, and 
+        allows your customers to connect to and authorise with their chosen provider, allowing Bud to pull their account information.
 
-        The status of the authorisation step will be provided to you as a path parameter within the `redirect_url` specified within the request payload. This `redirect_url` is where your customer will be redirected to once they have either failed, or successfully completed, the authorisation process with their provider.
+        Using the different configuration options that can be set through the request body you can personalize the experience for your Customer. Please, refer to the documentation below for more information about the available configurations.
 
-        Please note that in order to recieve status updates on a given account connection task, you will need to configure your Callback URL within the developer console. Once the entire connection process has been completed and the customer's account information is ready to be collected via the __FINANCIAL DATA API__, Bud will send a request to your callback URL.
+        The status of the authorisation step will be provided to you as a path parameter within the `redirect_url` specified within the request payload. 
+        This `redirect_url` is where your customer will be redirected to once they have either failed, or successfully completed, the authorisation process with their provider.
+
+        The URL generated with this endpoint is valid for up to 30 minutes. We suggest to generate the URL right before redirecting your Customer to it.
+
+        Please note that in order to recieve status updates on a given account connection task, you will need to configure your Callback URL within the developer console. 
+        Once the entire connection process has been completed and the customer's account information is ready to be collected, Bud will send a request to your callback URL.
       operationId: v2_ob_authorisation_gateway_url_post
       security:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AuthGatewayURLRequestv2'
+              $ref: '#/components/schemas/USAuthGatewayURLRequestv2'
             examples:
               All providers:
                 value:
                   redirect_url: https://my-agent-webapp.com/connected?my-parameter=xyz
-              Filter providers list:
-                value:
-                  redirect_url: https://my-agent-webapp.com/connected?my-parameter=xyz
-                  provider_types:
-                    - retail
               Specify provider(s):
                 value:
                   redirect_url: https://my-agent-webapp.com/connected?my-parameter=xyz
@@ -1196,7 +1193,7 @@ paths:
               example:
                 operation_id: v2_ob_authorisation_gateway_url_post
                 data:
-                  url: https://auth.gateway.thisisbud.com/connect?nonce=nu9ysswxk3hnrepo&token=b361e184038e25077cab277ede9362289941da928cd0d9c7ea52107aa2ad0d909d87993a532af47d9794cd5f29ba66128b3dc7f705ce9b044c636c28e31e1bb3ff8e17145a49f42f525bff51945c3a2484c89a05c1b1e484f9b84ee0cfee4640453fd599e71b5111bd880a63cc924fca8c6ce831396e2f4f8b3e5ac994c5c9
+                  url: https://connect-us.thisisbud.com/connect?nonce=nu9ysswxk3hnrepo&token=b361e184038e25077cab277ede9362289941da928cd0d9c7ea52107aa2ad0d909d87993a532af47d9794cd5f29ba66128b3dc7f705ce9b044c636c28e31e1bb3ff8e17145a49f42f525bff51945c3a2484c89a05c1b1e484f9b84ee0cfee4640453fd599e71b5111bd880a63cc924fca8c6ce831396e2f4f8b3e5ac994c5c9
         '400':
           description: Bad Request that fails validations on headers & payload
           content:
@@ -1264,320 +1261,6 @@ paths:
                   description: Bad Request that fails validations on headers & payload
                 '500':
                   description: An unexpected error occurred on the server side
-  /v1/open-banking/authorisation-url:
-    post:
-      tags:
-        - Create a Connection
-      summary: Initiate Provider Authorisation
-      description: |
-        Request a new __Bud Connect__ authorisation url for a specific Customer and provider. This will allow you to use your own interface to connect new account(s).
-
-        A generated consent has a variable expiry period by banking provider. To allow for re-authentication to extend this expiry the id of the customers previous consent can be included as the `consent_id` property. This re-authenciation if the customer grants consent would extend the consent.
-      operationId: open_banking_authorisation_url_post
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OpenBankingAuthoriseRequest'
-            examples:
-              Provider:
-                value:
-                  provider: citi
-                  redirect_url: https://myclientredirecturl.com
-      responses:
-        '202':
-          description: A new Task has been created to obtain the bank's authorisation URL. The generated `task_id` can be used to check the Task's status
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TaskCreatedResponseOB'
-              example:
-                operation_id: open_banking_authorisation_url_post
-                data:
-                  task_id: 360e5821-4f18-4077-83f4-c9a7c1768bea
-                  provider: citi
-                metadata:
-                  next_url: /v1/open-banking/authorisation-url/360e5821-4f18-4077-83f4-c9a7c1768bea
-                  next_url_delay: 50
-                  status: Pending
-        '400':
-          description: Bad Request that fails validations on headers & payload
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              examples:
-                Parameter missing:
-                  value:
-                    operation_id: open_banking_authorisation_url_post
-                    code_id: failed_validation
-                    message: Failed validation
-                    errors:
-                      customer_id:
-                        - This value should not be blank
-                Resource not found:
-                  value:
-                    operation_id: open_banking_authorisation_url_post
-                    code_id: resource_not_found
-                    message: Consent ID could not be found.
-                    errors:
-                      domain_error:
-                        - Consent ID could not be found.
-                Provider in Maintenance:
-                  value:
-                    operation_id: open_banking_authorisation_url_post
-                    code_id: provider_maintenance
-                    message: The provider is in maintenance.
-                    errors:
-                      provider:
-                        - The provider is currently disabled due to planned maintenance or known issues.
-        '401':
-          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
-        '405':
-          description: The request uses an unexpected HTTP method
-        5XX:
-          description: An unexpected error occurred on the server side
-  /v1/open-banking/authorisation-url/{task_id}:
-    get:
-      tags:
-        - Create a Connection
-      summary: Retrieve Authorisation URL
-      description: |
-        Check the status and get the result of an Initiate Provider Authorisation URL task. If the task is not yet completed, the data element will be null.
-
-        Once the customer has successfully authorised with the provider, Bud will create a task to fetch the relevant data from the provider. The task id created will be passed back within the supplied re-direct url. Please refer to the Check Connection Status endpoint for updates on this fetching process using the task id provided in the redirect URL.
-      operationId: open_banking_authorisation_url_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/TaskId'
-      responses:
-        '200':
-          description: The request was successfully processed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TaskAuthoriseResponse'
-              examples:
-                complete:
-                  summary: Completed
-                  value:
-                    operation_id: open_banking_authorisation_url_get
-                    data:
-                      provider: example_provider
-                      result: success
-                      status: Completed
-                      task_id: 16fa0748-8a6b-455b-9be9-30ae257965d8
-                      url: https://oauth.example.provider.com/authorization.oauth2?
-                    metadata:
-                      next_url: /v1/open-banking/authorisation-url/16fa0748-8a6b-455b-9be9-30ae257965d8
-                      next_url_delay: 50
-                      status: Completed
-                pending:
-                  summary: Pending
-                  value:
-                    operation_id: open_banking_authorisation_url_get
-                    data:
-                      provider: example_provider
-                      status: Pending
-                      task_id: 16fa0748-8a6b-455b-9be9-30ae257965d8
-                    metadata:
-                      status: Pending
-                      next_url: /v1/open-banking/authorisation-url/16fa0748-8a6b-455b-9be9-30ae257965d8
-                      next_url_delay: 50
-                failed:
-                  summary: Failed
-                  value:
-                    operation_id: open_banking_authorisation_url_get
-                    data:
-                      provider: example_provider
-                      result: internal_error
-                      status: Failed
-                      task_id: 16fa0748-8a6b-455b-9be9-30ae257965d8
-                    metadata:
-                      status: Failed
-                      next_url: /v1/open-banking/authorisation-url/16fa0748-8a6b-455b-9be9-30ae257965d8
-                      next_url_delay: 50
-        '400':
-          description: Bad Request that fails validations on headers & payload
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              example:
-                operation_id: open_banking_authorisation_url_get
-                code_id: failed_validation
-                message: Failed validation
-                errors:
-                  customer_id:
-                    - This value should not be blank
-        '404':
-          description: Task not found
-        '405':
-          description: The request uses an unexpected HTTP method
-        5XX:
-          description: An unexpected error occurred on the server side
-  /v2/open-banking/authorisation-codes:
-    post:
-      tags:
-        - Create a Connection
-      summary: Submit Authorisation Codes V2
-      description: |
-        When doing full app-to-app authorisation, the customer is returned from the provider directly back to your app. Your app will then need to send all the query and hash fragment parameters to Bud so that we can complete the connection.
-
-        Query and fragment parameters should be merged with query taking precedence. If you receive a request `/path?a=1#a=2&b=3` then you should perform this request with `{"a":"1","b":"3"}`. Given the nature of the fragment queries most server side languages will not process these so javascript may be required to correctly gather both parameters.
-
-        Regardless of what parameters are present, all of them should be sent to Bud so that we can choose to either continue the connection or to map and record the error.
-
-        Code and error are shown here only because they are the most common parameters you will see, but this object could contain any number of unspecified properties. Currently state is a common property among all authorisation flows and is the current task ID. The state property is not guaranteed for the future of this API contract and will not be treated as backwards incompatible if a new authentication flow does not use it.
-
-        This endpoint triggers an asynchronous collection of OpenBanking data within the Bud platform. Therefore after calling this endpoint the [Retrieve Connection Status](/reference/open_banking_connect_get) endpoint should be called to retrieve the status of the collection
-      operationId: v2_open_banking_authorisation_codes_post
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AuthorisationCodesRequest'
-            examples:
-              success:
-                summary: Authorisation has been successful
-                value:
-                  state: b55f5f00-8e40-4e9e-8c9e-a292a86eb40c
-                  code: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
-              error:
-                summary: Authorisation has failed
-                value:
-                  state: b55f5f00-8e40-4e9e-8c9e-a292a86eb40c
-                  error: access_denied
-      responses:
-        '202':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AuthorisationCodesResponse'
-              examples:
-                Success:
-                  description: success
-                  value:
-                    operation_id: v2_open_banking_authorisation_codes_post
-                    data:
-                      task_id: b55f5f00-8e40-4e9e-8c9e-a292a86eb40c
-                      provider: citi
-                      status: Completed
-                      result: success
-                Error:
-                  description: error
-                  value:
-                    operation_id: v2_open_banking_authorisation_codes_post
-                    data:
-                      task_id: b55f5f00-8e40-4e9e-8c9e-a292a86eb40c
-                      provider: citi
-                      status: Failed
-                      result: auth_invalid
-        '400':
-          description: Bad Request that fails validations on headers & payload
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              examples:
-                Invalid Body:
-                  description: Invalid Body
-                  value:
-                    operation_id: v2_open_banking_authorisation_codes_post
-                    code_id: failed_body_decode
-                    message: invalid request body
-                    errors:
-                      customer_id:
-                        - This value should not be blank
-                Validation Failure:
-                  description: Validation Error
-                  value:
-                    operation_id: v2_open_banking_authorisation_codes_post
-                    code_id: failed_validation
-                    message: invalid request
-                    errors:
-                      state:
-                        - The field is required
-        '409':
-          description: The code has already been submitted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              examples:
-                Code already submitted:
-                  description: Code already submitted
-                  value:
-                    operation_id: v2_open_banking_authorisation_codes_post
-                    code_id: auth_used
-                    message: auth code has been used before
-                    errors:
-                      code:
-                        - already used
-      callbacks:
-        ConnectCompletedCallBack:
-          '{$request.body#/redirect_url}':
-            description: |
-              This callback is sent to your configured `Open Banking Connection Completed` webhook URL on the completion of a connect task.
-            post:
-              security: []
-              parameters:
-                - $ref: '#/components/parameters/SignatureHeaderParameter'
-                - $ref: '#/components/parameters/SigningIdHeaderParameter'
-              summary: Connect Completed Notification Callback
-              requestBody:
-                required: true
-                description: This callback is sent to your configured `Open Banking Connection Completed` webhook URL on the completion of a connect task.
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/OBWebhookBody'
-                    examples:
-                      Success:
-                        description: Successful connection
-                        value:
-                          data:
-                            task_id: 03af1639-78a6-402d-809b-902a0b00a77d
-                            status: Completed
-                            result: success
-                            task_type: connect
-                            customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
-                      Failure:
-                        description: Failed connect due to a provider failure
-                        value:
-                          data:
-                            task_id: 03af1639-78a6-402d-809b-902a0b00a77d
-                            status: Failed
-                            result: provider_failure
-                            task_type: connect
-                            customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
-              responses:
-                '200':
-                  description: Your server returns this code if it accepts the callback
-                '300':
-                  description: The notification will not be retried, redirects will not be followed
-                '400':
-                  description: The notification will not be retried
-                '500':
-                  description: |
-                    The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
   /v1/open-banking/connect/{connection_task_id}:
     get:
       tags:
@@ -1675,14 +1358,18 @@ paths:
         - Manage a Connection
       summary: Initiate Refresh
       description: |
-        Instruct Bud to retrieve the latest account infomation for a customer. Refresh the accounts from a single provider with an existing connection. If the customer's consent has been revoked or expired for this provider, Bud will be unable to refresh the account. This will be confirmed in the response of the refresh status endpoint associated with the `task_id` provided in the response to this endpoint, where the `reconnect_required` field will set to `true` and status set to `Completed`.
+        Instruct Bud to retrieve the latest account infomation for a customer. Refresh the accounts from a single provider with an existing connection.
+
+        After initiating this long running process, make sure to check the status of the it till completion before trying to access the Customer's data or initiating another refresh.
+
+        If the customer's consent has been revoked or expired for this provider, Bud will be unable to refresh the account. 
+        This will be confirmed in the response of the refresh status endpoint associated with the `task_id` provided in the response to this endpoint, where the `reconnect_required` field will set to `true` and status set to `Completed`.
       operationId: open_banking_refresh_post
       security:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       requestBody:
         required: true
         content:
@@ -1723,8 +1410,6 @@ paths:
                     message: Failed validation
                     errors:
                       customer_id:
-                        - This value should not be blank
-                      customer_secret:
                         - This value should not be blank
                 Provider in Maintenance:
                   value:
@@ -1795,7 +1480,17 @@ paths:
         - Manage a Connection
       summary: Retrieve Refresh Status
       description: |
-        Check the status of an account information refresh task e.g. progress on account information download. If the task is not yet completed, the status will be shown as pending. If the status is completed, then the data is ready to be collected via the [Retrieve Financial Data](/reference/retrieve-financial-data) endpoints. Successful requests will include `step` (1-4) and associated `text` values to indicate the current progress of the refresh task.
+        Check the status of an account information refresh task. If the task is not yet completed, the status will be shown as pending. 
+        If the status is completed, then the data is ready to be collected via the [Retrieve Financial Data](/reference/retrieve-financial-data) endpoints. 
+        Successful requests will include `step` (1-4) and associated `text` values to indicate the current progress of the refresh task.
+
+        Make sure to check the status of the task till completion before trying to access the Customer's data or initiating another process.
+
+        When the task is successful, we include in the response body a `metadata.has_new_transactions` boolean attribute that tells you if the refresh resulted in storing new data. This attribute must be used to 
+        decide if it's necessary to pull the Customer's data or not.
+
+        When the refresh fails, we include the reason of the failure as part of the `data.result` attribute. We also include the `data.reconnect_required` boolean attribute that indicates if the consent used to 
+        fetch the data for this customer and provider is no longer valid. If reconnect_required is true, the customer will need to go through the bank account connection flow again.
       operationId: open_banking_refresh_get
       security:
         - OAuth2: []
@@ -1913,7 +1608,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/ConsentStatus'
       responses:
         '200':
@@ -1921,13 +1615,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetOBConsentsResponse'
+                $ref: '#/components/schemas/USGetOBConsentsResponse'
               example:
                 operation_id: open_banking_connections_get
                 data:
                   - id: 1ceb1d81-a80e-4825-a7c0-4d69424c9874
                     customer_id: 8e826e72-5cab-4426-897f-5317992a95f0
-                    provider: capitalone_Sandbox
+                    provider: mikomo
                     transaction_from_date: '2020-03-23T14:46:32Z'
                     expiration_date: '2021-06-21T14:46:33Z'
                     created_at: '2021-03-23T14:46:33Z'
@@ -1941,25 +1635,15 @@ paths:
                       - ReadAccounts
                       - ReadBalances
                       - ReadTransactions
-                    raw_version: v1.1
-                    raw_format: obie
-                    raw:
-                      ConsentId: 87ccf4c3-62b1-49c1-9a49-26919f954deb
-                      TransactionFromDateTime: null
-                      StatusUpdateDateTime: null
-                      Status: AwaitingAuthorisation
-                      Permissions:
-                        - ReadAccountsDetail
-                        - ReadBalances
-                        - ReadTransactionsDetail
-                        - ReadTransactionsDebits
-                        - ReadTransactionsCredits
+                    raw_version: v1.0
+                    raw_format: akoya
+                    raw: null
                     account_ids:
                       - aa86f72c-476a-3355-b54c-614a815fae40
                     last_synced_at: '2021-06-15T11:01:30.07Z'
                   - id: a080272e-c449-4a75-861a-9feb53075946
                     customer_id: 8e826e72-5cab-4426-897f-5317992a95f0
-                    provider: Amex
+                    provider: capitalone
                     transaction_from_date: '2020-04-24T15:46:32Z'
                     transaction_to_date: '0001-01-01T00:00:00Z'
                     expiration_date: '2021-07-21T14:46:33Z'
@@ -1974,8 +1658,8 @@ paths:
                       - ReadAccounts
                       - ReadBalances
                       - ReadTransactions
-                    raw_version: v1.1
-                    raw_format: amex
+                    raw_version: v1.0
+                    raw_format: akoya
                     raw: null
                     account_ids:
                       - bb98k51y-564t-8560-c99d-232b977gef68
@@ -1994,11 +1678,11 @@ paths:
         - Manage a Connection
       summary: Initiate Revoke Consent
       description: |
-        Start a task to remove consent to download further customer account information and remove Bud’s ability to download further information for a specified customer account.
+        Start a task to remove consent and remove Bud’s ability to download further information for a specified customer account.
 
-        This will revoke `all` the consents for the specified provider, that are associated to the specified customer account.
+        This will revoke `all` the consents for the specified provider associated to the customer.
 
-        To check the status of this task, use the `Retrieve Revoke Consent Status` using the returned `task_id`
+        To check the status of this task, use the `Retrieve Revoke Consent Status` using the returned `task_id`.
 
         Alternatively, there is a `Open Banking Consent Revoked` webhook that will trigger per consent successfully revoked. As such this task could generate multiple of these.
       operationId: open_banking_account_access_consent_revoke_post
@@ -2025,7 +1709,7 @@ paths:
               example:
                 operation_id: open_banking_revoke_post
                 data:
-                  provider: Monzo
+                  provider: citi
                   task_id: 1ceb1d81-a80e-4825-a7c0-4d69424c9874
                 metadata:
                   status: Pending
@@ -2060,7 +1744,7 @@ paths:
                         event: open_banking.consent.revoked
                         consent_id: 03af1639-78a6-402d-809b-902a0b00a77d
                         customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
-                        provider: Monzo
+                        provider: citi
                         updated_at: '2023-10-02T14:05:55Z'
               responses:
                 '200':
@@ -2390,7 +2074,6 @@ paths:
                 description: A sample finicity v1 accounts ingest request
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                    customer_secret: 95793c357ce9f3738f302db9579e453d03ce44eba814512d0c8038f7c376f586
                     accounts:
                       - id: '1014136057'
                         name: Super Checking
@@ -2993,7 +2676,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryFromBudDate'
         - $ref: '#/components/parameters/QueryToBudDate'
         - in: query
@@ -3136,7 +2818,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryFromBudDate'
         - $ref: '#/components/parameters/QueryToBudDate'
         - $ref: '#/components/parameters/PathAccountID'
@@ -3558,7 +3239,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       requestBody:
         required: true
         content:
@@ -3615,7 +3295,7 @@ paths:
         L1 and l2 categories can be filtered using the category query parameter.
         Example:
           - 'shopping'
-          - 'shopping.groceries'
+          - 'shopping.clothing_and_accessories'
 
         Each income and expenditure total is separated by currency, as we cannot sum totals in different currencies.
       operationId: v2_category_totals_get
@@ -3648,24 +3328,24 @@ paths:
                     credit_amount:
                       - amount:
                           value: '357.90'
-                          currency: GBP
+                          currency: USD
                         transaction_count: 1
                     debit_amount:
                       - amount:
                           value: '397.80'
-                          currency: GBP
+                          currency: USD
                         transaction_count: 2
                     l2_totals:
-                      - name: clothing
+                      - name: clothing_and_accessories
                         credit_amount:
                           - amount:
                               value: '357.90'
-                              currency: GBP
+                              currency: USD
                             transaction_count: 1
                         debit_amount:
                           - amount:
                               value: '397.80'
-                              currency: GBP
+                              currency: USD
                             transaction_count: 2
         '400':
           description: The request contains an invalid payload
@@ -3684,7 +3364,7 @@ paths:
         L1 and l2 categories can be filtered using the category query parameter.
         Example:
           - 'shopping'
-          - 'shopping.groceries'
+          - 'shopping.hobbies'
         Each income and expenditure total is separated by currency, as we cannot sum totals in different currencies.
 
         Can be used for producing graphs of category totals over time.
@@ -3739,24 +3419,24 @@ paths:
                         credit_amount:
                           - amount:
                               value: '357.90'
-                              currency: GBP
+                              currency: USD
                             transaction_count: 1
                         debit_amount:
                           - amount:
                               value: '397.80'
-                              currency: GBP
+                              currency: USD
                             transaction_count: 2
                         l2_totals:
-                          - name: clothing
+                          - name: clothing_and_accessories
                             credit_amount:
                               - amount:
                                   value: '357.90'
-                                  currency: GBP
+                                  currency: USD
                                 transaction_count: 1
                             debit_amount:
                               - amount:
                                   value: '397.80'
-                                  currency: GBP
+                                  currency: USD
                                 transaction_count: 2
         '400':
           description: The request contains an invalid payload
@@ -3935,9 +3615,8 @@ paths:
                       categories:
                         - travel
                       subcategories:
-                        - flights
-                        - insurance
-                        - other_travel
+                        - flights_and_airport_expenses
+                        - holiday_and_travel_expenses
                     metadata:
                       model:
                         name: us-v1
@@ -3948,9 +3627,8 @@ paths:
                     data:
                       - name: travel
                         subcategories:
-                          - name: flights
-                          - name: insurance
-                          - name: other_travel
+                          - name: flights_and_airport_expenses
+                          - name: holiday_and_travel_expenses
                     metadata:
                       model:
                         name: uk-v2
@@ -4455,7 +4133,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/SmartFinderFrom'
         - $ref: '#/components/parameters/SmartFinderTo'
       responses:
@@ -4472,7 +4149,7 @@ paths:
                     - transaction_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
                       account_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
                       transaction_description: PayPal* Bud
-                      provider: Barclays
+                      provider: Chase
                       date: 2021-01-11T01:00:00+0100
                       amount:
                         value: '1234.56'
@@ -4481,13 +4158,13 @@ paths:
                       enrichment:
                         categories:
                           l1:
-                            - name: transfers
+                            - name: income
                               confidence: '0.8057'
-                              label: Transfers
+                              label: Income
                           l2:
-                            - name: transfers_in
+                            - name: employment_income
                               confidence: '0.7811'
-                              label: Transfers In
+                              label: Employment income
                           l3:
                             - name: salary_and_wages
                               confidence: '0.6805'
@@ -4546,7 +4223,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/SmartFinderFrom'
         - $ref: '#/components/parameters/SmartFinderTo'
       responses:
@@ -4561,8 +4237,8 @@ paths:
                 data:
                   - transaction_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
                     account_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
-                    transaction_description: NATWEST DWP DLA GBR
-                    provider: Natwest
+                    transaction_description: CHASE DWP DLA GBR
+                    provider: Chase
                     date: 2022-03-21T01:00:00+0100
                     amount:
                       amount: '333.28'
@@ -4601,7 +4277,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/SmartFinderFrom'
         - $ref: '#/components/parameters/SmartFinderTo'
       responses:
@@ -4664,7 +4339,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/SmartFinderFrom'
         - $ref: '#/components/parameters/SmartFinderTo'
       responses:
@@ -4681,7 +4355,7 @@ paths:
                     - transaction_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
                       account_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
                       transaction_description: Bud Loan Repayment
-                      provider: Natwest
+                      provider: Chase
                       date: 2022-03-21T01:00:00+0100
                       amount:
                         value: '133.28'
@@ -4730,7 +4404,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/SmartFinderFrom'
         - $ref: '#/components/parameters/SmartFinderTo'
       responses:
@@ -4747,7 +4420,7 @@ paths:
                     - transaction_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
                       account_id: fdcc55c6-f347-4abc-8c66-61ff290d8bd4
                       transaction_description: Bud Debt Collection Payment
-                      provider: Barclays
+                      provider: Chase
                       date: 2021-04-11T01:00:00+0100
                       amount:
                         value: '100.00'
@@ -6094,14 +5767,13 @@ paths:
 
         > 📘 Note:
         >
-        > For more information about Actionable Insights, please refer to our [guide](https://docs.thisisbud.com/docs/actionable-insights).
+        > For more information about Actionable Insights, please refer to our [guide](https://docs-us.thisisbud.com/docs/actionable-insights).
       operationId: insights_v1_actionable_balances_get
       security:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/parameters-From'
         - $ref: '#/components/parameters/parameters-To'
         - $ref: '#/components/parameters/BalancesEnabledInsights'
@@ -6146,14 +5818,13 @@ paths:
 
         > 📘 Note:
         >
-        > For more information about Actionable Insights, please refer to our [guide](https://docs.thisisbud.com/docs/actionable-insights).
+        > For more information about Actionable Insights, please refer to our [guide](https://docs-us.thisisbud.com/docs/actionable-insights).
       operationId: insights_v1_actionable_balances_details_get
       security:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/parameters-From'
         - $ref: '#/components/parameters/parameters-To'
         - $ref: '#/components/parameters/BalancesInsightType'
@@ -6182,8 +5853,7 @@ paths:
                         usage_type: personal
                         provider: BankOfBud
                         identifiers:
-                          uk_sort_code: '126432'
-                          uk_account_number: '31510604'
+                          iban: US29NWBK60161331926819
                         balances:
                           - date: '2023-05-12T00:00:00Z'
                             amount:
@@ -6221,14 +5891,13 @@ paths:
 
         > 📘 Note:
         >
-        > For more information about Actionable Insights, please refer to our [guide](https://docs.thisisbud.com/docs/actionable-insights).
+        > For more information about Actionable Insights, please refer to our [guide](https://docs-us.thisisbud.com/docs/actionable-insights).
       operationId: insights_v1_actionable_income_get
       security:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/parameters-From'
         - $ref: '#/components/parameters/parameters-To'
         - $ref: '#/components/parameters/IncomeEnabledInsights'
@@ -6306,14 +5975,13 @@ paths:
 
         > 📘 Note:
         >
-        > For more information about Actionable Insights, please refer to our [guide](https://docs.thisisbud.com/docs/actionable-insights).
+        > For more information about Actionable Insights, please refer to our [guide](https://docs-us.thisisbud.com/docs/actionable-insights).
       operationId: insights_v1_actionable_income_details_get
       security:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/parameters-From'
         - $ref: '#/components/parameters/parameters-To'
         - $ref: '#/components/parameters/IncomeInsightType'
@@ -6350,8 +6018,7 @@ paths:
                         usage_type: personal
                         provider: BankOfBud
                         identifiers:
-                          uk_sort_code: '126432'
-                          uk_account_number: '31510604'
+                          iban: US29NWBK60161331926819
                         balances:
                           - date: '2023-05-12T00:00:00Z'
                             amount:
@@ -6420,14 +6087,13 @@ paths:
 
         > 📘 Note:
         >
-        > For more information about Actionable Insights, please refer to our [guide](https://docs.thisisbud.com/docs/actionable-insights).
+        > For more information about Actionable Insights, please refer to our [guide](https://docs-us.thisisbud.com/docs/actionable-insights).
       operationId: insights_v1_actionable_spending_get
       security:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/parameters-From'
         - $ref: '#/components/parameters/parameters-To'
         - $ref: '#/components/parameters/SpendingEnabledInsights'
@@ -6501,14 +6167,13 @@ paths:
 
         > 📘 Note:
         >
-        > For more information about Actionable Insights, please refer to our [guide](https://docs.thisisbud.com/docs/actionable-insights).
+        > For more information about Actionable Insights, please refer to our [guide](https://docs-us.thisisbud.com/docs/actionable-insights).
       operationId: insights_v1_actionable_spending_details_get
       security:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/parameters-From'
         - $ref: '#/components/parameters/parameters-To'
         - $ref: '#/components/parameters/SpendingInsightType'
@@ -6541,8 +6206,7 @@ paths:
                         usage_type: personal
                         provider: BankOfBud
                         identifiers:
-                          uk_sort_code: '126432'
-                          uk_account_number: '31510604'
+                          iban: US29NWBK60161331926819
                         balances:
                           - date: '2023-05-12T00:00:00Z'
                             amount:
@@ -6601,337 +6265,6 @@ paths:
                       value: '10.00'
         '404':
           description: Insight not found. This can occur if the returned insight was invalidated by an account refresh or other change to customer data.
-  /v1/signal/custom/components:
-    get:
-      tags:
-        - Custom Signals
-      summary: Retrieve Components
-      description: |
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-
-        List the matching components which can be used to define custom insights.
-      operationId: v1_signal_custom_components_get
-      deprecated: true
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-      responses:
-        '200':
-          description: The request was successfully processed
-          content:
-            application/json:
-              schema:
-                required:
-                  - operation_id
-                  - data
-                  - metadata
-                properties:
-                  operation_id:
-                    type: string
-                    enum:
-                      - v1_signal_custom_components_get
-                  data:
-                    $ref: '#/components/schemas/ListComponentsResponse'
-                  metadata:
-                    $ref: '#/components/schemas/ListComponentsMetaData'
-                example:
-                  operation_id: v1_signal_custom_components_get
-                  data:
-                    components:
-                      - name: expenditure_merchant
-                        description: Tests whether the total spend, over a period, across a list of merchants, is at least an amount
-                        parameters:
-                          amount:
-                            type: number
-                            min: 0.01
-                            max: 1000000000000
-                            default: 100
-                          merchants:
-                            type: string-array
-                            min: null
-                            max: null
-                            default: []
-                          period:
-                            type: period
-                            min: 1D
-                            max: 12M
-                            default: 1M
-                      - name: income_l2s
-                        description: Tests whether total income, over a period, across a list of L2 categories, is at least an amount
-                        parameters:
-                          amount:
-                            type: number
-                            min: 0.01
-                            max: 1000000000000
-                            default: 100
-                          merchants:
-                            type: string-array
-                            min: null
-                            max: null
-                            default: []
-                          period:
-                            type: period
-                            min: 1D
-                            max: 12M
-                            default: 1M
-                      - name: income_l3s
-                        description: Tests whether total income, over a period, across a list of L3 categories, is at least an amount
-                        parameters:
-                          amount:
-                            type: number
-                            min: 0.01
-                            max: 1000000000000
-                            default: 100
-                          merchants:
-                            type: string-array
-                            min: null
-                            max: null
-                            default: []
-                          period:
-                            type: period
-                            min: 1D
-                            max: 12M
-                            default: 1M
-                      - name: all
-                        description: Matches all customers
-                        parameters: null
-                      - name: expenditure_l2s
-                        description: Tests whether the total spend, over a period, across a list of L2 categories, is at least an amount
-                        parameters:
-                          amount:
-                            type: number
-                            min: 0.01
-                            max: 1000000000000
-                            default: 100
-                          merchants:
-                            type: string-array
-                            min: null
-                            max: null
-                            default: []
-                          period:
-                            type: period
-                            min: 1D
-                            max: 12M
-                            default: 1M
-                      - name: expenditure_l3s
-                        description: Tests whether the total spend, over a period, across a list of L3 categories, is at least an amount
-                        parameters:
-                          amount:
-                            type: number
-                            min: 0.01
-                            max: 1000000000000
-                            default: 100
-                          merchants:
-                            type: string-array
-                            min: null
-                            max: null
-                            default: []
-                          period:
-                            type: period
-                            min: 1D
-                            max: 12M
-                            default: 1M
-                  metadata:
-                    results: 6
-        '400':
-          description: The request contains an invalid payload
-        '401':
-          description: Unauthorised request
-        '405':
-          description: An unexpected HTTP method was used
-        5XX:
-          description: An unexpected error occurred on the server side
-  /v1/signal/custom/insights:
-    post:
-      tags:
-        - Custom Signals
-      summary: Create Custom Insight
-      description: |
-        Create new custom insights using one or more components.
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 23rd of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-      deprecated: true
-      operationId: v1_signal_custom_create_post
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateInsightRequest'
-            example:
-              name: Life Insurance
-              description: Customer is paying more than bank X's average life insurance cost
-              components:
-                - name: expenditure_l3s
-                  parameters:
-                    amount: 15
-                    l3-categories:
-                      - health_and_life_insurance
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                required:
-                  - operation_id
-                  - data
-                  - metadata
-                properties:
-                  operation_id:
-                    type: string
-                    enum:
-                      - v1_signal_custom_create_post
-                  data:
-                    $ref: '#/components/schemas/CreateInsightResponse'
-                  metadata:
-                    type: object
-                    additionalProperties: true
-                    nullable: true
-                example:
-                  operation_id: v1_signal_custom_create_post
-                  data:
-                    insight_id: 9298f468-a8e1-49c5-9d37-9fc45d870b22
-        '400':
-          description: The request contains an invalid payload
-        '401':
-          description: Unauthorised request
-        '405':
-          description: An unexpected HTTP method was used
-        5XX:
-          description: An unexpected error occurred on the server side
-  /v1/signal/custom/{insight_id}/schema:
-    get:
-      tags:
-        - Custom Signals
-      summary: Retrieve Custom Insight
-      description: |
-        Retrieve a previously created custom insight.
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 23rd of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-      deprecated: true
-      operationId: v1_signal_custom_schema_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/InsightId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                required:
-                  - operation_id
-                  - data
-                  - metadata
-                properties:
-                  operation_id:
-                    type: string
-                    enum:
-                      - v1_signal_custom_schema_get
-                  data:
-                    $ref: '#/components/schemas/RetrieveInsightResponse'
-                  metadata:
-                    type: object
-                    additionalProperties: true
-                    nullable: true
-                example:
-                  id: 9298f468-a8e1-49c5-9d37-9fc45d870b22
-                  name: Life Insurance
-                  description: Customer is paying more than bank X's average life insurance cost
-                  components:
-                    - id: 428b7a57-6480-44c9-bb98-56b93310ab6c
-                      name: expenditure_l3s
-                      parameters:
-                        amount: 15
-                        l3-categories:
-                          - health_and_life_insurance
-        '400':
-          description: The request contains an invalid payload
-        '401':
-          description: Unauthorised request
-        '404':
-          description: This insight doesn't exist or doesn't belong to this client
-        '405':
-          description: An unexpected HTTP method was used
-        5XX:
-          description: An unexpected error occurred on the server side
-  /v1/signal/custom/{insight_id}:
-    get:
-      tags:
-        - Custom Signals
-      summary: Compare Custom Insight
-      description: |
-        Compare a customer with an previously created custom insight, testing whether they match against it.
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 23rd of April 2024 - please complete your migration to the Custom Insights endpoints by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-      deprecated: true
-      operationId: v1_signal_custom_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/InsightId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                required:
-                  - operation_id
-                  - data
-                  - metadata
-                properties:
-                  operation_id:
-                    type: string
-                    enum:
-                      - v1_signal_custom_get
-                  data:
-                    $ref: '#/components/schemas/CompareInsightResponse'
-                  metadata:
-                    type: object
-                    additionalProperties: true
-                    nullable: true
-                example:
-                  operation_id: v1_signal_custom_schema_get
-                  data:
-                    name: Life Insurance
-                    description: Customer is paying more than bank X's average life insurance cost
-                    components:
-                      216d20e6-78e9-40d7-85cf-435077254d38:
-                        name: expenditure_l3s
-                        match: 'true'
-                        value: 23
-                    match: full
-        '400':
-          description: The request contains an invalid payload
-        '401':
-          description: Unauthorised request
-        '404':
-          description: This insight doesn't exist or doesn't belong to this client
-        '405':
-          description: An unexpected HTTP method was used
-        5XX:
-          description: An unexpected error occurred on the server side
   /insights/v1/custom/manage:
     post:
       tags:
@@ -7134,7 +6467,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
         - in: header
           name: X-Now
           required: false
@@ -7159,7 +6491,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '200':
           description: OK
@@ -7227,7 +6558,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '200':
           description: OK
@@ -7269,7 +6599,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '200':
           description: OK
@@ -7321,7 +6650,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '200':
           description: OK
@@ -7373,7 +6701,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '200':
           description: OK
@@ -7425,7 +6752,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '200':
           description: OK
@@ -8827,17 +8153,7 @@ components:
         results:
           type: number
           description: The number of results returned
-    ProviderTypes:
-      title: Provider Types
-      type: array
-      description: One or more provider types that can be used to filter the list of providers that are shown to the customer during the connection flow. If no filter is applied, all types of provider are returned. Note that on Bud's sandbox environment, only sandbox providers will be returned.
-      items:
-        type: string
-        enum:
-          - business
-          - retail
-          - sandbox
-    AuthGatewayURLRequestv2:
+    USAuthGatewayURLRequestv2:
       title: Authorisation Gateweay URL Request Payload
       type: object
       required:
@@ -8845,7 +8161,11 @@ components:
       properties:
         redirect_url:
           type: string
-          description: URL where the user will be redirected to once they have completed the TPP Connection flow. This can be a web based URL or a mobile application internal URL.
+          description: |
+            URL where the Customer will be redirected to once they have completed the Connection flow. This can be a web based URL or a mobile application internal URL. 
+            When the Customer is redirected to your URL we include the following query parameters: 
+            - `status`: Represents the status of the connection. It can be `success`, `failure` or `pending`
+            - `task_id`: Is the identifier that can be used to check the status of the connection task and retrieve more information in case of failure
           nullable: false
           maxLength: 2083
         providers:
@@ -8857,8 +8177,6 @@ components:
             Note, that these must match the `provider_id` returned by the Retrieve OB Providers endpoint.
           items:
             type: string
-        provider_types:
-          $ref: '#/components/schemas/ProviderTypes'
         connect_more_accounts_button:
           type: boolean
           nullable: true
@@ -8866,26 +8184,20 @@ components:
         accounts_summary:
           type: boolean
           nullable: true
-          description: When enabled, the customer will be shown a summary screen at the endpoint of the flow that lists the names and balances of all of the accounts that the customer has active consents for (including those connected in previous sessions).
+          description: When enabled, the customer will be shown a summary screen at the end of the flow that lists the names and balances of all of the accounts that the customer has active consents for (including those connected in previous sessions).
         initial_screen:
           type: string
-          description: The first screen that the customer will be shown. When value is 'accounts_summary' the customer will see a list of the names and balances of the accounts that the customer currently has active consents for. When value is 'connect_accounts', the customer will see a list of providers to connect their accounts with. By default this value is 'connect_accounts'. When the value is 'download_data', the customer can download their data in a JSON file. When the value is 'reconfirm_consent', the customer will be taken through the reconfirmation of consent journey. If the customer only has one consent they will skip the consent selection screen. When the value is 'revoke_consent', the customer can revoke consent for accounts they have previously connected.
+          description: |
+            The first screen that the customer will be shown. When value is 'accounts_summary' the customer will see a list of the names and balances of the accounts that the customer currently has active consents for. 
+            When value is 'connect_accounts', the customer will see a list of providers to connect their accounts with. 
+            By default this value is 'connect_accounts'. When the value is 'download_data', the customer can download their data in a JSON file. 
+            When the value is 'revoke_consent', the customer can revoke consent for accounts they have previously connected.
           enum:
             - accounts_summary
             - connect_accounts
             - download_data
-            - reconfirm_consent
             - revoke_consent
           nullable: true
-        reconfirm_consent:
-          deprecated: true
-          type: boolean
-          nullable: true
-          description: This body parameter has been deprecated. Please use the initial_screen option reconfirm_consent. When enabled, the customer will be taken through the reconfirmation of consent journey. If the customer only has one consent they will skip the consent selection screen. Once they select the option to renew their consent, Bud will either extend the consent expiry date by 90 days from today's date or (if required) send the customer to the provider to go through Strong Customer Authentication (SCA) before updating the consent expiry date.
-        reconfirm_consent_redirect:
-          type: boolean
-          nullable: true
-          description: When enabled, once a customer has reconfirmed consent they will be redirected back to the client redirect_url bypassing the account summary screen. This should be used if you don’t want your customers to see the Bud account summary screen.
         enable_async_connect:
           type: boolean
           nullable: true
@@ -9013,196 +8325,6 @@ components:
             provider:
               type: string
               description: Name of the provider (banking institution) the task interacted with
-    OpenBankingAuthoriseRequest:
-      title: Provider
-      type: object
-      description: Expected request payload structure
-      required:
-        - provider
-      properties:
-        provider:
-          type: string
-          description: The identifier of the ASPSP (bank) the Customer is requesting the authorisation URL for. This should be a provider value returned from a call to [Retrieve OB Providers](#tag/Create-OB-Connection-TSP/operation/open_banking_providers_get)
-        redirect_url:
-          type: string
-          description: This is the url that your Customer will be redirected to when using the Bud Connect product. If you wish to use your own license and callback infrastructure this parameter will have no effect and the provider_redirect_url parameter should be used instead.
-        provider_redirect_url:
-          type: string
-          description: This is the url that your Customer will be redirected to once they have authorised with the relevant provider. This should only be used when using your own license and wish to use the Submit Authorisation Codes endpoint. If you wish to use Bud's call back then the redirect_url must be provided.
-        consent_id:
-          type: string
-          description: Uses the previous consent id of your customer to re-authenticate their consent.
-    TaskCreatedView:
-      title: Task Created View
-      description: Standard successful task created response.
-      type: object
-      required:
-        - task_id
-        - provider
-      properties:
-        task_id:
-          $ref: '#/components/schemas/TaskId'
-        provider:
-          type: string
-          description: The provider (ASPSP) associated with this task
-    TaskCreatedResponseOB:
-      title: Task Created Response
-      type: object
-      description: Expected response structure
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          $ref: '#/components/schemas/TaskCreatedView'
-        metadata:
-          $ref: '#/components/schemas/AsyncTaskMetadata'
-    TaskAuthorise:
-      title: Open Banking Authorise Response
-      type: object
-      description: Result of GET authorise taskId
-      required:
-        - provider
-        - status
-        - task_id
-      properties:
-        provider:
-          type: string
-          description: Name of the provider (banking institution)
-        result:
-          $ref: '#/components/schemas/ConnectResultCodes'
-        status:
-          type: string
-          description: The status of the job associated with the specified task id
-          enum:
-            - Completed
-            - Pending
-            - Failed
-        task_id:
-          $ref: '#/components/schemas/TaskId'
-        url:
-          type: string
-          description: The authentication URL for a given bank
-    TaskManagerMetaData:
-      title: Task Status Metadata
-      type: object
-      description: Standard metadata response from the OB task manager
-      required:
-        - status
-        - next_url
-        - next_url_delay
-      properties:
-        status:
-          type: string
-          description: The status of the job associated with the specified task id
-          enum:
-            - Completed
-            - Pending
-            - Failed
-        next_url:
-          type: string
-          description: The url to try next if the `status` property returned is `Pending`
-        next_url_delay:
-          type: number
-          description: The time in milliseconds that the client should wait before polling the relevant GET endpoint with the above task id if the `status` property returned is `Pending`
-    TaskAuthoriseResponse:
-      title: Open Banking Authorise Request Response
-      type: object
-      description: Expected response structure
-      required:
-        - operation_id
-        - metadata
-        - data
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          $ref: '#/components/schemas/TaskAuthorise'
-        metadata:
-          $ref: '#/components/schemas/TaskManagerMetaData'
-    AuthorisationCodesRequest:
-      title: Authorisation Codes Request Payload
-      type: object
-      required:
-        - state
-      additionalProperties: true
-      properties:
-        state:
-          type: string
-          description: The task ID
-        code:
-          type: string
-          description: Code parameter returned in redirect parameters
-    IngestResponseStatus:
-      title: Ingest Response Status
-      description: Ingest response status.
-      type: string
-      enum:
-        - Completed
-        - Pending
-        - Failed
-    AuthorisationCodesResponse:
-      title: Authorisation Codes Response Payload
-      type: object
-      required:
-        - operation_id
-        - data
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: object
-          description: Details regarding the response object for the authorisation codes response.
-          properties:
-            task_id:
-              $ref: '#/components/schemas/TaskId'
-            provider:
-              type: string
-              description: Name of the provider (banking institution)
-            status:
-              $ref: '#/components/schemas/IngestResponseStatus'
-            result:
-              type: string
-              enum:
-                - success
-                - account_closed
-                - auth_denied
-                - auth_expired
-                - auth_invalid
-                - auth_used
-                - awaiting_authorisation
-                - bad_request
-                - connection_expired
-                - connection_not_found
-                - connection_permission
-                - connection_reauthenticate
-                - connection_revoked
-                - connection_status
-                - consent_not_found
-                - enrichment_failed
-                - extension_not_permitted
-                - failed_body_decode
-                - failed_validation
-                - internal_auth_error
-                - internal_error
-                - internal_timeout
-                - internal_transient_error
-                - provider_endpoint_deprecated
-                - provider_endpoint_unimplemented
-                - provider_endpoint_unsupported
-                - provider_failure
-                - provider_invalid
-                - provider_maintenance
-                - provider_marked_account_invalid
-                - provider_not_found
-                - provider_request_limit
-                - provider_timeout
-                - request_validation
-                - resource_not_found
-                - task_not_found
     GetOBConnectData:
       title: Open Banking Synchronisation Status
       type: object
@@ -9300,6 +8422,34 @@ components:
           description: |
             The datetime (ISO 8601) that defines the time up to which the Customer's data needs to be collected. Defaults to the current datetime. 
             Refreshes can only go back to a maximum of 90 days from the current date.
+    TaskCreatedView:
+      title: Task Created View
+      description: Standard successful task created response.
+      type: object
+      required:
+        - task_id
+        - provider
+      properties:
+        task_id:
+          $ref: '#/components/schemas/TaskId'
+        provider:
+          type: string
+          description: The provider (ASPSP) associated with this task
+    TaskCreatedResponseOB:
+      title: Task Created Response
+      type: object
+      description: Expected response structure
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/TaskCreatedView'
+        metadata:
+          $ref: '#/components/schemas/AsyncTaskMetadata'
     TaskStatusCaps:
       title: The Task Status
       type: string
@@ -9375,60 +8525,7 @@ components:
             next_url_delay:
               description: Recommended delay in milliseconds before next call
               type: integer
-    RawOBConsents:
-      title: Raw OB Consent
-      type: object
-      nullable: true
-      description: The raw consent as returned by the provider
-      required:
-        - ConsentId
-        - Permissions
-        - Status
-        - StatusUpdateDateTime
-      properties:
-        ConsentId:
-          type: string
-          format: uuid
-          description: Open Banking consent unique identifier
-        CreationDateTime:
-          type: string
-          format: ISO8601
-          description: Date and time at which the resource was created.
-        Permissions:
-          type: array
-          description: Specifies the Open Banking account access data types that tied to the consent
-          items:
-            type: string
-            enum:
-              - ReadAccountsBasic
-              - ReadAccountsDetail
-              - ReadBalances
-              - ReadDirectDebits
-              - ReadParty
-              - ReadPartyPSU
-              - ReadTransactionsBasic
-              - ReadTransactionsCredits
-              - ReadTransactionsDebits
-              - ReadTransactionsDetail
-        Status:
-          type: string
-          description: Specifies the status of consent resource.
-          enum:
-            - Authorised
-            - AwaitingAuthorisation
-            - Rejected
-            - Revoked
-        StatusUpdateDateTime:
-          type: string
-          nullable: true
-          format: ISO8601
-          description: Date and time at which the resource status was updated.
-        TransactionFromDateTime:
-          type: string
-          nullable: true
-          format: ISO8601
-          description: Specified start date and time for the transaction query period.
-    GetOBConsentsResponseDataItem:
+    USGetOBConsentsResponseDataItem:
       title: Open Banking Consent
       type: object
       description: Schema to define a given Open Banking consent
@@ -9469,7 +8566,9 @@ components:
           description: Date and time when the consent was last consented on. ISODateTime.
         revoked_at:
           type: string
-          description: Date and time when the consent was revoked. ISODateTime.
+          description: |
+            Date and time when the consent was revoked. ISODateTime. This attribute in included in the response only if the status of the consent is `revoked`. 
+            When the consent is invalidated as part of a Bud refresh task, this date time represents the time when the consent was set to `revoked` by Bud during the refresh.
         status:
           type: string
           description: To describe the status of the consent. Note that the query parameter `status=all` must be provided to be shown consents that have a status of anything but `authorised`
@@ -9487,8 +8586,6 @@ components:
               - accounts
               - balances
               - transactions
-              - parties
-              - direct-debits
         permissions:
           type: array
           description: Specifies the Open Banking account access data types. This is a list of the data clusters being consented by the PSU, and requested for authorisation with the ASPSP.
@@ -9497,8 +8594,6 @@ components:
             enum:
               - ReadAccounts
               - ReadBalances
-              - ReadDirectDebits
-              - ReadParty
               - ReadTransactions
         raw_version:
           type: string
@@ -9507,20 +8602,16 @@ components:
           type: string
           description: The format of the consent returned in the raw attribute
           enum:
-            - obie
-            - amex
-            - starling
-        raw:
-          $ref: '#/components/schemas/RawOBConsents'
+            - akoya
         account_ids:
           type: array
-          description: A list of the different account identifiers that are associated with this particular consent object. Note that you will have to provide the customer secret in the request headers in order to retrieve this field against a consent object.
+          description: A list of the different account identifiers that are associated with this particular consent object
           items:
             type: string
         last_synced_at:
           type: string
           description: The date at which the last data refresh (sync) occured for this consent object
-    GetOBConsentsResponse:
+    USGetOBConsentsResponse:
       title: Available Open Banking Consents
       type: object
       required:
@@ -9533,7 +8624,7 @@ components:
           type: array
           description: List of available consents
           items:
-            $ref: '#/components/schemas/GetOBConsentsResponseDataItem'
+            $ref: '#/components/schemas/USGetOBConsentsResponseDataItem'
         metadata:
           $ref: '#/components/schemas/ResultsMetadata'
     RevokeAccountAccessIntentRequest:
@@ -14003,181 +13094,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/InsightOption'
-    ComponentParameterSpec:
-      type: object
-      required:
-        - type
-        - min
-        - max
-        - default
-      properties:
-        type:
-          type: string
-          enum:
-            - number
-            - period
-            - string
-            - string-array
-        min:
-          oneOf:
-            - type: number
-              nullable: true
-            - type: string
-              nullable: true
-          description: The minimum value accepted for this parameter, if any.
-        max:
-          oneOf:
-            - type: number
-              nullable: true
-            - type: string
-              nullable: true
-          description: The maximum value accepted for this parameter, if any.
-        default:
-          oneOf:
-            - type: number
-            - type: string
-            - type: array
-              items:
-                type: string
-          description: The default value for this parameter if unspecified.
-    ComponentSpec:
-      type: object
-      required:
-        - name
-        - description
-        - parameters
-      properties:
-        name:
-          type: string
-          description: Name of the component, for creating an insight using it.
-        description:
-          type: string
-          description: Human-readable description of the component.
-        parameters:
-          type: object
-          nullable: true
-          additionalProperties:
-            $ref: '#/components/schemas/ComponentParameterSpec'
-    ListComponentsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/ComponentSpec'
-    ListComponentsMetaData:
-      type: object
-      required:
-        - results
-      properties:
-        results:
-          type: number
-          description: Number of available components.
-    ComponentParameters:
-      type: object
-      required:
-        - name
-      properties:
-        name:
-          type: string
-          description: The name of the component to incorporate in the insight.
-        parameters:
-          type: object
-          additionalProperties: {}
-          description: The parameters you want to specify for the component from its component spec. All are optional and if omitted the default value is used.
-    CreateInsightRequest:
-      type: object
-      required:
-        - name
-        - components
-      properties:
-        name:
-          type: string
-          description: The name to assign to this segment of users.
-        description:
-          type: string
-          description: An optional human-readable description of the insight.
-        components:
-          type: array
-          items:
-            $ref: '#/components/schemas/ComponentParameters'
-    CreateInsightResponse:
-      type: object
-      required:
-        - insight_id
-      properties:
-        insight_id:
-          type: string
-          description: The ID of the created insight.
-    CreatedComponentParameters:
-      allOf:
-        - $ref: '#/components/schemas/ComponentParameters'
-        - type: object
-          required:
-            - id
-          properties:
-            id:
-              type: string
-              description: The ID of this component configuration.
-    RetrieveInsightResponse:
-      type: object
-      required:
-        - id
-        - name
-        - description
-        - components
-      properties:
-        id:
-          type: string
-          description: The ID of the insight.
-        name:
-          type: string
-          description: The name assigned to this segment of users.
-        description:
-          type: string
-          description: An optional human-readable description of the insight.
-        components:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreatedComponentParameters'
-    ComponentResult:
-      type: object
-      required:
-        - name
-        - match
-        - value
-      properties:
-        name:
-          type: string
-          description: The name of the component.
-        match:
-          type: boolean
-          description: Whether the customer matched this component.
-        value:
-          description: A component-specific computed value for this customer, that either matched or failed to match the components's requirements. Meaning varies by component.
-    CompareInsightResponse:
-      type: object
-      required:
-        - name
-        - description
-        - components
-        - match
-      properties:
-        name:
-          type: string
-          description: The name assigned to this segment of users.
-        description:
-          type: string
-          description: An optional human-readable description of the insight.
-        components:
-          type: object
-          description: The result of comparing the customer against each configured component of this insight, keyed by component configuration IDs.
-          additionalProperties:
-            $ref: '#/components/schemas/ComponentResult'
-        match:
-          type: string
-          description: Whether this customer fully, partially, or not at all matched this insight. Full means matching all components, partial means matching at least one.
-          enum:
-            - full
-            - partial
-            - 'false'
     CustomerCharacteristicSimple:
       title: Customer Characteristic
       type: object
@@ -14424,17 +13340,6 @@ components:
       required: true
       description: A unique identifier for a Customer, as registered on Bud's platform.
       example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-    OBProvidersQueryTypeFilter:
-      in: query
-      required: false
-      name: types
-      description: A comma separated list of Bud support provider types to be shown. If no filter is applied, all the providers are returned.
-      schema:
-        type: string
-        enum:
-          - sandbox
-          - business
-          - retail
     USBankingProvidersQueryRegionFilter:
       in: query
       required: false
@@ -14444,17 +13349,6 @@ components:
         type: string
         enum:
           - USA
-    USBankingProvidersQueryScopesFilter:
-      in: query
-      required: false
-      name: scopes
-      description: A comma separated list of Bud ob scopes to be shown. If no filter is applied, all the providers are returned.
-      schema:
-        type: string
-        enum:
-          - accounts
-          - balances
-          - transactions
     CustomerId:
       in: header
       name: X-Customer-Id
@@ -14464,13 +13358,6 @@ components:
       required: true
       description: A unique identifier for a Customer, as registered on Bud's platform.
       example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-    CustomerSecret:
-      in: header
-      name: X-Customer-Secret
-      schema:
-        type: string
-      required: false
-      description: The Bud Customer secret used to encrypt customer data. This is required only if the customer secret is not already stored with Bud.
     SignatureHeaderParameter:
       in: header
       name: X-Signature
@@ -14968,14 +13855,6 @@ components:
           - suspected_duplicate_charge
           - regular_payment_changed
           - new_insurance_expense
-    InsightId:
-      in: path
-      required: true
-      name: insight_id
-      description: Insight identifier
-      schema:
-        type: string
-        format: uuid
     PathCustomInsightID:
       in: path
       name: custom_insight_id
@@ -15025,7 +13904,6 @@ x-tagGroups:
   - name: ''
     tags:
       - Retrieve Actionable Insights
-      - Custom Signals
       - Custom Insights
       - Insights API
   - name: ''
