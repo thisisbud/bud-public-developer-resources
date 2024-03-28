@@ -13424,6 +13424,13 @@ components:
         type: string
       example: BankOfBud
       description: Use this parameter to filter the results returned on the `provider` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `provider` will be returned.
+    CustomerSecret:
+      in: header
+      name: X-Customer-Secret
+      schema:
+        type: string
+      required: false
+      description: The Bud Customer secret used to encrypt customer data. This is required only if the customer secret is not already stored with Bud.
     QueryFromBudDate:
       in: query
       name: from
