@@ -1732,6 +1732,11 @@
 										"key": "X-Disable-Synchronous",
 										"value": "false",
 										"type": "text"
+									},
+									{
+										"key": "X-Generate-Transaction-IDs",
+										"value": "false",
+										"type": "text"
 									}
 								],
 								"body": {
