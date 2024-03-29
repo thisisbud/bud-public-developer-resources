@@ -1388,15 +1388,20 @@ paths:
         - Create a Connection
       summary: Retrieve Authorisation Gateway URL (v2)
       description: |
-        Allow customers to authorise with, and connect to, a provider, using Bud’s regulatory permission as an Account Information Service Provider (AISP) using __Bud Connect__. Bud Connect is a piece of frontend UI that can be integrated into any mobile or web experience, and allows your customers to connect to and authorise with their chosen provider, allowing Bud to pull their account information using Bud's AISP license.
+        Allow customers to authorise with, and connect to, a provider, using Bud’s __Bud Connect__. Bud Connect is a UI component hosted by Bud that can be integrated into any mobile or web experience, and 
+        allows your customers to connect to and authorise with their chosen provider, allowing Bud to pull their account information using Bud's AISP license.
 
-        Version 2 of the Bud Connect flow provides customer's with an updated connection flow and includes a number of different parameters within the API itself that can be used to configure the journey to a clients needs. Please refer to the request schema for further details.
+        Using the different configuration options that can be set through the request body you can personalize the experience for your Customer. Please, refer to the documentation below for more information about the available configurations.
 
         Use Bud’s Authorisation Gateway (__Bud Connect__) if you are not regulated as an AISP in order to connect your customers to their banks to share account information. You may still choose to use __Bud Connect__ in order to give the customer a slick account connection experience or to speed up your technical build and integration, even if you are a regulated AISP yourself.
 
-        The status of the authorisation step will be provided to you as a path parameter within the `redirect_url` specified within the request payload. This `redirect_url` is where your customer will be redirected to once they have either failed, or successfully completed, the authorisation process with their provider.
+        The status of the authorisation step will be provided to you as a path parameter within the `redirect_url` specified within the request payload. 
+        This `redirect_url` is where your customer will be redirected to once they have either failed, or successfully completed, the authorisation process with their provider.
 
-        Please note that in order to recieve status updates on a given account connection task, you will need to configure your Callback URL within the developer console. Once the entire connection process has been completed and the customer's account information is ready to be collected via the Retrieve OB Data Endpoints, Bud will send a request to your callback URL.
+        The URL generated with this endpoint is valid for up to 30 minutes. We suggest to generate the URL right before redirecting your Customer to it.
+
+        Please note that in order to recieve status updates on a given account connection task, you will need to configure your Callback URL within the developer console. 
+        Once the entire connection process has been completed and the customer's account information is ready to be collected, Bud will send a request to your callback URL.
       operationId: v2_ob_authorisation_gateway_url_post
       security:
         - OAuth2: []
@@ -1502,6 +1507,7 @@ paths:
                         status: Completed
                         task_type: connect
                         customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
+                        consent_id: f43c4fc9-26f6-4107-a631-4f323f06e5c9
               responses:
                 '200':
                   description: Your server returns this code if it accepts the callback
@@ -1539,6 +1545,7 @@ paths:
                             result: success
                             task_type: connect
                             customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
+                            consent_id: f43c4fc9-26f6-4107-a631-4f323f06e5c9
                       Failure:
                         description: Failed connect due to a provider failure
                         value:
@@ -1548,6 +1555,7 @@ paths:
                             result: provider_failure
                             task_type: connect
                             customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
+                            consent_id: f43c4fc9-26f6-4107-a631-4f323f06e5c9
               responses:
                 '200':
                   description: Your server returns this code if it accepts the callback
@@ -1941,6 +1949,7 @@ paths:
                             result: success
                             task_type: connect
                             customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
+                            consent_id: f43c4fc9-26f6-4107-a631-4f323f06e5c9
                       Failure:
                         description: Failed connect due to a provider failure
                         value:
@@ -1950,6 +1959,7 @@ paths:
                             result: provider_failure
                             task_type: connect
                             customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
+                            consent_id: f43c4fc9-26f6-4107-a631-4f323f06e5c9
               responses:
                 '200':
                   description: Your server returns this code if it accepts the callback
@@ -2057,7 +2067,12 @@ paths:
         - Manage a Connection
       summary: Initiate Refresh
       description: |
-        Instruct Bud to retrieve the latest account infomation for a customer. Refresh the accounts from a single provider with an existing connection. If the customer's consent has been revoked or expired for this provider, Bud will be unable to refresh the account. This will be confirmed in the response of the refresh status endpoint associated with the `task_id` provided in the response to this endpoint, where the `reconnect_required` field will set to `true` and status set to `Completed`.
+        Instruct Bud to retrieve the latest account infomation for a customer. Refresh the accounts from a single provider with an existing connection.
+
+        After initiating this long running process, make sure to check the status of the it till completion before trying to access the Customer's data or initiating another refresh.
+
+        If the customer's consent has been revoked or expired for this provider, Bud will be unable to refresh the account. 
+        This will be confirmed in the response of the refresh status endpoint associated with the `task_id` provided in the response to this endpoint, where the `reconnect_required` field will set to `true` and status set to `Completed`.
       operationId: open_banking_refresh_post
       security:
         - OAuth2: []
@@ -2146,6 +2161,7 @@ paths:
                         status: Completed
                         task_type: refresh
                         customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
+                        consent_id: f43c4fc9-26f6-4107-a631-4f323f06e5c9
               responses:
                 '200':
                   description: Your server returns this code if it accepts the callback
@@ -2185,6 +2201,7 @@ paths:
                             customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
                             reconnect_required: 'false'
                             has_new_transactions: 'true'
+                            consent_id: f43c4fc9-26f6-4107-a631-4f323f06e5c9
                       Failure:
                         description: Failed refresh due to a consent being revoked
                         value:
@@ -2196,6 +2213,7 @@ paths:
                             customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
                             reconnect_required: 'true'
                             has_new_transactions: 'false'
+                            consent_id: f43c4fc9-26f6-4107-a631-4f323f06e5c9
               responses:
                 '200':
                   description: Your server returns this code if it accepts the callback
@@ -2212,7 +2230,17 @@ paths:
         - Manage a Connection
       summary: Retrieve Refresh Status
       description: |
-        Check the status of an account information refresh task e.g. progress on account information download. If the task is not yet completed, the status will be shown as pending. If the status is completed, then the data is ready to be collected via the [Retrieve Financial Data](/reference/retrieve-financial-data) endpoints. Successful requests will include `step` (1-4) and associated `text` values to indicate the current progress of the refresh task.
+        Check the status of an account information refresh task. If the task is not yet completed, the status will be shown as pending. 
+        If the status is completed, then the data is ready to be collected via the [Retrieve Financial Data](/reference/retrieve-financial-data) endpoints. 
+        Successful requests will include `step` (1-4) and associated `text` values to indicate the current progress of the refresh task.
+
+        Make sure to check the status of the task till completion before trying to access the Customer's data or initiating another process.
+
+        When the task is successful, we include in the response body a `metadata.has_new_transactions` boolean attribute that tells you if the refresh resulted in storing new data. This attribute must be used to 
+        decide if it's necessary to pull the Customer's data or not.
+
+        When the refresh fails, we include the reason of the failure as part of the `data.result` attribute. We also include the `data.reconnect_required` boolean attribute that indicates if the consent used to 
+        fetch the data for this customer and provider is no longer valid. If reconnect_required is true, the customer will need to go through the bank account connection flow again.
       operationId: open_banking_refresh_get
       security:
         - OAuth2: []
@@ -2324,8 +2352,6 @@ paths:
       summary: Retrieve Customer Consents
       description: |
         Retrieve the list of all available Open Banking consents granted by the customer.
-
-        This will only include their respective `account_ids`, when the Customer Secret is included in the request. See the `X-Customer-Secret` header.
       operationId: open_banking_connections_get
       security:
         - OAuth2: []
@@ -2476,11 +2502,11 @@ paths:
         - Manage a Connection
       summary: Initiate Revoke Consent
       description: |
-        Start a task to remove consent to download further customer account information and remove Bud’s ability to download further information for a specified customer account.
+        Start a task to remove consent and remove Bud’s ability to download further information for a specified customer account.
 
-        This will revoke `all` the consents for the specified provider, that are associated to the specified customer account.
+        This will revoke `all` the consents for the specified provider associated to the customer.
 
-        To check the status of this task, use the `Retrieve Revoke Consent Status` using the returned `task_id`
+        To check the status of this task, use the `Retrieve Revoke Consent Status` using the returned `task_id`.
 
         Alternatively, there is a `Open Banking Consent Revoked` webhook that will trigger per consent successfully revoked. As such this task could generate multiple of these.
       operationId: open_banking_account_access_consent_revoke_post
@@ -4762,7 +4788,7 @@ paths:
                       to: '2022-11-15T23:59:59Z'
                       max_balance:
                         value: '500.12'
-                        currency: USD
+                        currency: GBP
                       min_balance:
                         value: '0.00'
                         currency: GBP
@@ -4884,7 +4910,7 @@ paths:
                     to: '2022-11-15T23:59:59Z'
                     max_balance:
                       value: '500.12'
-                      currency: USD
+                      currency: GBP
                     min_balance:
                       value: '0.00'
                       currency: GBP
@@ -12829,657 +12855,6 @@ components:
             Prepend with the API host to get a fully resolved URL.
 
             The same headers as [Retrieve Transactions V2](https://docs.thisisbud.com/reference/v2_transactions_get) apply.
-    IncomeInsightsResponse:
-      title: Income Insights Response
-      description: Income insights response, providing identified income insights for this customer.
-      type: object
-      required:
-        - data
-        - operation_id
-        - metadata
-      properties:
-        operation_id:
-          type: string
-          enum:
-            - insights_v1_actionable_income_get
-        data:
-          type: object
-          required:
-            - insights
-            - totals
-          properties:
-            insights:
-              type: array
-              items:
-                $ref: '#/components/schemas/IncomeInsightResponse'
-            totals:
-              $ref: '#/components/schemas/TransactionTotals'
-        metadata:
-          type: object
-          required:
-            - results
-            - from
-            - to
-            - options
-          properties:
-            results:
-              type: integer
-              description: Number of insights returned in the response.
-            from:
-              $ref: '#/components/schemas/schemas-DateTimeISO8601'
-            to:
-              $ref: '#/components/schemas/schemas-DateTimeISO8601'
-            options:
-              type: array
-              items:
-                $ref: '#/components/schemas/InsightOption'
-    IncomeInsightsDataResponse:
-      title: Income Insight Details Response
-      description: Details response for an income insight
-      type: object
-      required:
-        - data
-        - operation_id
-        - metadata
-      properties:
-        operation_id:
-          type: string
-          enum:
-            - insights_v1_actionable_income_details_get
-        data:
-          oneOf:
-            - $ref: '#/components/schemas/GamblingIncomeInsightDataResponse'
-            - $ref: '#/components/schemas/LateIncomeInsightDataResponse'
-            - $ref: '#/components/schemas/PensionIncomeInsightDataResponse'
-            - $ref: '#/components/schemas/RegularIncomeChangedInsightDataResponse'
-        metadata:
-          type: object
-          required:
-            - from
-            - to
-            - options
-          properties:
-            from:
-              $ref: '#/components/schemas/schemas-DateTimeISO8601'
-            to:
-              $ref: '#/components/schemas/schemas-DateTimeISO8601'
-            options:
-              type: array
-              items:
-                $ref: '#/components/schemas/InsightOption'
-    SpendingInsightsResponse:
-      title: Spending Insights Response
-      description: Spending insights response, providing identified balances insights for this customer.
-      type: object
-      required:
-        - data
-        - operation_id
-        - metadata
-      properties:
-        operation_id:
-          type: string
-          enum:
-            - insights_v1_actionable_spending_get
-        data:
-          type: object
-          required:
-            - insights
-            - totals
-          properties:
-            insights:
-              type: array
-              items:
-                $ref: '#/components/schemas/SpendingInsightResponse'
-            totals:
-              $ref: '#/components/schemas/TransactionTotals'
-        metadata:
-          type: object
-          required:
-            - results
-            - from
-            - to
-            - options
-          properties:
-            results:
-              type: integer
-              description: Number of insights returned in the response.
-            from:
-              $ref: '#/components/schemas/schemas-DateTimeISO8601'
-            to:
-              $ref: '#/components/schemas/schemas-DateTimeISO8601'
-            options:
-              type: array
-              items:
-                $ref: '#/components/schemas/InsightOption'
-    SpendingInsightsDataResponse:
-      title: Spending Insight Details Response
-      description: Details response for a spending insight
-      type: object
-      required:
-        - data
-        - operation_id
-        - metadata
-      properties:
-        operation_id:
-          type: string
-          enum:
-            - insights_v1_actionable_spending_details_get
-        data:
-          oneOf:
-            - $ref: '#/components/schemas/LatePaymentInsightDataResponse'
-            - $ref: '#/components/schemas/NewInsuranceExpenseInsightDataResponse'
-            - $ref: '#/components/schemas/RegularPaymentChangedInsightDataResponse'
-            - $ref: '#/components/schemas/SuspectedDuplicateChargeInsightDataResponse'
-        metadata:
-          type: object
-          required:
-            - from
-            - to
-            - options
-          properties:
-            from:
-              $ref: '#/components/schemas/schemas-DateTimeISO8601'
-            to:
-              $ref: '#/components/schemas/schemas-DateTimeISO8601'
-            options:
-              type: array
-              items:
-                $ref: '#/components/schemas/InsightOption'
-    BalancesInsightsResponse:
-      title: Balances Insights Response
-      description: Balances insights response, providing identified balances insights for this customer.
-      type: object
-      required:
-        - data
-        - operation_id
-        - metadata
-      properties:
-        operation_id:
-          type: string
-          enum:
-            - insights_v1_actionable_balances_get
-        data:
-          type: object
-          required:
-            - insights
-          properties:
-            insights:
-              type: array
-              items:
-                $ref: '#/components/schemas/BalancesInsightResponse'
-        metadata:
-          type: object
-          required:
-            - results
-            - from
-            - to
-            - options
-          properties:
-            results:
-              type: integer
-              description: Number of insights returned in the response.
-            from:
-              $ref: '#/components/schemas/schemas-DateTimeISO8601'
-            to:
-              $ref: '#/components/schemas/schemas-DateTimeISO8601'
-            options:
-              type: array
-              items:
-                $ref: '#/components/schemas/InsightOption'
-    BalancesInsightsDataResponse:
-      title: Balances Insight Details Response
-      description: Details response for a balances insight
-      type: object
-      required:
-        - data
-        - operation_id
-        - metadata
-      properties:
-        operation_id:
-          type: string
-          enum:
-            - insights_v1_actionable_balances_details_get
-        data:
-          oneOf:
-            - $ref: '#/components/schemas/CannotCoverBillsInsightDataResponse'
-            - $ref: '#/components/schemas/CloseToCreditLimitInsightDataResponse'
-            - $ref: '#/components/schemas/InOverdraftInsightDataResponse'
-            - $ref: '#/components/schemas/LowBalanceInsightDataResponse'
-        metadata:
-          type: object
-          required:
-            - from
-            - to
-            - options
-          properties:
-            from:
-              $ref: '#/components/schemas/schemas-DateTimeISO8601'
-            to:
-              $ref: '#/components/schemas/schemas-DateTimeISO8601'
-            options:
-              type: array
-              items:
-                $ref: '#/components/schemas/InsightOption'
-    CommonInsightResponse:
-      title: Common Insight Response
-      description: Common parts of an identified insight, shared across all identified insights
-      type: object
-      required:
-        - id
-        - type
-        - _links
-      properties:
-        id:
-          type: string
-          description: An ID for this returned insight. Will be unique within the response, and consistent until financial data is refreshed. For a customised insights request, this will only be consistent across requests specifying the same configuration.
-        type:
-          type: string
-          description: The type of insight triggered. Specifies the meaning of the insight, and the format of the additional_info object.
-          example: gambling_threshold
-        _links:
-          $ref: '#/components/schemas/InsightLinks'
-    CommonInsightDataResponse:
-      title: Common Insight Details Response
-      description: Common parts of the insight details response, shared by all insight types
-      type: object
-      required:
-        - id
-        - type
-        - caused_by
-        - details
-      properties:
-        id:
-          type: string
-          description: An ID for this returned insight. Will be unique within the response, and consistent until financial data is refreshed. For a customised insights request, this will only be consistent across requests specifying the same configuration.
-        type:
-          type: string
-          description: The type of insight triggered. Specifies the meaning of the insight, and the format of the additional_info object.
-          example: late_income
-        caused_by:
-          $ref: '#/components/schemas/InsightCausedBy'
-        details:
-          type: object
-          description: Additional data specific to the triggered insight type.
-          additionalProperties: true
-    InsightCausedBy:
-      title: Caused By
-      description: The financial data that resulted in this insight being triggered, to which it can be attributed.
-      type: object
-      required:
-        - transactions
-        - accounts
-      properties:
-        accounts:
-          type: array
-          description: Accounts in the Bud Accounts V2 format that triggered the insight, for insights based on account and balance data. If there are no specific relevant accounts, this will be an empty list.
-          items:
-            $ref: '#/components/schemas/AccountV2'
-        transactions:
-          type: array
-          description: |-
-            Transactions in the Bud Transactions V2 format that triggered the insight, for insights based on transaction data. If there are no specific relevant transactions, this will be an empty list.
-            For clients making use of the deprecated client taxonomy support, the categories in this response will be set to the client categories.
-          items:
-            $ref: '#/components/schemas/Transaction'
-    InsightLinks:
-      title: Links
-      description: URLs for resources related to this insight
-      type: object
-      required:
-        - details
-      properties:
-        details:
-          type: string
-          description: An endpoint, including options, to make a GET request to in order to retrieve insight-specific details for this insight, and the transaction and account data that caused it to trigger.
-    TransactionTotals:
-      title: Transaction Totals
-      description: Total income and expenses for the customer across the period checked for insights
-      type: object
-      required:
-        - income
-        - expenditure
-      properties:
-        income:
-          type: array
-          description: The total income for the period, in every currency that had an insight trigger within the period.
-          items:
-            $ref: '#/components/schemas/BudAmount'
-        expenditure:
-          type: array
-          description: The total expenses for the period, in every currency that had an insight trigger within the period.
-          items:
-            $ref: '#/components/schemas/BudAmount'
-    IncomeInsightResponse:
-      title: Income Insight Response
-      description: Income insight identified from the customer's financial data
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightResponse'
-        - type: object
-          required:
-            - transactions
-          properties:
-            transactions:
-              type: array
-              description: The transaction or transactions that most immediately triggered the insight, in our Transactions V2 format.
-              items:
-                $ref: '#/components/schemas/Transaction'
-    SpendingInsightResponse:
-      title: Spending Insight Response
-      description: Spending insight identified from the customer's financial data
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightResponse'
-        - type: object
-          required:
-            - transactions
-          properties:
-            transactions:
-              type: array
-              description: The transaction or transactions that most immediately triggered the insight, in our Transactions V2 format.
-              items:
-                $ref: '#/components/schemas/Transaction'
-    BalancesInsightResponse:
-      title: Balances Insight Response
-      description: Balances insight identified from the customer's financial data
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightResponse'
-        - type: object
-          required:
-            - account_id
-            - balance
-            - threshold
-          properties:
-            account_id:
-              type: string
-              description: The account ID whose current, projected, or past balance information this insight relates to.
-            balance:
-              $ref: '#/components/schemas/AmountWithCDI'
-            threshold:
-              $ref: '#/components/schemas/AmountWithCDI'
-    OtherInsightDataResponse:
-      title: Other Insight Details Response
-      description: Details response for any other insight
-      $ref: '#/components/schemas/CommonInsightDataResponse'
-    GamblingIncomeInsightDataResponse:
-      title: Gambling Income Insight Details Response
-      description: Details response for a 'gambling income' insight
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - gambling_income
-            details:
-              $ref: '#/components/schemas/GamblingIncomeInsightDetails'
-    GamblingIncomeInsightDetails:
-      title: Gambling Income Insight Details
-      description: Details for a 'gambling income' insight
-      type: object
-      properties:
-        total:
-          $ref: '#/components/schemas/BudAmount'
-    LateIncomeInsightDataResponse:
-      title: Late Income Insight Details Response
-      description: Details response for a 'late income' insight
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - late_income
-            details:
-              $ref: '#/components/schemas/LateIncomeInsightDetails'
-    LateIncomeInsightDetails:
-      title: Late Income Insight Details
-      description: Details for a 'late income' insight
-      type: object
-      properties:
-        days_late:
-          type: number
-          description: Number of days since the predicted transaction was expected to occur.
-        expected_date_time:
-          $ref: '#/components/schemas/schemas-DateTimeISO8601'
-    LatePaymentInsightDataResponse:
-      title: Late Payment Insight Details Response
-      description: Details response for a 'late payment' insight
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - late_payment
-            details:
-              $ref: '#/components/schemas/LatePaymentInsightDetails'
-    LatePaymentInsightDetails:
-      title: Late Payment Insight Details
-      description: Details for a 'late payment' insight
-      type: object
-      properties:
-        days_late:
-          type: number
-          description: Number of days since the predicted transaction was expected to occur.
-        expected_date_time:
-          $ref: '#/components/schemas/schemas-DateTimeISO8601'
-    NewInsuranceExpenseInsightDataResponse:
-      title: New Insurance Expense Insight Details Response
-      description: Details response for a 'new insurance expense' insight
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - new_insurance_expense
-            details:
-              type: object
-              additionalProperties: false
-              description: Always empty for this insight type.
-    PensionIncomeInsightDataResponse:
-      title: Pension Income Insight Details Response
-      description: Details response for a 'pension income' insight
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - pension_income
-            details:
-              $ref: '#/components/schemas/PensionIncomeInsightDetails'
-    PensionIncomeInsightDetails:
-      title: Pension Income Insight Details
-      description: Details for a 'pension income' insight
-      type: object
-      properties:
-        total:
-          $ref: '#/components/schemas/BudAmount'
-    RegularIncomeChangedInsightDataResponse:
-      title: Regular Income Changed Insight Details Response
-      description: Details response for a 'regular income changed' insight
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - regular_income_changed
-            details:
-              $ref: '#/components/schemas/RegularIncomeChangedInsightDetails'
-    RegularIncomeChangedInsightDetails:
-      title: Regular Income Changed Insight Details
-      description: Details for a 'regular income changed' insight
-      type: object
-      properties:
-        new_amount:
-          $ref: '#/components/schemas/BudAmount'
-        absolute_change:
-          $ref: '#/components/schemas/BudMonetaryValue'
-        percentage_change:
-          $ref: '#/components/schemas/BudMonetaryValue'
-    RegularPaymentChangedInsightDataResponse:
-      title: Regular Payment Changed Insight Details Response
-      description: Details response for a 'regular payment changed' insight
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - regular_payment_changed
-            details:
-              $ref: '#/components/schemas/RegularPaymentChangedInsightDetails'
-    RegularPaymentChangedInsightDetails:
-      title: Regular Payment Changed Insight Details
-      description: Details for a 'regular payment changed' insight
-      type: object
-      properties:
-        new_amount:
-          $ref: '#/components/schemas/BudAmount'
-        absolute_change:
-          $ref: '#/components/schemas/BudMonetaryValue'
-        percentage_change:
-          $ref: '#/components/schemas/BudMonetaryValue'
-    SuspectedDuplicateChargeInsightDataResponse:
-      title: Suspected Duplicate Charge Insight Details Response
-      description: Details response for a 'suspected duplicate charge' insight
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - suspected_duplicate_charge
-            details:
-              type: object
-              additionalProperties: false
-              description: Always empty for this insight type.
-    CannotCoverBillsInsightDataResponse:
-      title: Cannot Cover Bills Insight Details Response
-      description: Details response for a 'cannot cover bills' insight
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - cannot_cover_bills
-            details:
-              $ref: '#/components/schemas/CannotCoverBillsInsightDetails'
-    CannotCoverBillsInsightDetails:
-      title: Cannot Cover Bills Insight Details
-      description: Details for a 'cannot cover bills' insight
-      type: object
-      properties:
-        expected_debit:
-          $ref: '#/components/schemas/BudAmount'
-        expected_credit:
-          $ref: '#/components/schemas/BudAmount'
-        date_time:
-          $ref: '#/components/schemas/schemas-DateTimeISO8601'
-        current_balance:
-          $ref: '#/components/schemas/BudAmount'
-    CloseToCreditLimitInsightDataResponse:
-      title: Close To Credit Limit Insight Details Response
-      description: Details response for a 'close to credit limit' insight
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - close_to_credit_limit
-            details:
-              $ref: '#/components/schemas/CloseToCreditLimitInsightDetails'
-    CloseToCreditLimitInsightDetails:
-      title: Close To Credit Limit Insight Details
-      description: Details for a 'close to credit limit' insight
-      type: object
-      properties:
-        percentage_utilisation:
-          type: string
-          description: Percentage (to 2 decimal places) of the credit limit that is currently being used.
-    InOverdraftInsightDataResponse:
-      title: In Overdraft Insight Details Response
-      description: Details response for an 'in overdraft' insight
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - in_overdraft
-            details:
-              type: object
-              additionalProperties: false
-              description: Always empty for this insight type.
-    LowBalanceInsightDataResponse:
-      title: Low Balance Insight Details Response
-      description: Details response for a low balance insight
-      allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - low_balance
-            details:
-              type: object
-              additionalProperties: false
-              description: Always empty for this insight type.
-    InsightOption:
-      title: Insight Option
-      type: object
-      description: An option used to configure the returned insights.
-      required:
-        - insight_type
-        - option
-        - value
-      properties:
-        insight_type:
-          type: string
-          description: The insight this option is applied to
-        option:
-          type: string
-          description: The name of the option
-        value:
-          type: string
-          description: The value of the option
-    AmountWithCDI:
-      title: Credit Debit Indicator
-      type: object
-      description: An amount of money, in a specific currency with a credit/debit indicator.
-      required:
-        - currency
-        - value
-        - credit_debit_indicator
-      properties:
-        currency:
-          $ref: '#/components/schemas/BudCurrency'
-        value:
-          $ref: '#/components/schemas/BudMonetaryValue'
-        credit_debit_indicator:
-          $ref: '#/components/schemas/CreditDebitIndicator'
-    CreditDebitIndicator:
-      title: Credit Debit Indicator
-      type: string
-      description: Whether the associated amount is a credit (positive) or debit (negative) amount.
-      enum:
-        - credit
-        - debit
     OperationId:
       title: Operation Id Field
       type: string
@@ -13618,7 +12993,12 @@ components:
           description: When enabled, the customer will be shown a summary screen at the endpoint of the flow that lists the names and balances of all of the accounts that the customer has active consents for (including those connected in previous sessions).
         initial_screen:
           type: string
-          description: The first screen that the customer will be shown. When value is 'accounts_summary' the customer will see a list of the names and balances of the accounts that the customer currently has active consents for. When value is 'connect_accounts', the customer will see a list of providers to connect their accounts with. By default this value is 'connect_accounts'. When the value is 'download_data', the customer can download their data in a JSON file. When the value is 'reconfirm_consent', the customer will be taken through the reconfirmation of consent journey. If the customer only has one consent they will skip the consent selection screen. When the value is 'revoke_consent', the customer can revoke consent for accounts they have previously connected.
+          description: |
+            The first screen that the customer will be shown. When value is 'accounts_summary' the customer will see a list of the names and balances of the accounts that the customer currently has active consents for. 
+            When value is 'connect_accounts', the customer will see a list of providers to connect their accounts with. By default this value is 'connect_accounts'. 
+            When the value is 'download_data', the customer can download their data in a JSON file. 
+            When the value is 'reconfirm_consent', the customer will be taken through the reconfirmation of consent journey. If the customer only has one consent they will skip the consent selection screen. 
+            When the value is 'revoke_consent', the customer can revoke consent for accounts they have previously connected.
           enum:
             - accounts_summary
             - connect_accounts
@@ -13749,6 +13129,9 @@ components:
             provider:
               type: string
               description: Name of the provider (banking institution) the task interacted with
+            consent_id:
+              type: string
+              description: The consent identifier that the event relates to
     ConnectResultCodes:
       type: string
       description: The result of the operation. Either success or various error codes.
@@ -13848,6 +13231,9 @@ components:
             provider:
               type: string
               description: Name of the provider (banking institution) the task interacted with
+            consent_id:
+              type: string
+              description: The consent identifier that the event relates to
     OpenBankingAuthoriseRequest:
       title: Provider
       type: object
@@ -14326,7 +13712,9 @@ components:
           description: Date and time when the consent was last consented on. ISODateTime.
         revoked_at:
           type: string
-          description: Date and time when the consent was revoked. ISODateTime.
+          description: |
+            Date and time when the consent was revoked. ISODateTime. This attribute in included in the response only if the status of the consent is `revoked`. 
+            When the consent is invalidated as part of a Bud refresh task, this date time represents the time when the consent was set to `revoked` by Bud during the refresh.
         status:
           type: string
           description: To describe the status of the consent. Note that the query parameter `status=all` must be provided to be shown consents that have a status of anything but `authorised`
@@ -14371,7 +13759,7 @@ components:
           $ref: '#/components/schemas/RawOBConsents'
         account_ids:
           type: array
-          description: A list of the different account identifiers that are associated with this particular consent object. Note that you will have to provide the customer secret in the request headers in order to retrieve this field against a consent object.
+          description: A list of the different account identifiers that are associated with this particular consent object.
           items:
             type: string
         last_synced_at:
@@ -20455,6 +19843,653 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/TransactionTotal'
+    InsightLinks:
+      title: Links
+      description: URLs for resources related to this insight
+      type: object
+      required:
+        - details
+      properties:
+        details:
+          type: string
+          description: An endpoint, including options, to make a GET request to in order to retrieve insight-specific details for this insight, and the transaction and account data that caused it to trigger.
+    CommonInsightResponse:
+      title: Common Insight Response
+      description: Common parts of an identified insight, shared across all identified insights
+      type: object
+      required:
+        - id
+        - type
+        - _links
+      properties:
+        id:
+          type: string
+          description: An ID for this returned insight. Will be unique within the response, and consistent until financial data is refreshed. For a customised insights request, this will only be consistent across requests specifying the same configuration.
+        type:
+          type: string
+          description: The type of insight triggered. Specifies the meaning of the insight, and the format of the additional_info object.
+          example: gambling_threshold
+        _links:
+          $ref: '#/components/schemas/InsightLinks'
+    CreditDebitIndicator:
+      title: Credit Debit Indicator
+      type: string
+      description: Whether the associated amount is a credit (positive) or debit (negative) amount.
+      enum:
+        - credit
+        - debit
+    AmountWithCDI:
+      title: Credit Debit Indicator
+      type: object
+      description: An amount of money, in a specific currency with a credit/debit indicator.
+      required:
+        - currency
+        - value
+        - credit_debit_indicator
+      properties:
+        currency:
+          $ref: '#/components/schemas/BudCurrency'
+        value:
+          $ref: '#/components/schemas/BudMonetaryValue'
+        credit_debit_indicator:
+          $ref: '#/components/schemas/CreditDebitIndicator'
+    BalancesInsightResponse:
+      title: Balances Insight Response
+      description: Balances insight identified from the customer's financial data
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightResponse'
+        - type: object
+          required:
+            - account_id
+            - balance
+            - threshold
+          properties:
+            account_id:
+              type: string
+              description: The account ID whose current, projected, or past balance information this insight relates to.
+            balance:
+              $ref: '#/components/schemas/AmountWithCDI'
+            threshold:
+              $ref: '#/components/schemas/AmountWithCDI'
+    InsightOption:
+      title: Insight Option
+      type: object
+      description: An option used to configure the returned insights.
+      required:
+        - insight_type
+        - option
+        - value
+      properties:
+        insight_type:
+          type: string
+          description: The insight this option is applied to
+        option:
+          type: string
+          description: The name of the option
+        value:
+          type: string
+          description: The value of the option
+    BalancesInsightsResponse:
+      title: Balances Insights Response
+      description: Balances insights response, providing identified balances insights for this customer.
+      type: object
+      required:
+        - data
+        - operation_id
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_actionable_balances_get
+        data:
+          type: object
+          required:
+            - insights
+          properties:
+            insights:
+              type: array
+              items:
+                $ref: '#/components/schemas/BalancesInsightResponse'
+        metadata:
+          type: object
+          required:
+            - results
+            - from
+            - to
+            - options
+          properties:
+            results:
+              type: integer
+              description: Number of insights returned in the response.
+            from:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            to:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/InsightOption'
+    InsightCausedBy:
+      title: Caused By
+      description: The financial data that resulted in this insight being triggered, to which it can be attributed.
+      type: object
+      required:
+        - transactions
+        - accounts
+      properties:
+        accounts:
+          type: array
+          description: Accounts in the Bud Accounts V2 format that triggered the insight, for insights based on account and balance data. If there are no specific relevant accounts, this will be an empty list.
+          items:
+            $ref: '#/components/schemas/AccountV2'
+        transactions:
+          type: array
+          description: |-
+            Transactions in the Bud Transactions V2 format that triggered the insight, for insights based on transaction data. If there are no specific relevant transactions, this will be an empty list.
+            For clients making use of the deprecated client taxonomy support, the categories in this response will be set to the client categories.
+          items:
+            $ref: '#/components/schemas/Transaction'
+    CommonInsightDataResponse:
+      title: Common Insight Details Response
+      description: Common parts of the insight details response, shared by all insight types
+      type: object
+      required:
+        - id
+        - type
+        - caused_by
+        - details
+      properties:
+        id:
+          type: string
+          description: An ID for this returned insight. Will be unique within the response, and consistent until financial data is refreshed. For a customised insights request, this will only be consistent across requests specifying the same configuration.
+        type:
+          type: string
+          description: The type of insight triggered. Specifies the meaning of the insight, and the format of the additional_info object.
+          example: late_income
+        caused_by:
+          $ref: '#/components/schemas/InsightCausedBy'
+        details:
+          type: object
+          description: Additional data specific to the triggered insight type.
+          additionalProperties: true
+    CannotCoverBillsInsightDetails:
+      title: Cannot Cover Bills Insight Details
+      description: Details for a 'cannot cover bills' insight
+      type: object
+      properties:
+        expected_debit:
+          $ref: '#/components/schemas/BudAmount'
+        expected_credit:
+          $ref: '#/components/schemas/BudAmount'
+        date_time:
+          $ref: '#/components/schemas/schemas-DateTimeISO8601'
+        current_balance:
+          $ref: '#/components/schemas/BudAmount'
+    CannotCoverBillsInsightDataResponse:
+      title: Cannot Cover Bills Insight Details Response
+      description: Details response for a 'cannot cover bills' insight
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - cannot_cover_bills
+            details:
+              $ref: '#/components/schemas/CannotCoverBillsInsightDetails'
+    CloseToCreditLimitInsightDetails:
+      title: Close To Credit Limit Insight Details
+      description: Details for a 'close to credit limit' insight
+      type: object
+      properties:
+        percentage_utilisation:
+          type: string
+          description: Percentage (to 2 decimal places) of the credit limit that is currently being used.
+    CloseToCreditLimitInsightDataResponse:
+      title: Close To Credit Limit Insight Details Response
+      description: Details response for a 'close to credit limit' insight
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - close_to_credit_limit
+            details:
+              $ref: '#/components/schemas/CloseToCreditLimitInsightDetails'
+    InOverdraftInsightDataResponse:
+      title: In Overdraft Insight Details Response
+      description: Details response for an 'in overdraft' insight
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - in_overdraft
+            details:
+              type: object
+              additionalProperties: false
+              description: Always empty for this insight type.
+    LowBalanceInsightDataResponse:
+      title: Low Balance Insight Details Response
+      description: Details response for a low balance insight
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - low_balance
+            details:
+              type: object
+              additionalProperties: false
+              description: Always empty for this insight type.
+    BalancesInsightsDataResponse:
+      title: Balances Insight Details Response
+      description: Details response for a balances insight
+      type: object
+      required:
+        - data
+        - operation_id
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_actionable_balances_details_get
+        data:
+          oneOf:
+            - $ref: '#/components/schemas/CannotCoverBillsInsightDataResponse'
+            - $ref: '#/components/schemas/CloseToCreditLimitInsightDataResponse'
+            - $ref: '#/components/schemas/InOverdraftInsightDataResponse'
+            - $ref: '#/components/schemas/LowBalanceInsightDataResponse'
+        metadata:
+          type: object
+          required:
+            - from
+            - to
+            - options
+          properties:
+            from:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            to:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/InsightOption'
+    IncomeInsightResponse:
+      title: Income Insight Response
+      description: Income insight identified from the customer's financial data
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightResponse'
+        - type: object
+          required:
+            - transactions
+          properties:
+            transactions:
+              type: array
+              description: The transaction or transactions that most immediately triggered the insight, in our Transactions V2 format.
+              items:
+                $ref: '#/components/schemas/Transaction'
+    TransactionTotals:
+      title: Transaction Totals
+      description: Total income and expenses for the customer across the period checked for insights
+      type: object
+      required:
+        - income
+        - expenditure
+      properties:
+        income:
+          type: array
+          description: The total income for the period, in every currency that had an insight trigger within the period.
+          items:
+            $ref: '#/components/schemas/BudAmount'
+        expenditure:
+          type: array
+          description: The total expenses for the period, in every currency that had an insight trigger within the period.
+          items:
+            $ref: '#/components/schemas/BudAmount'
+    IncomeInsightsResponse:
+      title: Income Insights Response
+      description: Income insights response, providing identified income insights for this customer.
+      type: object
+      required:
+        - data
+        - operation_id
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_actionable_income_get
+        data:
+          type: object
+          required:
+            - insights
+            - totals
+          properties:
+            insights:
+              type: array
+              items:
+                $ref: '#/components/schemas/IncomeInsightResponse'
+            totals:
+              $ref: '#/components/schemas/TransactionTotals'
+        metadata:
+          type: object
+          required:
+            - results
+            - from
+            - to
+            - options
+          properties:
+            results:
+              type: integer
+              description: Number of insights returned in the response.
+            from:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            to:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/InsightOption'
+    GamblingIncomeInsightDetails:
+      title: Gambling Income Insight Details
+      description: Details for a 'gambling income' insight
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/BudAmount'
+    GamblingIncomeInsightDataResponse:
+      title: Gambling Income Insight Details Response
+      description: Details response for a 'gambling income' insight
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - gambling_income
+            details:
+              $ref: '#/components/schemas/GamblingIncomeInsightDetails'
+    LateIncomeInsightDetails:
+      title: Late Income Insight Details
+      description: Details for a 'late income' insight
+      type: object
+      properties:
+        days_late:
+          type: number
+          description: Number of days since the predicted transaction was expected to occur.
+        expected_date_time:
+          $ref: '#/components/schemas/schemas-DateTimeISO8601'
+    LateIncomeInsightDataResponse:
+      title: Late Income Insight Details Response
+      description: Details response for a 'late income' insight
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - late_income
+            details:
+              $ref: '#/components/schemas/LateIncomeInsightDetails'
+    PensionIncomeInsightDetails:
+      title: Pension Income Insight Details
+      description: Details for a 'pension income' insight
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/BudAmount'
+    PensionIncomeInsightDataResponse:
+      title: Pension Income Insight Details Response
+      description: Details response for a 'pension income' insight
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - pension_income
+            details:
+              $ref: '#/components/schemas/PensionIncomeInsightDetails'
+    RegularIncomeChangedInsightDetails:
+      title: Regular Income Changed Insight Details
+      description: Details for a 'regular income changed' insight
+      type: object
+      properties:
+        new_amount:
+          $ref: '#/components/schemas/BudAmount'
+        absolute_change:
+          $ref: '#/components/schemas/BudMonetaryValue'
+        percentage_change:
+          $ref: '#/components/schemas/BudMonetaryValue'
+    RegularIncomeChangedInsightDataResponse:
+      title: Regular Income Changed Insight Details Response
+      description: Details response for a 'regular income changed' insight
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - regular_income_changed
+            details:
+              $ref: '#/components/schemas/RegularIncomeChangedInsightDetails'
+    IncomeInsightsDataResponse:
+      title: Income Insight Details Response
+      description: Details response for an income insight
+      type: object
+      required:
+        - data
+        - operation_id
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_actionable_income_details_get
+        data:
+          oneOf:
+            - $ref: '#/components/schemas/GamblingIncomeInsightDataResponse'
+            - $ref: '#/components/schemas/LateIncomeInsightDataResponse'
+            - $ref: '#/components/schemas/PensionIncomeInsightDataResponse'
+            - $ref: '#/components/schemas/RegularIncomeChangedInsightDataResponse'
+        metadata:
+          type: object
+          required:
+            - from
+            - to
+            - options
+          properties:
+            from:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            to:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/InsightOption'
+    SpendingInsightResponse:
+      title: Spending Insight Response
+      description: Spending insight identified from the customer's financial data
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightResponse'
+        - type: object
+          required:
+            - transactions
+          properties:
+            transactions:
+              type: array
+              description: The transaction or transactions that most immediately triggered the insight, in our Transactions V2 format.
+              items:
+                $ref: '#/components/schemas/Transaction'
+    SpendingInsightsResponse:
+      title: Spending Insights Response
+      description: Spending insights response, providing identified balances insights for this customer.
+      type: object
+      required:
+        - data
+        - operation_id
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_actionable_spending_get
+        data:
+          type: object
+          required:
+            - insights
+            - totals
+          properties:
+            insights:
+              type: array
+              items:
+                $ref: '#/components/schemas/SpendingInsightResponse'
+            totals:
+              $ref: '#/components/schemas/TransactionTotals'
+        metadata:
+          type: object
+          required:
+            - results
+            - from
+            - to
+            - options
+          properties:
+            results:
+              type: integer
+              description: Number of insights returned in the response.
+            from:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            to:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/InsightOption'
+    LatePaymentInsightDetails:
+      title: Late Payment Insight Details
+      description: Details for a 'late payment' insight
+      type: object
+      properties:
+        days_late:
+          type: number
+          description: Number of days since the predicted transaction was expected to occur.
+        expected_date_time:
+          $ref: '#/components/schemas/schemas-DateTimeISO8601'
+    LatePaymentInsightDataResponse:
+      title: Late Payment Insight Details Response
+      description: Details response for a 'late payment' insight
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - late_payment
+            details:
+              $ref: '#/components/schemas/LatePaymentInsightDetails'
+    NewInsuranceExpenseInsightDataResponse:
+      title: New Insurance Expense Insight Details Response
+      description: Details response for a 'new insurance expense' insight
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - new_insurance_expense
+            details:
+              type: object
+              additionalProperties: false
+              description: Always empty for this insight type.
+    RegularPaymentChangedInsightDetails:
+      title: Regular Payment Changed Insight Details
+      description: Details for a 'regular payment changed' insight
+      type: object
+      properties:
+        new_amount:
+          $ref: '#/components/schemas/BudAmount'
+        absolute_change:
+          $ref: '#/components/schemas/BudMonetaryValue'
+        percentage_change:
+          $ref: '#/components/schemas/BudMonetaryValue'
+    RegularPaymentChangedInsightDataResponse:
+      title: Regular Payment Changed Insight Details Response
+      description: Details response for a 'regular payment changed' insight
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - regular_payment_changed
+            details:
+              $ref: '#/components/schemas/RegularPaymentChangedInsightDetails'
+    SuspectedDuplicateChargeInsightDataResponse:
+      title: Suspected Duplicate Charge Insight Details Response
+      description: Details response for a 'suspected duplicate charge' insight
+      allOf:
+        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - suspected_duplicate_charge
+            details:
+              type: object
+              additionalProperties: false
+              description: Always empty for this insight type.
+    SpendingInsightsDataResponse:
+      title: Spending Insight Details Response
+      description: Details response for a spending insight
+      type: object
+      required:
+        - data
+        - operation_id
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_actionable_spending_details_get
+        data:
+          oneOf:
+            - $ref: '#/components/schemas/LatePaymentInsightDataResponse'
+            - $ref: '#/components/schemas/NewInsuranceExpenseInsightDataResponse'
+            - $ref: '#/components/schemas/RegularPaymentChangedInsightDataResponse'
+            - $ref: '#/components/schemas/SuspectedDuplicateChargeInsightDataResponse'
+        metadata:
+          type: object
+          required:
+            - from
+            - to
+            - options
+          properties:
+            from:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            to:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/InsightOption'
     ComponentParameterSpec:
       type: object
       required:
@@ -20787,211 +20822,6 @@ components:
         default: P1M,P3M,P6M,P12M
         items:
           $ref: '#/components/schemas/DayOrMonth'
-    From:
-      in: query
-      name: from
-      required: false
-      description: A start time to check financial data for insights from. Configures the earliest financial data which may be used to generate insights. If omitted, defaults to the start of the sixth complete month prior to the latest ingested financial data. Note that some insights will only be checked for complete months entirely between the `from` and `to` dates.
-      schema:
-        $ref: '#/components/schemas/schemas-DateTimeISO8601'
-    To:
-      in: query
-      name: to
-      required: false
-      description: An end time to check financial data for insights up to. Configures the latest financial data which may be used to generate insights. If omitted, defaults to the date of the latest ingested financial data. Note that some insights will only be checked for complete months entirely between the `from` and `to` dates. Insights relating to potential future events, such as cannot_cover_bills, may forecast them up to a month after this point.
-      schema:
-        $ref: '#/components/schemas/schemas-DateTimeISO8601'
-    IncomeInsightType:
-      in: path
-      name: type
-      required: true
-      schema:
-        type: string
-        description: A type of income insight available on the platform.
-        example: late_income
-        enum:
-          - late_income
-          - regular_monthly_income_changed
-          - gambling_income
-          - pension_income
-    SpendingInsightType:
-      in: path
-      name: type
-      required: true
-      schema:
-        type: string
-        description: A type of spending insight available on the platform.
-        example: late_payment
-        enum:
-          - late_payment
-          - suspected_duplicate_charge
-          - regular_payment_changed
-          - new_insurance_expense
-    BalancesInsightType:
-      in: path
-      name: type
-      required: true
-      schema:
-        type: string
-        description: A type of balances insight available on the platform.
-        example: in_overdraft
-        enum:
-          - cannot_cover_bills
-          - in_overdraft
-          - close_to_credit_limit
-          - low_balance
-    InsightID:
-      in: path
-      name: id
-      required: true
-      schema:
-        type: string
-        description: The insight ID to provide data for,
-        example: late_income_8789764a-df2f-4589-b550-00bcd0e9cb2c
-    IncomeEnabledInsights:
-      in: query
-      name: enabled_insights
-      required: false
-      schema:
-        type: string
-        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
-        example: late_income
-        enum:
-          - late_income
-          - regular_monthly_income_changed
-          - gambling_income
-          - pension_income
-    GamblingIncomeMinimumMonthlyThreshold:
-      in: query
-      name: gambling_income.minimum_monthly_threshold
-      required: false
-      schema:
-        type: number
-        description: A minimum absolute total of gambling income for the insight to trigger. Both `gambling_income.minimum_monthly_threshold` and `gambling_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
-    GamblingIncomeMinimumPercentageTotalThreshold:
-      in: query
-      name: gambling_income.minimum_percentage_total_threshold
-      required: false
-      schema:
-        type: number
-        description: A minimum percentage of all income that must be gambling income for the insight to trigger. Both `gambling_income.minimum_monthly_threshold` and `gambling_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
-    LateIncomeMinimumValueThreshold:
-      in: query
-      name: late_income.minimum_value_threshold
-      required: false
-      schema:
-        type: number
-        description: A minimum value of a late transaction in that transaction's currency for the insight to trigger. Both `late_income.minimum_value_threshold` and `late_income.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
-    LateIncomeMinimumDaysLateThreshold:
-      in: query
-      name: late_income.minimum_days_late_threshold
-      required: false
-      schema:
-        type: number
-        description: A minimum number of days late for a transaction to be for the insight to trigger. Both `late_income.minimum_value_threshold` and `late_income.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
-    PensionIncomeMinimumMonthlyThreshold:
-      in: query
-      name: pension_income.minimum_monthly_threshold
-      required: false
-      schema:
-        type: number
-        description: A minimum absolute total of pension income for the insight to trigger. Both `pension_income.minimum_monthly_threshold` and `pension_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
-    PensionIncomeMinimumPercentageTotalThreshold:
-      in: query
-      name: pension_income.minimum_percentage_total_threshold
-      required: false
-      schema:
-        type: number
-        description: A minimum percentage of all income that must be pension income for the insight to trigger.. Both `pension_income.minimum_monthly_threshold` and `pension_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
-    RegularIncomeChangedMinimumAbsoluteChangeThreshold:
-      in: query
-      name: regular_income_changed.minimum_absolute_change_threshold
-      required: false
-      schema:
-        type: number
-        description: A minimum absolute change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_income_changed.minimum_absolute_change_threshold` and `regular_income_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
-    RegularIncomeChangedMinimumPercentageChangeThreshold:
-      in: query
-      name: regular_income_changed.minimum_percentage_change_threshold
-      required: false
-      schema:
-        type: number
-        description: A minimum percentage change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_income_changed.minimum_absolute_change_threshold` and `regular_income_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
-    SpendingEnabledInsights:
-      in: query
-      name: enabled_insights
-      required: false
-      schema:
-        type: string
-        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
-        example: late_payment
-        enum:
-          - late_payment
-          - suspected_duplicate_charge
-          - regular_payment_changed
-          - new_insurance_expense
-    LatePaymentMinimumValueThreshold:
-      in: query
-      name: late_payment.minimum_value_threshold
-      required: false
-      schema:
-        type: number
-        description: A minimum value of a late transaction in that transaction's currency for the insight to trigger. Both `late_payment.minimum_value_threshold` and `late_payment.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
-    LatePaymentMinimumDaysLateThreshold:
-      in: query
-      name: late_payment.minimum_days_late_threshold
-      required: false
-      schema:
-        type: number
-        description: A minimum number of days late for a transaction to be for the insight to trigger. Both `late_payment.minimum_value_threshold` and `late_payment.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used.
-    RegularPaymentChangedMinimumAbsoluteChangeThreshold:
-      in: query
-      name: regular_payment_changed.minimum_absolute_change_threshold
-      required: false
-      schema:
-        type: number
-        description: A minimum absolute change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_payment_changed.minimum_absolute_change_threshold` and `regular_payment_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
-    RegularPaymentChangedMinimumPercentageChangeThreshold:
-      in: query
-      name: regular_payment_changed.minimum_percentage_change_threshold
-      required: false
-      schema:
-        type: number
-        description: A minimum percentage change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_payment_changed.minimum_absolute_change_threshold` and `regular_payment_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
-    BalancesEnabledInsights:
-      in: query
-      name: enabled_insights
-      required: false
-      schema:
-        type: string
-        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
-        example: in_overdraft
-        enum:
-          - cannot_cover_bills
-          - in_overdraft
-          - close_to_credit_limit
-          - low_balance
-    CloseToCreditLimitPercentageUtilisationThreshold:
-      in: query
-      name: close_to_credit_limit.percentage_utilisation_threshold
-      required: false
-      schema:
-        type: number
-        description: A minimum percentage utilisation of the credit limit for this insight to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
-    LowBalanceBalanceThreshold:
-      in: query
-      name: low_balance.balance_threshold
-      required: false
-      schema:
-        type: number
-        description: A balance threshold such that balances lower than this will trigger the low balance insight. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
-    PathCustomInsightID:
-      in: path
-      name: custom_insight_id
-      required: true
-      schema:
-        type: string
-        format: uuid
     OBProvidersQueryTypeFilter:
       in: query
       required: false
@@ -21517,11 +21347,216 @@ components:
       schema:
         type: string
       description: Bud Payment Identifier
+    From:
+      in: query
+      name: from
+      required: false
+      description: A start time to check financial data for insights from. Configures the earliest financial data which may be used to generate insights. If omitted, defaults to the start of the sixth complete month prior to the latest ingested financial data. Note that some insights will only be checked for complete months entirely between the `from` and `to` dates.
+      schema:
+        $ref: '#/components/schemas/schemas-DateTimeISO8601'
+    To:
+      in: query
+      name: to
+      required: false
+      description: An end time to check financial data for insights up to. Configures the latest financial data which may be used to generate insights. If omitted, defaults to the date of the latest ingested financial data. Note that some insights will only be checked for complete months entirely between the `from` and `to` dates. Insights relating to potential future events, such as cannot_cover_bills, may forecast them up to a month after this point.
+      schema:
+        $ref: '#/components/schemas/schemas-DateTimeISO8601'
+    BalancesEnabledInsights:
+      in: query
+      name: enabled_insights
+      required: false
+      schema:
+        type: string
+        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
+        example: in_overdraft
+        enum:
+          - cannot_cover_bills
+          - in_overdraft
+          - close_to_credit_limit
+          - low_balance
+    CloseToCreditLimitPercentageUtilisationThreshold:
+      in: query
+      name: close_to_credit_limit.percentage_utilisation_threshold
+      required: false
+      schema:
+        type: number
+        description: A minimum percentage utilisation of the credit limit for this insight to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+    LowBalanceBalanceThreshold:
+      in: query
+      name: low_balance.balance_threshold
+      required: false
+      schema:
+        type: number
+        description: A balance threshold such that balances lower than this will trigger the low balance insight. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+    BalancesInsightType:
+      in: path
+      name: type
+      required: true
+      schema:
+        type: string
+        description: A type of balances insight available on the platform.
+        example: in_overdraft
+        enum:
+          - cannot_cover_bills
+          - in_overdraft
+          - close_to_credit_limit
+          - low_balance
+    InsightID:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        description: The insight ID to provide data for,
+        example: late_income_8789764a-df2f-4589-b550-00bcd0e9cb2c
+    IncomeEnabledInsights:
+      in: query
+      name: enabled_insights
+      required: false
+      schema:
+        type: string
+        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
+        example: late_income
+        enum:
+          - late_income
+          - regular_monthly_income_changed
+          - gambling_income
+          - pension_income
+    GamblingIncomeMinimumMonthlyThreshold:
+      in: query
+      name: gambling_income.minimum_monthly_threshold
+      required: false
+      schema:
+        type: number
+        description: A minimum absolute total of gambling income for the insight to trigger. Both `gambling_income.minimum_monthly_threshold` and `gambling_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+    GamblingIncomeMinimumPercentageTotalThreshold:
+      in: query
+      name: gambling_income.minimum_percentage_total_threshold
+      required: false
+      schema:
+        type: number
+        description: A minimum percentage of all income that must be gambling income for the insight to trigger. Both `gambling_income.minimum_monthly_threshold` and `gambling_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+    LateIncomeMinimumValueThreshold:
+      in: query
+      name: late_income.minimum_value_threshold
+      required: false
+      schema:
+        type: number
+        description: A minimum value of a late transaction in that transaction's currency for the insight to trigger. Both `late_income.minimum_value_threshold` and `late_income.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+    LateIncomeMinimumDaysLateThreshold:
+      in: query
+      name: late_income.minimum_days_late_threshold
+      required: false
+      schema:
+        type: number
+        description: A minimum number of days late for a transaction to be for the insight to trigger. Both `late_income.minimum_value_threshold` and `late_income.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+    PensionIncomeMinimumMonthlyThreshold:
+      in: query
+      name: pension_income.minimum_monthly_threshold
+      required: false
+      schema:
+        type: number
+        description: A minimum absolute total of pension income for the insight to trigger. Both `pension_income.minimum_monthly_threshold` and `pension_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+    PensionIncomeMinimumPercentageTotalThreshold:
+      in: query
+      name: pension_income.minimum_percentage_total_threshold
+      required: false
+      schema:
+        type: number
+        description: A minimum percentage of all income that must be pension income for the insight to trigger.. Both `pension_income.minimum_monthly_threshold` and `pension_income.minimum_percentage_total_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+    RegularIncomeChangedMinimumAbsoluteChangeThreshold:
+      in: query
+      name: regular_income_changed.minimum_absolute_change_threshold
+      required: false
+      schema:
+        type: number
+        description: A minimum absolute change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_income_changed.minimum_absolute_change_threshold` and `regular_income_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+    RegularIncomeChangedMinimumPercentageChangeThreshold:
+      in: query
+      name: regular_income_changed.minimum_percentage_change_threshold
+      required: false
+      schema:
+        type: number
+        description: A minimum percentage change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_income_changed.minimum_absolute_change_threshold` and `regular_income_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+    IncomeInsightType:
+      in: path
+      name: type
+      required: true
+      schema:
+        type: string
+        description: A type of income insight available on the platform.
+        example: late_income
+        enum:
+          - late_income
+          - regular_monthly_income_changed
+          - gambling_income
+          - pension_income
+    SpendingEnabledInsights:
+      in: query
+      name: enabled_insights
+      required: false
+      schema:
+        type: string
+        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
+        example: late_payment
+        enum:
+          - late_payment
+          - suspected_duplicate_charge
+          - regular_payment_changed
+          - new_insurance_expense
+    LatePaymentMinimumValueThreshold:
+      in: query
+      name: late_payment.minimum_value_threshold
+      required: false
+      schema:
+        type: number
+        description: A minimum value of a late transaction in that transaction's currency for the insight to trigger. Both `late_payment.minimum_value_threshold` and `late_payment.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+    LatePaymentMinimumDaysLateThreshold:
+      in: query
+      name: late_payment.minimum_days_late_threshold
+      required: false
+      schema:
+        type: number
+        description: A minimum number of days late for a transaction to be for the insight to trigger. Both `late_payment.minimum_value_threshold` and `late_payment.minimum_days_late_threshold` must be met to trigger. If not specified, a configured value will be used.
+    RegularPaymentChangedMinimumAbsoluteChangeThreshold:
+      in: query
+      name: regular_payment_changed.minimum_absolute_change_threshold
+      required: false
+      schema:
+        type: number
+        description: A minimum absolute change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_payment_changed.minimum_absolute_change_threshold` and `regular_payment_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+    RegularPaymentChangedMinimumPercentageChangeThreshold:
+      in: query
+      name: regular_payment_changed.minimum_percentage_change_threshold
+      required: false
+      schema:
+        type: number
+        description: A minimum percentage change between the previous and latest amounts of a regular payment for the insight to trigger. Both `regular_payment_changed.minimum_absolute_change_threshold` and `regular_payment_changed.minimum_percentage_change_threshold` must be met to trigger. If not specified, a configured value will be used. Please note that including this request on a customer level will increase latency of this endpoint. Instead, we recommend to update the thresholds for your organisation by raising a support request.
+    SpendingInsightType:
+      in: path
+      name: type
+      required: true
+      schema:
+        type: string
+        description: A type of spending insight available on the platform.
+        example: late_payment
+        enum:
+          - late_payment
+          - suspected_duplicate_charge
+          - regular_payment_changed
+          - new_insurance_expense
     InsightId:
       in: path
       required: true
       name: insight_id
       description: Insight identifier
+      schema:
+        type: string
+        format: uuid
+    PathCustomInsightID:
+      in: path
+      name: custom_insight_id
+      required: true
       schema:
         type: string
         format: uuid
