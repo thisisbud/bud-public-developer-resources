@@ -3062,6 +3062,7 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/IngestTransactionsV2ContentType'
         - $ref: '#/components/parameters/DisableSynchronous'
+        - $ref: '#/components/parameters/GenerateTransactionIDs'
       requestBody:
         required: true
         content:
@@ -20955,6 +20956,18 @@ components:
         enum:
           - 'true'
           - 'false'
+    GenerateTransactionIDs:
+      in: header
+      name: X-Generate-Transaction-IDs
+      schema:
+        type: string
+        enum:
+          - 'true'
+      example: 'true'
+      description: |
+        Enable transaction ID generation based on the contents of the transaction data. The transaction ID field still needs to be provided, but it will
+        not be validated or checked for uniqueness and instead overwritten with a generated value.
+        When generating IDs from transaction data, the following fields are taken into account: account ID, description, amount, currency and date.
     PathCustomerID:
       in: path
       name: customer_id
