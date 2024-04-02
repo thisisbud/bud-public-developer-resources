@@ -1131,9 +1131,9 @@ paths:
         the refresh token is used to generate a new access token without the need to supply your client credentials again.
 
         The access token usually expires after the `expires_in` time (in seconds) has elapsed. 
-        However this is not garuanteed, so it is recomended to integrate such as to handle the `401` response code and refresh the token when it this response code is seen.
+        However this is not guaranteed, so it is recomended to integrate such as to handle the `401` response code and refresh the token when it this response code is seen.
 
-        Refresh tokens typically expire after 24 hours, but this is not garuanteed.
+        Refresh tokens typically expire after 24 hours, but this is not guaranteed.
 
         > **🚧** Recognise the sensitive nature of access tokens. Implement appropriate security measures to prevent unauthorized access.
 
@@ -14051,6 +14051,9 @@ components:
       title: Ingest Credit Line
       type: object
       description: A set of elements used to provide details on the credit line
+      required:
+        - amount
+        - type
       properties:
         included:
           type: boolean
@@ -14075,7 +14078,6 @@ components:
         - date
         - type
         - credit_debit_indicator
-        - credit_line
       properties:
         amount:
           $ref: '#/components/schemas/InpAmount'
