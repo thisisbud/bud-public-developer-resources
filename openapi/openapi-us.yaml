@@ -2137,6 +2137,7 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/V2IngestTransactionsContentType'
         - $ref: '#/components/parameters/DisableSynchronous'
+        - $ref: '#/components/parameters/GenerateTransactionIDs'
       requestBody:
         required: true
         content:
@@ -2569,7 +2570,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListAccountsV2Response'
+                $ref: '#/components/schemas/USListAccountsV2Response'
               examples:
                 Account Data:
                   value:
@@ -8325,6 +8326,9 @@ components:
             provider:
               type: string
               description: Name of the provider (banking institution) the task interacted with
+            consent_id:
+              type: string
+              description: The consent identifier that the event relates to
     GetOBConnectData:
       title: Open Banking Synchronisation Status
       type: object
@@ -9709,7 +9713,7 @@ components:
             $ref: '#/components/schemas/IngestResponseV3SubTask'
         metadata:
           $ref: '#/components/schemas/schemas-IngestStatusTaskMetadata'
-    AccountV2:
+    USAccountV2:
       title: Account
       type: object
       required:
@@ -9816,36 +9820,12 @@ components:
           type: object
           description: These are wellknown fields which uniquely identify the account.
           properties:
-            uk_sort_code:
+            us_account_number:
               type: string
               description: |
-                A six digit number identifying the UK bank or building society the account is held with. This is usually supplied alongside a `uk_account_number` to uniquely identify the account.
+                Account display number for the end user's handle at owning institution.
 
-                Example: `601613`
-            uk_account_number:
-              type: string
-              description: |
-                An eight digit number uniquely identifying the account for the UK bank or building society the account is held with. This is usually supplied alongside a `uk_sort_code` to uniquely identify the account from accounts with other UK banks or building societies.
-
-                Example: `31926819`
-            nz_account_number:
-              type: string
-              description: |
-                A sixteen digit number uniquely identifying the account and New Zealand bank the account is held with.
-
-                Example: `1212341234567123`
-            iban:
-              type: string
-              description: |
-                A thirty-four character alphanumerical code (ISO 13616), internationally and uniquely identifying the account.
-
-                Example: `GB29NWBK60161331926819`
-            pan:
-              type: string
-              description: |
-                A number between 14 and 19 digits that uniquely identifies the account, this is usually the number printed on the card assigned to the account.
-
-                Example: `4444333322221111`
+                Example: `...3750`
         balances:
           type: array
           title: Balances
@@ -9927,7 +9907,7 @@ components:
                     - `temporary`
               amount:
                 $ref: '#/components/schemas/BudAmount'
-    ListAccountsV2Response:
+    USListAccountsV2Response:
       title: Retrieve Accounts Response
       type: object
       required:
@@ -9942,7 +9922,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/AccountV2'
+            $ref: '#/components/schemas/USAccountV2'
         metadata:
           type: object
           required:
@@ -10213,6 +10193,224 @@ components:
         message:
           type: string
           description: An actual user friendly error message.
+    AccountV2:
+      title: Account
+      type: object
+      required:
+        - account_id
+        - currency
+      properties:
+        account_id:
+          type: string
+          description: |
+            A unique id associated with the account.
+
+            Example: `sdb4eRMaad8XVEvdIoISOQ`
+        currency:
+          $ref: '#/components/schemas/BudCurrency'
+        holder:
+          title: Account_Holder
+          description: |
+            The account holder. This field is only present if parties data **is not** available.
+
+            Parties data will only be present if you are a Check customer, and the provider is support by Check.
+            Providers that support Check can be found in the Connect coverage table in Guides, under Connect.
+          type: object
+          properties:
+            name:
+              type: string
+              description: |
+                The name of the given account holder.
+
+                Example: `John Smith`
+            relationship:
+              type: string
+              description: |
+                The relationship that the individual holder has with the account. If parties data is not present, this will always be `unknown`.
+
+                Currently supported values include (but are not necessarily limited to):
+                  - `sole`
+                  - `joint`
+                  - `delegate`
+                  - `unknown`
+        holders:
+          type: array
+          description: |
+            The account holders. This field is only present if parties data **is** available.
+
+            Parties data will only be present if you are a Check customer, and the provider is supported by Check.
+            Providers that support Check can be found in the Connect coverage table in Guides, under Connect.
+          items:
+            title: Account_Holder
+            type: object
+            properties:
+              name:
+                type: string
+                description: |
+                  The name of the given account holder.
+
+                  Example: `John Smith`
+              relationship:
+                type: string
+                description: |
+                  The relationship that the individual holder has with the account. If parties data is not present, this will always be `unknown`
+
+                  Currently supported values include (but are not necessarily limited to):
+                    - `sole`
+                    - `joint`
+                    - `delegate`
+                    - `unknown`
+        account_name:
+          type: string
+          description: |
+            The name associated with the account, this is often a friendly name assigned to the account to make it easier to refer to.
+
+            Example: `Household Savings Account`
+        account_type:
+          type: string
+          description: |
+            The type of account.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `charge_card`
+              - `credit_card`
+              - `current_account`
+              - `e_money`
+              - `investment`
+              - `loan`
+              - `mortgage`
+              - `other`
+              - `pre_paid_card`
+              - `savings`
+        usage_type:
+          type: string
+          description: |
+            The intended usage of the account.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `personal`
+              - `business`
+        provider:
+          type: string
+          description: |
+            The account's provider, this is usually the bank or building society the account is held with.
+
+            Example: `Nationwide`
+        identifiers:
+          type: object
+          description: These are wellknown fields which uniquely identify the account.
+          properties:
+            uk_sort_code:
+              type: string
+              description: |
+                A six digit number identifying the UK bank or building society the account is held with. This is usually supplied alongside a `uk_account_number` to uniquely identify the account.
+
+                Example: `601613`
+            uk_account_number:
+              type: string
+              description: |
+                An eight digit number uniquely identifying the account for the UK bank or building society the account is held with. This is usually supplied alongside a `uk_sort_code` to uniquely identify the account from accounts with other UK banks or building societies.
+
+                Example: `31926819`
+            nz_account_number:
+              type: string
+              description: |
+                A sixteen digit number uniquely identifying the account and New Zealand bank the account is held with.
+
+                Example: `1212341234567123`
+            iban:
+              type: string
+              description: |
+                A thirty-four character alphanumerical code (ISO 13616), internationally and uniquely identifying the account.
+
+                Example: `GB29NWBK60161331926819`
+            pan:
+              type: string
+              description: |
+                A number between 14 and 19 digits that uniquely identifies the account, this is usually the number printed on the card assigned to the account.
+
+                Example: `4444333322221111`
+        balances:
+          type: array
+          title: Balances
+          description: The latest balances for the account.
+          items:
+            type: object
+            title: Balance
+            required:
+              - date
+              - type
+              - amount
+              - credit_debit_indicator
+            properties:
+              date:
+                type: string
+                description: |
+                  The date when the balance was last updated in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+                  Examples:
+                    - `2023-01-17T17:29:51Z`
+                    - `2023-01-17T17:29:51-08:00`
+              type:
+                type: string
+                description: |
+                  The type for the given balance
+
+                  Currently supported values include (but are not necessarily limited to):
+                    - `closing_available`
+                    - `closing_booked`
+                    - `closing_cleared`
+                    - `expected`
+                    - `forward_available`
+                    - `information`
+                    - `interim_available`
+                    - `interim_booked`
+                    - `interim_cleared`
+                    - `opening_available`
+                    - `opening_booked`
+                    - `opening_cleared`
+                    - `previously_closed_booked`
+              amount:
+                $ref: '#/components/schemas/BudAmount'
+              credit_debit_indicator:
+                type: string
+                description: The credit or debit state of the given balance
+                enum:
+                  - credit
+                  - debit
+        credit_lines:
+          type: array
+          title: Credit Lines
+          description: The latest lines of credit available to the account. This is typically a representation of the overdraft or credit limits.
+          items:
+            type: object
+            title: Credit_Line
+            required:
+              - date
+              - type
+              - amount
+            properties:
+              date:
+                type: string
+                description: |
+                  The date when the credit line was last updated in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+                  Examples:
+                    - `2023-01-17T17:29:51Z`
+                    - `2023-01-17T17:29:51-08:00`
+              type:
+                type: string
+                description: |
+                  The type of the given credit line.
+
+                  Currently supported values include (but are not necessarily limited to):
+                    - `available`
+                    - `credit`
+                    - `emergency`
+                    - `pre_agreed`
+                    - `temporary`
+              amount:
+                $ref: '#/components/schemas/BudAmount'
     RetrieveAccountByIDV2Response:
       title: Retrieve Account By ID Response
       type: object
@@ -13410,6 +13608,18 @@ components:
         enum:
           - 'true'
           - 'false'
+    GenerateTransactionIDs:
+      in: header
+      name: X-Generate-Transaction-IDs
+      schema:
+        type: string
+        enum:
+          - 'true'
+      example: 'true'
+      description: |
+        Enable transaction ID generation based on the contents of the transaction data. The transaction ID field still needs to be provided, but it will
+        not be validated or checked for uniqueness and instead overwritten with a generated value.
+        When generating IDs from transaction data, the following fields are taken into account: account ID, description, amount, currency and date.
     QueryCurrencyUSD:
       in: query
       name: currency
@@ -13424,13 +13634,6 @@ components:
         type: string
       example: BankOfBud
       description: Use this parameter to filter the results returned on the `provider` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `provider` will be returned.
-    CustomerSecret:
-      in: header
-      name: X-Customer-Secret
-      schema:
-        type: string
-      required: false
-      description: The Bud Customer secret used to encrypt customer data. This is required only if the customer secret is not already stored with Bud.
     QueryFromBudDate:
       in: query
       name: from
