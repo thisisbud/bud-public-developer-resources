@@ -905,8 +905,8 @@ tags:
 
         2. If you have your own license you can choose to host the Open Banking customer connection journey yourself, using [Bud's APIs](#operation/open_banking_authorisation_url_post) to create the connection. __If you are an agent of Bud but feel that your application could benefit from a more native feel please talk to your Bud Account Manager or email help@thisisbud.com for further details.__
 
-        3. If you already have transactional data that you’re looking to enrich, you can use Bud’s [Ingest Endpoints](#tag/Ingest-Data) to push your data onto the Bud platform without needing your customers to connect their accounts via Open Banking. 
-        
+        3. If you already have transactional data that you’re looking to enrich, you can use Bud’s [Ingest Endpoints](#tag/Ingest-Data) to push your data onto the Bud platform without needing your customers to connect their accounts via Open Banking.
+
       Note: a number of the calls within this service are asynchronous, and as such, follow a pattern of sending a request and responding with a task ID. This task ID can then be tracked, allowing for a more efficient, cross network implementation.
     x-displayName: Connect API
     x-traitTag: true
@@ -918,9 +918,9 @@ tags:
     x-displayName: Manage a Connection
     description: |
       Different endpoints that allow to to manage an existing customer connection. This includes the ability to:
-        (i) Refresh the data associated with a given connection, pulling in the latest account 
+        (i) Refresh the data associated with a given connection, pulling in the latest account
             information into the Bud platform;
-        (ii) Renew an existing consent  by-passing the need to go through Strong Customer 
+        (ii) Renew an existing consent  by-passing the need to go through Strong Customer
             Authentication (SCA) with their bank;
         (iii) Revoke a consent, removing the ability for Bud to fetch any further data associated
             with that consent.
@@ -1388,19 +1388,19 @@ paths:
         - Create a Connection
       summary: Retrieve Authorisation Gateway URL (v2)
       description: |
-        Allow customers to authorise with, and connect to, a provider, using Bud’s __Bud Connect__. Bud Connect is a UI component hosted by Bud that can be integrated into any mobile or web experience, and 
+        Allow customers to authorise with, and connect to, a provider, using Bud’s __Bud Connect__. Bud Connect is a UI component hosted by Bud that can be integrated into any mobile or web experience, and
         allows your customers to connect to and authorise with their chosen provider, allowing Bud to pull their account information using Bud's AISP license.
 
         Using the different configuration options that can be set through the request body you can personalize the experience for your Customer. Please, refer to the documentation below for more information about the available configurations.
 
         Use Bud’s Authorisation Gateway (__Bud Connect__) if you are not regulated as an AISP in order to connect your customers to their banks to share account information. You may still choose to use __Bud Connect__ in order to give the customer a slick account connection experience or to speed up your technical build and integration, even if you are a regulated AISP yourself.
 
-        The status of the authorisation step will be provided to you as a path parameter within the `redirect_url` specified within the request payload. 
+        The status of the authorisation step will be provided to you as a path parameter within the `redirect_url` specified within the request payload.
         This `redirect_url` is where your customer will be redirected to once they have either failed, or successfully completed, the authorisation process with their provider.
 
         The URL generated with this endpoint is valid for up to 30 minutes. We suggest to generate the URL right before redirecting your Customer to it.
 
-        Please note that in order to recieve status updates on a given account connection task, you will need to configure your Callback URL within the developer console. 
+        Please note that in order to recieve status updates on a given account connection task, you will need to configure your Callback URL within the developer console.
         Once the entire connection process has been completed and the customer's account information is ready to be collected, Bud will send a request to your callback URL.
       operationId: v2_ob_authorisation_gateway_url_post
       security:
@@ -1443,10 +1443,14 @@ paths:
                 value:
                   redirect_url: https://my-agent-webapp.com/connected?my-parameter=xyz
                   initial_screen": accounts_summary
-              Enable a asynchronous connection:
+              Enable an asynchronous connection:
                 value:
                   redirect_url: https://my-agent-webapp.com/connected?my-parameter=xyz
                   enable_async_connect: true
+              Send consent management email to customer:
+                value:
+                  redirect_url: https://my-agent-webapp.com/connected?my-parameter=xyz
+                  customer_email: john.doe@email.com
       responses:
         '201':
           description: The resource has been successfully created.
@@ -1565,7 +1569,7 @@ paths:
                   description: The notification will not be retried
                 '500':
                   description: |
-                    The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.   
+                    The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
   /v1/open-banking/authorisation-url:
     post:
       tags:
@@ -1976,7 +1980,7 @@ paths:
         - Create a Connection
       summary: Retrieve Connection Status
       description: |
-        Check the status of an account connection task. If the task is not yet completed, the status will be shown as pending. If the status is completed, then the data is ready to be ingested. 
+        Check the status of an account connection task. If the task is not yet completed, the status will be shown as pending. If the status is completed, then the data is ready to be ingested.
 
         The __connection_task_id__ is provided as a parameter in the redirect url after the Customer has undergone a successful authorisation with a relevant Open Banking provider.
       operationId: open_banking_connect_get
@@ -2071,7 +2075,7 @@ paths:
 
         After initiating this long running process, make sure to check the status of the it till completion before trying to access the Customer's data or initiating another refresh.
 
-        If the customer's consent has been revoked or expired for this provider, Bud will be unable to refresh the account. 
+        If the customer's consent has been revoked or expired for this provider, Bud will be unable to refresh the account.
         This will be confirmed in the response of the refresh status endpoint associated with the `task_id` provided in the response to this endpoint, where the `reconnect_required` field will set to `true` and status set to `Completed`.
       operationId: open_banking_refresh_post
       security:
@@ -2223,23 +2227,23 @@ paths:
                   description: The notification will not be retried
                 '500':
                   description: |
-                    The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event. 
+                    The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
   /v1/open-banking/refresh/{task_id}:
     get:
       tags:
         - Manage a Connection
       summary: Retrieve Refresh Status
       description: |
-        Check the status of an account information refresh task. If the task is not yet completed, the status will be shown as pending. 
-        If the status is completed, then the data is ready to be collected via the [Retrieve Financial Data](/reference/retrieve-financial-data) endpoints. 
+        Check the status of an account information refresh task. If the task is not yet completed, the status will be shown as pending.
+        If the status is completed, then the data is ready to be collected via the [Retrieve Financial Data](/reference/retrieve-financial-data) endpoints.
         Successful requests will include `step` (1-4) and associated `text` values to indicate the current progress of the refresh task.
 
         Make sure to check the status of the task till completion before trying to access the Customer's data or initiating another process.
 
-        When the task is successful, we include in the response body a `metadata.has_new_transactions` boolean attribute that tells you if the refresh resulted in storing new data. This attribute must be used to 
+        When the task is successful, we include in the response body a `metadata.has_new_transactions` boolean attribute that tells you if the refresh resulted in storing new data. This attribute must be used to
         decide if it's necessary to pull the Customer's data or not.
 
-        When the refresh fails, we include the reason of the failure as part of the `data.result` attribute. We also include the `data.reconnect_required` boolean attribute that indicates if the consent used to 
+        When the refresh fails, we include the reason of the failure as part of the `data.result` attribute. We also include the `data.reconnect_required` boolean attribute that indicates if the consent used to
         fetch the data for this customer and provider is no longer valid. If reconnect_required is true, the customer will need to go through the bank account connection flow again.
       operationId: open_banking_refresh_get
       security:
@@ -2586,7 +2590,7 @@ paths:
         - Manage a Connection
       summary: Retrieve Revoke Consent Status
       description: |
-        Check the status and result of a Revoke Consent task. 
+        Check the status and result of a Revoke Consent task.
 
         Use the `task_id` taken from a successful `Initiate Revoke Consent` request.
       operationId: open_banking_account_access_consent_revoke_get
@@ -2662,13 +2666,13 @@ paths:
         - Manage a Connection
       summary: Reconfirm Consent
       description: |
-        Reconfirm a customer's consent to extend the expiration date by 90 days. If the provider requires SCA authentication or the consent status is not showing "Authorised" or the consent is expired, the `reconnect_required` flag will show as true. 
+        Reconfirm a customer's consent to extend the expiration date by 90 days. If the provider requires SCA authentication or the consent status is not showing "Authorised" or the consent is expired, the `reconnect_required` flag will show as true.
         If true, you should make a call to the Retrieve Authoirsation Gateway URL endpoint with the `reconfirm_consent` flag set to true to direct your customer to the reconfirm consent journey.
         If false, the consent has been extended.
 
         > 📘 Note:
         >
-        > This endpoint should only be used by TSP clients (Technical Service Provider). 
+        > This endpoint should only be used by TSP clients (Technical Service Provider).
         >
         > Requests to this endpoint from TPP clients (Third Party Provider) will fail, i.e. you are not yourself regulated as an PISP (Payment Initiation Service Provider).
       operationId: open_banking_consents_reconfirm_post
@@ -3048,8 +3052,8 @@ paths:
       description: |
         This endpoint should be used to ingest customer transactions into the Bud Platform.
 
-        By default, this endpoint is synchronous but can be easily switched to asynchronous using the 'X-Disable-Synchronous' header. 
-        Please refer to the following [guide](https://docs.thisisbud.com/docs/setup_data_enrichment) to ensure you set up First Party Ingestion 
+        By default, this endpoint is synchronous but can be easily switched to asynchronous using the 'X-Disable-Synchronous' header.
+        Please refer to the following [guide](https://docs.thisisbud.com/docs/setup_data_enrichment) to ensure you set up First Party Ingestion
         correctly for your organisation based on your use case.
 
         We accept a maximum of 1.000 transactions. If this threshold is not respected, a 400 error is returned.
@@ -3094,9 +3098,9 @@ paths:
       responses:
         '200':
           description: |
-            The synchronous enrichment request has succeeded and enriched transaction returned. 
+            The synchronous enrichment request has succeeded and enriched transaction returned.
 
-            A new Task has been created to ingest and fully enrich the given transactions. 
+            A new Task has been created to ingest and fully enrich the given transactions.
 
             The generated `task_id` can be used to check the Task's status.
           content:
@@ -12995,10 +12999,10 @@ components:
         initial_screen:
           type: string
           description: |
-            The first screen that the customer will be shown. When value is 'accounts_summary' the customer will see a list of the names and balances of the accounts that the customer currently has active consents for. 
-            When value is 'connect_accounts', the customer will see a list of providers to connect their accounts with. By default this value is 'connect_accounts'. 
-            When the value is 'download_data', the customer can download their data in a JSON file. 
-            When the value is 'reconfirm_consent', the customer will be taken through the reconfirmation of consent journey. If the customer only has one consent they will skip the consent selection screen. 
+            The first screen that the customer will be shown. When value is 'accounts_summary' the customer will see a list of the names and balances of the accounts that the customer currently has active consents for.
+            When value is 'connect_accounts', the customer will see a list of providers to connect their accounts with. By default this value is 'connect_accounts'.
+            When the value is 'download_data', the customer can download their data in a JSON file.
+            When the value is 'reconfirm_consent', the customer will be taken through the reconfirmation of consent journey. If the customer only has one consent they will skip the consent selection screen.
             When the value is 'revoke_consent', the customer can revoke consent for accounts they have previously connected.
           enum:
             - accounts_summary
@@ -13024,6 +13028,20 @@ components:
           type: boolean
           nullable: true
           description: When enabled, once the customer has completed the connect flow, they will be redirected back to the client redirect_url bypassing the success screen. This should be used if you don’t want your customers to see the Bud success screen.
+        customer_email:
+          type: string
+          format: email
+          description: |
+            When provided, an email will be delivered to the customer with a URL for managing their consents with you.
+
+            This allows the customer to separately view, revoke and reconfirm consents for accounts that they
+            have agreed to share with you, as well as download the financial data for their own records.
+
+            Use this option if your application does not already provide a means for customers to manage their financial data consents.
+
+            **Note**: for some clients, we enforce that customers have access to this consent management feature. In this case,
+            even if `customer_email` is not provided, the customer will be prompted at the start of the Connect flow to
+            provide their email address, so that the URL will still be delivered to them.
     AuthGatewayURLResponse:
       title: Authorisation Gateweay URL Response
       type: object
@@ -13536,13 +13554,13 @@ components:
         from:
           type: string
           description: |
-            The datetime (ISO 8601) that defines the time since when the Customer's data needs to be collected. 
-            Defaults to the datetime of the last pull of transactions less seven days to account for any potential changes to the most recent set of transactions. 
+            The datetime (ISO 8601) that defines the time since when the Customer's data needs to be collected.
+            Defaults to the datetime of the last pull of transactions less seven days to account for any potential changes to the most recent set of transactions.
             Refreshes can only go back to a maximum of 90 days from the current date.
         to:
           type: string
           description: |
-            The datetime (ISO 8601) that defines the time up to which the Customer's data needs to be collected. Defaults to the current datetime. 
+            The datetime (ISO 8601) that defines the time up to which the Customer's data needs to be collected. Defaults to the current datetime.
             Refreshes can only go back to a maximum of 90 days from the current date.
     TaskStatusCaps:
       title: The Task Status
@@ -13714,7 +13732,7 @@ components:
         revoked_at:
           type: string
           description: |
-            Date and time when the consent was revoked. ISODateTime. This attribute in included in the response only if the status of the consent is `revoked`. 
+            Date and time when the consent was revoked. ISODateTime. This attribute in included in the response only if the status of the consent is `revoked`.
             When the consent is invalidated as part of a Bud refresh task, this date time represents the time when the consent was set to `revoked` by Bud during the refresh.
         status:
           type: string
