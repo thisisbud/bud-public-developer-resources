@@ -492,9 +492,9 @@ paths:
         the refresh token is used to generate a new access token without the need to supply your client credentials again.
 
         The access token usually expires after the `expires_in` time (in seconds) has elapsed. 
-        However this is not garuanteed, so it is recomended to integrate such as to handle the `401` response code and refresh the token when it this response code is seen.
+        However this is not guaranteed, so it is recomended to integrate such as to handle the `401` response code and refresh the token when it this response code is seen.
 
-        Refresh tokens typically expire after 24 hours, but this is not garuanteed.
+        Refresh tokens typically expire after 24 hours, but this is not guaranteed.
 
         > **🚧** Recognise the sensitive nature of access tokens. Implement appropriate security measures to prevent unauthorized access.
 
@@ -1832,139 +1832,6 @@ paths:
           description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
         5XX:
           description: An unexpected error occurred on the server side
-  /v1/ingest/accounts:
-    post:
-      deprecated: true
-      tags:
-        - Ingest First Party Data
-      summary: Ingest Accounts
-      description: |
-        Initiate the asynchronous process of pushing a customer's account(s) and balance(s) through the Bud architecture. This request creates a task that stores the given accounts and balances against the specified customers. The Task ID returned by this request can be used to verify the current status of the process.
-      operationId: ingest_accounts_post
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/IngestAccountsContentType'
-      requestBody:
-        required: true
-        content:
-          '*/*':
-            schema:
-              oneOf:
-                - $ref: '#/components/schemas/IngestAccountsRequest'
-                - $ref: '#/components/schemas/IngestPlaidAccountsRequest'
-                - $ref: '#/components/schemas/IngestFinicityAccountsRequest'
-            examples:
-              bud-accounts-v1 Request:
-                summary: Bud Accounts V1 Example
-                value:
-                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                    accounts:
-                      - provider: citi
-                        account_id: 99473c28-21cf-4a9a-b79e-fd643dd7a4bc
-                        currency: USD
-                        account_type: Personal
-                        account_sub_type: CurrentAccount
-                        details:
-                          - scheme_name: UK.OBIE.SortCodeAccountNumber
-                            identification: '98765432165444'
-                            secondary_identification: '00021'
-                            name: Mr Kevin
-                        balances:
-                          - amount:
-                              value: '7.00'
-                              currency: USD
-                            credit_debit_indicator: outgoing_debit
-                            credit_line:
-                              - included: true
-                                amount:
-                                  value: '200.00'
-                                  currency: USD
-                                type: Credit
-                            date: '2020-12-01'
-                            time: '00:00:00'
-                            type: InterimBooked
-                  - customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
-                    accounts:
-                      - provider: chase
-                        account_id: bfd4ea71-58d7-4b24-8820-95029875cc9a
-                        currency: USD
-                        account_type: Personal
-                        account_sub_type: CurrentAccount
-                        details:
-                          - scheme_name: UK.OBIE.SortCodeAccountNumber
-                            identification: '12312312313200'
-                            secondary_identification: '00022'
-                            name: Mr Kevin
-                        balances:
-                          - amount:
-                              value: '70005.00'
-                              currency: USD
-                            credit_debit_indicator: incoming_credit
-                            credit_line:
-                              - included: true
-                                amount:
-                                  value: '100.00'
-                                  currency: USD
-                                type: Credit
-                            date: '2020-12-01'
-                            time: '00:00:00'
-                            type: InterimBooked
-              plaid-accounts-v1 Request:
-                summary: Plaid Accounts V1 Example
-                value:
-                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                    accounts:
-                      - account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk
-                        balances:
-                          available: 100
-                          current: 120
-                          limit: 1200
-                          iso_currency_code: USD
-                          last_updated_datetime: '2022-07-13T15:30:00Z'
-                        name: Plaid Checking
-                        official_name: Plaid Gold Standard 0% Interest Checking
-                        type: depository
-                        subtype: checking
-              finicity-accounts-v1 Request:
-                summary: Finicity V1 Accounts Request
-                description: A sample finicity v1 accounts ingest request
-                value:
-                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                    accounts:
-                      - id: '1014136057'
-                        name: Super Checking
-                        balance: 7456
-                        type: checking
-                        status: active
-                        institutionId: '102224'
-                        balanceDate: 1588797048
-                        currency: USD
-                        detail:
-                          availableBalanceAmount: 5678.78
-                          creditAvailableAmount: 10200
-                          creditMaxAmount: 12000
-      responses:
-        '202':
-          description: A new Task has been created to ingest the given accounts. The generated `task_id` can be used to check the Task's status
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IngestTransactionsResponse'
-              example:
-                operation_id: ingest_accounts_post
-                data:
-                  task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                metadata:
-                  next_url: /v1/ingest/accounts/4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url_delay: 50
-        '400':
-          description: Bad Request that fails validations on headers & payload
-        '401':
-          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
-        5XX:
-          description: An unexpected error occurred on the server side
   /v2/ingest/accounts:
     post:
       tags:
@@ -2336,98 +2203,6 @@ paths:
           description: An unexpected error occurred on the enrichment server. Sync Only
         '504':
           description: An unexpected timeout occurred on the enrichment server. Sync Only
-        5XX:
-          description: An unexpected error occurred on the server side
-  /v2/ingest/status/{task_id}:
-    get:
-      deprecated: true
-      tags:
-        - Ingest First Party Data
-      summary: Retrieve Ingestion Task Status V2
-      description: |
-        Check the status of an ingest request. Please note that this works for both the Ingest Transactions endpoints And Ingest Accounts endpoints.
-
-        The given status has an overall value and a specific status for each given customer.
-      operationId: v2_ingest_status_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/TaskId'
-      responses:
-        '200':
-          description: The request was successfully processed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/USIngestStatusV2Response'
-              examples:
-                Pending Task:
-                  value:
-                    operation_id: v2_ingest_status_get
-                    data:
-                      status: Pending
-                    metadata:
-                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
-                      status: Pending
-                Successful Task:
-                  value:
-                    operation_id: v2_ingest_status_get
-                    data:
-                      - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
-                        status: Completed
-                        error: null
-                    metadata:
-                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
-                      status: Completed
-                      ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
-                      ingest_route: v2_ingest_transactions_post
-                      ingest_schema: application/bud-transaction-v3+json
-                Failed Task:
-                  value:
-                    operation_id: v2_ingest_status_get
-                    data:
-                      - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
-                        status: Failed
-                        error:
-                          accounts[0].currency: 'unexpected currency code: GlkjlkjBP, expected ISO-4217 currency code'
-                    metadata:
-                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
-                      status: Failed
-                      ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
-                      ingest_route: v2_ingest_transactions_post
-                      ingest_schema: application/bud-transaction-v3+json
-                Partially Completed Task:
-                  value:
-                    operation_id: v2_ingest_status_get
-                    data:
-                      - customer_id: c63e1aa6-954c-4cac-9c89-a86715574063
-                        status: Completed
-                        error: null
-                      - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
-                        status: Failed
-                        error:
-                          accounts[0].currency: 'unexpected currency code: GlkjlkjBP, expected ISO-4217 currency code'
-                    metadata:
-                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
-                      status: PartialCompleted
-                      ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
-                      ingest_route: v2_ingest_transactions_post
-                      ingest_schema: application/bud-transaction-v3+json
-        '401':
-          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
-        '404':
-          description: The task couldn't be found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TaskNotFoundError'
-              example:
-                operation_id: v2_ingest_status_get
-                code_id: task_not_found
-                message: Task ID [6c7d06a7-5b40-4556-91d4-6b6d1a7db3f1] does not exist or it has expired
-        '405':
-          description: The request uses an unexpected HTTP method
         5XX:
           description: An unexpected error occurred on the server side
   /ingestion/v3/tasks/{task_id}:
@@ -7168,7 +6943,7 @@ components:
           example: The RSPCA, Southwater
         original_description:
           type: string
-          description: TThe string returned by the financial institution to describe the transaction.
+          description: The string returned by the financial institution to describe the transaction.
         iso_currency_code:
           type: string
           format: ISO-4217
@@ -8163,8 +7938,8 @@ components:
         redirect_url:
           type: string
           description: |
-            URL where the Customer will be redirected to once they have completed the Connection flow. This can be a web based URL or a mobile application internal URL. 
-            When the Customer is redirected to your URL we include the following query parameters: 
+            URL where the Customer will be redirected to once they have completed the Connection flow. This can be a web based URL or a mobile application internal URL.
+            When the Customer is redirected to your URL we include the following query parameters:
             - `status`: Represents the status of the connection. It can be `success`, `failure` or `pending`
             - `task_id`: Is the identifier that can be used to check the status of the connection task and retrieve more information in case of failure
           nullable: false
@@ -8189,9 +7964,9 @@ components:
         initial_screen:
           type: string
           description: |
-            The first screen that the customer will be shown. When value is 'accounts_summary' the customer will see a list of the names and balances of the accounts that the customer currently has active consents for. 
-            When value is 'connect_accounts', the customer will see a list of providers to connect their accounts with. 
-            By default this value is 'connect_accounts'. When the value is 'download_data', the customer can download their data in a JSON file. 
+            The first screen that the customer will be shown. When value is 'accounts_summary' the customer will see a list of the names and balances of the accounts that the customer currently has active consents for.
+            When value is 'connect_accounts', the customer will see a list of providers to connect their accounts with.
+            By default this value is 'connect_accounts'. When the value is 'download_data', the customer can download their data in a JSON file.
             When the value is 'revoke_consent', the customer can revoke consent for accounts they have previously connected.
           enum:
             - accounts_summary
@@ -8418,13 +8193,13 @@ components:
         from:
           type: string
           description: |
-            The datetime (ISO 8601) that defines the time since when the Customer's data needs to be collected. 
-            Defaults to the datetime of the last pull of transactions less seven days to account for any potential changes to the most recent set of transactions. 
+            The datetime (ISO 8601) that defines the time since when the Customer's data needs to be collected.
+            Defaults to the datetime of the last pull of transactions less seven days to account for any potential changes to the most recent set of transactions.
             Refreshes can only go back to a maximum of 90 days from the current date.
         to:
           type: string
           description: |
-            The datetime (ISO 8601) that defines the time up to which the Customer's data needs to be collected. Defaults to the current datetime. 
+            The datetime (ISO 8601) that defines the time up to which the Customer's data needs to be collected. Defaults to the current datetime.
             Refreshes can only go back to a maximum of 90 days from the current date.
     TaskCreatedView:
       title: Task Created View
@@ -8571,7 +8346,7 @@ components:
         revoked_at:
           type: string
           description: |
-            Date and time when the consent was revoked. ISODateTime. This attribute in included in the response only if the status of the consent is `revoked`. 
+            Date and time when the consent was revoked. ISODateTime. This attribute in included in the response only if the status of the consent is `revoked`.
             When the consent is invalidated as part of a Bud refresh task, this date time represents the time when the consent was set to `revoked` by Bud during the refresh.
         status:
           type: string
@@ -8865,6 +8640,9 @@ components:
       title: Ingest Credit Line
       type: object
       description: A set of elements used to provide details on the credit line
+      required:
+        - amount
+        - type
       properties:
         included:
           type: boolean
@@ -8889,7 +8667,6 @@ components:
         - date
         - type
         - credit_debit_indicator
-        - credit_line
       properties:
         amount:
           $ref: '#/components/schemas/InpAmount'
@@ -9023,24 +8800,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/IngestCustomerWithAccounts'
-    IngestTransactionsResponse:
-      title: Ingest First Party Transaction Data Response
-      description: Ingest transactions response body.
-      type: object
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: object
-          properties:
-            task_id:
-              $ref: '#/components/schemas/TaskId'
-        metadata:
-          $ref: '#/components/schemas/AsyncTaskMetadata'
     IngestV2Response:
       type: object
       required:
@@ -9580,59 +9339,6 @@ components:
                 - date
               ba466961-d623-4173-9001-2f6487a9a41e:
                 - date
-    IngestResponseV2SubTask:
-      title: Customer Ingest Task
-      description: A single customer ingest task status
-      type: object
-      required:
-        - customer_id
-        - status
-        - error
-      properties:
-        customer_id:
-          type: string
-          format: uuid
-          description: A unique identifier for a Customer, as registered on Bud's platform.
-        status:
-          title: Ingest Response Status
-          description: Ingest response status.
-          type: string
-          enum:
-            - Completed
-            - Failed
-        error:
-          nullable: true
-          description: Any error messages describing why a sub task has failed.
-          type: object
-          additionalProperties: true
-    OverallIngestResponseStatus:
-      title: Ingest Task Overall Status
-      description: Ingest response status.
-      type: string
-      enum:
-        - Completed
-        - Pending
-        - Failed
-        - PartialCompleted
-    TaskNotFoundError:
-      type: object
-      title: Task Not Found
-      required:
-        - operation_id
-        - code_id
-        - message
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        code_id:
-          type: string
-        message:
-          type: string
-          description: High level description on what has failed
-      example:
-        operation_id: ingest_transactions_get
-        code_id: not_found
-        message: Task not found
     IngestResponseV3SubTask:
       title: Customer Ingest Task
       description: A single customer ingest task status
@@ -9657,6 +9363,15 @@ components:
           description: Any error messages describing why a sub task has failed.
           type: object
           additionalProperties: true
+    OverallIngestResponseStatus:
+      title: Ingest Task Overall Status
+      description: Ingest response status.
+      type: string
+      enum:
+        - Completed
+        - Pending
+        - Failed
+        - PartialCompleted
     schemas-IngestStatusTaskMetadata:
       title: Ingest Task Metadata
       description: Expected response structure.
@@ -9713,6 +9428,25 @@ components:
             $ref: '#/components/schemas/IngestResponseV3SubTask'
         metadata:
           $ref: '#/components/schemas/schemas-IngestStatusTaskMetadata'
+    TaskNotFoundError:
+      type: object
+      title: Task Not Found
+      required:
+        - operation_id
+        - code_id
+        - message
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+        message:
+          type: string
+          description: High level description on what has failed
+      example:
+        operation_id: ingest_transactions_get
+        code_id: not_found
+        message: Task not found
     USAccountV2:
       title: Account
       type: object
@@ -13491,6 +13225,31 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/TransactionTotal'
+    IngestResponseV2SubTask:
+      title: Customer Ingest Task
+      description: A single customer ingest task status
+      type: object
+      required:
+        - customer_id
+        - status
+        - error
+      properties:
+        customer_id:
+          type: string
+          format: uuid
+          description: A unique identifier for a Customer, as registered on Bud's platform.
+        status:
+          title: Ingest Response Status
+          description: Ingest response status.
+          type: string
+          enum:
+            - Completed
+            - Failed
+        error:
+          nullable: true
+          description: Any error messages describing why a sub task has failed.
+          type: object
+          additionalProperties: true
   parameters:
     IngestAccountsContentType:
       in: header
