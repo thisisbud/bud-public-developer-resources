@@ -3059,6 +3059,9 @@ paths:
         We accept a maximum of 1.000 transactions. If this threshold is not respected, a 400 error is returned.
 
         We support the ingestion of transactions for multiple customers as part of the same request.
+
+        The detailed location enrichment response is an additional addon, otherwise only tokens are returned 
+        (read more about this in the location [guide](https://docs.thisisbud.com/docs/locations)).
       operationId: v2_ingest_transactions_post
       security:
         - OAuth2: []
@@ -3121,6 +3124,8 @@ paths:
                           value: '10.99'
                           currency: GBP
                         date_time: '2022-05-28T10:00:00Z'
+                        tags:
+                          - online
                         enrichments:
                           categories:
                             l1:
@@ -3173,9 +3178,15 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            tokens:
-                              - london
-                              - portobello
+                            address_lines:
+                              - '180'
+                              - Shepherds Bush Rd
+                              - London
+                              - W6 7NL
+                              - United Kingdom
+                            geolocation:
+                              longitude: 51.497678,
+                              latitude: -0.223766
                           transaction_types:
                             - card
                             - debit
@@ -4728,6 +4739,7 @@ paths:
               - `annually`
 
             Defaults to `weekly`.
+        - $ref: '#/components/parameters/QueryDateField'
       responses:
         '200':
           description: OK
@@ -4872,6 +4884,7 @@ paths:
               - `annually`
 
             Defaults to `weekly`.
+        - $ref: '#/components/parameters/QueryDateField'
       responses:
         '200':
           description: OK
@@ -5073,6 +5086,7 @@ paths:
                           value: '10.99'
                           currency: GBP
                         date_time: '2022-05-28T10:00:00Z'
+                        posted_date_time: '2022-05-29T00:00:00Z'
                         enrichments:
                           categories:
                             l1:
@@ -5089,6 +5103,16 @@ paths:
                             tokens:
                               - value: speciality coffee
                                 confidence: '0.98'
+                          location:
+                            address_lines:
+                              - '180'
+                              - Shepherds Bush Rd
+                              - London
+                              - W6 7NL
+                              - United Kingdom
+                            geolocation:
+                              longitude: 51.497678,
+                              latitude: -0.223766
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
                             slug: paypal
@@ -5121,6 +5145,7 @@ paths:
                           value: '50.23'
                           currency: GBP
                         date_time: '2022-05-26T10:00:00Z'
+                        posted_date_time: '2022-05-27T00:00:00Z'
                         enrichments:
                           categories:
                             l1:
@@ -5138,14 +5163,15 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            address:
-                              address_lines:
-                                - 224-226 Portobello Rd
-                                - London
-                              country: GBR
-                            tokens:
-                              - london
-                              - portobello
+                            address_lines:
+                              - '180'
+                              - Shepherds Bush Rd
+                              - London
+                              - W6 7NL
+                              - United Kingdom
+                            geolocation:
+                              longitude: 51.497678,
+                              latitude: -0.223766
                           transaction_types:
                             - card
                             - debit
@@ -5166,6 +5192,7 @@ paths:
                           value: '10.99'
                           currency: GBP
                         date_time: '2022-01-02T15:00:00Z'
+                        posted_date_time: '2022-01-02T15:00:00Z'
                     metadata:
                       results: 1
                       next_page_token: eyJvZmZzZXQiOjEwMH0
@@ -11826,7 +11853,10 @@ components:
           $ref: '#/components/schemas/BudAmount'
         date_time:
           type: string
-          description: Date of the transaction compliant with RFC3339.
+          description: Date that the transaction occured compliant with RFC3339.
+        posted_date_time:
+          type: string
+          description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becamse available, for debits this is the date that the asset ceased to be available
         enrichments:
           $ref: '#/components/schemas/Enrichments'
         tags:
@@ -11860,7 +11890,7 @@ components:
           $ref: '#/components/schemas/Processor'
         regularity:
           $ref: '#/components/schemas/Regularity'
-        locations:
+        location:
           $ref: '#/components/schemas/Location'
         transaction_types:
           type: array
@@ -11995,6 +12025,16 @@ components:
                 The level of detail depends on the resolution with which we are able to detect the transaction location.
               items:
                 type: string
+            geolocation:
+              type: object
+              description: The geolocation if an exact match is found
+              properties:
+                latitude:
+                  type: number
+                  format: double
+                longitude:
+                  type: number
+                  format: double
             country:
               type: string
               description: An ISO-3166 Alpha-3 country code representing the detected country the transaction was located.
@@ -12100,6 +12140,7 @@ components:
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
             | `salary`                | A transaction associated with a regular wage              |
             | `subscription`          | A transaction associated with a subscription service      |
+            | `online`                | A transaction associated with an online merchant          |
           items:
             type: string
     SyncEnrichments:
@@ -12113,7 +12154,7 @@ components:
           $ref: '#/components/schemas/Merchant'
         processor:
           $ref: '#/components/schemas/Processor'
-        locations:
+        location:
           $ref: '#/components/schemas/Location'
         transaction_types:
           type: array
@@ -12366,7 +12407,7 @@ components:
         metadata:
           $ref: '#/components/schemas/Metadata'
     PostCustomerApplicationsResponse:
-      title: Post Customer Applications Reponse Object
+      title: Post Customer Applications Response Object
       type: object
       description: Details provided back to the client when a new customer application has been created
       required:
@@ -14657,6 +14698,7 @@ components:
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
             | `salary`                | A transaction associated with a regular wage              |
             | `subscription`          | A transaction associated with a subscription service      |
+            | `online`                | A transaction associated with an online merchant          |
           items:
             type: string
     IngestV2SyncResponseData:
@@ -21099,6 +21141,20 @@ components:
         Examples:
           - `2023-03-17T17:29:51Z`
           - `2023-03-17T17:29:51-08:00`
+    QueryDateField:
+      in: query
+      name: date-field
+      schema:
+        type: string
+      example: date_time
+      description: |
+        Specifies which date field as returned from the `/financial/v2/transactions` endpoint should be used in the calculation of balance over time.
+
+        Currently supported values include (but are not necessarily limited to):
+          - `date_time`
+          - `posted_date_time`
+
+        Defaults to `date_time`.
     OBProvider:
       in: path
       name: provider
