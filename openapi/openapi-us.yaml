@@ -1997,6 +1997,9 @@ paths:
         We accept a maximum of 1.000 transactions. If this threshold is not respected, a 400 error is returned.
 
         We support the ingestion of transactions for multiple customers as part of the same request.
+
+        The detailed location enrichment response is an additional addon, otherwise only tokens are returned 
+        (read more about this in the location [guide](https://docs-us.thisisbud.com/docs/locations).
       operationId: v2_ingest_transactions_post
       security:
         - OAuth2: []
@@ -2116,6 +2119,8 @@ paths:
                           value: '12.04'
                           currency: USD
                         date_time: 2023-11-08T23:00:00Z00:00
+                        tags:
+                          - online
                         enrichments:
                           categories:
                             l1:
@@ -2168,11 +2173,16 @@ paths:
                                 confidence: '0.92'
                               - value: nystar
                                 confidence: '0.25'
-                          locations:
-                            tokens:
-                              - NY
-                              - Main St
-                              - Queens
+                          location:
+                            address_lines:
+                              - 41-02
+                              - Main Street
+                              - Flushing
+                              - '11355'
+                              - New York
+                            geolocation:
+                              longitude: 40.757551
+                              latitude: -73.829289
                 metadata:
                   task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
                   next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
@@ -2472,6 +2482,7 @@ paths:
               - `annually`
 
             Defaults to `weekly`.
+        - $ref: '#/components/parameters/QueryDateField'
       responses:
         '200':
           description: OK
@@ -2615,6 +2626,7 @@ paths:
               - `annually`
 
             Defaults to `weekly`.
+        - $ref: '#/components/parameters/QueryDateField'
       responses:
         '200':
           description: OK
@@ -2884,6 +2896,7 @@ paths:
                           value: '19.99'
                           currency: USD
                         date_time: '2023-08-01T12:02:48Z'
+                        posted_date_time: '2023-08-01T12:02:48Z'
                         enrichments:
                           merchant:
                             id: 60bf3a60-c872-4f45-909d-c84b140fc6e1
@@ -2893,14 +2906,14 @@ paths:
                             tokens:
                               - value: netflix
                                 confidence: '0.98'
-                            processor:
-                              id: 18f63293-0217-4520-bbf0-071dca7a9d04
-                              slug: paypal
-                              display_name: PayPal
-                              logo: http://url/paypal_logo.jpeg
-                              tokens:
-                                - value: paypal
-                                  confidence: '0.96'
+                          processor:
+                            id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                            slug: paypal
+                            display_name: PayPal
+                            logo: http://url/paypal_logo.jpeg
+                            tokens:
+                              - value: paypal
+                                confidence: '0.96'
                           categories:
                             l1:
                               slug: entertainment
@@ -2916,6 +2929,7 @@ paths:
                               - '2022-11-01T12:02:48Z'
                             group_label: 13ed070478ef62c3a7baa36c8d042a9d1cdc0fcbb2af93a795f2ad20ad6e9cb5-0
                         tags:
+                          - online
                           - regular-transaction
                       - transaction_id: '692529081000'
                         account_id: 2f5b2055-6253-4cd0-b646-06788342a609
@@ -2927,6 +2941,7 @@ paths:
                           value: '12.77'
                           currency: USD
                         date_time: '2023-07-05T12:02:48Z'
+                        posted_date_time: '2023-07-05T12:02:48Z'
                         enrichments:
                           categories:
                             l1:
@@ -2947,6 +2962,7 @@ paths:
                           value: '6.04'
                           currency: USD
                         date_time: 2023-11-10T23:00:00Z00:00
+                        posted_date_time: 2023-11-10T23:00:00Z00:00
                         enrichments:
                           categories:
                             l1:
@@ -2961,11 +2977,16 @@ paths:
                                 confidence: '0.92'
                               - value: nystar
                                 confidence: '0.25'
-                          locations:
-                            tokens:
-                              - NY
-                              - Main St
-                              - Queens
+                          location:
+                            address_lines:
+                              - 41-02
+                              - Main Street
+                              - Flushing
+                              - '11355'
+                              - New York
+                            geolocation:
+                              longitude: 40.757551
+                              latitude: -73.829289
                     metadata:
                       results: 2
                       next_page_token: eyJvZmZzZXQiOjEwMH0
@@ -2983,6 +3004,7 @@ paths:
                           value: '10.99'
                           currency: USD
                         date_time: '2022-01-02T15:00:00Z'
+                        posted_date_time: '2022-01-02T15:00:00Z'
                     metadata:
                       results: 1
                       next_page_token: eyJvZmZzZXQiOjEwMH0
@@ -7301,7 +7323,10 @@ components:
           $ref: '#/components/schemas/BudAmount'
         date_time:
           type: string
-          description: Date of the transaction compliant with RFC3339.
+          description: Date that the transaction occured compliant with RFC3339.
+        posted_date_time:
+          type: string
+          description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becamse available, for debits this is the date that the asset ceased to be available
         enrichments:
           $ref: '#/components/schemas/Enrichments'
         tags:
@@ -7314,10 +7339,13 @@ components:
             |:------------------------|:----------------------------------------------------------|
             | `benefit`               | A government/non-profit benefit transaction               |
             | `debt-collection`       | A transaction associated with a known debt-collector      |
+            | `loan`                  | A transaction associated with a loan                      |
             | `income`                | A transaction associated with income                      |
+            | `pending`               | A transaction which has not been booked                   |
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
             | `salary`                | A transaction associated with a regular wage              |
             | `subscription`          | A transaction associated with a subscription service      |
+            | `online`                | A transaction associated with an online merchant          |
           items:
             type: string
     Enrichments:
@@ -7333,7 +7361,7 @@ components:
           $ref: '#/components/schemas/Processor'
         regularity:
           $ref: '#/components/schemas/Regularity'
-        locations:
+        location:
           $ref: '#/components/schemas/Location'
         transaction_types:
           type: array
@@ -7459,6 +7487,16 @@ components:
                 The level of detail depends on the resolution with which we are able to detect the transaction location.
               items:
                 type: string
+            geolocation:
+              type: object
+              description: The geolocation if an exact match is found
+              properties:
+                latitude:
+                  type: number
+                  format: double
+                longitude:
+                  type: number
+                  format: double
             country:
               type: string
               description: An ISO-3166 Alpha-3 country code representing the detected country the transaction was located.
@@ -9177,7 +9215,7 @@ components:
           $ref: '#/components/schemas/schemas-Merchant'
         processor:
           $ref: '#/components/schemas/schemas-Processor'
-        locations:
+        location:
           $ref: '#/components/schemas/Location'
         transaction_types:
           type: array
@@ -9246,6 +9284,7 @@ components:
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
             | `salary`                | A transaction associated with a regular wage              |
             | `subscription`          | A transaction associated with a subscription service      |
+            | `online`                | A transaction associated with an online merchant          |
           items:
             type: string
     IngestV2SyncResponseData:
@@ -12432,7 +12471,7 @@ components:
           $ref: '#/components/schemas/schemas-Processor'
         regularity:
           $ref: '#/components/schemas/schemas-Regularity'
-        locations:
+        location:
           $ref: '#/components/schemas/Location'
         transaction_types:
           type: array
@@ -12485,7 +12524,10 @@ components:
           $ref: '#/components/schemas/BudAmount'
         date_time:
           type: string
-          description: Date of the transaction compliant with RFC3339.
+          description: Date that the transaction occured compliant with RFC3339.
+        posted_date_time:
+          type: string
+          description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becamse available, for debits this is the date that the asset ceased to be available
         enrichments:
           $ref: '#/components/schemas/components-schemas-Enrichments'
         tags:
@@ -13417,6 +13459,20 @@ components:
         Examples:
           - `2023-03-17T17:29:51Z`
           - `2023-03-17T17:29:51-08:00`
+    QueryDateField:
+      in: query
+      name: date-field
+      schema:
+        type: string
+      example: date_time
+      description: |
+        Specifies which date field as returned from the `/financial/v2/transactions` endpoint should be used in the calculation of balance over time.
+
+        Currently supported values include (but are not necessarily limited to):
+          - `date_time`
+          - `posted_date_time`
+
+        Defaults to `date_time`.
     PathAccountID:
       in: path
       name: account_id
