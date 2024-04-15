@@ -1512,7 +1512,7 @@ paths:
                     operation_id: open_banking_refresh_get
                     data:
                       provider: citi
-                      status: Complete
+                      status: Completed
                       result: success
                       reconnect_required: false
                       step: 4
@@ -1520,7 +1520,7 @@ paths:
                       text: Completed
                     metadata:
                       has_new_transactions: true
-                      status: Complete
+                      status: Completed
                 pending:
                   summary: Pending
                   value:
@@ -8190,6 +8190,14 @@ components:
             - Failed
         task_id:
           $ref: '#/components/schemas/TaskId'
+    TaskStatusCaps:
+      title: The Task Status
+      type: string
+      description: The general status of a task
+      enum:
+        - Pending
+        - Completed
+        - Failed
     OpenBankingConnectResponse:
       title: Open Banking Connect Response
       type: object
@@ -8207,11 +8215,7 @@ components:
           type: object
           properties:
             status:
-              type: string
-              enum:
-                - Failed
-                - Pending
-                - Completed
+              $ref: '#/components/schemas/TaskStatusCaps'
             next_url:
               description: The URL to call to obtain the results of the task
               type: string
@@ -8267,14 +8271,6 @@ components:
           $ref: '#/components/schemas/TaskCreatedView'
         metadata:
           $ref: '#/components/schemas/AsyncTaskMetadata'
-    TaskStatusCaps:
-      title: The Task Status
-      type: string
-      description: The general status of a task
-      enum:
-        - Pending
-        - Complete
-        - Failed
     ReconnectRequired:
       type: boolean
       description: Indicator as to whether the account needs to be connected again, through SCA authentication.
