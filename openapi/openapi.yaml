@@ -3161,6 +3161,7 @@ paths:
                           value: '50.23'
                           currency: GBP
                         date_time: '2022-05-26T10:00:00Z'
+                        merchant_category_code: '1234'
                         enrichments:
                           categories:
                             l1:
@@ -7556,6 +7557,9 @@ paths:
         If a valid email is specified in the request, Bud will automatically
         send an email to the customer with the link embedded, and with
         instructions for the customer to proceed.
+
+        This email will also override/set the `metadata.customer_email` property
+        on the customer application.
       operationId: v1_customer_applications_customer_links_post
       security:
         - OAuth2: []
@@ -7569,6 +7573,30 @@ paths:
               $ref: '#/components/schemas/PostCustomerLinksRequest'
             example:
               send_to: customer@example.com
+              redirect_url: https://your-domain.com/callback
+      callbacks:
+        Customer connected accounts:
+          '{$request.body#redirect_url}':
+            get:
+              summary: After customer attempts to connect accounts
+              security: []
+              description: |
+                Check the `status` query parameter before handling the redirection.
+
+                If `status` is `success`, then the customer successfully connected their accounts.
+              parameters:
+                - $ref: '#/components/parameters/RedirectURLCallbackStatus'
+                - $ref: '#/components/parameters/RedirectURLCallbackCustomerID'
+                - $ref: '#/components/parameters/RedirectURLCallbackTaskID'
+                - $ref: '#/components/parameters/RedirectURLCallbackApplicationID'
+                - $ref: '#/components/parameters/RedirectURLCallbackConnectionID'
+                - $ref: '#/components/parameters/RedirectURLCallbackError'
+              responses:
+                '200':
+                  description: OK
+                  content:
+                    text/html:
+                      schema: {}
       responses:
         '200':
           description: The request was successfully processed.
@@ -12124,6 +12152,11 @@ components:
           description: Date of the transaction compliant with RFC3339.
         enrichments:
           $ref: '#/components/schemas/SyncEnrichments'
+        merchant_category_code:
+          type: string
+          description: |
+            A Merchant Category Code (MCC) is a four-digit number listed in ISO 18245. 
+            An MCC is used to classify a business by the types of goods or services it provides.
         tags:
           type: array
           description: |
@@ -12172,6 +12205,12 @@ components:
       format: uuid
       description: |
         The unique identifier for a customer application.
+    ConnectionID:
+      title: Connection ID
+      type: string
+      format: uuid
+      description: |
+        The unique identifier for a customer application's link (for connecting accounts).
     DateTimeISO8601:
       title: Date/Time (ISO 8601) - YYYY-MM-DDTHH:MM:SSTZ
       type: string
@@ -12499,6 +12538,10 @@ components:
           type: string
           format: email
           description: If provided, the customer will receive an email with the generated link embedded.
+        redirect_url:
+          type: string
+          format: url
+          description: URL where the customer will be redirected to once they complete the connection flow.
     PostCustomerLinksResponse:
       title: Post Customer Link Response Object
       type: object
@@ -14579,6 +14622,14 @@ components:
             Example: `"10.98"` or `"-10.98"`
         currency:
           $ref: '#/components/schemas/BudCurrency'
+        merchant_category_code:
+          type: string
+          description: |
+            A Merchant Category Code (MCC) is a four-digit number listed in ISO 18245. 
+            An MCC is used to classify a business by the types of goods or services it provides.
+        merchant_name:
+          type: string
+          description: Merchant name
     TransactionWindow:
       type: object
       title: Transaction Window
@@ -14678,6 +14729,11 @@ components:
           description: Date of the transaction compliant with RFC3339.
         enrichments:
           $ref: '#/components/schemas/SyncEnrichments'
+        merchant_category_code:
+          type: string
+          description: |
+            A Merchant Category Code (MCC) is a four-digit number listed in ISO 18245. 
+            An MCC is used to classify a business by the types of goods or services it provides.
         tags:
           type: array
           description: |
@@ -20881,6 +20937,65 @@ components:
         default: P1M,P3M,P6M,P12M
         items:
           $ref: '#/components/schemas/DayOrMonth'
+    RedirectURLCallbackApplicationID:
+      in: query
+      name: application_id
+      schema:
+        $ref: '#/components/schemas/CustomerApplicationID'
+    RedirectURLCallbackConnectionID:
+      in: query
+      name: connection_id
+      schema:
+        $ref: '#/components/schemas/ConnectionID'
+    RedirectURLCallbackStatus:
+      in: query
+      name: status
+      required: true
+      schema:
+        type: string
+        enum:
+          - success
+          - failure
+          - pending
+    RedirectURLCallbackCustomerID:
+      in: query
+      name: customer_id
+      description: |
+        Open Banking "Connect Completed" event customer ID. This is the `customer_id`
+        seen on the customer application under [Retrieve Customer Application](https://docs.thisisbud.com/reference/v1_customer_application_get).
+      schema:
+        type: string
+        format: uuid
+    RedirectURLCallbackTaskID:
+      in: query
+      name: task_id
+      description: |
+        Open Banking "Connect Completed" event task ID.
+
+        See [here](https://docs.thisisbud.com/docs/open-banking-connect-completed) for details.
+      schema:
+        type: string
+        format: uuid
+    RedirectURLCallbackError:
+      in: query
+      name: error
+      description: |
+        Error code indicating the status of the connection.
+
+          - `connection_expired` - link was accessed after expiry time
+          - `connection_already_started` - customer has already used the link to connect accounts
+      schema:
+        type: string
+        enum:
+          - connection_expired
+          - connection_already_started
+    RedirectURLCallbackErrorMessage:
+      in: query
+      name: error_message
+      description: |
+        Human-readable description providing slightly more information to the `error`.
+      schema:
+        type: string
     OBProvidersQueryTypeFilter:
       in: query
       required: false
