@@ -2159,6 +2159,7 @@ paths:
                           value: '6.04'
                           currency: USD
                         date_time: 2023-11-10T23:00:00Z00:00
+                        merchant_category_code: '1234'
                         enrichments:
                           categories:
                             l1:
@@ -9076,6 +9077,14 @@ components:
             Example: `"10.98"` or `"-10.98"`
         currency:
           $ref: '#/components/schemas/BudCurrency'
+        merchant_category_code:
+          type: string
+          description: |
+            A Merchant Category Code (MCC) is a four-digit number listed in ISO 18245. 
+            An MCC is used to classify a business by the types of goods or services it provides.
+        merchant_name:
+          type: string
+          description: Merchant name
     TransactionWindow:
       type: object
       title: Transaction Window
@@ -9264,6 +9273,11 @@ components:
           description: Date of the transaction compliant with RFC3339.
         enrichments:
           $ref: '#/components/schemas/SyncEnrichments'
+        merchant_category_code:
+          type: string
+          description: |
+            A Merchant Category Code (MCC) is a four-digit number listed in ISO 18245. 
+            An MCC is used to classify a business by the types of goods or services it provides.
         tags:
           type: array
           description: |
