@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: 'Bud API Services: Documentation'
-  version: 2.10.5
+  version: 2.10.10
   description: |-
     # Overview
 
@@ -298,6 +298,9 @@ info:
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
+
+    **Version 2.10.10: 17/05/2024**
+    >- Add optional `X-Customer-Ip-Address` header to __Initiate Refresh__.
 
     **Version 2.10.9: 05/03/2024**
     > - Added insight type as a string on Balances, Income and Spending insights endpoints.
@@ -993,8 +996,8 @@ tags:
     x-displayName: Loan Finder
     description: |
       Find information regarding your customer's loans.
-  - name: Debt Finder
-    x-displayName: Debt Finder
+  - name: Debt Collection Finder
+    x-displayName: Debt Collection Finder
     description: |
       Find information regarding your customer's debts.
   - name: Product Finder
@@ -2084,6 +2087,15 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerSecret'
+        - in: header
+          name: X-Customer-Ip-Address
+          schema:
+            type: string
+          required: false
+          description: |
+            The IP address of the personal device the customer is initiating the refresh from.
+            This header should _only_ be supplied if the customer has initiated the refresh from a personal device, and never if the refresh has been initated from an automated process such as a script.
+            The IP address is forwarded to the provider and can help avoid hitting limits on how frequently a refresh can be initiated.
       requestBody:
         required: true
         content:
@@ -4042,6 +4054,12 @@ paths:
             type: string
           description: |
             The name of the model for which categories should be returned. See the *List Categorisation Models V2* endpoint for available model names.
+        - in: query
+          name: labels
+          schema:
+            type: string
+          description: Filter out categories that do not have the specified label. If unset, endpoint will include all labels
+          example: essential
       responses:
         '200':
           description: OK
@@ -6732,7 +6750,7 @@ paths:
     get:
       tags:
         - Regular Payments Finder
-      summary: Retrieve Forecasted Transactions V2
+      summary: Retrieve Future Transactions V2
       description: |
         Provides a list of transactions predicted to occur in the next specified number of months. Currently the following periods are supported:
         - `daily`
@@ -7086,7 +7104,7 @@ paths:
   /v1/debt-collection:
     get:
       tags:
-        - Debt Finder
+        - Debt Collection Finder
       summary: Retrieve Debt Collection Transactions
       description: |
         Provides a list of a customers' outgoing debt collection transactions found within their connected accounts.
@@ -7375,6 +7393,7 @@ paths:
               secondary_applicants:
                 - first_name: Jane
                   last_name: Doe
+              financial_data_consent: one_time
               metadata:
                 loan_product_code: credit_card_1234
       responses:
@@ -7439,6 +7458,7 @@ paths:
                       status: requested
                     review_status: ''
                     review_date: '2023-05-11T15:30:39Z'
+                    financial_data_consent: one_time
                     metadata:
                       loan_product_code: credit_card_1234
                 metadata:
@@ -7499,6 +7519,7 @@ paths:
                   review_date: '2023-05-11T15:30:39Z'
                   metadata:
                     loan_product_code: credit_card_1234
+                  financial_data_consent: one_time
                 metadata:
                   timezone: Europe/London
                   date_range_end: latest_calendar_month
@@ -12338,16 +12359,17 @@ components:
       type: object
       description: Details relating to a customer's application
       required:
+        - accounts_connected
         - application_id
         - creation_date
-        - deletion_date
         - customer_id
+        - deletion_date
+        - financial_data_consent
         - initiator_id
-        - primary_applicant
-        - secondary_applicants
-        - accounts_connected
-        - review_status
         - metadata
+        - primary_applicant
+        - review_status
+        - secondary_applicants
       properties:
         application_id:
           $ref: '#/components/schemas/CustomerApplicationID'
@@ -12389,6 +12411,23 @@ components:
           $ref: '#/components/schemas/DateTimeISO8601'
         metadata:
           $ref: '#/components/schemas/Metadata'
+        financial_data_consent:
+          $ref: '#/components/schemas/FinancialDataConsentType'
+    FinancialDataConsentType:
+      anyOf:
+        - $ref: '#/components/schemas/OneTimeFinancialDataConsentType'
+      description: |
+        Monitoring type for an application refers to the strategy for ingesting data via a customers financial provider.
+        If no monitoring type is provided, the setting will default to the clients configured type.
+    OneTimeFinancialDataConsentType:
+      type: string
+      enum:
+        - one_time
+      description: |
+        Indicates that data ingestion connections with external providers will be a one-time use only. 
+        After authentication and ingestion, the consent will be automatically revoked. 
+
+        If additional data is required, a new connection will need to be established.
     GetCustomerApplicationsResponse:
       title: Get Customer Application Response
       type: object
@@ -12443,6 +12482,8 @@ components:
           $ref: '#/components/schemas/PrimaryApplicant'
         secondary_applicants:
           $ref: '#/components/schemas/SecondaryApplicants'
+        financial_data_consent:
+          $ref: '#/components/schemas/FinancialDataConsentType'
         metadata:
           $ref: '#/components/schemas/Metadata'
     PostCustomerApplicationsResponse:
@@ -21795,7 +21836,7 @@ x-tagGroups:
       - Regular Payments Finder
       - Income Finder
       - Loan Finder
-      - Debt Finder
+      - Debt Collection Finder
       - Product Finder
       - Subscription Finder
       - Smart Finders API

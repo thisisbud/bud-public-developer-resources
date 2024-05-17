@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Transaction Enrichment Service - API Documentation
-  version: 1.8.2
+  version: 1.8.3
   description: |-
     # Overview
 
@@ -215,6 +215,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 1.8.3: 17/05/2024**:
+    >- Add optional `X-Customer-Ip-Address` header to __Initiate Refresh__.
+
     **Version 1.8.2: 25/10/2024**:
     > - Deprecated __Retrieve Ingestion Task Status V2__ endpoint in favour of __Retrieve Ingestion Task Status V3__ endpoint.
 
@@ -422,8 +425,8 @@ tags:
     x-displayName: Loan Finder
     description: |
       Find information regarding your customer's loans.
-  - name: Debt Finder
-    x-displayName: Debt Finder
+  - name: Debt Collection Finder
+    x-displayName: Debt Collection Finder
     description: |
       Find information regarding your customer's debts.
   - name: Product Finder
@@ -1370,6 +1373,15 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - in: header
+          name: X-Customer-Ip-Address
+          schema:
+            type: string
+          required: false
+          description: |
+            The IP address of the personal device the customer is initiating the refresh from.
+            This header should _only_ be supplied if the customer has initiated the refresh from a personal device, and never if the refresh has been initated from an automated process such as a script.
+            The IP address is forwarded to the provider and can help avoid hitting limits on how frequently a refresh can be initiated.
       requestBody:
         required: true
         content:
@@ -3399,6 +3411,12 @@ paths:
             type: string
           description: |
             The name of the model for which categories should be returned. See the *List Categorisation Models V2* endpoint for available model names.
+        - in: query
+          name: labels
+          schema:
+            type: string
+          description: Filter out categories that do not have the specified label. If unset, endpoint will include all labels
+          example: essential
       responses:
         '200':
           description: OK
@@ -4186,7 +4204,7 @@ paths:
   /v1/debt-collection:
     get:
       tags:
-        - Debt Finder
+        - Debt Collection Finder
       summary: Retrieve Debt Collection Transactions
       description: |
         Provides a list of a customers' outgoing debt collection transactions found within their connected accounts.
@@ -13927,7 +13945,7 @@ x-tagGroups:
       - Regular Payments Finder
       - Income Finder
       - Loan Finder
-      - Debt Finder
+      - Debt Collection Finder
       - Product Finder
       - Subscription Finder
       - Smart Finders API

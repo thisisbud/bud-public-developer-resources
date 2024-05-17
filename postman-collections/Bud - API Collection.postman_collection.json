@@ -1167,6 +1167,11 @@
 										"key": "X-Customer-Id",
 										"value": "{{customer_id}}",
 										"type": "default"
+									},
+									{
+										"key": "X-Customer-Ip-Address",
+										"value": "",
+										"disabled": true
 									}
 								],
 								"body": {
