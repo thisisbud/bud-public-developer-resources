@@ -293,11 +293,19 @@ info:
     | 15/01/2024           | Deprecated **Remove Customer** in favour of **Remove Customer V3**.                                                                                                                                                                                                                                                                                                                                                                        |
     | 15/01/2024           | Deprecated **Compare Custom Insight**, **Retrieve Custom Insight**, **Create Custom Insight**                                                                                                                                                                                                                                                                                                                                              |
     | 25/01/2024           | Deprecated **Retrieve Ingestion Task Status V2** in favour of **Retrieve Ingestion Task Status V3**                                                                                                                                                                                                                                                                                                                                        |
+    | 21/05/2024           | Deprecated **Initiate Refresh** in favour of **Initiate Refresh V2** (Six month deprecation Notice)                                                                                                                                                                                                                                                                                                                                        |
+    | 21/05/2024           | Deprecated **Retrieve Refresh Status** in favour of **Retrieve Refresh Status V2** (Six month deprecation Notice)                                                                                                                                                                                                                                                                                                                          |
 
 
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
+
+    **Version 2.11.0: 17/05/2024**
+    > - Added __Initiate Refresh V2__ endpoint.
+    > - Added __Retrieve Refresh Status V2__ endpoint.
+    > - Deprecated __Initiate Refresh__ endpoint in favour of __Initiate Refresh V2__ endpoint (Six month deprecation period).
+    > - Deprecated __Retrieve Refresh Status__ endpoint in favour of __Retrieve Refresh Status V2__ endpoint (Six month deprecation period).
 
     **Version 2.10.10: 17/05/2024**
     >- Add optional `X-Customer-Ip-Address` header to __Initiate Refresh__.
@@ -1541,7 +1549,7 @@ paths:
                 content:
                   application/json:
                     schema:
-                      $ref: '#/components/schemas/OBWebhookBody'
+                      $ref: '#/components/schemas/OBConnectWebhookBody'
                     examples:
                       Success:
                         description: Successful connection
@@ -1945,7 +1953,7 @@ paths:
                 content:
                   application/json:
                     schema:
-                      $ref: '#/components/schemas/OBWebhookBody'
+                      $ref: '#/components/schemas/OBConnectWebhookBody'
                     examples:
                       Success:
                         description: Successful connection
@@ -2070,11 +2078,12 @@ paths:
           description: An unexpected error occurred on the server side
   /v1/open-banking/refresh:
     post:
+      deprecated: true
       tags:
         - Manage a Connection
       summary: Initiate Refresh
       description: |
-        Instruct Bud to retrieve the latest account infomation for a customer. Refresh the accounts from a single provider with an existing connection.
+        Instruct Bud to retrieve the latest account information for a customer. Refresh the accounts from a single provider with an existing connection.
 
         After initiating this long running process, make sure to check the status of the it till completion before trying to access the Customer's data or initiating another refresh.
 
@@ -2204,7 +2213,7 @@ paths:
                 content:
                   application/json:
                     schema:
-                      $ref: '#/components/schemas/OBWebhookBody'
+                      $ref: '#/components/schemas/OBRefreshWebhookBody'
                     examples:
                       Success:
                         description: Successful refresh
@@ -2242,6 +2251,7 @@ paths:
                     The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
   /v1/open-banking/refresh/{task_id}:
     get:
+      deprecated: true
       tags:
         - Manage a Connection
       summary: Retrieve Refresh Status
@@ -2352,6 +2362,387 @@ paths:
                 $ref: '#/components/schemas/BadRequestResponse'
               example:
                 operation_id: open_banking_refresh_get
+                code_id: failed_validation
+                message: Failed validation
+                errors:
+                  customer_id:
+                    - This value should not be blank
+        '405':
+          description: The request uses an unexpected HTTP method
+        5XX:
+          description: An unexpected error occurred on the server side
+  /open-banking/v2/refresh:
+    post:
+      tags:
+        - Manage a Connection
+      summary: Initiate Refresh V2
+      description: |
+        Instruct Bud to retrieve the latest account information for a customer. Refresh the accounts from all providers with an existing connection.
+
+        On completion of this task Bud will send a webhook to your configured endpoint including details of the refresh completed and the status of the refresh for each provider. Alternatively the status of the task can be checked using the Retrieve Refresh Status V2 endpoint. Please check that the task has completed successfully before trying to access the Customer's data or initiating another refresh.
+
+        If the customer's consent has been revoked or expired for a provider, Bud will be unable to refresh the customers account at that provider. 
+        This will be confirmed in the response of the refresh status endpoint associated with the `task_id` provided in the response to this endpoint, where the `reconnect_required` field will set to `true` and status set to `Completed`. If the consent within the Bud system was marked as `Authorised` at this point the consent will be updated to `Revoked` 
+
+        To simplify your integration Bud is able to take control of your background refreshes and manage these regularly for you. Full details can be found on the following [guide](https://docs.thisisbud.com/docs/open-banking-hosted-refreshes)
+      operationId: v2_open_banking_refresh_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - in: header
+          name: X-Customer-Ip-Address
+          schema:
+            type: string
+          required: false
+          description: |
+            The IP address of the personal device the customer is initiating the refresh from.
+            This header should _only_ be supplied if the customer has initiated the refresh from a personal device, and never if the refresh has been initated from an automated process such as a script.
+            The IP address is forwarded to the provider and can help avoid hitting limits on how frequently a refresh can be initiated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenBankingRefreshRequestV2'
+            example:
+              from: '2019-03-01T00:00:00+00:00'
+              to: '2019-06-01T00:00:00+00:00'
+      responses:
+        '202':
+          description: A new Task has been generated to request the Customer's bank account refresh. The generated `task_id` can be used to check the Task's status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCreatedV2ResponseOB'
+              example:
+                operation_id: v2_open_banking_refresh_post
+                data:
+                  task_id: 360e5821-4f18-4077-83f4-c9a7c1768bea
+                  sub_tasks:
+                    - provider: Natwest_Sandbox
+                      task_id: 030d244b-c2d8-4698-b919-69a6c6974c75
+                    - provider: Bank_Of_Bud
+                      task_id: 030d7563-eb58-4319-9a62-f008ce48bd6c
+                metadata:
+                  next_url: /v2/open-banking/refresh/360e5821-4f18-4077-83f4-c9a7c1768bea
+                  next_url_delay: 500
+                  status: Pending
+        '400':
+          description: The request contains an invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                Parameter missing:
+                  value:
+                    operation_id: v2_open_banking_refresh_post
+                    code_id: failed_validation
+                    message: Failed validation
+                    errors:
+                      customer_id:
+                        - This value should not be blank
+        '405':
+          description: The request uses an unexpected HTTP method
+        5XX:
+          description: An unexpected error occurred on the server side
+      callbacks:
+        RefreshV2CompletedCallBack:
+          '{$request.body#/redirect_url}':
+            description: |
+              This callback is sent to your configured 'Open banking refresh v2 completed' webhook URL on the completion of a refresh v2 task. This includes details of refreshes completed for all providers
+            post:
+              security: []
+              parameters:
+                - $ref: '#/components/parameters/SignatureHeaderParameter'
+                - $ref: '#/components/parameters/SigningIdHeaderParameter'
+              summary: Refresh Completed Notification Callback
+              requestBody:
+                required: true
+                description: This callback is sent to your configured 'Open banking refresh completed V2' webhook URL on the completion of a refresh task. This includes details of refreshes completed for all providers.
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/OBV2WebhookBody'
+                    examples:
+                      Success:
+                        description: Successful refresh
+                        value:
+                          customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
+                          event: open_banking.v2.refresh.completed
+                          has_new_transactions: true
+                          task_id: 03af1639-78a6-402d-809b-902a0b00a77d
+                          result: success
+                          status: Completed
+                          sub_tasks:
+                            - task_id: 03af1639-78a6-402d-809b-902a0b00a789
+                              has_new_transactions: true
+                              provider: Bank_Of_Bud
+                              reconnect_required: false
+                              result: success
+                              status: Completed
+                              consent_ids:
+                                - 2c7b5faf-2d11-47b1-b9e6-ce95f195259b
+                              account_ids:
+                                - d8b1390e-0106-4b65-8298-d6a4f13e662c
+                      Failure:
+                        description: Failed refresh due to a consent being revoked
+                        value:
+                          customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
+                          event: open_banking.v2.refresh.completed
+                          has_new_transactions: false
+                          task_id: 03af1639-78a6-402d-809b-902a0b001234
+                          status: Failed
+                          result: connection_revoked
+                          sub_tasks:
+                            - task_id: 03af1639-78a6-402d-809b-902a0b00b283
+                              has_new_transactions: false
+                              provider: Bank_Of_Bud
+                              reconnect_required: true
+                              result: connection_revoked
+                              status: Failed
+                              consent_ids:
+                                - 2c7b5faf-2d11-47b1-b9e6-ce95f195259b
+                              account_ids:
+                                - d8b1390e-0106-4b65-8298-d6a4f13e662c
+              responses:
+                '200':
+                  description: Your server returns this code if it accepts the callback
+                '300':
+                  description: The notification will not be retried, redirects will not be followed
+                '400':
+                  description: The notification will not be retried
+                '500':
+                  description: |
+                    The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
+        ProviderRefreshCompletedCallBack:
+          '{$request.body#/redirect_url}':
+            description: |
+              This callback is sent to your configured 'Open banking refresh v2 provider completed' webhook URL on the completion of a refresh task. This webhook includes details of the refresh completed for a specific provider.
+            post:
+              security: []
+              parameters:
+                - $ref: '#/components/parameters/SignatureHeaderParameter'
+                - $ref: '#/components/parameters/SigningIdHeaderParameter'
+              summary: Provider Refresh Completed Notification Callback
+              requestBody:
+                required: true
+                description: This callback is sent to your configured 'Open banking refresh v2 provider completed' webhook URL when the refresh completes for each provider in a refresh v2 task.
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/ProviderOBV2WebhookBody'
+                    examples:
+                      Success:
+                        description: Successful refresh
+                        value:
+                          event: open_banking.v2.refresh.provider.completed
+                          task_id: 03af1639-78a6-402d-809b-902a0b00a789
+                          has_new_transactions: true
+                          provider: Bank_Of_Bud
+                          reconnect_required: false
+                          result: success
+                          status: Completed
+                          consent_ids:
+                            - 2c7b5faf-2d11-47b1-b9e6-ce95f195259b
+                          account_ids:
+                            - d8b1390e-0106-4b65-8298-d6a4f13e662c
+                          customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
+                      Failure:
+                        description: Failed refresh due to a consent being revoked
+                        value:
+                          event: open_banking.v2.refresh.provider.completed
+                          task_id: 03af1639-78a6-402d-809b-902a0b00a789
+                          has_new_transactions: false
+                          provider: Bank_Of_Bud
+                          reconnect_required: true
+                          result: connection_revoked
+                          status: Failed
+                          consent_ids:
+                            - 2c7b5faf-2d11-47b1-b9e6-ce95f195259b
+                          account_ids:
+                            - d8b1390e-0106-4b65-8298-d6a4f13e662c
+                          customer_id: b6f898f8-99e8-4529-8e90-64d96fe05aa4
+              responses:
+                '200':
+                  description: Your server returns this code if it accepts the callback
+                '300':
+                  description: The notification will not be retried, redirects will not be followed
+                '400':
+                  description: The notification will not be retried
+                '500':
+                  description: |
+                    The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
+  /open-banking/v2/refresh/{task_id}:
+    get:
+      tags:
+        - Manage a Connection
+      summary: Retrieve Refresh Status V2
+      description: |
+        Check the status of an account information refresh task. If the task is not yet completed, the status will be shown as pending. 
+        If the status is completed, then the data is ready to be collected via the [Retrieve Financial Data](/reference/retrieve-financial-data) endpoints. 
+
+        To monitor the status of a refresh task we provide two methods. The preferred approach is to utilise the webhook functionality within the Bud platform where Bud will send a webhook to your configured endpoint when the task completes. Alternatively you can poll this endpoint to retrieve the status of the task.
+        Please ensure that you either receive a webhook with a status of `Completed` and result of `success` or this endpoint returns a status of `Completed` and result of `success` before trying to access the Customer's data or initiating another process.
+
+        When the task is successful, we include in the response body a `metadata.has_new_transactions` boolean attribute that tells you if the refresh resulted in storing new data. This attribute must be used to 
+        decide if it's necessary to pull the Customer's data or not.
+
+        When the refresh fails, we include the reason of the failure as part of the `data.result` attribute. We also include the `data.sub_tasks[i].reconnect_required` boolean attribute that indicates if the consent used to 
+        fetch the data for this customer and provider is no longer valid. If reconnect_required is true, the customer will need to go through the bank account connection flow and the consent will be marked as revoked.
+
+        When only a subset of sub tasks fails the main task will be marked as `Failed` but for each provider where the refresh was successful (result is equal to `success`) customers data will be updated and available from the [Retrieve Financial Data](/reference/retrieve-financial-data) endpoints.
+        In the case of a partial success you are able to specify the `providers` body parameter to the [Initiate Refresh V2](/reference/v2_open_banking_refresh_post) endpoint to initiate a refresh for the failing provider(s).
+      operationId: v2_open_banking_refresh_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: The request was successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenBankingRefreshV2Response'
+              examples:
+                completed:
+                  summary: Completed
+                  value:
+                    operation_id: v2_open_banking_refresh_get
+                    data:
+                      task_id: 03af1639-78a6-402d-809b-902a0b00a77d
+                      status: Completed
+                      result: success
+                      has_new_transactions: true
+                      sub_tasks:
+                        - task_id: 030d244b-c2d8-4698-b919-69a6c6974c75
+                          provider: Natwest_Sandbox
+                          status: Completed
+                          result: success
+                          reconnect_required: false
+                          has_new_transactions: true
+                        - task_id: 030d7563-eb58-4319-9a62-f008ce48bd6c
+                          provider: Bank_Of_Bud
+                          status: Completed
+                          result: success
+                          reconnect_required: false
+                          has_new_transactions: false
+                    metadata:
+                      status: Completed
+                pending:
+                  summary: Pending
+                  value:
+                    operation_id: v2_open_banking_refresh_get
+                    data:
+                      task_id: 03af1639-78a6-402d-809b-902a0b00a77d
+                      status: Pending
+                      sub_tasks:
+                        - task_id: 030d244b-c2d8-4698-b919-69a6c6974c75
+                          provider: Natwest_Sandbox
+                          status: Pending
+                        - task_id: 030d7563-eb58-4319-9a62-f008ce48bd6c
+                          provider: Bank_Of_Bud
+                          status: Pending
+                    metadata:
+                      status: Pending
+                      next_url: /v2/open-banking/refresh/03af1639-78a6-402d-809b-902a0b00a77d
+                      next_url_delay: 500
+                partially_complete:
+                  summary: Partially Complete
+                  value:
+                    operation_id: v2_open_banking_refresh_get
+                    data:
+                      task_id: 03af1639-78a6-402d-809b-902a0b00a77d
+                      status: Pending
+                      sub_tasks:
+                        - task_id: 030d244b-c2d8-4698-b919-69a6c6974c75
+                          provider: Natwest_Sandbox
+                          status: Pending
+                        - task_id: 030d7563-eb58-4319-9a62-f008ce48bd6c
+                          provider: Bank_Of_Bud
+                          status: Completed
+                          result: success
+                          reconnect_required: false
+                          has_new_transactions: false
+                    metadata:
+                      status: Pending
+                      next_url: /v2/open-banking/refresh/03af1639-78a6-402d-809b-902a0b00a77d
+                      next_url_delay: 500
+                failed_provider_failure:
+                  summary: Provider Failure
+                  value:
+                    operation_id: v2_open_banking_refresh_get
+                    data:
+                      task_id: 03af1639-78a6-402d-809b-902a0b00a77d
+                      status: Failed
+                      sub_tasks:
+                        - task_id: 030d244b-c2d8-4698-b919-69a6c6974c75
+                          provider: Natwest_Sandbox
+                          status: Failed
+                          result: provider_failure
+                          reconnect_required: false
+                        - task_id: 030d7563-eb58-4319-9a62-f008ce48bd6c
+                          provider: Bank_Of_Bud
+                          status: Completed
+                          result: success
+                          reconnect_required: false
+                          has_new_transactions: false
+                    metadata:
+                      status: Failed
+                failed_connection_not_found:
+                  summary: Connection not found
+                  value:
+                    operation_id: v2_open_banking_refresh_get
+                    data:
+                      task_id: 03af1639-78a6-402d-809b-902a0b00a77d
+                      status: Failed
+                      sub_tasks:
+                        - task_id: 030d244b-c2d8-4698-b919-69a6c6974c75
+                          provider: Natwest_Sandbox
+                          status: Failed
+                          result: connection_not_found
+                          reconnect_required: true
+                        - task_id: 030d7563-eb58-4319-9a62-f008ce48bd6c
+                          provider: Bank_Of_Bud
+                          status: Failed
+                          result: connection_not_found
+                          reconnect_required: true
+                    metadata:
+                      status: Failed
+                failed_provider_in_maintenance:
+                  summary: Provider In Maintenance
+                  value:
+                    operation_id: v2_open_banking_refresh_get
+                    data:
+                      task_id: 03af1639-78a6-402d-809b-902a0b00a77d
+                      status: Failed
+                      sub_tasks:
+                        - task_id: 030d244b-c2d8-4698-b919-69a6c6974c75
+                          provider: Natwest_Sandbox
+                          status: Failed
+                          result: provider_maintenance
+                          reconnect_required: false
+                        - task_id: 030d7563-eb58-4319-9a62-f008ce48bd6c
+                          provider: Bank_Of_Bud
+                          status: Failed
+                          result: provider_maintenance
+                          reconnect_required: false
+                    metadata:
+                      status: Failed
+        '400':
+          description: The request contains an invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: v2_open_banking_refresh_get
                 code_id: failed_validation
                 message: Failed validation
                 errors:
@@ -13316,7 +13707,7 @@ components:
         - request_validation
         - resource_not_found
         - task_not_found
-    OBWebhookBody:
+    OBConnectWebhookBody:
       title: OB Webhook Payload
       type: object
       description: |
@@ -13356,22 +13747,6 @@ components:
               example: 19677d9f-90e7-44a6-a32e-566990623da4
             result:
               $ref: '#/components/schemas/ConnectResultCodes'
-            has_new_transactions:
-              type: string
-              enum:
-                - 'true'
-                - 'false'
-              description: |
-                To describe whether new transactions have been pulled from the relevant
-                ASPSP during the refresh. Note that if this field is set to `false` then
-                there is no need to make a request to any other downstream endpoints to
-                collect the data related to that customer.
-            reconnect_required:
-              type: string
-              enum:
-                - 'true'
-                - 'false'
-              description: If true, the customer must re-connect to the specified provider
             provider:
               type: string
               description: Name of the provider (banking institution) the task interacted with
@@ -13691,6 +14066,68 @@ components:
           description: |
             The datetime (ISO 8601) that defines the time up to which the Customer's data needs to be collected. Defaults to the current datetime.
             Refreshes can only go back to a maximum of 90 days from the current date.
+    OBRefreshWebhookBody:
+      title: OB Webhook Payload
+      type: object
+      description: |
+        The payload sent to the client defined webhook (via the console) when an Open Banking (connect
+        or refresh) task completes.
+      required:
+        - data
+      properties:
+        data:
+          description: Open Banking Task Event Data
+          required:
+            - task_type
+            - customer_id
+            - task_id
+            - status
+            - result
+          properties:
+            task_id:
+              description: The task identifier that the event relates to
+              type: string
+              example: e145c656-4a90-45db-a025-af7765482c8c
+            status:
+              type: string
+              description: The general status of a task
+              enum:
+                - Completed
+                - Failed
+            task_type:
+              type: string
+              enum:
+                - connect
+                - refresh
+              description: The type of task that completed
+            customer_id:
+              description: The customer the event relates to
+              type: string
+              example: 19677d9f-90e7-44a6-a32e-566990623da4
+            result:
+              $ref: '#/components/schemas/ConnectResultCodes'
+            has_new_transactions:
+              type: string
+              enum:
+                - 'true'
+                - 'false'
+              description: |
+                To describe whether new transactions have been pulled from the relevant
+                ASPSP during the refresh. Note that if this field is set to `false` then
+                there is no need to make a request to any other downstream endpoints to
+                collect the data related to that customer.
+            reconnect_required:
+              type: string
+              enum:
+                - 'true'
+                - 'false'
+              description: If true, the customer must re-connect to the specified provider
+            provider:
+              type: string
+              description: Name of the provider (banking institution) the task interacted with
+            consent_id:
+              type: string
+              description: The consent identifier that the event relates to
     ReconnectRequired:
       type: boolean
       description: Indicator as to whether the account needs to be connected again, through SCA authentication.
@@ -13726,6 +14163,13 @@ components:
             - Fetching accounts
             - Fetching balances and transactions
             - Completed
+    HasNewTransactions:
+      type: boolean
+      description: |
+        To describe whether new transactions have been pulled from the relevant
+        ASPSP during the refresh. Note that if this field is set to `false` then
+        there is no need to make a request to any other downstream endpoints to
+        collect the data related to that customer.
     OpenBankingRefreshResponse:
       title: Refresh Task Response
       type: object
@@ -13744,12 +14188,247 @@ components:
           description: Refresh Response Metadata
           properties:
             has_new_transactions:
-              type: boolean
-              description: |
-                To describe whether new transactions have been pulled from the relevant
-                ASPSP during the refresh. Note that if this field is set to `false` then
-                there is no need to make a request to any other downstream endpoints to
-                collect the data related to that customer.
+              $ref: '#/components/schemas/HasNewTransactions'
+            status:
+              $ref: '#/components/schemas/TaskStatusCaps'
+            next_url:
+              description: The URL to call to obtain the results of the task
+              type: string
+            next_url_delay:
+              description: Recommended delay in milliseconds before next call
+              type: integer
+    OpenBankingRefreshRequestV2:
+      title: Open Banking Refresh V2 Payload
+      type: object
+      description: Expected request payload structure
+      properties:
+        providers:
+          type: array
+          description: Optional parameter defining the name of the providers that a refresh should be completed for. If this is not specified a refresh is completed for all providers that a customer has an authorised consent with.
+          items:
+            type: string
+        from:
+          type: string
+          description: |
+            The datetime (ISO 8601) that defines the time since when the Customer's data needs to be collected. 
+            Defaults to the datetime of the last pull of transactions less seven days to account for any potential changes to the most recent set of transactions. 
+            Refreshes can only go back to a maximum of 90 days from the current date.
+        to:
+          type: string
+          description: |
+            The datetime (ISO 8601) that defines the time up to which the Customer's data needs to be collected. Defaults to the current datetime. 
+    TaskV2CreatedView:
+      title: Refresh V2 Task Created View
+      description: Standard successful task created response.
+      type: object
+      required:
+        - task_id
+        - sub_tasks
+      properties:
+        task_id:
+          $ref: '#/components/schemas/TaskId'
+        sub_tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskCreatedView'
+    TaskCreatedV2ResponseOB:
+      title: Refresh V2 Task Created Response
+      type: object
+      description: Expected response structure
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/TaskV2CreatedView'
+        metadata:
+          $ref: '#/components/schemas/AsyncTaskMetadata'
+    RefreshSubtaskWebhookTask:
+      title: Details of an individual refresh Task
+      type: object
+      description: The payload detailing an individual refresh for a single provider
+      required:
+        - has_new_transactions
+        - provider
+        - reconnect_required
+        - result
+        - status
+        - task_id
+      properties:
+        account_ids:
+          description: An array listing all account ids that were updated as part of this task
+          type: array
+          items:
+            type: string
+        consent_ids:
+          description: An array listing all consents that were updated as part of this task
+          type: array
+          items:
+            type: string
+        has_new_transactions:
+          $ref: '#/components/schemas/HasNewTransactions'
+        provider:
+          type: string
+          description: Name of the provider (banking institution)
+        reconnect_required:
+          $ref: '#/components/schemas/ReconnectRequired'
+        result:
+          $ref: '#/components/schemas/ConnectResultCodes'
+        status:
+          type: string
+          description: The general status of a task
+          enum:
+            - Completed
+            - Failed
+        task_id:
+          description: The task identifier that the event relates to
+          type: string
+          example: e145c656-4a90-45db-a025-af7765482c8c
+    OBV2WebhookBody:
+      title: OB V2 Webhook Payload
+      type: object
+      description: |
+        The payload sent to the client defined webhook (via the console) when an Open Banking refresh V2 task completes.
+      required:
+        - customer_id
+        - event
+        - has_new_transactions
+        - task_id
+        - result
+        - status
+      properties:
+        customer_id:
+          description: The customer the event relates to
+          type: string
+          example: 19677d9f-90e7-44a6-a32e-566990623da4
+        event:
+          type: string
+          description: The task type for the event.
+        has_new_transactions:
+          $ref: '#/components/schemas/HasNewTransactions'
+        task_id:
+          description: The task identifier that the event relates to
+          type: string
+          example: e145c656-4a90-45db-a025-af7765482c8c
+        result:
+          $ref: '#/components/schemas/ConnectResultCodes'
+        status:
+          type: string
+          description: The general status of a task
+          enum:
+            - Completed
+            - Failed
+        sub_tasks:
+          description: An array of details about each individual refresh subtask
+          type: array
+          items:
+            $ref: '#/components/schemas/RefreshSubtaskWebhookTask'
+    ProviderOBV2WebhookBody:
+      title: OB V2 Webhook Payload
+      type: object
+      description: |
+        The payload sent to the client defined webhook (via the console) when an Open Banking refresh V2 task completes.
+      required:
+        - event
+        - task_id
+        - status
+        - result
+        - reconnect_required
+        - provider
+        - has_new_transactions
+        - customer_id
+      properties:
+        account_ids:
+          description: An array listing all account ids that were updated as part of this task
+          type: array
+          items:
+            type: string
+        consent_ids:
+          description: An array listing all consents that were updated as part of this task
+          type: array
+          items:
+            type: string
+        customer_id:
+          description: The customer the event relates to
+          type: string
+          example: 19677d9f-90e7-44a6-a32e-566990623da4
+        has_new_transactions:
+          $ref: '#/components/schemas/HasNewTransactions'
+        provider:
+          type: string
+          description: Name of the provider (banking institution)
+        reconnect_required:
+          $ref: '#/components/schemas/ReconnectRequired'
+        result:
+          $ref: '#/components/schemas/ConnectResultCodes'
+        status:
+          type: string
+          description: The general status of a task
+          enum:
+            - Completed
+            - Failed
+        task_id:
+          description: The task identifier that the event relates to
+          type: string
+          example: e145c656-4a90-45db-a025-af7765482c8c
+        event:
+          type: string
+          description: The task type for the event.
+    SubTaskV2View:
+      title: SubTask V2 View
+      description: A task view.
+      type: object
+      properties:
+        task_id:
+          $ref: '#/components/schemas/TaskId'
+        provider:
+          type: string
+          description: The provider (ASPSP) associated with this task
+        result:
+          $ref: '#/components/schemas/ConnectResultCodes'
+        status:
+          $ref: '#/components/schemas/TaskStatusCaps'
+        reconnect_required:
+          $ref: '#/components/schemas/ReconnectRequired'
+        has_new_transactions:
+          $ref: '#/components/schemas/HasNewTransactions'
+    TaskV2View:
+      title: Task V2 View
+      description: A task view.
+      type: object
+      properties:
+        task_id:
+          $ref: '#/components/schemas/TaskId'
+        result:
+          $ref: '#/components/schemas/ConnectResultCodes'
+        status:
+          $ref: '#/components/schemas/TaskStatusCaps'
+        has_new_transactions:
+          $ref: '#/components/schemas/HasNewTransactions'
+        sub_tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubTaskV2View'
+    OpenBankingRefreshV2Response:
+      title: Refresh V2 Task Response
+      type: object
+      description: Expected response structure
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/TaskV2View'
+        metadata:
+          type: object
+          description: Refresh Response Metadata
+          properties:
             status:
               $ref: '#/components/schemas/TaskStatusCaps'
             next_url:
@@ -13904,7 +14583,7 @@ components:
             type: string
         last_synced_at:
           type: string
-          description: The date at which the last data refresh (sync) occured for this consent object
+          description: The date at which the last data refresh (sync) occured for this consent object. For revoked consents this will be the time that the conesnt was revoked.
     GetOBConsentsResponse:
       title: Available Open Banking Consents
       type: object
