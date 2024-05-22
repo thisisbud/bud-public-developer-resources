@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "e2c232d2-5ef6-4266-a9c9-34ff1f2b0232",
+		"_postman_id": "17357c5b-d293-405d-ba9f-f2e7c8520118",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25466084"
+		"_exporter_id": "30390585"
 	},
 	"item": [
 		{
@@ -1123,7 +1123,7 @@
 					"name": "Manage a Connection",
 					"item": [
 						{
-							"name": "Initiate Refresh",
+							"name": "Initiate Refresh (deprecated)",
 							"event": [
 								{
 									"listen": "test",
@@ -1192,7 +1192,7 @@
 							"response": []
 						},
 						{
-							"name": "Retrieve refresh status",
+							"name": "Retrieve refresh status (deprecated)",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -1231,6 +1231,123 @@
 									],
 									"path": [
 										"open-banking",
+										"refresh",
+										"{{refresh_task_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Initiate Refresh V2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has refresh_task_id\"] = jsonData.data.task_id;",
+											"",
+											"pm.environment.set(\"refresh_task_id\", jsonData.data.task_id);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Ip-Address",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n}"
+								},
+								"url": {
+									"raw": "{{proxy_url}}open-banking/v2/refresh",
+									"host": [
+										"{{proxy_url}}open-banking"
+									],
+									"path": [
+										"v2",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve refresh V2 status",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"type": "text",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}open-banking/v2/refresh/{{refresh_task_id}}",
+									"host": [
+										"{{proxy_url}}open-banking"
+									],
+									"path": [
+										"v2",
 										"refresh",
 										"{{refresh_task_id}}"
 									]
