@@ -10999,6 +10999,7 @@ components:
         operation_id:
           $ref: '#/components/schemas/OperationId'
         data:
+          nullable: true
           type: array
           items:
             $ref: '#/components/schemas/CategoriesTotalV2'
