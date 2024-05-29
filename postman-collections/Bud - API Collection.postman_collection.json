@@ -3410,6 +3410,12 @@
 											"value": "true",
 											"description": "If set to `true` the result of category totals will include the l2 totals used in the computation",
 											"disabled": true
+										},
+										{
+											"key": "category_filter",
+											"value": "essential",
+											"description": "Filters the categories included in the category totals to just those with the label(s) specified by this parameter",
+											"disabled": true
 										}
 									]
 								}
@@ -3495,6 +3501,12 @@
 											"key": "granularity",
 											"value": "weekly",
 											"description": "enumeration defining the granularity of the transaction windows:\n- `daily`\n- `weekly`\n- `biweekly`\n- `monthly`\n- `quarterly`\n- `six_monthly`\n- `annually`\n\n. defaults to monthly",
+											"disabled": true
+										},
+										{
+											"key": "category_filter",
+											"value": "essential",
+											"description": "Filters the categories included in the category totals to just those with the label(s) specified by this parameter",
 											"disabled": true
 										}
 									]
