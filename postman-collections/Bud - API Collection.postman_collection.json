@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "17357c5b-d293-405d-ba9f-f2e7c8520118",
+		"_postman_id": "d90492e5-ee98-4ae6-8e3d-2cb2777143c9",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30390585"
+		"_exporter_id": "32569087"
 	},
 	"item": [
 		{
@@ -351,6 +351,99 @@
 									]
 								},
 								"description": "This endpoint is used to delete an existing Customer."
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Customers V3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"packages": {},
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}/platform/v3/customers",
+									"host": [
+										"{{proxy_url}}"
+									],
+									"path": [
+										"platform",
+										"v3",
+										"customers"
+									],
+									"query": [
+										{
+											"key": "date_from",
+											"value": "2022-01-01T01:00:00Z",
+											"description": "Only include customers created at or after this time",
+											"disabled": true
+										},
+										{
+											"key": "date_to",
+											"value": "2024-01-01T01:00:00Z",
+											"description": "Only include customers created at or before this time",
+											"disabled": true
+										},
+										{
+											"key": "idempotent_identifier",
+											"value": "user-assigned-id",
+											"description": "Only include customers with this idempotent identifier",
+											"disabled": true
+										},
+										{
+											"key": "page_size",
+											"value": "200",
+											"description": "Number of results to return with a single request",
+											"disabled": true
+										},
+										{
+											"key": "page_token",
+											"value": null,
+											"description": "Token to retrieve next page by",
+											"disabled": true
+										}
+									]
+								},
+								"description": "This endpoint is used to retrieve a list of customers associated with the project."
 							},
 							"response": []
 						},
@@ -4631,178 +4724,6 @@
 											"description": "A minimum percentage change between the previous and latest amounts.",
 											"disabled": true
 										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Custom Signals",
-					"item": [
-						{
-							"name": "List Components",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									}
-								],
-								"url": {
-									"raw": "{{proxy_url}}v1/signal/custom/components",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"signal",
-										"custom",
-										"components"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create Custom Insight",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"custom_insight_id\", jsonData.data.insight_id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [
-									{
-										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
-									},
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"name\": \"parent-with-kids\",\n\t\"description\": \"Matches customers with childcare expenses\",\n\t\"components\": [\n\t\t{\n\t\t\t\"name\": \"expenditure_l3s\",\n\t\t\t\"parameters\": {\n\t\t\t\t\"l3-categories\": [\"childcare_and_nursery\"],\n\t\t\t\t\"amount\": 400,\n\t\t\t\t\"period\": \"4M\"\n\t\t\t}\n\t\t}\n\t]\n}"
-								},
-								"url": {
-									"raw": "{{proxy_url}}v1/signal/custom/insights",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"signal",
-										"custom",
-										"insights"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Retrieve Custom Insight",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									}
-								],
-								"url": {
-									"raw": "{{proxy_url}}v1/signal/custom/{{custom_insight_id}}/schema",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"signal",
-										"custom",
-										"{{custom_insight_id}}",
-										"schema"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Compare Custom Insight",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
-									},
-									{
-										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
-									}
-								],
-								"url": {
-									"raw": "{{proxy_url}}v1/signal/custom/{{custom_insight_id}}",
-									"host": [
-										"{{proxy_url}}v1"
-									],
-									"path": [
-										"signal",
-										"custom",
-										"{{custom_insight_id}}"
 									]
 								}
 							},
