@@ -4525,7 +4525,6 @@ paths:
             type: boolean
           example: true
           description: Whether to include the L2 categories in result. Defaults to false.
-        - $ref: '#/components/parameters/CategoryTotalsQueryCategoryFilter'
       responses:
         '200':
           description: OK
@@ -4615,7 +4614,6 @@ paths:
               - `annually`
 
               Defaults to `monthly`.
-        - $ref: '#/components/parameters/CategoryTotalsQueryCategoryFilter'
       responses:
         '200':
           description: OK
@@ -21416,15 +21414,6 @@ components:
         type: string
       example: GBP
       description: Use this parameter to filter the results returned on the `currency` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `currency` will be returned.
-    CategoryTotalsQueryCategoryFilter:
-      in: query
-      name: category_filter
-      schema:
-        type: string
-      example: essential
-      description: |
-        Filters the categories included in the category totals to just those with the label(s) specified by this parameter.
-        For the SOT on which categories have which filters see the Retrieve Categories endpoint.
     MerchantsTotalsIncludeCategories:
       in: header
       name: X-Include-Categories
