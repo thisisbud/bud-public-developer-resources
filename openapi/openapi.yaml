@@ -964,8 +964,7 @@ tags:
       Breakdown your customer's income and expenditure based on Bud's enrichments to help orientate their financial world.
   - name: Financial Data API
     description: |
-      These endpoints handle the aggregation and retrieval of financial data. They are designed to be generic across
-      a range of ingestion sources and regions.
+      These endpoints handle the aggregation and retrieval of financial data. They are designed to be generic across a range of ingestion sources and regions.
     x-displayName: Financial Data API
     x-traitTag: true
   - name: Retrieve Financial Data
@@ -3929,104 +3928,6 @@ paths:
           description: The request uses an unexpected HTTP method.
         5XX:
           description: An unexpected error occurred on the server side.
-    get:
-      security:
-        - OAuth2: []
-      tags:
-        - Manage Customers
-      summary: Retrieve Customers V3
-      description: |
-        This endpoint is used to list customers associated with the current project.
-
-        Customers are listed ordered by their `created_at` timestamp (in ascending order).
-        Deleted customers will not be included in the list.
-
-        The list of customers can be filtered by creation date with the `date_from` and `date_to`
-        query parameters, which expect dates in the RFC3339 format. The `idempotent_identifier` query
-        parameter can be used to list only customers created with the given idempotent identifier.
-
-        If more results pages are available, the response metadata object will contain a
-        `next_page_token` field which can be used to fetch the next page of results. The token should
-        be provided in the `page_token` query parameter for subsequent requests.
-
-        For more information on how to manage your Bud Customers, please, refer to the following
-        [guide](https://docs.thisisbud.com/docs/setup-customers)
-      operationId: platform_v3_customers_get
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - in: query
-          name: date_from
-          schema:
-            type: string
-          example: '2022-05-28T00:00:00Z'
-          description: |
-            Date (RFC3339) to filter customers created on or after which. To maintain backwards compatibility, 
-            dates in the format (YYYY-MM-DD) can also be used and will be assumed to be UTC.
-        - in: query
-          name: date_to
-          schema:
-            type: string
-          example: '2022-05-29T00:00:00Z'
-          description: |
-            Date (RFC3339) to filter customers created on or before which. To maintain backwards compatibility, 
-            dates in the format (YYYY-MM-DD) can also be used and will be assumed to be UTC. Uses the current date
-            by default.
-        - in: query
-          name: idempotent_identifier
-          schema:
-            type: string
-          example: internal-customer-id
-          description: |
-            List only customers created with the given idempotent identifier.
-        - name: page_size
-          in: query
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 1000
-          description: The number of results to return per page. Defaults to 200.
-        - name: page_token
-          in: query
-          schema:
-            type: string
-          description: The token to retrieve the next page of results.
-      responses:
-        '200':
-          description: Returns a list of customers.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomersGetAllV3Response'
-              example:
-                operation_id: platform_v3_customers_get
-                data:
-                  - customer_id: acbff0b9-299c-4065-b933-4a991e17da6d
-                    idempotent_identifier: acbff0b9-299c-4065-b933-4a991e17da6d
-                    created_at: 2019-02-27T06:11:57+0000
-                  - customer_id: ebb50ae5-8c5c-4205-9b61-e93ce84eb467
-                    created_at: 2019-02-27T06:11:57+0000
-                metadata:
-                  next_page_token: eyJwYWdlX3NpemUiOjIsInBhZ2UiOjF9
-                  results: 2
-        '400':
-          description: The request contains an invalid parameter.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              example:
-                operation_id: platform_v3_customers_get_all
-                code_id: bad_request
-                message: invalid page token
-                errors:
-                  page_token:
-                    - Failed to parse page token
-        '401':
-          description: An unauthenticated request was received.
-        '405':
-          description: The request uses an unexpected HTTP method.
-        5XX:
-          description: An unexpected error occurred on the server side.
   /platform/v3/customers/batch:
     post:
       security:
@@ -4858,10 +4759,7 @@ paths:
       summary: Retrieve Accounts V2
       description: |
         Retrieves a list of a customer's connected accounts. The result can be filtered using the parameters outlined below.
-
-        > 📘 Note:
-        >
-        > For more information on the Account object, please refer to our handy [guide](https://docs.thisisbud.com/docs/accounts).
+        > 📘 Note: > > For more information on the Account object, please refer to our handy [guide](https://docs.thisisbud.com/docs/accounts).
       operationId: financial_v2_accounts
       security:
         - OAuth2: []
@@ -4878,7 +4776,6 @@ paths:
           example: current_account
           description: |
             Use this parameter to filter the results returned on the `account_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `account_type` will be returned.
-
             Currently supported values include (but are not necessarily limited to):
               - `charge_card`
               - `credit_card`
@@ -4897,7 +4794,6 @@ paths:
           example: personal
           description: |
             Use this parameter to filter the results returned on the `usage_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `usage_type` will be returned.
-
             Currently supported values include (but are not necessarily limited to):
               - `personal`
               - `business`
@@ -4908,7 +4804,6 @@ paths:
           example: joint
           description: |
             Use this parameter to filter the results returned on the `holder_relationship_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `holder_relationship_type` will be returned.
-
             Currently supported values include (but are not necessarily limited to):
               - `sole`
               - `joint`
@@ -5056,10 +4951,7 @@ paths:
       summary: Retrieve Account By ID V2
       description: |
         Retrieves a customer's connected account by its ID.
-
-        > 📘 Note:
-        >
-        > For more information on the Account object, please refer to our handy [guide](https://docs.thisisbud.com/docs/accounts).
+        > 📘 Note: > > For more information on the Account object, please refer to our handy [guide](https://docs.thisisbud.com/docs/accounts).
       operationId: financial_v2_accounts_account_id
       security:
         - OAuth2: []
@@ -5199,22 +5091,10 @@ paths:
       summary: Retrieve Balances Over Time
       description: |
         List the balances of each bank account for a customer across all ingestion sources. Ordered by balance date.
-
-        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` 
-        and `from` dates provided. It then checks all the transactions within this range, calculating the balance at 
-        the end of each day.
-
-        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the 
-        account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint
-        returns an empty list.
-
-        You can only request balances within transaction windows, therefore if you ingest transactions without a 
-        transaction window, you won't be able to request balance for that time range. However those transactions will be
-        used to calculate the balance as well.
-
-        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the 
-        data supplied from this service by including the transaction_window field upon account ingestion.
-
+        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to`  and `from` dates provided. It then checks all the transactions within this range, calculating the balance at  the end of each day.
+        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the  account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint returns an empty list.
+        You can only request balances within transaction windows, therefore if you ingest transactions without a  transaction window, you won't be able to request balance for that time range. However those transactions will be used to calculate the balance as well.
+        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the  data supplied from this service by including the transaction_window field upon account ingestion.
         Results are limited to up to 5000 balance items across all accounts.
       operationId: financial_v2_balances_get
       security:
@@ -5232,7 +5112,6 @@ paths:
           example: daily
           description: |
             Specifies in what interval the balance over time should be retrieved.
-
             Currently supported values include (but are not necessarily limited to):
               - `daily`
               - `weekly`
@@ -5341,24 +5220,11 @@ paths:
         - Retrieve Financial Data
       summary: Retrieve Balances Over Time By Account
       description: |
-        List the balances of a specific bank account for a customer across all ingestion sources. Ordered by balance 
-        date.
-
-        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` 
-        and `from` dates provided. It then checks all the transactions within this range, calculating the balance at 
-        the end of each day.
-
-        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the 
-        account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint
-        returns an empty list.
-
-        You can only request balances within transaction windows, therefore if you ingest transactions without a 
-        transaction window, you won't be able to request balance for that time range. However those transactions will be
-        used to calculate the balance as well.
-
-        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the 
-        data supplied from this service by including the transaction_window field upon account ingestion.
-
+        List the balances of a specific bank account for a customer across all ingestion sources. Ordered by balance  date.
+        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to`  and `from` dates provided. It then checks all the transactions within this range, calculating the balance at  the end of each day.
+        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the  account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint returns an empty list.
+        You can only request balances within transaction windows, therefore if you ingest transactions without a  transaction window, you won't be able to request balance for that time range. However those transactions will be used to calculate the balance as well.
+        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the  data supplied from this service by including the transaction_window field upon account ingestion.
         Results are limited to up to 5000 balance items.
       operationId: financial_v2_accounts_balances_get
       security:
@@ -5377,7 +5243,6 @@ paths:
           example: daily
           description: |
             Specifies in what interval the balance over time should be retrieved.
-
             Currently supported values include (but are not necessarily limited to):
               - `daily`
               - `weekly`
@@ -5474,15 +5339,10 @@ paths:
         - Retrieve Financial Data
       summary: Retrieve Transactions V2
       description: |
-        List the Transactions for a customer across all ingestion sources and accounts. Ordered by `date_time` and then 
-        `transaction_id` descending.
+        List the Transactions for a customer across all ingestion sources and accounts. Ordered by `date_time` and then  `transaction_id` descending.
                 
-        They are also provided with Enrichments - contextual information generated by Bud's artificial intelligence 
-        models. Enrichments are optional because not all Enrichments are relevant to all Transactions, or because they
-        did not have enough information to generate enrichments (e.g. pending Transactions).
-
-        The Enrichment process also generates tags, which can be used for filtering using the `include_tags` and 
-        `exclude_tags` query parameters. 
+        They are also provided with Enrichments - contextual information generated by Bud's artificial intelligence  models. Enrichments are optional because not all Enrichments are relevant to all Transactions, or because they did not have enough information to generate enrichments (e.g. pending Transactions).
+        The Enrichment process also generates tags, which can be used for filtering using the `include_tags` and  `exclude_tags` query parameters. 
       operationId: v2_transactions_get
       security:
         - OAuth2: []
@@ -5496,17 +5356,14 @@ paths:
             type: string
           example: '2022-05-28T00:00:00Z'
           description: |
-            Date (RFC3339) from which the transactions should be returned from. To maintain backwards compatibility, 
-            dates in the format (YYYY-MM-DD) can also be used and will be assumed to be UTC.
+            Date (RFC3339) from which the transactions should be returned from. To maintain backwards compatibility,  dates in the format (YYYY-MM-DD) can also be used and will be assumed to be UTC.
         - in: query
           name: date_to
           schema:
             type: string
           example: '2022-05-29T00:00:00Z'
           description: |
-            Date (RFC3339) from which the transactions should be returned to. To maintain backwards compatibility, 
-            dates in the format (YYYY-MM-DD) can also be used and will be assumed to be UTC. Uses the current date
-            by default.
+            Date (RFC3339) from which the transactions should be returned to. To maintain backwards compatibility,  dates in the format (YYYY-MM-DD) can also be used and will be assumed to be UTC. Uses the current date by default.
         - in: query
           name: page_size
           schema:
@@ -5718,15 +5575,8 @@ paths:
         - Retrieve Financial Data
       summary: Retrieve Authorised Payments V2
       description: |
-        Retrieves a list of a customer's authorised payments.
-        Currently supported authorised payment types include (but are not necessarily limited to):
-        - direct debits
-        - standing orders
-        - scheduled payments
-
-        > 📘 Note:
-        >
-        > Not all providers support authorised payments
+        Retrieves a list of a customer's authorised payments. Currently supported authorised payment types include (but are not necessarily limited to): - direct debits - standing orders - scheduled payments
+        > 📘 Note: > > Not all providers support authorised payments
       operationId: financial_v2_authorised_payments_get
       security:
         - OAuth2: []
@@ -5740,7 +5590,6 @@ paths:
             type: string
           description: |
             Identifier of the accounts from which transactions should be returned.
-
             Example: "5bd9ecaf31fc2d5172fd89cb61b89fc6"
         - in: query
           name: page_size
@@ -5749,7 +5598,6 @@ paths:
           example: 100
           description: |
             Maximum number of results to be returned. Defaults to 100, maximum is 200.
-
             Example: 100
         - in: query
           name: page_token
@@ -5757,8 +5605,7 @@ paths:
             type: string
           example: eyJvZmZzZXQiOjEwMH0
           description: |
-            The token required to fetch a specific page of results. Provided by the `next_page_token` field in the previous request.
-            Example: `eyJvZmZzZXQiOjEwMH0`
+            The token required to fetch a specific page of results. Provided by the `next_page_token` field in the previous request. Example: `eyJvZmZzZXQiOjEwMH0`
         - in: query
           name: status
           schema:
@@ -5778,7 +5625,6 @@ paths:
           example: direct_debit
           description: |
             Use this parameter to filter the results returned on the `type` associated with each result. If this parameter is not provided then results of any `type` will be returned.
-
             Currently supported values include (but are not necessarily limited to):
               - `direct_debit`
               - `standing_order`
@@ -5890,9 +5736,7 @@ paths:
       summary: Correct Transaction Categories V2
       description: |
         Allow a customer to change a transaction’s (and similar transactions') category and/or subcategory.
-
         If `include_similar` is set to `true`, then all previous and future transactions (i.e. those that are yet to happen yet) that are similar in nature to the specified transaction id will be corrected with the provided category and/or subcategory.
-
         Similar transactions are determined based on transactions with similar descriptions & amounts.
       operationId: corrections_v2_categories_post
       security:
@@ -12068,19 +11912,8 @@ components:
         tags:
           type: array
           description: |
-            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering.
-            Region and client specific.
-
-            | Value                   | Description                                               |
-            |:------------------------|:----------------------------------------------------------|
-            | `benefit`               | A government/non-profit benefit transaction               |
-            | `debt-collection`       | A transaction associated with a known debt-collector      |
-            | `loan`                  | A transaction associated with a loan                      |
-            | `income`                | A transaction associated with income                      |
-            | `pending`               | A transaction which has not been booked                   |
-            | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
-            | `salary`                | A transaction associated with a regular wage              |
-            | `subscription`          | A transaction associated with a subscription service      |
+            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering. Region and client specific.
+            | Value                   | Description                                               | |:------------------------|:----------------------------------------------------------| | `benefit`               | A government/non-profit benefit transaction               | | `debt-collection`       | A transaction associated with a known debt-collector      | | `loan`                  | A transaction associated with a loan                      | | `income`                | A transaction associated with income                      | | `pending`               | A transaction which has not been booked                   | | `regular-transaction`   | A transaction predicted to occur with a regular frequency | | `salary`                | A transaction associated with a regular wage              | | `subscription`          | A transaction associated with a subscription service      |
           items:
             type: string
     Enrichments:
@@ -12112,9 +11945,7 @@ components:
       title: Categories
       type: object
       description: |
-        Categories enrichment associated with a Transaction, as generated by Bud's artificial intelligence models. 
-        Currently two levels of category are supported, with `l1` being a coarse-grained category level and `l2` being
-        more refined.
+        Categories enrichment associated with a Transaction, as generated by Bud's artificial intelligence models.  Currently two levels of category are supported, with `l1` being a coarse-grained category level and `l2` being more refined.
       properties:
         l1:
           $ref: '#/components/schemas/Category'
@@ -12140,8 +11971,7 @@ components:
       title: Merchant
       type: object
       description: |
-        Merchant enrichment associated with a Transaction, as generated using a combination of Bud's artificial 
-        intelligence models and database of known merchants.
+        Merchant enrichment associated with a Transaction, as generated using a combination of Bud's artificial  intelligence models and database of known merchants.
       properties:
         id:
           type: string
@@ -12158,16 +11988,14 @@ components:
         tokens:
           type: array
           description: |
-            A list of tokens calculated from the transaction model, used to identify the Merchant. 
-            This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
+            A list of tokens calculated from the transaction model, used to identify the Merchant.  This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
           items:
             $ref: '#/components/schemas/Token'
     Processor:
       title: Processor
       type: object
       description: |
-        Processor enrichment associated with a Transaction, as generated using a combination of Bud's artificial 
-        intelligence models and database of known payment processors.
+        Processor enrichment associated with a Transaction, as generated using a combination of Bud's artificial  intelligence models and database of known payment processors.
       properties:
         id:
           type: string
@@ -12184,16 +12012,14 @@ components:
         tokens:
           type: array
           description: |
-            A list of tokens calculated from the transaction model, used to identify the Merchant. 
-            This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
+            A list of tokens calculated from the transaction model, used to identify the Merchant.  This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
           items:
             $ref: '#/components/schemas/Token'
     Regularity:
       title: Regularity
       type: object
       description: |
-        Regularity enrichment associated with a Transaction, as generated by Bud's artificial intelligence models. 
-        Transactions that are similar and have a known frequency will all have the same regularity enrichment.
+        Regularity enrichment associated with a Transaction, as generated by Bud's artificial intelligence models.  Transactions that are similar and have a known frequency will all have the same regularity enrichment.
       properties:
         frequency:
           type: string
@@ -12227,8 +12053,7 @@ components:
             address_lines:
               type: array
               description: |
-                The lines of the detected address. These could be anything from a full street address down to a simple town or city.
-                The level of detail depends on the resolution with which we are able to detect the transaction location.
+                The lines of the detected address. These could be anything from a full street address down to a simple town or city. The level of detail depends on the resolution with which we are able to detect the transaction location.
               items:
                 type: string
             geolocation:
@@ -12333,25 +12158,12 @@ components:
         merchant_category_code:
           type: string
           description: |
-            A Merchant Category Code (MCC) is a four-digit number listed in ISO 18245. 
-            An MCC is used to classify a business by the types of goods or services it provides.
+            A Merchant Category Code (MCC) is a four-digit number listed in ISO 18245.  An MCC is used to classify a business by the types of goods or services it provides.
         tags:
           type: array
           description: |
-            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering.
-            Region and client specific.
-
-            | Value                   | Description                                               |
-            |:------------------------|:----------------------------------------------------------|
-            | `benefit`               | A government/non-profit benefit transaction               |
-            | `debt-collection`       | A transaction associated with a known debt-collector      |
-            | `loan`                  | A transaction associated with a loan                      |
-            | `income`                | A transaction associated with income                      |
-            | `pending`               | A transaction which has not been booked                   |
-            | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
-            | `salary`                | A transaction associated with a regular wage              |
-            | `subscription`          | A transaction associated with a subscription service      |
-            | `online`                | A transaction associated with an online merchant          |
+            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering. Region and client specific.
+            | Value                   | Description                                               | |:------------------------|:----------------------------------------------------------| | `benefit`               | A government/non-profit benefit transaction               | | `debt-collection`       | A transaction associated with a known debt-collector      | | `loan`                  | A transaction associated with a loan                      | | `income`                | A transaction associated with income                      | | `pending`               | A transaction which has not been booked                   | | `regular-transaction`   | A transaction predicted to occur with a regular frequency | | `salary`                | A transaction associated with a regular wage              | | `subscription`          | A transaction associated with a subscription service      | | `online`                | A transaction associated with an online merchant          |
           items:
             type: string
     SyncEnrichments:
@@ -15218,25 +15030,12 @@ components:
         merchant_category_code:
           type: string
           description: |
-            A Merchant Category Code (MCC) is a four-digit number listed in ISO 18245. 
-            An MCC is used to classify a business by the types of goods or services it provides.
+            A Merchant Category Code (MCC) is a four-digit number listed in ISO 18245.  An MCC is used to classify a business by the types of goods or services it provides.
         tags:
           type: array
           description: |
-            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering.
-            Region and client specific.
-
-            | Value                   | Description                                               |
-            |:------------------------|:----------------------------------------------------------|
-            | `benefit`               | A government/non-profit benefit transaction               |
-            | `debt-collection`       | A transaction associated with a known debt-collector      |
-            | `loan`                  | A transaction associated with a loan                      |
-            | `income`                | A transaction associated with income                      |
-            | `pending`               | A transaction which has not been booked                   |
-            | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
-            | `salary`                | A transaction associated with a regular wage              |
-            | `subscription`          | A transaction associated with a subscription service      |
-            | `online`                | A transaction associated with an online merchant          |
+            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering. Region and client specific.
+            | Value                   | Description                                               | |:------------------------|:----------------------------------------------------------| | `benefit`               | A government/non-profit benefit transaction               | | `debt-collection`       | A transaction associated with a known debt-collector      | | `loan`                  | A transaction associated with a loan                      | | `income`                | A transaction associated with income                      | | `pending`               | A transaction which has not been booked                   | | `regular-transaction`   | A transaction predicted to occur with a regular frequency | | `salary`                | A transaction associated with a regular wage              | | `subscription`          | A transaction associated with a subscription service      | | `online`                | A transaction associated with an online merchant          |
           items:
             type: string
     IngestV2SyncResponseData:
@@ -15492,46 +15291,6 @@ components:
             $ref: '#/components/schemas/IngestResponseV3SubTask'
         metadata:
           $ref: '#/components/schemas/IngestStatusTaskMetadata'
-    CustomersGetAllV3DataItem:
-      type: object
-      description: Representation of a Customer.
-      required:
-        - customer_id
-        - created_at
-      properties:
-        customer_id:
-          type: string
-          format: uuid
-        created_at:
-          type: string
-          description: Date and time at which the Customer has been registered (ISO 8601).
-        idempotent_identifier:
-          type: string
-          description: Client-assigned idempotent customer identifier (omitted if not present).
-    CustomerCreatedV3Metadata:
-      title: Customer Created V3 Metadata
-      type: object
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time the customer was created. Format ISO 8601.
-    CustomersGetAllV3Response:
-      title: List customers response
-      type: object
-      description: Expected response structure.
-      required:
-        - operation_id
-        - data
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomersGetAllV3DataItem'
-        metadata:
-          $ref: '#/components/schemas/CustomerCreatedV3Metadata'
     CustomerContextType:
       title: Customer Context Type
       type: string
@@ -15623,6 +15382,14 @@ components:
           $ref: '#/components/schemas/CustomerContext'
         client_metadata:
           $ref: '#/components/schemas/ClientMetadata'
+    CustomerCreatedV3Metadata:
+      title: Customer Created V3 Metadata
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the customer was created. Format ISO 8601.
     CustomerCreateV3Response:
       title: Create Customer V3 Response
       type: object
