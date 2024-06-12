@@ -2483,6 +2483,11 @@
 											"key": "exclude_tags[0]",
 											"value": "",
 											"disabled": true
+										},
+										{
+											"key": "updated_after",
+											"value": "2024-01-01T00:00:00Z",
+											"disabled": true
 										}
 									]
 								}
