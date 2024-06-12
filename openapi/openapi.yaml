@@ -4490,6 +4490,8 @@ paths:
           description: The request contains an invalid payload
         '401':
           description: Unauthorised request
+        '404':
+          description: Model not found
         '405':
           description: An unexpected HTTP method was used
         5XX:
@@ -5427,6 +5429,15 @@ paths:
               - debit
           example: credit
           description: Credit debit indicator for which associated transactions should be returned.
+        - in: query
+          name: updated_after
+          schema:
+            type: string
+          example: '2024-06-01T11:00:00Z'
+          description: |
+            The `updated_after` parameter lets you retrieve transactions that have been modified since  a specific date and time. This format should follow the RFC3339 standard (e.g., "2024-06-01T11:00:00Z").
+            This parameter is particularly useful for keeping local copies of transactions up-to-date. By storing the  timestamp of your last successful fetch, you can request only transactions updated after that point during  subsequent retrievals. 
+            This approach ensures you only fetch the latest changes, making the process more streamlined.
       responses:
         '200':
           description: The request was successfully processed.
@@ -11613,11 +11624,11 @@ paths:
     get:
       tags:
         - Custom Insights
-      summary: Details transactions used to generate a custom insight
+      summary: Detail the transactions used to generate a custom insight
       description: |
         This endpoint will return some transactions used to determine the custom insight.
 
-        More specifically it will return transactions filtered for in the WHRE expression of the custom insight query.
+        More specifically it will return transactions filtered for in the WHERE expression of the custom insight query.
       deprecated: false
       security:
         - OAuth2: []
@@ -11813,6 +11824,8 @@ paths:
       responses:
         '204':
           description: OK
+        '400':
+          description: The request contained an invalid payload, in this case often a syntax error in the query.
         '404':
           description: Custom insight doesn't exist, thus cannot be patched
         5XX:
@@ -17142,8 +17155,7 @@ components:
 
                     Example: "81a68821-dca6-4771-80d4-002c7fce412e"
                   example: 81a68821-dca6-4771-80d4-002c7fce412e
-                next_page_token:
-                  $ref: '#/components/schemas/BudNextPageTokenMetadata'
+            - $ref: '#/components/schemas/BudNextPageTokenMetadata'
     CreateSavingsGoalActionRequest:
       title: Create Savings Goal Action Request
       required:
@@ -17751,8 +17763,7 @@ components:
                   example: 81a68821-dca6-4771-80d4-002c7fce412e
                 page_size:
                   $ref: '#/components/schemas/BudPageSizeMetadata'
-                next_page_token:
-                  $ref: '#/components/schemas/BudNextPageTokenMetadata'
+            - $ref: '#/components/schemas/BudNextPageTokenMetadata'
     RegularPaymentsConfirmed:
       title: Regular Payment Object
       type: object
