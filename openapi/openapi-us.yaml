@@ -3268,6 +3268,15 @@ paths:
               type: string
           example: benefit
           description: Tags for which associated transactions should not be returned.
+        - in: query
+          name: updated_after
+          schema:
+            type: string
+          example: '2024-06-01T11:00:00Z'
+          description: |
+            The `updated_after` parameter lets you retrieve transactions that have been modified since  a specific date and time. This format should follow the RFC3339 standard (e.g., "2024-06-01T11:00:00Z").
+            This parameter is particularly useful for keeping local copies of transactions up-to-date. By storing the  timestamp of your last successful fetch, you can request only transactions updated after that point during  subsequent retrievals. 
+            This approach ensures you only fetch the latest changes, making the process more streamlined.
       responses:
         '200':
           description: The request was successfully processed.
@@ -3837,6 +3846,8 @@ paths:
           description: The request contains an invalid payload
         '401':
           description: Unauthorised request
+        '404':
+          description: Category not found
         '405':
           description: An unexpected HTTP method was used
         5XX:
@@ -6579,6 +6590,158 @@ paths:
           description: Malformed request
         5XX:
           description: An unexpected error occurred on the server side
+  /insights/v1/custom/detail/{custom_insight_id}:
+    get:
+      tags:
+        - Custom Insights
+      summary: Detail the transactions used to generate a custom insight
+      description: |
+        This endpoint will return some transactions used to determine the custom insight.
+
+        More specifically it will return transactions filtered for in the WHERE expression of the custom insight query.
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: custom_insight_v1_detail_get
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/PathCustomInsightID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                required:
+                  - operation_id
+                  - data
+                properties:
+                  operation_id:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/components-schemas-Transaction'
+                  metadata:
+                    type: object
+                    properties:
+                      created_at:
+                        type: string
+                        description: The time when the profile was last built, and this insight was generated.
+                      results:
+                        type: integer
+                        description: The number of transactions returned.
+              example:
+                operation_id: custom_insight_v1_detail_get
+                data:
+                  - transaction_id: fbdc28e82f0f137586a526a88ec4a6be
+                    account_id: 5bd9ecaf31fc2d5172fd89cb61b89fc6
+                    provider: BankOfBud
+                    description: paypal* specialty coffee
+                    credit_debit_indicator: debit
+                    status: booked
+                    amount:
+                      value: '10.99'
+                      currency: GBP
+                    date_time: '2022-05-28T10:00:00Z'
+                    posted_date_time: '2022-05-29T00:00:00Z'
+                    enrichments:
+                      categories:
+                        l1:
+                          slug: eating_out
+                          confidence: '0.99'
+                        l2:
+                          slug: cafes_and_eating_out
+                          confidence: '0.98'
+                      merchant:
+                        id: 01cc2d49-6144-46f1-9414-67c99b139a95
+                        slug: specialty_coffee
+                        display_name: Specialty Coffee Supplier Ltd.
+                        logo: http://url/specialty_coffee_supplier_logo.jpeg
+                        tokens:
+                          - value: speciality coffee
+                            confidence: '0.98'
+                      location:
+                        address_lines:
+                          - '180'
+                          - Shepherds Bush Rd
+                          - London
+                          - W6 7NL
+                          - United Kingdom
+                        geolocation:
+                          longitude: 51.497678,
+                          latitude: -0.223766
+                      processor:
+                        id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                        slug: paypal
+                        display_name: PayPal
+                        logo: http://url/paypal_logo.jpeg
+                        tokens:
+                          - value: paypal
+                            confidence: '0.92'
+                      regularity:
+                        frequency: monthly
+                        predicted_date_times:
+                          - '2022-06-28T15:00:00Z'
+                          - '2022-07-28T15:00:00Z'
+                          - '2022-08-28T15:00:00Z'
+                        group_label: a_group_id
+                      transaction_types:
+                        - card
+                        - debit
+                      names:
+                        - jane doe
+                    tags:
+                      - regular-transaction
+                  - transaction_id: a2294cebb45d2a6e0cfc70d270988d8c
+                    account_id: 37c633a71237b9a8282e09587109668e
+                    provider: BankOfBud
+                    description: Tesco 2956 London GBR
+                    credit_debit_indicator: debit
+                    status: booked
+                    amount:
+                      value: '50.23'
+                      currency: GBP
+                    date_time: '2022-05-26T10:00:00Z'
+                    posted_date_time: '2022-05-27T00:00:00Z'
+                    enrichments:
+                      categories:
+                        l1:
+                          slug: eating_out
+                          confidence: '0.99'
+                        l2:
+                          slug: cafes_and_eating_out
+                          confidence: '0.98'
+                      merchant:
+                        id: 0980cf54-6052-4527-84ff-e6f9b169884f
+                        slug: tesco_stores
+                        display_name: Tesco
+                        logo: http://url/tesco_stores_logo.jpeg
+                        tokens:
+                          - value: tesco
+                            confidence: '0.96'
+                      location:
+                        address_lines:
+                          - '180'
+                          - Shepherds Bush Rd
+                          - London
+                          - W6 7NL
+                          - United Kingdom
+                        geolocation:
+                          longitude: 51.497678,
+                          latitude: -0.223766
+                      transaction_types:
+                        - card
+                        - debit
+                metadata:
+                  results: 2
+                  created_at: '2023-11-23T10:41:55Z'
+        '404':
+          description: Custom insight doesn't exist, or there has been no profile built for this customer
+        5XX:
+          description: An unexpected error occurred on the server side
   /insights/v1/custom/manage/{custom_insight_id}:
     delete:
       tags:
@@ -6631,6 +6794,8 @@ paths:
       responses:
         '204':
           description: OK
+        '400':
+          description: The request contained an invalid payload, in this case often a syntax error in the query.
         '404':
           description: Custom insight doesn't exist, thus cannot be patched
         5XX:
@@ -12435,8 +12600,7 @@ components:
 
                     Example: "81a68821-dca6-4771-80d4-002c7fce412e"
                   example: 81a68821-dca6-4771-80d4-002c7fce412e
-                next_page_token:
-                  $ref: '#/components/schemas/BudNextPageTokenMetadata'
+            - $ref: '#/components/schemas/BudNextPageTokenMetadata'
     CreateSavingsGoalActionRequest:
       title: Create Savings Goal Action Request
       required:
@@ -13044,8 +13208,7 @@ components:
                   example: 81a68821-dca6-4771-80d4-002c7fce412e
                 page_size:
                   $ref: '#/components/schemas/BudPageSizeMetadata'
-                next_page_token:
-                  $ref: '#/components/schemas/BudNextPageTokenMetadata'
+            - $ref: '#/components/schemas/BudNextPageTokenMetadata'
     DateTimeISO8601:
       title: Date/Time (ISO 8601)
       type: string
