@@ -3341,7 +3341,7 @@ paths:
         This endpoint is for pushing customer(s) account(s) and balance(s) through the Bud architecture.
         It can ingest data for multiple customers per request.
         By default, this is synchronous and will report any issue with the data in the response.
-        If a 'X-Disable-Synchronous' header is present and set to true, the process will create a task in the background and be enrirely 'non-blocking'.
+        If a 'X-Disable-Synchronous' header is present and set to true, the process will create a task in the background and be entirely 'non-blocking'.
         In this scenario, the response metadata will contain a Task ID and the next URL which would then be used for finding out the operation's result.
       operationId: v2_ingest_accounts_post
       security:
@@ -3354,7 +3354,7 @@ paths:
           description: If present and set to true, a task is created and a response is returned immediately
           schema:
             type: boolean
-            default: 'false'
+            default: false
       requestBody:
         required: true
         content:
@@ -11609,6 +11609,158 @@ paths:
           description: Malformed request
         5XX:
           description: An unexpected error occurred on the server side
+  /insights/v1/custom/detail/{custom_insight_id}:
+    get:
+      tags:
+        - Custom Insights
+      summary: Details transactions used to generate a custom insight
+      description: |
+        This endpoint will return some transactions used to determine the custom insight.
+
+        More specifically it will return transactions filtered for in the WHRE expression of the custom insight query.
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: custom_insight_v1_detail_get
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/PathCustomInsightID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                required:
+                  - operation_id
+                  - data
+                properties:
+                  operation_id:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
+                  metadata:
+                    type: object
+                    properties:
+                      created_at:
+                        type: string
+                        description: The time when the profile was last built, and this insight was generated.
+                      results:
+                        type: integer
+                        description: The number of transactions returned.
+              example:
+                operation_id: custom_insight_v1_detail_get
+                data:
+                  - transaction_id: fbdc28e82f0f137586a526a88ec4a6be
+                    account_id: 5bd9ecaf31fc2d5172fd89cb61b89fc6
+                    provider: BankOfBud
+                    description: paypal* specialty coffee
+                    credit_debit_indicator: debit
+                    status: booked
+                    amount:
+                      value: '10.99'
+                      currency: GBP
+                    date_time: '2022-05-28T10:00:00Z'
+                    posted_date_time: '2022-05-29T00:00:00Z'
+                    enrichments:
+                      categories:
+                        l1:
+                          slug: eating_out
+                          confidence: '0.99'
+                        l2:
+                          slug: cafes_and_eating_out
+                          confidence: '0.98'
+                      merchant:
+                        id: 01cc2d49-6144-46f1-9414-67c99b139a95
+                        slug: specialty_coffee
+                        display_name: Specialty Coffee Supplier Ltd.
+                        logo: http://url/specialty_coffee_supplier_logo.jpeg
+                        tokens:
+                          - value: speciality coffee
+                            confidence: '0.98'
+                      location:
+                        address_lines:
+                          - '180'
+                          - Shepherds Bush Rd
+                          - London
+                          - W6 7NL
+                          - United Kingdom
+                        geolocation:
+                          longitude: 51.497678,
+                          latitude: -0.223766
+                      processor:
+                        id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                        slug: paypal
+                        display_name: PayPal
+                        logo: http://url/paypal_logo.jpeg
+                        tokens:
+                          - value: paypal
+                            confidence: '0.92'
+                      regularity:
+                        frequency: monthly
+                        predicted_date_times:
+                          - '2022-06-28T15:00:00Z'
+                          - '2022-07-28T15:00:00Z'
+                          - '2022-08-28T15:00:00Z'
+                        group_label: a_group_id
+                      transaction_types:
+                        - card
+                        - debit
+                      names:
+                        - jane doe
+                    tags:
+                      - regular-transaction
+                  - transaction_id: a2294cebb45d2a6e0cfc70d270988d8c
+                    account_id: 37c633a71237b9a8282e09587109668e
+                    provider: BankOfBud
+                    description: Tesco 2956 London GBR
+                    credit_debit_indicator: debit
+                    status: booked
+                    amount:
+                      value: '50.23'
+                      currency: GBP
+                    date_time: '2022-05-26T10:00:00Z'
+                    posted_date_time: '2022-05-27T00:00:00Z'
+                    enrichments:
+                      categories:
+                        l1:
+                          slug: eating_out
+                          confidence: '0.99'
+                        l2:
+                          slug: cafes_and_eating_out
+                          confidence: '0.98'
+                      merchant:
+                        id: 0980cf54-6052-4527-84ff-e6f9b169884f
+                        slug: tesco_stores
+                        display_name: Tesco
+                        logo: http://url/tesco_stores_logo.jpeg
+                        tokens:
+                          - value: tesco
+                            confidence: '0.96'
+                      location:
+                        address_lines:
+                          - '180'
+                          - Shepherds Bush Rd
+                          - London
+                          - W6 7NL
+                          - United Kingdom
+                        geolocation:
+                          longitude: 51.497678,
+                          latitude: -0.223766
+                      transaction_types:
+                        - card
+                        - debit
+                metadata:
+                  results: 2
+                  created_at: '2023-11-23T10:41:55Z'
+        '404':
+          description: Custom insight doesn't exist, or there has been no profile built for this customer
+        5XX:
+          description: An unexpected error occurred on the server side
   /insights/v1/custom/manage/{custom_insight_id}:
     delete:
       tags:
@@ -11782,7 +11934,7 @@ components:
 
         1. Perform OAuth2 Client Credentials authentication using API Credentials (`client_id`,`client_secret`) to obtain an `access_token` against `/v1/oauth/token` endpoint,
         2. Use `access_token` as Bearer Authorisation for every other API request,
-        3. Include `X-Client-Id` (=client_id) within the header of every API request
+        3. Include `X-Client-Id` (=client_id) within the header of every API request,
         4. Note that some of the requests may also require `X-Customer-Id` to be provided within the request header.
 
         ### Examples
@@ -13130,14 +13282,11 @@ components:
           description: |
             When provided, an email will be delivered to the customer with a URL for managing their consents with you.
 
-            This allows the customer to separately view, revoke and reconfirm consents for accounts that they
-            have agreed to share with you, as well as download the financial data for their own records.
+            This allows the customer to separately view, revoke and reconfirm consents for accounts that they have agreed to share with you, as well as download the financial data for their own records.
 
             Use this option if your application does not already provide a means for customers to manage their financial data consents.
 
-            **Note**: for some clients, we enforce that customers have access to this consent management feature. In this case,
-            even if `customer_email` is not provided, the customer will be prompted at the start of the Connect flow to
-            provide their email address, so that the URL will still be delivered to them.
+            **Note**: for some clients, we enforce that customers have access to this consent management feature. In this case, even if `customer_email` is not provided, the customer will be prompted at the start of the Connect flow to provide their email address, so that the URL will still be delivered to them.
     AuthGatewayURLResponse:
       title: Authorisation Gateweay URL Response
       type: object
@@ -13189,8 +13338,7 @@ components:
       title: OB Synchronisation Webhook Payload
       type: object
       description: |
-        The payload sent to the client defined webhook (via the console) when an Open Banking Synchronisation (connect
-        or refresh) task completes.
+        The payload sent to the client defined webhook (via the console) when an Open Banking Synchronisation (connect or refresh) task completes.
       required:
         - data
       properties:
@@ -13231,10 +13379,7 @@ components:
                 - 'true'
                 - 'false'
               description: |
-                To describe whether new transactions have been pulled from the relevant
-                ASPSP during the refresh. Note that if this field is set to `false` then
-                there is no need to make a request to any other downstream endpoints to
-                collect the data related to that customer.
+                To describe whether new transactions have been pulled from the relevant ASPSP during the refresh. Note that if this field is set to `false` then there is no need to make a request to any other downstream endpoints to collect the data related to that customer.
             reconnect_required:
               type: string
               enum:
@@ -13291,8 +13436,7 @@ components:
       title: OB Webhook Payload
       type: object
       description: |
-        The payload sent to the client defined webhook (via the console) when an Open Banking (connect
-        or refresh) task completes.
+        The payload sent to the client defined webhook (via the console) when an Open Banking (connect or refresh) task completes.
       required:
         - data
       properties:
@@ -13650,8 +13794,7 @@ components:
       title: OB Webhook Payload
       type: object
       description: |
-        The payload sent to the client defined webhook (via the console) when an Open Banking (connect
-        or refresh) task completes.
+        The payload sent to the client defined webhook (via the console) when an Open Banking (connect or refresh) task completes.
       required:
         - data
       properties:
@@ -13692,10 +13835,7 @@ components:
                 - 'true'
                 - 'false'
               description: |
-                To describe whether new transactions have been pulled from the relevant
-                ASPSP during the refresh. Note that if this field is set to `false` then
-                there is no need to make a request to any other downstream endpoints to
-                collect the data related to that customer.
+                To describe whether new transactions have been pulled from the relevant ASPSP during the refresh. Note that if this field is set to `false` then there is no need to make a request to any other downstream endpoints to collect the data related to that customer.
             reconnect_required:
               type: string
               enum:
@@ -14826,6 +14966,7 @@ components:
               title: Map of Account
               description: |
                 A map of accounts to missing fields array.
+
                 The key contains the index of the account causing issues.
                 See example
               additionalProperties:
@@ -14835,6 +14976,7 @@ components:
               title: Map of Account
               description: |
                 A map of accounts to invalid fields array.
+
                 The key contains the index of the account causing issues.
                 See example
               additionalProperties:
@@ -14862,9 +15004,7 @@ components:
     SynchronousEnrichmentsList:
       type: array
       description: |
-        The list of enrichments product to execute during the synchronous execution of the request. Based on this list, the transactions sent
-        will be processed through a number of enrichment flows, and this drives the amount of additional information attached to each transactions
-        in the synchronous process.
+        The list of enrichments product to execute during the synchronous execution of the request. Based on this list, the transactions sent will be processed through a number of enrichment flows, and this drives the amount of additional information attached to each transactions in the synchronous process.
 
         The list of available enrichement products during the synchronous ingestion is the following:
         - categories
@@ -14872,8 +15012,7 @@ components:
 
         The default behaviour is to execute `categories` and `merchants`.
 
-        Note: This attribute doesn't limit the execution of all Bud's enrichments, we'll still return a number of additional information (eg: tokens),
-        but it switches on and off the two enrichments listed above.
+        Note: This attribute doesn't limit the execution of all Bud's enrichments, we'll still return a number of additional information (eg: tokens), but it switches on and off the two enrichments listed above.
       example:
         - categories
         - merchants
@@ -14897,8 +15036,7 @@ components:
           type: string
           description: |
             Unique, immutable transaction identifier. This can be of any format (not necessarily UUID), with a maximum of 255 characters.
-            It's important this ID is immutable over time and unique as we use this ID as a key to store the transaction against your customer,
-            so if more than one transaction has the same ID for the same customer, we will store only one of them.
+            It's important this ID is immutable over time and unique as we use this ID as a key to store the transaction against your customer, so if more than one transaction has the same ID for the same customer, we will store only one of them.
           example: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
         description:
           type: string
@@ -14934,10 +15072,9 @@ components:
       type: object
       title: Transaction Window
       description: |
-        The transaction window is used to describe the entire period for which you have
-        provided full coverage for the transactions within the request. It is used by Bud to
-        ascertain periods of inactivity on the account(s) in question to ensure accurate data
-        can be provided across downstream endpoints (e.g. Retrieve Balances Over Time).
+        The transaction window is used to describe the entire period for which you have provided full coverage for the transactions within the request. 
+
+        It is used by Bud to ascertain periods of inactivity on the account(s) in question to ensure accurate data can be provided across downstream endpoints (e.g. Retrieve Balances Over Time).
       required:
         - account_id
         - start
@@ -15097,6 +15234,7 @@ components:
               title: Map of transaction IDs
               description: |
                 A map of transaction IDs to missing fields array.
+
                 If the transaction ID was missing use the request transaction array index to identify it.
                 See example
               additionalProperties:
@@ -15106,6 +15244,7 @@ components:
               title: Map of transaction IDs
               description: |
                 A map of transaction IDs to invalid fields array.
+
                 If the transaction ID was missing use the request transaction array index to identify it.
                 See example
               additionalProperties:
@@ -15973,7 +16112,7 @@ components:
               relationship:
                 type: string
                 description: |
-                  The relationship that the individual holder has with the account. If parties data is not present, this will always be `unknown`
+                  The relationship that the individual holder has with the account. If parties data is not present, this will always be `unknown`.
 
                   Currently supported values include (but are not necessarily limited to):
                     - `sole`
@@ -16098,6 +16237,24 @@ components:
                 enum:
                   - credit
                   - debit
+        transaction_windows:
+          type: array
+          title: Transaction Windows
+          description: |
+            The transaction windows indicate for which periods we have full coverage of transactions ingested for the account.
+          items:
+            type: object
+            title: Transaction Window
+            required:
+              - from
+              - to
+            properties:
+              from:
+                type: string
+                description: A [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339) datetime recording the start of the window
+              to:
+                type: string
+                description: A [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339) datetime recording the end of the window
         credit_lines:
           type: array
           title: Credit Lines
@@ -16238,7 +16395,7 @@ components:
         type:
           type: string
           description: |
-            The type for the given balance
+            The type for the given balance.
 
             Currently supported values include (but are not necessarily limited to):
               - `closing_available`
@@ -20086,8 +20243,7 @@ components:
       type: object
       description: |
         Categories enrichment associated with a Transaction, as generated by Bud's artificial intelligence models.
-        Currently two levels of category are supported, with `l1` being a coarse-grained category level and `l2` being
-        more refined.
+        Currently two levels of category are supported, with `l1` being a coarse-grained category level and `l2` being more refined.
       properties:
         l1:
           $ref: '#/components/schemas/Category'
@@ -21251,8 +21407,7 @@ components:
           - 'true'
       example: 'true'
       description: |
-        Enable transaction ID generation based on the contents of the transaction data. The transaction ID field still needs to be provided, but it will
-        not be validated or checked for uniqueness and instead overwritten with a generated value.
+        Enable transaction ID generation based on the contents of the transaction data. The transaction ID field still needs to be provided, but it will not be validated or checked for uniqueness and instead overwritten with a generated value.
         When generating IDs from transaction data, the following fields are taken into account: account ID, description, amount, currency and date.
     PathCustomerID:
       in: path
