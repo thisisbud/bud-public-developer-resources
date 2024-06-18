@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "86bd3734-0406-43f2-8687-bff46a358168",
+		"_postman_id": "a5b631cf-28da-49c1-8d73-dbe42e84dc55",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30694952"
@@ -2594,53 +2594,6 @@
 								}
 							},
 							"response": []
-						},
-						{
-							"name": "Correct Transaction Categories V2",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [
-									{
-										"key": "content-type",
-										"value": "application/json"
-									},
-									{
-										"key": "X-Client-Id",
-										"type": "default",
-										"value": "{{api_credentials_id}}"
-									},
-									{
-										"key": "X-Customer-Id",
-										"type": "default",
-										"value": "{{customer_id}}"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "[\n     {\n          \"include_similar\": true,\n          \"transaction_id\": \"{{transaction_id}}\",\n          \"category_l1\": \"company_equipment\",\n          \"category_l2\": \"it_equipment\"\n     }\n]"
-								},
-								"url": {
-									"raw": "{{proxy_url}}corrections/v2/categories",
-									"host": [
-										"{{proxy_url}}corrections"
-									],
-									"path": [
-										"v2",
-										"categories"
-									]
-								}
-							},
-							"response": []
 						}
 					]
 				},
@@ -3342,6 +3295,53 @@
 				{
 					"name": "Correct Financial Data",
 					"item": [
+						{
+							"name": "Correct Transaction Categories V2",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "content-type",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "default",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "default",
+										"value": "{{customer_id}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n     {\n          \"include_similar\": true,\n          \"transaction_id\": \"{{transaction_id}}\",\n          \"category_l1\": \"company_equipment\",\n          \"category_l2\": \"it_equipment\"\n     }\n]"
+								},
+								"url": {
+									"raw": "{{proxy_url}}corrections/v2/categories",
+									"host": [
+										"{{proxy_url}}corrections"
+									],
+									"path": [
+										"v2",
+										"categories"
+									]
+								}
+							},
+							"response": []
+						},
 						{
 							"name": "Similar Transactions",
 							"request": {
