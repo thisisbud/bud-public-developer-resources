@@ -405,6 +405,10 @@ tags:
     x-displayName: Manage Financial Data
     description: |
       Manipulate Transactions held on the Bud platform by removing data, submitting corrections, or adding tags through different rulesets.
+  - name: Correct Financial Data
+    x-displayName: Correct Financial Data
+    description: |
+      Manipulate Transactions held on the Bud platform by finding similar transactions and submitting corrections.
   - name: Enrichment API
     description: |
       Ingest and enrich your customers transactions using Bud's core enrichment services.
@@ -1374,6 +1378,8 @@ paths:
       description: |
         Instruct Bud to retrieve the latest account information for a customer. Refresh the accounts from a single provider with an existing connection.
 
+        By default this task will retrieve transactions since the last pull of transactions less seven days. This can be overridden using the `from` body parameter to a maximum of 90 days previously.
+
         After initiating this long running process, make sure to check the status of the it till completion before trying to access the Customer's data or initiating another refresh.
 
         If the customer's consent has been revoked or expired for this provider, Bud will be unable to refresh the account. 
@@ -1626,6 +1632,8 @@ paths:
       summary: Initiate Refresh V2
       description: |
         Instruct Bud to retrieve the latest account information for a customer. Refresh the accounts from all providers with an existing connection.
+
+        By default this task will retrieve transactions since the last pull of transactions less seven days. This can be overridden using the `from` body parameter to a maximum of 90 days previously.
 
         On completion of this task Bud will send a webhook to your configured endpoint including details of the refresh completed and the status of the refresh for each provider. Alternatively the status of the task can be checked using the Retrieve Refresh Status V2 endpoint. Please check that the task has completed successfully before trying to access the Customer's data or initiating another refresh.
 
@@ -3486,6 +3494,114 @@ paths:
           description: An unexpected HTTP method was used
         5XX:
           description: An unexpected error occurred on the server side
+  /corrections/v2/categories/similar/{transaction_id}:
+    get:
+      tags:
+        - Correct Financial Data
+      summary: Similar Transactions
+      description: |-
+        This endpoint is used to find similar transactions to the *source* transaction. Similar transactions are  determined based on transactions with similar descriptions & amounts to the source transaction.
+
+        There will **not** be any duplicate transactions in the response. 
+
+        Use the `exclude_source` query parameter to toggle whether the endpoint returns the source transaction in the response. By **default** it will.
+
+        For example if there are **no** similar transactions to transaction A:
+
+        > `exclude_source = true`
+        >> The response will contain **0** transactions
+
+        > `exclude_source = false` or not present (**default**)
+        >> The response will contain **1** transaction, that being the source transaction A
+      operationId: corrections_v2_similar_categories_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/QueryExcludeSource'
+        - $ref: '#/components/parameters/PathTransactionID'
+      responses:
+        '200':
+          description: The request was successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimilarTransactionsResponse'
+        '400':
+          description: The request was invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                Missing Customer Secret:
+                  value:
+                    operation_id: corrections_v2_similar_categories_get
+                    code_id: failed_validation
+                    message: failed to parse request
+                    errors:
+                      header.X-Customer-Secret:
+                        - This value should not be blank
+        '404':
+          description: Unknown transaction
+        5XX:
+          description: An unexpected error occurred on the server side.
+  /corrections/v2/merchants/similar/{transaction_id}:
+    get:
+      tags:
+        - Correct Financial Data
+      summary: Similar Transactions Including Merchants
+      description: |-
+        This endpoint is used to find similar transactions to the *source* transaction. Similar transactions are  determined based on transactions with similar descriptions & amounts to the source transaction. In addition, transactions that also have the same merchant are returned. 
+
+        There will **not** be any duplicate transactions in the response. 
+
+        Use the `exclude_source` query parameter to toggle whether the endpoint returns the source transaction in the response. By **default** it will.
+
+        For example if there are **no** similar transactions to transaction A:
+
+        > `exclude_source = true`
+        >> The response will contain **0** transactions
+
+        > `exclude_source = false` or not present (**default**)
+        >> The response will contain **1** transaction, that being the source transaction A
+      operationId: corrections_v2_similar_merchants_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/QueryExcludeSource'
+        - $ref: '#/components/parameters/PathTransactionID'
+      responses:
+        '200':
+          description: The request was successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimilarTransactionsResponse'
+        '400':
+          description: The request was invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                Missing Customer Secret:
+                  value:
+                    operation_id: corrections_v2_similar_merchants_get
+                    code_id: failed_validation
+                    message: failed to parse request
+                    errors:
+                      header.X-Customer-Secret:
+                        - This value should not be blank
+        '404':
+          description: Unknown transaction
+        5XX:
+          description: An unexpected error occurred on the server side.
   /aggregations/v2/totals/categories:
     get:
       tags:
@@ -8088,6 +8204,32 @@ components:
         confidence:
           type: string
           description: Degree of belief of correct assignment, expressed as a probability.
+    SimilarTransactionsResponse:
+      title: Similar Transactions Response
+      type: object
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - v2_transactions_get
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        metadata:
+          type: object
+          required:
+            - results
+          properties:
+            results:
+              type: integer
+              description: The number of results returned.
+            exclude_source:
+              type: boolean
     RegularTransactionsResponse:
       title: Regular Transactions Response
       type: object
@@ -14386,6 +14528,21 @@ components:
         type: string
       required: true
       description: The account ID to retrieve data for.
+    QueryExcludeSource:
+      in: query
+      name: exclude_source
+      schema:
+        type: boolean
+      required: false
+      description: Toggle whether the endpoint returns the transaction used as part of the request
+    PathTransactionID:
+      in: path
+      name: transaction_id
+      schema:
+        type: string
+        format: uuid
+      required: true
+      description: A transaction identifier
     CategoryTotalsQueryFromTimestamp:
       in: query
       name: from
@@ -14821,6 +14978,7 @@ x-tagGroups:
     tags:
       - Retrieve Financial Data
       - Manage Financial Data
+      - Correct Financial Data
       - Financial Data API
   - name: ''
     tags:
