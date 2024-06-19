@@ -217,6 +217,11 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 1.9.1: 19/06/2024**
+    > - Added a new __Correct Financial Data__ section within __FINANCIAL DATA API__.
+    > - Relocated __Correct Transaction Categories V2__ endpoint to __Correct Financial Data__ from __Manage Financial Data__.
+    > - Added new  __Similar Transactions__ endpoint under __Correct Financial Data__.
+    > - Added new  __Similar Transactions Including Merchants__ endpoint under __Correct Financial Data__.
 
     **Version 1.9.0: 21/05/2024**
     > - Added __Initiate Refresh V2__ endpoint.
@@ -401,10 +406,6 @@ tags:
     x-displayName: Retrieve Financial Data
     description: |
       Retrieve a customer's financial data from a range of sources.
-  - name: Manage Financial Data
-    x-displayName: Manage Financial Data
-    description: |
-      Manipulate Transactions held on the Bud platform by removing data, submitting corrections, or adding tags through different rulesets.
   - name: Correct Financial Data
     x-displayName: Correct Financial Data
     description: |
@@ -3434,7 +3435,7 @@ paths:
   /corrections/v2/categories:
     post:
       tags:
-        - Manage Financial Data
+        - Correct Financial Data
       summary: Correct Transaction Categories V2
       description: |
         Allow a customer to change a transaction’s (and similar transactions') category and/or subcategory.
@@ -3529,6 +3530,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SimilarTransactionsResponse'
+              examples:
+                Single Similar Transaction:
+                  value:
+                    operation_id: corrections_v2_similar_categories_get
+                    data:
+                      - transaction_id: source_transaction_id
+                        account_id: an_account_id
+                        provider: a_bank_account_provider
+                        description: a_transaction_description
+                        credit_debit_indicator: credit
+                        status: pending
+                        amount:
+                          value: '10.99'
+                          currency: USD
+                        date_time: '2022-01-02T15:00:00Z'
+                        posted_date_time: '2022-01-02T15:00:00Z'
+                      - transaction_id: similar_transaction_id
+                        account_id: an_account_id
+                        provider: a_bank_account_provider
+                        description: a_transaction_description
+                        credit_debit_indicator: credit
+                        status: pending
+                        amount:
+                          value: '10.99'
+                          currency: USD
+                        date_time: '2022-02-02T15:00:00Z'
+                        posted_date_time: '2022-02-02T15:00:00Z'
+                    metadata:
+                      results: 2
+                      exclude_source: false
+                Single Similar Transaction Excluding Source:
+                  value:
+                    operation_id: corrections_v2_similar_categories_get
+                    data:
+                      - transaction_id: similar_transaction_id
+                        account_id: an_account_id
+                        provider: a_bank_account_provider
+                        description: a_transaction_description
+                        credit_debit_indicator: credit
+                        status: pending
+                        amount:
+                          value: '10.99'
+                          currency: USD
+                        date_time: '2022-02-02T15:00:00Z'
+                        posted_date_time: '2022-02-02T15:00:00Z'
+                    metadata:
+                      results: 1
+                      exclude_source: true
         '400':
           description: The request was invalid
           content:
@@ -3546,6 +3595,16 @@ paths:
                         - This value should not be blank
         '404':
           description: Unknown transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestNotFoundResponse'
+              examples:
+                Transaction Not Found:
+                  value:
+                    operation_id: corrections_v2_similar_categories_get
+                    code_id: not_found
+                    message: transaction not found
         5XX:
           description: An unexpected error occurred on the server side.
   /corrections/v2/merchants/similar/{transaction_id}:
@@ -3583,6 +3642,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SimilarTransactionsResponse'
+              examples:
+                Single Similar Transaction:
+                  value:
+                    operation_id: corrections_v2_similar_merchants_get
+                    data:
+                      - transaction_id: source_transaction_id
+                        account_id: an_account_id
+                        provider: a_bank_account_provider
+                        description: a_transaction_description
+                        credit_debit_indicator: credit
+                        status: pending
+                        amount:
+                          value: '10.99'
+                          currency: USD
+                        date_time: '2022-01-02T15:00:00Z'
+                        posted_date_time: '2022-01-02T15:00:00Z'
+                      - transaction_id: similar_transaction_id
+                        account_id: an_account_id
+                        provider: a_bank_account_provider
+                        description: a_transaction_description
+                        credit_debit_indicator: credit
+                        status: pending
+                        amount:
+                          value: '10.99'
+                          currency: USD
+                        date_time: '2022-02-02T15:00:00Z'
+                        posted_date_time: '2022-02-02T15:00:00Z'
+                    metadata:
+                      results: 2
+                      exclude_source: false
+                Single Similar Transaction Excluding Source:
+                  value:
+                    operation_id: corrections_v2_similar_merchants_get
+                    data:
+                      - transaction_id: similar_transaction_id
+                        account_id: an_account_id
+                        provider: a_bank_account_provider
+                        description: a_transaction_description
+                        credit_debit_indicator: credit
+                        status: pending
+                        amount:
+                          value: '10.99'
+                          currency: USD
+                        date_time: '2022-02-02T15:00:00Z'
+                        posted_date_time: '2022-02-02T15:00:00Z'
+                    metadata:
+                      results: 1
+                      exclude_source: true
         '400':
           description: The request was invalid
           content:
@@ -3600,6 +3707,16 @@ paths:
                         - This value should not be blank
         '404':
           description: Unknown transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestNotFoundResponse'
+              examples:
+                Transaction Not Found:
+                  value:
+                    operation_id: corrections_v2_similar_merchants_get
+                    code_id: not_found
+                    message: transaction not found
         5XX:
           description: An unexpected error occurred on the server side.
   /aggregations/v2/totals/categories:
@@ -8215,7 +8332,8 @@ components:
         operation_id:
           type: string
           enum:
-            - v2_transactions_get
+            - corrections_v2_similar_merchants_get
+            - corrections_v2_similar_categories_get
         data:
           type: array
           items:
@@ -14977,7 +15095,6 @@ x-tagGroups:
   - name: ''
     tags:
       - Retrieve Financial Data
-      - Manage Financial Data
       - Correct Financial Data
       - Financial Data API
   - name: ''
