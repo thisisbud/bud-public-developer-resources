@@ -4574,6 +4574,9 @@ paths:
                               value: '397.80'
                               currency: GBP
                             transaction_count: 2
+                metadata:
+                  from: '2023-05-21T07:20:50.52Z'
+                  to: '2023-06-21T07:20:50.52Z'
         '400':
           description: The request contains an invalid payload
         '401':
@@ -16197,6 +16200,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CategoriesTotalV2'
+        metadata:
+          type: object
+          required:
+            - from
+            - to
+          properties:
+            from:
+              type: string
+              example: '2023-05-21T07:20:50.52Z'
+              description: |
+                RFC3339 compliant date stamp indicating the beginning of the transaction window used in this calculation
+            to:
+              type: string
+              example: '2023-05-21T07:20:50.52Z'
+              description: |
+                RFC3339 compliant date stamp indicating the end of the transaction window used in this calculation
     CategoriesTotalTrendsV2Response:
       type: object
       properties:
