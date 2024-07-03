@@ -217,6 +217,10 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 1.9.2: 21/06/2024**
+    > - Added __website__ field to merchant field in enrichments field in  __Retrieve Transactions V2__.
+    > - Added __website__ field to processor field in enrichments field in  __Retrieve Transactions V2__.
+
     **Version 1.9.1: 19/06/2024**
     > - Added a new __Correct Financial Data__ section within __FINANCIAL DATA API__.
     > - Relocated __Correct Transaction Categories V2__ endpoint to __Correct Financial Data__ from __Manage Financial Data__.
@@ -1074,6 +1078,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - USA
+                      mobile_only: false
                     - provider: chase
                       display_name: Chase
                       maintenance_window: null
@@ -1081,6 +1086,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - USA
+                      mobile_only: false
                     - provider: bankofamerica
                       display_name: Bank of America
                       maintenance_window: null
@@ -1088,6 +1094,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - USA
+                      mobile_only: false
                     - provider: capitalone
                       display_name: Capital One
                       maintenance_window: null
@@ -1095,6 +1102,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - USA
+                      mobile_only: false
                     - provider: wellsfargo
                       display_name: Wells Fargo
                       maintenance_window: null
@@ -1102,6 +1110,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - USA
+                      mobile_only: false
                     - provider: pnc
                       display_name: PNC Bank
                       maintenance_window: null
@@ -1109,6 +1118,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - USA
+                      mobile_only: false
                     - provider: fidelity
                       display_name: Fidelity
                       maintenance_window: null
@@ -1116,6 +1126,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - USA
+                      mobile_only: false
                     - provider: td
                       display_name: TD Bank
                       maintenance_window: null
@@ -1123,6 +1134,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - USA
+                      mobile_only: false
                     - provider: usbank
                       display_name: US Bank
                       maintenance_window: null
@@ -1130,6 +1142,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - USA
+                      mobile_only: false
                     - provider: transamerica
                       display_name: Transamerica
                       maintenance_window: null
@@ -1137,6 +1150,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - USA
+                      mobile_only: false
                   metadata: null
         '400':
           description: Bad Request that fails validations on headers & payload
@@ -1382,6 +1396,8 @@ paths:
         By default this task will retrieve transactions since the last pull of transactions less seven days. This can be overridden using the `from` body parameter to a maximum of 90 days previously.
 
         After initiating this long running process, make sure to check the status of the it till completion before trying to access the Customer's data or initiating another refresh.
+
+        If the customer's provider was fetched (connect or refresh) within the last hour, the endpoint will return the task_id of the previous task instead of refreshing the data again.
 
         If the customer's consent has been revoked or expired for this provider, Bud will be unable to refresh the account. 
         This will be confirmed in the response of the refresh status endpoint associated with the `task_id` provided in the response to this endpoint, where the `reconnect_required` field will set to `true` and status set to `Completed`.
@@ -1635,8 +1651,9 @@ paths:
         Instruct Bud to retrieve the latest account information for a customer. Refresh the accounts from all providers with an existing connection.
 
         By default this task will retrieve transactions since the last pull of transactions less seven days. This can be overridden using the `from` body parameter to a maximum of 90 days previously.
-
         On completion of this task Bud will send a webhook to your configured endpoint including details of the refresh completed and the status of the refresh for each provider. Alternatively the status of the task can be checked using the Retrieve Refresh Status V2 endpoint. Please check that the task has completed successfully before trying to access the Customer's data or initiating another refresh.
+
+        If a similar refresh (same providers) for this customer has been initiated within the last hour, the endpoint will return the task_id of the previous task instead of refreshing the data again.
 
         If the customer's consent has been revoked or expired for a provider, Bud will be unable to refresh the customers account at that provider. 
         This will be confirmed in the response of the refresh status endpoint associated with the `task_id` provided in the response to this endpoint, where the `reconnect_required` field will set to `true` and status set to `Completed`. If the consent within the Bud system was marked as `Authorised` at this point the consent will be updated to `Revoked` 
@@ -2250,7 +2267,7 @@ paths:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/parameters-IngestAccountsContentType'
+        - $ref: '#/components/parameters/IngestAccountsContentType'
         - name: X-Disable-Synchronous
           in: header
           description: If present and set to true, a task is created and a response is returned immediately
@@ -3267,7 +3284,8 @@ paths:
             type: array
             items:
               type: string
-          example: regular-transaction
+          example:
+            - regular-transaction
           description: Tags for which associated transactions should be returned.
         - in: query
           name: exclude_tags
@@ -3275,7 +3293,8 @@ paths:
             type: array
             items:
               type: string
-          example: benefit
+          example:
+            - benefit
           description: Tags for which associated transactions should not be returned.
         - in: query
           name: updated_after
@@ -3318,6 +3337,7 @@ paths:
                             tokens:
                               - value: netflix
                                 confidence: '0.98'
+                            website: http://www.netflix.com
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
                             slug: paypal
@@ -3326,6 +3346,7 @@ paths:
                             tokens:
                               - value: paypal
                                 confidence: '0.96'
+                            website: http://www.paypal.com
                           categories:
                             l1:
                               slug: entertainment
@@ -3536,27 +3557,75 @@ paths:
                     operation_id: corrections_v2_similar_categories_get
                     data:
                       - transaction_id: source_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: a_transaction_description
+                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                        provider: finicity
+                        description: NETFLIX
                         credit_debit_indicator: credit
-                        status: pending
+                        status: booked
                         amount:
-                          value: '10.99'
+                          value: '19.99'
                           currency: USD
-                        date_time: '2022-01-02T15:00:00Z'
-                        posted_date_time: '2022-01-02T15:00:00Z'
-                      - transaction_id: similar_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: a_transaction_description
-                        credit_debit_indicator: credit
-                        status: pending
+                        date_time: '2023-08-01T12:02:48Z'
+                        posted_date_time: '2023-08-01T12:02:48Z'
+                        enrichments:
+                          merchant:
+                            id: 60bf3a60-c872-4f45-909d-c84b140fc6e1
+                            slug: netflix
+                            display_name: Netflix
+                            logo: https://url/netflix.jpeg
+                            tokens:
+                              - value: netflix
+                                confidence: '0.98'
+                            website: http://www.netflix.com
+                          processor:
+                            id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                            slug: paypal
+                            display_name: PayPal
+                            logo: http://url/paypal_logo.jpeg
+                            tokens:
+                              - value: paypal
+                                confidence: '0.96'
+                            website: http://www.paypal.com
+                          categories:
+                            l1:
+                              slug: entertainment
+                              confidence: '0.86'
+                            l2:
+                              slug: media_subscriptions
+                              confidence: '0.86'
+                          regularity:
+                            frequency: monthly
+                            predicted_date_times:
+                              - '2022-09-01T12:02:48Z'
+                              - '2022-10-01T12:02:48Z'
+                              - '2022-11-01T12:02:48Z'
+                            group_label: 13ed070478ef62c3a7baa36c8d042a9d1cdc0fcbb2af93a795f2ad20ad6e9cb5-0
+                        tags:
+                          - online
+                          - regular-transaction
+                      - transaction_id: similar_transaction_id_1
+                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                        provider: finicity
+                        description: NETFLIX EXTRA
+                        credit_debit_indicator: debit
+                        status: booked
                         amount:
-                          value: '10.99'
+                          value: '6.04'
                           currency: USD
-                        date_time: '2022-02-02T15:00:00Z'
-                        posted_date_time: '2022-02-02T15:00:00Z'
+                        date_time: 2023-11-10T23:00:00Z00:00
+                        posted_date_time: 2023-11-10T23:00:00Z00:00
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: entertainment
+                              confidence: '0.99'
+                            l2:
+                              slug: media_subscriptions
+                              confidence: '0.98'
+                          merchant:
+                            tokens:
+                              - value: netflix
+                                confidence: '0.98'
                     metadata:
                       results: 2
                       exclude_source: false
@@ -3564,17 +3633,29 @@ paths:
                   value:
                     operation_id: corrections_v2_similar_categories_get
                     data:
-                      - transaction_id: similar_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: a_transaction_description
-                        credit_debit_indicator: credit
-                        status: pending
+                      - transaction_id: similar_transaction_id_1
+                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                        provider: finicity
+                        description: NETFLIX EXTRA
+                        credit_debit_indicator: debit
+                        status: booked
                         amount:
-                          value: '10.99'
+                          value: '6.04'
                           currency: USD
-                        date_time: '2022-02-02T15:00:00Z'
-                        posted_date_time: '2022-02-02T15:00:00Z'
+                        date_time: 2023-11-10T23:00:00Z00:00
+                        posted_date_time: 2023-11-10T23:00:00Z00:00
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: entertainment
+                              confidence: '0.99'
+                            l2:
+                              slug: media_subscriptions
+                              confidence: '0.98'
+                          merchant:
+                            tokens:
+                              - value: netflix
+                                confidence: '0.98'
                     metadata:
                       results: 1
                       exclude_source: true
@@ -3648,27 +3729,75 @@ paths:
                     operation_id: corrections_v2_similar_merchants_get
                     data:
                       - transaction_id: source_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: a_transaction_description
+                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                        provider: finicity
+                        description: NETFLIX
                         credit_debit_indicator: credit
-                        status: pending
+                        status: booked
                         amount:
-                          value: '10.99'
+                          value: '19.99'
                           currency: USD
-                        date_time: '2022-01-02T15:00:00Z'
-                        posted_date_time: '2022-01-02T15:00:00Z'
-                      - transaction_id: similar_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: a_transaction_description
-                        credit_debit_indicator: credit
-                        status: pending
+                        date_time: '2023-08-01T12:02:48Z'
+                        posted_date_time: '2023-08-01T12:02:48Z'
+                        enrichments:
+                          merchant:
+                            id: 60bf3a60-c872-4f45-909d-c84b140fc6e1
+                            slug: netflix
+                            display_name: Netflix
+                            logo: https://url/netflix.jpeg
+                            tokens:
+                              - value: netflix
+                                confidence: '0.98'
+                            website: http://www.netflix.com
+                          processor:
+                            id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                            slug: paypal
+                            display_name: PayPal
+                            logo: http://url/paypal_logo.jpeg
+                            tokens:
+                              - value: paypal
+                                confidence: '0.96'
+                            website: http://www.paypal.com
+                          categories:
+                            l1:
+                              slug: entertainment
+                              confidence: '0.86'
+                            l2:
+                              slug: media_subscriptions
+                              confidence: '0.86'
+                          regularity:
+                            frequency: monthly
+                            predicted_date_times:
+                              - '2022-09-01T12:02:48Z'
+                              - '2022-10-01T12:02:48Z'
+                              - '2022-11-01T12:02:48Z'
+                            group_label: 13ed070478ef62c3a7baa36c8d042a9d1cdc0fcbb2af93a795f2ad20ad6e9cb5-0
+                        tags:
+                          - online
+                          - regular-transaction
+                      - transaction_id: similar_transaction_id_1
+                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                        provider: finicity
+                        description: NETFLIX EXTRA
+                        credit_debit_indicator: debit
+                        status: booked
                         amount:
-                          value: '10.99'
+                          value: '6.04'
                           currency: USD
-                        date_time: '2022-02-02T15:00:00Z'
-                        posted_date_time: '2022-02-02T15:00:00Z'
+                        date_time: 2023-11-10T23:00:00Z00:00
+                        posted_date_time: 2023-11-10T23:00:00Z00:00
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: entertainment
+                              confidence: '0.99'
+                            l2:
+                              slug: media_subscriptions
+                              confidence: '0.98'
+                          merchant:
+                            tokens:
+                              - value: netflix
+                                confidence: '0.98'
                     metadata:
                       results: 2
                       exclude_source: false
@@ -3676,17 +3805,29 @@ paths:
                   value:
                     operation_id: corrections_v2_similar_merchants_get
                     data:
-                      - transaction_id: similar_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: a_transaction_description
-                        credit_debit_indicator: credit
-                        status: pending
+                      - transaction_id: similar_transaction_id_1
+                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                        provider: finicity
+                        description: NETFLIX EXTRA
+                        credit_debit_indicator: debit
+                        status: booked
                         amount:
-                          value: '10.99'
+                          value: '6.04'
                           currency: USD
-                        date_time: '2022-02-02T15:00:00Z'
-                        posted_date_time: '2022-02-02T15:00:00Z'
+                        date_time: 2023-11-10T23:00:00Z00:00
+                        posted_date_time: 2023-11-10T23:00:00Z00:00
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: entertainment
+                              confidence: '0.99'
+                            l2:
+                              slug: media_subscriptions
+                              confidence: '0.98'
+                          merchant:
+                            tokens:
+                              - value: netflix
+                                confidence: '0.98'
                     metadata:
                       results: 1
                       exclude_source: true
@@ -7487,30 +7628,6 @@ components:
             refresh_token:
               type: string
               description: A long-lived token that can be used to obtain a new `access_token` when the current `access_token` expires.
-    USIngestStatusV2Response:
-      title: Ingest Response
-      type: object
-      description: Expected response structure.
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          anyOf:
-            - $ref: '#/components/schemas/IngestStatusCompletedData'
-            - title: Pending Task Data
-              required:
-                - status
-              properties:
-                status:
-                  type: string
-                  enum:
-                    - Pending
-        metadata:
-          $ref: '#/components/schemas/IngestStatusTaskMetadata'
     IngestStatusCompletedData:
       title: Completed Task Data
       type: array
@@ -7697,7 +7814,7 @@ components:
           description: The ISO-4217 currency code of the balance
         last_updated_datetime:
           type: string
-          format: date
+          format: date-time
           description: Timestamp in ISO 8601 format (YYYY-MM-DDTHH:mm:ssZ) indicating the last time that the balance for the given account has been updated
     IngestPlaidTransactionsRequest:
       title: Plaid V1 Transactions Request
@@ -7807,7 +7924,7 @@ components:
         postal_code:
           type: string
           description: The postal code where the transaction occurred
-          example: 96858
+          example: '96858'
         country:
           type: string
           format: ISO 3166-1 alpha-2
@@ -8011,17 +8128,17 @@ components:
           type: string
           format: unix-time
           description: The timestamp of the transaction when it occurred. Unix timestamp
-          example: 1642521600
+          example: '1642521600'
         postedDate:
           type: string
           format: unix-time
           description: The timestamp of the transaction when it was posted or cleared by the institution. Unix timestamp
-          example: 1642521600
+          example: '1642521600'
         effectiveDate:
           type: string
           format: unix-time
           description: A timestamp of the transaction when it became effective on an account by an institution. Unix timestamp
-          example: 1642521600
+          example: '1642521600'
         currencySymbol:
           type: string
           format: ISO 4217
@@ -8053,7 +8170,7 @@ components:
         postal_code:
           type: string
           description: The postal code where the transaction occurred
-          example: 96858
+          example: '96858'
         country:
           type: string
           description: The ISO 3166-1 country code where the transaction occurred.
@@ -8139,6 +8256,7 @@ components:
           type: array
           description: |
             A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering.
+
             Region and client specific.
 
             | Value                   | Description                                               |
@@ -8207,7 +8325,8 @@ components:
     Merchant:
       title: Merchant
       type: object
-      description: Merchant enrichment associated with a Transaction
+      description: |
+        Merchant enrichment associated with a Transaction, as generated using a combination of Bud's artificial  intelligence models and database of known merchants.
       properties:
         id:
           type: string
@@ -8228,6 +8347,9 @@ components:
             This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
           items:
             $ref: '#/components/schemas/Token'
+        website:
+          type: string
+          description: URL supplying merchant website, if available.
     Processor:
       title: Processor
       type: object
@@ -8252,6 +8374,9 @@ components:
             This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
           items:
             $ref: '#/components/schemas/Token'
+        website:
+          type: string
+          description: URL supplying merchant website, if available.
     Regularity:
       title: Regularity
       type: object
@@ -8773,8 +8898,10 @@ components:
           type: string
           description: The name of the available open banking provider used for display purposes
         maintenance_window:
-          $ref: '#/components/schemas/MaintenanceWindowObject'
-          nullable: true
+          anyOf:
+            - $ref: '#/components/schemas/MaintenanceWindowObject'
+            - type: object
+              nullable: true
         maintenance_status:
           type: string
           description: The status of the maintenance window associated with the provider
@@ -10291,6 +10418,9 @@ components:
             A list of tokens calculated from the transaction model, used to identify the Merchant.  This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
           items:
             $ref: '#/components/schemas/Token'
+        website:
+          type: string
+          description: URL supplying merchant website, if available.
     schemas-Processor:
       title: Processor
       type: object
@@ -10315,6 +10445,9 @@ components:
             A list of tokens calculated from the transaction model, used to identify the Merchant.  This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
           items:
             $ref: '#/components/schemas/Token'
+        website:
+          type: string
+          description: URL supplying merchant website, if available.
     schemas-Location:
       title: Location
       type: object
@@ -10419,8 +10552,21 @@ components:
         tags:
           type: array
           description: |
-            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering. Region and client specific.
-            | Value                   | Description                                               | |:------------------------|:----------------------------------------------------------| | `benefit`               | A government/non-profit benefit transaction               | | `debt-collection`       | A transaction associated with a known debt-collector      | | `loan`                  | A transaction associated with a loan                      | | `income`                | A transaction associated with income                      | | `pending`               | A transaction which has not been booked                   | | `regular-transaction`   | A transaction predicted to occur with a regular frequency | | `salary`                | A transaction associated with a regular wage              | | `subscription`          | A transaction associated with a subscription service      | | `online`                | A transaction associated with an online merchant          |
+            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering.
+
+            Region and client specific.
+
+            | Value                   | Description                                               |
+            |:------------------------|:----------------------------------------------------------|
+            | `benefit`               | A government/non-profit benefit transaction               |
+            | `debt-collection`       | A transaction associated with a known debt-collector      |
+            | `loan`                  | A transaction associated with a loan                      |
+            | `income`                | A transaction associated with income                      |
+            | `pending`               | A transaction which has not been booked                   |
+            | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
+            | `salary`                | A transaction associated with a regular wage              |
+            | `subscription`          | A transaction associated with a subscription service      |
+            | `online`                | A transaction associated with an online merchant          |
           items:
             type: string
     IngestV2SyncResponseData:
@@ -12849,7 +12995,8 @@ components:
           type: string
           description: |
             The token to use to fetch the next page of results. This is only set if there are more results to fetch.
-      example: b21055a9a9f46fc794a2e6855c65abd7e317181039fc6930daabac5822911d14a84895ecd947e2b5abdcb22e4fcc2c594e1f661dc63e34b9ba88760724047990896f7581a0786c2605dce19c6a9d80d1044f963b74fea0a929c0a4465a6e67378a74dce38ec5e26ae4cc804b62fd666d5df4cf2e7f524bd99e5523bc5d471768065c036dc0c73122705b280817fbbd7d9aa31f271d72cd3877d999dcb9a5b1c0be0c05
+      example:
+        next_page_token: b21055a9a9f46fc794a2e6855c65abd7e317181039fc6930daabac5822911d14a84895ecd947e2b5abdcb22e4fcc2c594e1f661dc63e34b9ba88760724047990896f7581a0786c2605dce19c6a9d80d1044f963b74fea0a929c0a4465a6e67378a74dce38ec5e26ae4cc804b62fd666d5df4cf2e7f524bd99e5523bc5d471768065c036dc0c73122705b280817fbbd7d9aa31f271d72cd3877d999dcb9a5b1c0be0c05
     RetrieveSavingsGoalActionsResponse:
       title: Retrieve Savings Goal Actions Response
       required:
@@ -13724,8 +13871,20 @@ components:
         tags:
           type: array
           description: |
-            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering. Region and client specific.
-            | Value                   | Description                                               | |:------------------------|:----------------------------------------------------------| | `benefit`               | A government/non-profit benefit transaction               | | `debt-collection`       | A transaction associated with a known debt-collector      | | `loan`                  | A transaction associated with a loan                      | | `income`                | A transaction associated with income                      | | `pending`               | A transaction which has not been booked                   | | `regular-transaction`   | A transaction predicted to occur with a regular frequency | | `salary`                | A transaction associated with a regular wage              | | `subscription`          | A transaction associated with a subscription service      |
+            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering.
+
+            Region and client specific.
+
+            | Value                   | Description                                               |
+            |:------------------------|:----------------------------------------------------------|
+            | `benefit`               | A government/non-profit benefit transaction               |
+            | `debt-collection`       | A transaction associated with a known debt-collector      |
+            | `loan`                  | A transaction associated with a loan                      |
+            | `income`                | A transaction associated with income                      |
+            | `pending`               | A transaction which has not been booked                   |
+            | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
+            | `salary`                | A transaction associated with a regular wage              |
+            | `subscription`          | A transaction associated with a subscription service      |
           items:
             type: string
     InsightCausedBy:
@@ -14572,17 +14731,10 @@ components:
         type: string
         enum:
           - all
+          - active
+          - reconfirm_due
       required: false
-      description: By default this endpoint only returns `active` Authorised connections. To retrieve `all` consents, add this query param with the value of `all`
-    parameters-IngestAccountsContentType:
-      in: header
-      name: Content-Type
-      required: true
-      schema:
-        type: string
-        enum:
-          - application/bud-accounts+json
-      description: Define the transactions' format for this request.
+      description: By default this endpoint only returns `active` Authorised connections. To retrieve `all` consents, add this query param with the value of `all`. To retrieve consents where reconfirmation is required add this query param with the value of `reconfirm_due`.
     DisableSynchronous:
       in: header
       name: X-Disable-Synchronous
@@ -14591,10 +14743,7 @@ components:
 
         If false or the header is not included, the task **will** be processed synchronously.
       schema:
-        type: string
-        enum:
-          - 'true'
-          - 'false'
+        type: boolean
     GenerateTransactionIDs:
       in: header
       name: X-Generate-Transaction-IDs
@@ -14866,9 +15015,9 @@ components:
       in: query
       name: page_size
       schema:
-        type: string
+        type: integer
       example: 200
-      description: Use this paramater to set the maximum number of results to be returned. This defaults to 100, and has a maximum of 200.
+      description: Use this parameter to set the maximum number of results to be returned. This defaults to 100, and has a maximum of 200.
     PathGoalActionID:
       name: goal_action_id
       in: path
