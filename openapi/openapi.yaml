@@ -301,6 +301,13 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.11.3: 01/07/2024**
+    > - Added link to __Consents__ guide from __Retrieve Customer Consents__
+
+    **Version 2.11.2: 21/06/2024**
+    > - Added __website__ field to merchant field in enrichments field in  __Retrieve Transactions V2__.
+    > - Added __website__ field to processor field in enrichments field in  __Retrieve Transactions V2__.
+
     **Version 2.11.1: 19/06/2024**
     > - Added a new __Correct Financial Data__ section within __FINANCIAL DATA API__.
     > - Relocated __Correct Transaction Categories V2__ endpoint to __Correct Financial Data__ from __Manage Financial Data__.
@@ -1321,6 +1328,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - GBR
+                      mobile_only: false
                     - provider: fd
                       display_name: first direct
                       maintenance_window: null
@@ -1328,6 +1336,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - GBR
+                      mobile_only: false
                     - provider: halifax
                       display_name: Halifax
                       maintenance_window: null
@@ -1335,6 +1344,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - GBR
+                      mobile_only: false
                     - provider: hbos
                       display_name: Bank of Scotland
                       maintenance_window: null
@@ -1342,6 +1352,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - GBR
+                      mobile_only: false
                     - provider: hsbc
                       display_name: HSBC
                       maintenance_window: null
@@ -1349,6 +1360,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - GBR
+                      mobile_only: false
                     - provider: lloyds
                       display_name: Lloyds
                       maintenance_window: null
@@ -1356,6 +1368,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - GBR
+                      mobile_only: false
                     - provider: mns
                       display_name: Marks & Spencer
                       maintenance_window: null
@@ -1363,6 +1376,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - GBR
+                      mobile_only: false
                     - provider: nationwide
                       display_name: Nationwide
                       maintenance_window: null
@@ -1370,6 +1384,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - GBR
+                      mobile_only: false
                     - provider: natwest
                       display_name: Natwest
                       maintenance_window: null
@@ -1377,6 +1392,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - GBR
+                      mobile_only: false
                     - provider: rbs
                       display_name: Royal Bank of Scotland
                       maintenance_window: null
@@ -1384,6 +1400,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - GBR
+                      mobile_only: false
                     - provider: santander
                       display_name: Santander
                       maintenance_window: null
@@ -1391,6 +1408,7 @@ paths:
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - GBR
+                      mobile_only: false
                   metadata: null
         '400':
           description: Bad Request that fails validations on headers & payload
@@ -1595,6 +1613,10 @@ paths:
         Request a new Open Banking authorisation url for a specific Customer and provider. This endpoint should be used when using Bud as a Technical Service Provider(TSP). This means that Bud will be using your license (as a registered Account Information Service Provider (AISP)). This will allow you to use your own interface to connect new account(s).
 
         A generated consent has a 90 day expiry, to allow for re-authentication to extend this expiry the id of the customers previous consent can be included as the `consent_id` property. This re-authenciation if the customer grants consent would extend the consent by another 90 days.
+
+        > 📘 Note:
+        >
+        > For more information about Consents, please refer to our [guide](https://docs.thisisbud.com/docs/consents).
       operationId: open_banking_authorisation_url_post
       security:
         - OAuth2: []
@@ -2094,6 +2116,8 @@ paths:
 
         After initiating this long running process, make sure to check the status of the it till completion before trying to access the Customer's data or initiating another refresh.
 
+        If the customer's provider was fetched (connect or refresh) within the last hour, the endpoint will return the task_id of the previous task instead of refreshing the data again.
+
         If the customer's consent has been revoked or expired for this provider, Bud will be unable to refresh the account.
         This will be confirmed in the response of the refresh status endpoint associated with the `task_id` provided in the response to this endpoint, where the `reconnect_required` field will set to `true` and status set to `Completed`.
       operationId: open_banking_refresh_post
@@ -2387,8 +2411,9 @@ paths:
         Instruct Bud to retrieve the latest account information for a customer. Refresh the accounts from all providers with an existing connection.
 
         By default this task will retrieve transactions since the last pull of transactions less seven days. This can be overridden using the `from` body parameter to a maximum of 90 days previously.
-
         On completion of this task Bud will send a webhook to your configured endpoint including details of the refresh completed and the status of the refresh for each provider. Alternatively the status of the task can be checked using the Retrieve Refresh Status V2 endpoint. Please check that the task has completed successfully before trying to access the Customer's data or initiating another refresh.
+
+        If a similar refresh (same providers) for this customer has been initiated within the last hour, the endpoint will return the task_id of the previous task instead of refreshing the data again.
 
         If the customer's consent has been revoked or expired for a provider, Bud will be unable to refresh the customers account at that provider. 
         This will be confirmed in the response of the refresh status endpoint associated with the `task_id` provided in the response to this endpoint, where the `reconnect_required` field will set to `true` and status set to `Completed`. If the consent within the Bud system was marked as `Authorised` at this point the consent will be updated to `Revoked` 
@@ -2768,6 +2793,10 @@ paths:
       summary: Retrieve Customer Consents
       description: |
         Retrieve the list of all available Open Banking consents granted by the customer.
+
+        > 📘 Note:
+        >
+        > For more information about Consents, please refer to our [guide](https://docs.thisisbud.com/docs/consents).
       operationId: open_banking_connections_get
       security:
         - OAuth2: []
@@ -3087,6 +3116,9 @@ paths:
         > This endpoint should only be used by TSP clients (Technical Service Provider).
         >
         > Requests to this endpoint from TPP clients (Third Party Provider) will fail, i.e. you are not yourself regulated as an PISP (Payment Initiation Service Provider).
+        >
+        >
+        > For more information about Consents, please refer to our [guide](https://docs.thisisbud.com/docs/consents).
       operationId: open_banking_consents_reconfirm_post
       security:
         - OAuth2: []
@@ -5427,7 +5459,8 @@ paths:
             type: array
             items:
               type: string
-          example: regular-transaction
+          example:
+            - regular-transaction
           description: Tags for which associated transactions should be returned.
         - in: query
           name: exclude_tags
@@ -5435,7 +5468,8 @@ paths:
             type: array
             items:
               type: string
-          example: benefit
+          example:
+            - benefit
           description: Tags for which associated transactions should not be returned.
         - in: query
           name: credit_debit_indicator
@@ -5494,6 +5528,7 @@ paths:
                             tokens:
                               - value: speciality coffee
                                 confidence: '0.98'
+                            website: http://www.url.com
                           location:
                             address_lines:
                               - '180'
@@ -5512,6 +5547,7 @@ paths:
                             tokens:
                               - value: paypal
                                 confidence: '0.92'
+                            website: https://www.paypal.com
                           regularity:
                             frequency: monthly
                             predicted_date_times:
@@ -5686,8 +5722,7 @@ paths:
                             date: '2017-04-05T10:43:07+00:00'
                             type: previous_payment
                     metadata:
-                      parameters:
-                        results: '1'
+                      results: 1
         '400':
           description: Bad Request
           content:
@@ -5862,27 +5897,106 @@ paths:
                     operation_id: corrections_v2_similar_categories_get
                     data:
                       - transaction_id: source_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: a_transaction_description
-                        credit_debit_indicator: credit
-                        status: pending
+                        account_id: 5bd9ecaf31fc2d5172fd89cb61b89fc6
+                        provider: BankOfBud
+                        description: paypal* specialty coffee
+                        credit_debit_indicator: debit
+                        status: booked
                         amount:
                           value: '10.99'
-                          currency: USD
-                        date_time: '2022-01-02T15:00:00Z'
-                        posted_date_time: '2022-01-02T15:00:00Z'
+                          currency: GBP
+                        date_time: '2022-05-28T10:00:00Z'
+                        posted_date_time: '2022-05-29T00:00:00Z'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            id: 01cc2d49-6144-46f1-9414-67c99b139a95
+                            slug: specialty_coffee
+                            display_name: Specialty Coffee Supplier Ltd.
+                            logo: http://url/specialty_coffee_supplier_logo.jpeg
+                            tokens:
+                              - value: speciality coffee
+                                confidence: '0.98'
+                            website: http://www.url.com
+                          location:
+                            address_lines:
+                              - '180'
+                              - Shepherds Bush Rd
+                              - London
+                              - W6 7NL
+                              - United Kingdom
+                            geolocation:
+                              longitude: 51.497678,
+                              latitude: -0.223766
+                          processor:
+                            id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                            slug: paypal
+                            display_name: PayPal
+                            logo: http://url/paypal_logo.jpeg
+                            tokens:
+                              - value: paypal
+                                confidence: '0.92'
+                            website: https://www.paypal.com
+                          regularity:
+                            frequency: monthly
+                            predicted_date_times:
+                              - '2022-06-28T15:00:00Z'
+                              - '2022-07-28T15:00:00Z'
+                              - '2022-08-28T15:00:00Z'
+                            group_label: a_group_id
+                          transaction_types:
+                            - card
+                            - debit
+                          names:
+                            - jane doe
+                        tags:
+                          - regular-transaction
                       - transaction_id: similar_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: a_transaction_description
-                        credit_debit_indicator: credit
-                        status: pending
+                        account_id: 37c633a71237b9a8282e09587109668e
+                        provider: BankOfBud
+                        description: Tesco 2956 London GBR
+                        credit_debit_indicator: debit
+                        status: booked
                         amount:
-                          value: '10.99'
-                          currency: USD
-                        date_time: '2022-02-02T15:00:00Z'
-                        posted_date_time: '2022-02-02T15:00:00Z'
+                          value: '50.23'
+                          currency: GBP
+                        date_time: '2022-05-26T10:00:00Z'
+                        posted_date_time: '2022-05-27T00:00:00Z'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            id: 0980cf54-6052-4527-84ff-e6f9b169884f
+                            slug: tesco_stores
+                            display_name: Tesco
+                            logo: http://url/tesco_stores_logo.jpeg
+                            tokens:
+                              - value: tesco
+                                confidence: '0.96'
+                          location:
+                            address_lines:
+                              - '180'
+                              - Shepherds Bush Rd
+                              - London
+                              - W6 7NL
+                              - United Kingdom
+                            geolocation:
+                              longitude: 51.497678,
+                              latitude: -0.223766
+                          transaction_types:
+                            - card
+                            - debit
                     metadata:
                       results: 2
                       exclude_source: false
@@ -5891,16 +6005,45 @@ paths:
                     operation_id: corrections_v2_similar_categories_get
                     data:
                       - transaction_id: similar_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: a_transaction_description
-                        credit_debit_indicator: credit
-                        status: pending
+                        account_id: 37c633a71237b9a8282e09587109668e
+                        provider: BankOfBud
+                        description: Tesco 2956 London GBR
+                        credit_debit_indicator: debit
+                        status: booked
                         amount:
-                          value: '10.99'
-                          currency: USD
-                        date_time: '2022-02-02T15:00:00Z'
-                        posted_date_time: '2022-02-02T15:00:00Z'
+                          value: '50.23'
+                          currency: GBP
+                        date_time: '2022-05-26T10:00:00Z'
+                        posted_date_time: '2022-05-27T00:00:00Z'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            id: 0980cf54-6052-4527-84ff-e6f9b169884f
+                            slug: tesco_stores
+                            display_name: Tesco
+                            logo: http://url/tesco_stores_logo.jpeg
+                            tokens:
+                              - value: tesco
+                                confidence: '0.96'
+                          location:
+                            address_lines:
+                              - '180'
+                              - Shepherds Bush Rd
+                              - London
+                              - W6 7NL
+                              - United Kingdom
+                            geolocation:
+                              longitude: 51.497678,
+                              latitude: -0.223766
+                          transaction_types:
+                            - card
+                            - debit
                     metadata:
                       results: 1
                       exclude_source: true
@@ -5974,27 +6117,106 @@ paths:
                     operation_id: corrections_v2_similar_merchants_get
                     data:
                       - transaction_id: source_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: a_transaction_description
-                        credit_debit_indicator: credit
-                        status: pending
+                        account_id: 5bd9ecaf31fc2d5172fd89cb61b89fc6
+                        provider: BankOfBud
+                        description: paypal* specialty coffee
+                        credit_debit_indicator: debit
+                        status: booked
                         amount:
                           value: '10.99'
-                          currency: USD
-                        date_time: '2022-01-02T15:00:00Z'
-                        posted_date_time: '2022-01-02T15:00:00Z'
+                          currency: GBP
+                        date_time: '2022-05-28T10:00:00Z'
+                        posted_date_time: '2022-05-29T00:00:00Z'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            id: 01cc2d49-6144-46f1-9414-67c99b139a95
+                            slug: specialty_coffee
+                            display_name: Specialty Coffee Supplier Ltd.
+                            logo: http://url/specialty_coffee_supplier_logo.jpeg
+                            tokens:
+                              - value: speciality coffee
+                                confidence: '0.98'
+                            website: http://www.url.com
+                          location:
+                            address_lines:
+                              - '180'
+                              - Shepherds Bush Rd
+                              - London
+                              - W6 7NL
+                              - United Kingdom
+                            geolocation:
+                              longitude: 51.497678,
+                              latitude: -0.223766
+                          processor:
+                            id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                            slug: paypal
+                            display_name: PayPal
+                            logo: http://url/paypal_logo.jpeg
+                            tokens:
+                              - value: paypal
+                                confidence: '0.92'
+                            website: https://www.paypal.com
+                          regularity:
+                            frequency: monthly
+                            predicted_date_times:
+                              - '2022-06-28T15:00:00Z'
+                              - '2022-07-28T15:00:00Z'
+                              - '2022-08-28T15:00:00Z'
+                            group_label: a_group_id
+                          transaction_types:
+                            - card
+                            - debit
+                          names:
+                            - jane doe
+                        tags:
+                          - regular-transaction
                       - transaction_id: similar_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: a_transaction_description
-                        credit_debit_indicator: credit
-                        status: pending
+                        account_id: 37c633a71237b9a8282e09587109668e
+                        provider: BankOfBud
+                        description: Tesco 2956 London GBR
+                        credit_debit_indicator: debit
+                        status: booked
                         amount:
-                          value: '10.99'
-                          currency: USD
-                        date_time: '2022-02-02T15:00:00Z'
-                        posted_date_time: '2022-02-02T15:00:00Z'
+                          value: '50.23'
+                          currency: GBP
+                        date_time: '2022-05-26T10:00:00Z'
+                        posted_date_time: '2022-05-27T00:00:00Z'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            id: 0980cf54-6052-4527-84ff-e6f9b169884f
+                            slug: tesco_stores
+                            display_name: Tesco
+                            logo: http://url/tesco_stores_logo.jpeg
+                            tokens:
+                              - value: tesco
+                                confidence: '0.96'
+                          location:
+                            address_lines:
+                              - '180'
+                              - Shepherds Bush Rd
+                              - London
+                              - W6 7NL
+                              - United Kingdom
+                            geolocation:
+                              longitude: 51.497678,
+                              latitude: -0.223766
+                          transaction_types:
+                            - card
+                            - debit
                     metadata:
                       results: 2
                       exclude_source: false
@@ -6003,16 +6225,45 @@ paths:
                     operation_id: corrections_v2_similar_merchants_get
                     data:
                       - transaction_id: similar_transaction_id
-                        account_id: an_account_id
-                        provider: a_bank_account_provider
-                        description: a_transaction_description
-                        credit_debit_indicator: credit
-                        status: pending
+                        account_id: 37c633a71237b9a8282e09587109668e
+                        provider: BankOfBud
+                        description: Tesco 2956 London GBR
+                        credit_debit_indicator: debit
+                        status: booked
                         amount:
-                          value: '10.99'
-                          currency: USD
-                        date_time: '2022-02-02T15:00:00Z'
-                        posted_date_time: '2022-02-02T15:00:00Z'
+                          value: '50.23'
+                          currency: GBP
+                        date_time: '2022-05-26T10:00:00Z'
+                        posted_date_time: '2022-05-27T00:00:00Z'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            id: 0980cf54-6052-4527-84ff-e6f9b169884f
+                            slug: tesco_stores
+                            display_name: Tesco
+                            logo: http://url/tesco_stores_logo.jpeg
+                            tokens:
+                              - value: tesco
+                                confidence: '0.96'
+                          location:
+                            address_lines:
+                              - '180'
+                              - Shepherds Bush Rd
+                              - London
+                              - W6 7NL
+                              - United Kingdom
+                            geolocation:
+                              longitude: 51.497678,
+                              latitude: -0.223766
+                          transaction_types:
+                            - card
+                            - debit
                     metadata:
                       results: 1
                       exclude_source: true
@@ -9548,8 +9799,8 @@ paths:
                 recurring_amount:
                   value: '2.50'
                   currency: GBP
-                first_payment_date: '2023-02-10'
-                last_payment_date: '2023-02-10'
+                first_payment_date: '2023-02-10T15:00:00Z'
+                last_payment_date: '2023-02-10T15:00:00Z'
                 frequency: monthly
       responses:
         '200':
@@ -9648,7 +9899,7 @@ paths:
                 amount:
                   value: '2.50'
                   currency: GBP
-                requested_execution_date: '2023-01-20'
+                requested_execution_date: '2023-01-20T15:00:00Z'
       responses:
         '200':
           description: Successful request
@@ -12320,8 +12571,20 @@ components:
         tags:
           type: array
           description: |
-            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering. Region and client specific.
-            | Value                   | Description                                               | |:------------------------|:----------------------------------------------------------| | `benefit`               | A government/non-profit benefit transaction               | | `debt-collection`       | A transaction associated with a known debt-collector      | | `loan`                  | A transaction associated with a loan                      | | `income`                | A transaction associated with income                      | | `pending`               | A transaction which has not been booked                   | | `regular-transaction`   | A transaction predicted to occur with a regular frequency | | `salary`                | A transaction associated with a regular wage              | | `subscription`          | A transaction associated with a subscription service      |
+            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering.
+
+            Region and client specific.
+
+            | Value                   | Description                                               |
+            |:------------------------|:----------------------------------------------------------|
+            | `benefit`               | A government/non-profit benefit transaction               |
+            | `debt-collection`       | A transaction associated with a known debt-collector      |
+            | `loan`                  | A transaction associated with a loan                      |
+            | `income`                | A transaction associated with income                      |
+            | `pending`               | A transaction which has not been booked                   |
+            | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
+            | `salary`                | A transaction associated with a regular wage              |
+            | `subscription`          | A transaction associated with a subscription service      |
           items:
             type: string
     Enrichments:
@@ -12399,6 +12662,9 @@ components:
             A list of tokens calculated from the transaction model, used to identify the Merchant.  This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
           items:
             $ref: '#/components/schemas/Token'
+        website:
+          type: string
+          description: URL supplying merchant website, if available.
     Processor:
       title: Processor
       type: object
@@ -12423,6 +12689,9 @@ components:
             A list of tokens calculated from the transaction model, used to identify the Merchant.  This list is often present even if the merchant details (id, slug, disply_name, logo) are not returned.
           items:
             $ref: '#/components/schemas/Token'
+        website:
+          type: string
+          description: URL supplying merchant website, if available.
     Regularity:
       title: Regularity
       type: object
@@ -12570,8 +12839,21 @@ components:
         tags:
           type: array
           description: |
-            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering. Region and client specific.
-            | Value                   | Description                                               | |:------------------------|:----------------------------------------------------------| | `benefit`               | A government/non-profit benefit transaction               | | `debt-collection`       | A transaction associated with a known debt-collector      | | `loan`                  | A transaction associated with a loan                      | | `income`                | A transaction associated with income                      | | `pending`               | A transaction which has not been booked                   | | `regular-transaction`   | A transaction predicted to occur with a regular frequency | | `salary`                | A transaction associated with a regular wage              | | `subscription`          | A transaction associated with a subscription service      | | `online`                | A transaction associated with an online merchant          |
+            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering.
+
+            Region and client specific.
+
+            | Value                   | Description                                               |
+            |:------------------------|:----------------------------------------------------------|
+            | `benefit`               | A government/non-profit benefit transaction               |
+            | `debt-collection`       | A transaction associated with a known debt-collector      |
+            | `loan`                  | A transaction associated with a loan                      |
+            | `income`                | A transaction associated with income                      |
+            | `pending`               | A transaction which has not been booked                   |
+            | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
+            | `salary`                | A transaction associated with a regular wage              |
+            | `subscription`          | A transaction associated with a subscription service      |
+            | `online`                | A transaction associated with an online merchant          |
           items:
             type: string
     SyncEnrichments:
@@ -13459,8 +13741,10 @@ components:
           type: string
           description: The name of the available open banking provider used for display purposes
         maintenance_window:
-          $ref: '#/components/schemas/MaintenanceWindowObject'
-          nullable: true
+          anyOf:
+            - $ref: '#/components/schemas/MaintenanceWindowObject'
+            - type: object
+              nullable: true
         maintenance_status:
           type: string
           description: The status of the maintenance window associated with the provider
@@ -15455,8 +15739,21 @@ components:
         tags:
           type: array
           description: |
-            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering. Region and client specific.
-            | Value                   | Description                                               | |:------------------------|:----------------------------------------------------------| | `benefit`               | A government/non-profit benefit transaction               | | `debt-collection`       | A transaction associated with a known debt-collector      | | `loan`                  | A transaction associated with a loan                      | | `income`                | A transaction associated with income                      | | `pending`               | A transaction which has not been booked                   | | `regular-transaction`   | A transaction predicted to occur with a regular frequency | | `salary`                | A transaction associated with a regular wage              | | `subscription`          | A transaction associated with a subscription service      | | `online`                | A transaction associated with an online merchant          |
+            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering.
+
+            Region and client specific.
+
+            | Value                   | Description                                               |
+            |:------------------------|:----------------------------------------------------------|
+            | `benefit`               | A government/non-profit benefit transaction               |
+            | `debt-collection`       | A transaction associated with a known debt-collector      |
+            | `loan`                  | A transaction associated with a loan                      |
+            | `income`                | A transaction associated with income                      |
+            | `pending`               | A transaction which has not been booked                   |
+            | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
+            | `salary`                | A transaction associated with a regular wage              |
+            | `subscription`          | A transaction associated with a subscription service      |
+            | `online`                | A transaction associated with an online merchant          |
           items:
             type: string
     IngestV2SyncResponseData:
@@ -17015,17 +17312,14 @@ components:
         metadata:
           type: object
           required:
-            - parameters
+            - results
           properties:
-            parameters:
-              type: object
-              properties:
-                results:
-                  description: The number of results returned.
-                  type: string
-                next_page_token:
-                  description: Token is present if you have more pages.
-                  type: string
+            results:
+              description: The number of results returned.
+              type: integer
+            next_page_token:
+              description: Token is present if you have more pages.
+              type: string
     CustomerCategoryCorrectionPayload:
       title: Customer Category Correction
       type: object
@@ -17410,7 +17704,8 @@ components:
           type: string
           description: |
             The token to use to fetch the next page of results. This is only set if there are more results to fetch.
-      example: b21055a9a9f46fc794a2e6855c65abd7e317181039fc6930daabac5822911d14a84895ecd947e2b5abdcb22e4fcc2c594e1f661dc63e34b9ba88760724047990896f7581a0786c2605dce19c6a9d80d1044f963b74fea0a929c0a4465a6e67378a74dce38ec5e26ae4cc804b62fd666d5df4cf2e7f524bd99e5523bc5d471768065c036dc0c73122705b280817fbbd7d9aa31f271d72cd3877d999dcb9a5b1c0be0c05
+      example:
+        next_page_token: b21055a9a9f46fc794a2e6855c65abd7e317181039fc6930daabac5822911d14a84895ecd947e2b5abdcb22e4fcc2c594e1f661dc63e34b9ba88760724047990896f7581a0786c2605dce19c6a9d80d1044f963b74fea0a929c0a4465a6e67378a74dce38ec5e26ae4cc804b62fd666d5df4cf2e7f524bd99e5523bc5d471768065c036dc0c73122705b280817fbbd7d9aa31f271d72cd3877d999dcb9a5b1c0be0c05
     RetrieveSavingsGoalActionsResponse:
       title: Retrieve Savings Goal Actions Response
       required:
@@ -19333,7 +19628,7 @@ components:
             - active
             - inactive
         maintenance_window:
-          allOf:
+          anyOf:
             - $ref: '#/components/schemas/MaintenanceWindowObject'
             - type: object
               nullable: true
@@ -21499,7 +21794,11 @@ components:
         a customer's application data over.
       schema:
         type: array
-        default: P1M,P3M,P6M,P12M
+        default:
+          - P1M
+          - P3M
+          - P6M
+          - P12M
         items:
           $ref: '#/components/schemas/DayOrMonth'
     RedirectURLCallbackApplicationID:
@@ -21647,8 +21946,10 @@ components:
         type: string
         enum:
           - all
+          - active
+          - reconfirm_due
       required: false
-      description: By default this endpoint only returns `active` Authorised connections. To retrieve `all` consents, add this query param with the value of `all`
+      description: By default this endpoint only returns `active` Authorised connections. To retrieve `all` consents, add this query param with the value of `all`. To retrieve consents where reconfirmation is required add this query param with the value of `reconfirm_due`.
     CustomerIPAddress:
       in: header
       name: X-Customer-Ip-Address
@@ -21690,10 +21991,7 @@ components:
 
         If false or the header is not included, the task **will** be processed synchronously.
       schema:
-        type: string
-        enum:
-          - 'true'
-          - 'false'
+        type: boolean
     GenerateTransactionIDs:
       in: header
       name: X-Generate-Transaction-IDs
@@ -21905,9 +22203,9 @@ components:
       in: query
       name: page_size
       schema:
-        type: string
+        type: integer
       example: 200
-      description: Use this paramater to set the maximum number of results to be returned. This defaults to 100, and has a maximum of 200.
+      description: Use this parameter to set the maximum number of results to be returned. This defaults to 100, and has a maximum of 200.
     PathGoalActionID:
       name: goal_action_id
       in: path
@@ -22088,16 +22386,18 @@ components:
       description: comma separated list of status codes filter
       example: CREATED,SETTLED
       schema:
-        type: string
-        enum:
-          - CREATED
-          - AWAITING_AUTH
-          - AUTHENTICATED
-          - ACCEPTED
-          - FUNDS_CONFIRMED
-          - INITIATING
-          - SETTLED
-          - FAILED
+        type: array
+        items:
+          type: string
+          enum:
+            - CREATED
+            - AWAITING_AUTH
+            - AUTHENTICATED
+            - ACCEPTED
+            - FUNDS_CONFIRMED
+            - INITIATING
+            - SETTLED
+            - FAILED
     PaymentDateFrom:
       in: header
       name: X-Date-From
