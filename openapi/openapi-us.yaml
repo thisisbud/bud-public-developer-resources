@@ -9340,6 +9340,14 @@ components:
             next_url_delay:
               description: Recommended delay in milliseconds before next call
               type: integer
+    OBResources:
+      type: string
+      enum:
+        - accounts
+        - balances
+        - transactions
+        - parties
+        - direct-debits
     OpenBankingRefreshRequestV2:
       title: Open Banking Refresh V2 Payload
       type: object
@@ -9360,6 +9368,11 @@ components:
           type: string
           description: |
             The datetime (ISO 8601) that defines the time up to which the Customer's data needs to be collected. Defaults to the current datetime. 
+        resources:
+          type: array
+          description: Optional list of resources that should be refreshed. Default behaviour is to refresh all resources defined on the customers consent
+          items:
+            $ref: '#/components/schemas/OBResources'
     TaskV2CreatedView:
       title: Refresh V2 Task Created View
       description: Standard successful task created response.
