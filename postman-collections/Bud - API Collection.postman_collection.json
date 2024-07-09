@@ -2387,6 +2387,138 @@
 							"response": []
 						},
 						{
+							"name": "Retrieve Balances over time V3",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}financial/v3/balances",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v3",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2022-11-25",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "2023-02-01",
+											"disabled": true
+										},
+										{
+											"key": "granularity",
+											"value": "annually",
+											"disabled": true
+										}
+									]
+								},
+								"description": "List the balances of each bank account for a customer accross all ingestion sources. Ordered by balance date.\n\nIt calculates the balance for each date, by iterating from the date the account was last refreshed to the to and from dates provided. It then checks all the transactions within this range, calculating the balance at the end of each day.\n\nThis endpoint limits the date from which it gets balances from either by the oldest transaction_window on the account if they are present, or by the oldest transaction within the requested date range available.\n\nFor users ingesting data via the Ingest Accounts endpoint, you can increase the range and accuracy of the data supplied from this service by including the transaction_window field upon acccount ingestion."
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Balances over time by account V3",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "default",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Client-Id",
+										"type": "default",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"type": "default",
+										"value": "{{customer_id}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}financial/v3/accounts/{{bank_account_id}}/balances",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v3",
+										"accounts",
+										"{{bank_account_id}}",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2021-11-25",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "2023-02-01",
+											"disabled": true
+										},
+										{
+											"key": "granularity",
+											"value": "annually",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Retrieve Transactions V2",
 							"event": [
 								{
