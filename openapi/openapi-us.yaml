@@ -3126,6 +3126,253 @@ paths:
                 operation_id: financial_v2_accounts_balances_get
                 code_id: internal_error
                 message: Internal server error has occurred.
+  /financial/v3/balances:
+    get:
+      tags:
+        - Retrieve Financial Data
+      summary: Retrieve Balances Over Time
+      description: |
+        List the balances of each bank account for a customer across all ingestion sources. Ordered by balance date.
+        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to`  and `from` dates provided. It then checks all the transactions within this range, calculating the balance at  the end of each day.
+        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the  account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint returns an empty list.
+        You can only request balances within transaction windows, therefore if you ingest transactions without a  transaction window, you won't be able to request balance for that time range. However those transactions will be used to calculate the balance as well.
+        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the  data supplied from this service by including the transaction_window field upon account ingestion.
+        The balances selected to use as latest pending & latest booked in the calculation are selected according to a provider specific balance type priority list.
+        Results are limited to up to 5000 balance items across all accounts.
+      operationId: financial_v3_balances_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/QueryFromBudDate'
+        - $ref: '#/components/parameters/QueryToBudDate'
+        - in: query
+          name: granularity
+          schema:
+            type: string
+          example: daily
+          description: |
+            Specifies in what interval the balance over time should be retrieved.
+            Currently supported values include (but are not necessarily limited to):
+              - `daily`
+              - `weekly`
+              - `biweekly`
+              - `monthly`
+              - `quarterly`
+              - `six_monthly`
+              - `annually`
+
+            Defaults to `weekly`.
+        - $ref: '#/components/parameters/QueryDateField'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBalancesV3Response'
+              example:
+                operation_id: financial_v2_balances_get
+                data:
+                  - account_id: 705e95fea8312d9a9b227b682033d55f
+                    balances:
+                      - date: '2022-11-15T23:59:59Z'
+                        booked:
+                          amount:
+                            value: '900.00'
+                            currency: GBP
+                          credit_debit_indicator: credit
+                        pending:
+                          amount:
+                            value: '850.00'
+                            currency: GBP
+                          credit_debit_indicator: credit
+                      - date: '2022-11-14T23:59:59Z'
+                        booked:
+                          amount:
+                            value: '950.00'
+                            currency: GBP
+                          credit_debit_indicator: credit
+                        pending:
+                          amount:
+                            value: '900.00'
+                            currency: GBP
+                          credit_debit_indicator: credit
+                  - account_id: 9df0b46c8ab58277abc432fee26067ad
+                    balances:
+                      - date: '2022-11-15T23:59:59Z'
+                        booked:
+                          amount:
+                            value: '500'
+                            currency: JPY
+                          credit_debit_indicator: credit
+                        pending:
+                          amount:
+                            value: '500'
+                            currency: JPY
+                          credit_debit_indicator: credit
+                metadata:
+                  accounts:
+                    5b271e24-9ea5-4d7e-b5da-64f01d32db22:
+                      balance_count: 2
+                      from: '2022-11-14T23:59:59Z'
+                      to: '2022-11-15T23:59:59Z'
+                      max_balance:
+                        value: '500.00'
+                        currency: JPY
+                      min_balance:
+                        value: '200.00'
+                        currency: GBP
+                    b6e9ea3c-71f9-4572-983a-3e5e85470dad:
+                      balance_count: 1
+                      from: '2022-11-15T23:59:59Z'
+                      to: '2022-11-15T23:59:59Z'
+                      max_balance:
+                        value: '500.12'
+                        currency: GBP
+                      min_balance:
+                        value: '0.00'
+                        currency: GBP
+                  parameters:
+                    from: '2020-12-22T00:00:00Z'
+                    to: '2022-11-15T00:00:00Z'
+                    granularity: daily
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: An unauthenticated request was received.
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: financial_v2_balances_get
+                code_id: internal_error
+                message: Internal server error has occurred.
+  /financial/v3/accounts/{account_id}/balances:
+    get:
+      tags:
+        - Retrieve Financial Data
+      summary: Retrieve Balances Over Time By Account
+      description: |
+        List the balances of a specific bank account for a customer across all ingestion sources. Ordered by balance  date.
+        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to`  and `from` dates provided. It then checks all the transactions within this range, calculating the balance at  the end of each day.
+        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the  account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint returns an empty list.
+        You can only request balances within transaction windows, therefore if you ingest transactions without a  transaction window, you won't be able to request balance for that time range. However those transactions will be used to calculate the balance as well.
+        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the  data supplied from this service by including the transaction_window field upon account ingestion.
+        The balances selected to use as latest pending & latest booked in the calculation are selected according to a provider specific balance type priority list.
+        Results are limited to up to 5000 balance items.
+      operationId: financial_v3_accounts_balances_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/QueryFromBudDate'
+        - $ref: '#/components/parameters/QueryToBudDate'
+        - $ref: '#/components/parameters/PathAccountID'
+        - in: query
+          name: granularity
+          schema:
+            type: string
+          example: daily
+          description: |
+            Specifies in what interval the balance over time should be retrieved.
+            Currently supported values include (but are not necessarily limited to):
+              - `daily`
+              - `weekly`
+              - `biweekly`
+              - `monthly`
+              - `quarterly`
+              - `six_monthly`
+              - `annually`
+
+            Defaults to `weekly`.
+        - $ref: '#/components/parameters/QueryDateField'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBalancesForAccountIDV3Response'
+              example:
+                operation_id: financial_v2_accounts_balances_get
+                data:
+                  - date: '2022-11-15T23:59:59Z'
+                    booked:
+                      amount:
+                        value: '900.00'
+                        currency: GBP
+                      credit_debit_indicator: credit
+                    pending:
+                      amount:
+                        value: '850.00'
+                        currency: GBP
+                      credit_debit_indicator: credit
+                  - date: '2022-11-14T23:59:59Z'
+                    booked:
+                      amount:
+                        value: '950.00'
+                        currency: GBP
+                      credit_debit_indicator: credit
+                    pending:
+                      amount:
+                        value: '900.00'
+                        currency: GBP
+                      credit_debit_indicator: credit
+                metadata:
+                  accounts:
+                    balance_count: 2
+                    from: '2022-11-14T23:59:59Z'
+                    to: '2022-11-15T23:59:59Z'
+                    max_balance:
+                      value: '500.12'
+                      currency: GBP
+                    min_balance:
+                      value: '0.00'
+                      currency: GBP
+                  parameters:
+                    from: '2020-12-22T00:00:00Z'
+                    to: '2022-11-15T00:00:00Z'
+                    granularity: daily
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: An unauthenticated request was received.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestNotFoundResponse'
+              example:
+                operation_id: financial_v2_accounts_balances_get
+                code_id: account_not_found
+                message: The specified account could not be found. Please check the account identifier is correct. The account might be closed or suspended.
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: financial_v2_accounts_balances_get
+                code_id: internal_error
+                message: Internal server error has occurred.
   /financial/v2/accounts/{account_id}:
     get:
       tags:
@@ -3328,6 +3575,7 @@ paths:
                           currency: USD
                         date_time: '2023-08-01T12:02:48Z'
                         posted_date_time: '2023-08-01T12:02:48Z'
+                        merchant_category_code: '5815'
                         enrichments:
                           merchant:
                             id: 60bf3a60-c872-4f45-909d-c84b140fc6e1
@@ -3388,7 +3636,7 @@ paths:
                       - transaction_id: '692529081001'
                         account_id: 2f5b2055-6253-4cd0-b646-06788342a609
                         provider: finicity
-                        description: STARBACKS NY0812C
+                        description: STARBUCKS NY0812C
                         credit_debit_indicator: debit
                         status: booked
                         amount:
@@ -3396,6 +3644,7 @@ paths:
                           currency: USD
                         date_time: 2023-11-10T23:00:00Z00:00
                         posted_date_time: 2023-11-10T23:00:00Z00:00
+                        merchant_category_code: '5814'
                         enrichments:
                           categories:
                             l1:
@@ -3406,7 +3655,7 @@ paths:
                               confidence: '0.98'
                           merchant:
                             tokens:
-                              - value: starbacks
+                              - value: starbucks
                                 confidence: '0.92'
                               - value: nystar
                                 confidence: '0.25'
@@ -3567,6 +3816,7 @@ paths:
                           currency: USD
                         date_time: '2023-08-01T12:02:48Z'
                         posted_date_time: '2023-08-01T12:02:48Z'
+                        merchant_category_code: '5815'
                         enrichments:
                           merchant:
                             id: 60bf3a60-c872-4f45-909d-c84b140fc6e1
@@ -3614,6 +3864,7 @@ paths:
                           currency: USD
                         date_time: 2023-11-10T23:00:00Z00:00
                         posted_date_time: 2023-11-10T23:00:00Z00:00
+                        merchant_category_code: '5815'
                         enrichments:
                           categories:
                             l1:
@@ -3644,6 +3895,7 @@ paths:
                           currency: USD
                         date_time: 2023-11-10T23:00:00Z00:00
                         posted_date_time: 2023-11-10T23:00:00Z00:00
+                        merchant_category_code: '5815'
                         enrichments:
                           categories:
                             l1:
@@ -3722,7 +3974,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SimilarTransactionsResponse'
+                $ref: '#/components/schemas/SimilarTransactionsIncludingMerchantsResponse'
               examples:
                 Single Similar Transaction:
                   value:
@@ -3739,6 +3991,7 @@ paths:
                           currency: USD
                         date_time: '2023-08-01T12:02:48Z'
                         posted_date_time: '2023-08-01T12:02:48Z'
+                        merchant_category_code: '5815'
                         enrichments:
                           merchant:
                             id: 60bf3a60-c872-4f45-909d-c84b140fc6e1
@@ -3786,6 +4039,7 @@ paths:
                           currency: USD
                         date_time: 2023-11-10T23:00:00Z00:00
                         posted_date_time: 2023-11-10T23:00:00Z00:00
+                        merchant_category_code: '5815'
                         enrichments:
                           categories:
                             l1:
@@ -3816,6 +4070,7 @@ paths:
                           currency: USD
                         date_time: 2023-11-10T23:00:00Z00:00
                         posted_date_time: 2023-11-10T23:00:00Z00:00
+                        merchant_category_code: '5815'
                         enrichments:
                           categories:
                             l1:
@@ -8246,7 +8501,7 @@ components:
           description: Date that the transaction occured compliant with RFC3339.
         posted_date_time:
           type: string
-          description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becamse available, for debits this is the date that the asset ceased to be available
+          description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becomes available, for debits this is the date that the asset ceased to be available
         enrichments:
           $ref: '#/components/schemas/Enrichments'
         merchant_category_code:
@@ -8459,7 +8714,6 @@ components:
         operation_id:
           type: string
           enum:
-            - corrections_v2_similar_merchants_get
             - corrections_v2_similar_categories_get
         data:
           type: array
@@ -8475,6 +8729,33 @@ components:
               description: The number of results returned.
             exclude_source:
               type: boolean
+    SimilarTransactionsIncludingMerchantsResponse:
+      title: Retrieve Similar Transactions including Merchants Response
+      type: object
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - corrections_v2_similar_merchants_get
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        metadata:
+          type: object
+          required:
+            - results
+          properties:
+            results:
+              type: integer
+              description: The number of results returned.
+            exclude_source:
+              type: boolean
+              description: Is the request transaction being excluded from the response
     RegularTransactionsResponse:
       title: Regular Transactions Response
       type: object
@@ -11279,6 +11560,154 @@ components:
         message:
           type: string
           description: An actual user friendly error message.
+    BalanceV3Amount:
+      title: Balance amount
+      description: A representation of both the amount and the credit/debit indicator
+      required:
+        - amount
+        - credit_debit_indicator
+      properties:
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        credit_debit_indicator:
+          type: string
+          description: Indication as to whether the balance is in credit or debit
+          enum:
+            - credit
+            - debit
+    BalanceOverTimeV3DataPoint:
+      title: Balance Over Time Data-Point
+      description: A single record of the balance at the end of the given date.
+      type: object
+      required:
+        - date
+        - booked
+        - pending
+      properties:
+        date:
+          type: string
+          description: |
+            The date of the given balance in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+            Examples:
+              - `2023-03-17T23:59:59Z`
+              - `2023-03-17T23:59:59-08:00`
+        booked:
+          description: The current balance of the account
+          $ref: '#/components/schemas/BalanceV3Amount'
+        pending:
+          description: The balance of the account if all pending transactions have settled. This field is only present if the pending balance is different than the booked balance.
+          $ref: '#/components/schemas/BalanceV3Amount'
+    GetBalancesV3Response:
+      title: Get Balances Response
+      type: object
+      required:
+        - operation_id
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - balances
+            properties:
+              account_id:
+                type: string
+                description: Identifier of the accounts from which the balances have been calculated
+              balances:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BalanceOverTimeV3DataPoint'
+        metadata:
+          type: object
+          properties:
+            accounts:
+              description: This is a hashmap representing account_ids and metadata about the results returned from the balances endpoint
+              additionalProperties:
+                description: Hashmap of an account_id returned from the balances endpoint
+                allOf:
+                  - $ref: '#/components/schemas/BudDateRangeMetadata'
+                  - type: object
+                    properties:
+                      balance_count:
+                        type: number
+                        description: The number of balances returned for the account
+                  - type: object
+                    properties:
+                      min_balance:
+                        description: The minimum balance in the returned period
+                        $ref: '#/components/schemas/BudAmount'
+                  - type: object
+                    properties:
+                      max_balance:
+                        description: The maximum balance in the returned period
+                        $ref: '#/components/schemas/BudAmount'
+            parameters:
+              title: The parameters used to calculated balances
+              allOf:
+                - $ref: '#/components/schemas/BudDateRangeMetadata'
+                - type: object
+                  properties:
+                    granularity:
+                      type: string
+                      description: |
+                        The granularity that the balances have been retrieved for.
+
+                        Currently supported values include (but are not necessarily limited to):
+                          - `daily`
+                          - `weekly`
+                          - `biweekly`
+                          - `monthly`
+                          - `quarterly`
+                          - `six_monthly`
+                          - `annually`
+    GetBalancesForAccountIDV3Response:
+      title: Get Balances For Account ID Response
+      type: object
+      required:
+        - operation_id
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BalanceOverTimeV3DataPoint'
+        metadata:
+          type: object
+          properties:
+            accounts:
+              description: Metadata about the response for the given account_id
+              allOf:
+                - $ref: '#/components/schemas/BudDateRangeMetadata'
+                - type: object
+                  properties:
+                    balance_count:
+                      type: number
+                      description: The number of balances returned for the account
+                - type: object
+                  properties:
+                    min_balance:
+                      description: The minimum balance in the returned period
+                      $ref: '#/components/schemas/BudAmount'
+                - type: object
+                  properties:
+                    max_balance:
+                      description: The maximum balance in the returned period
+                      $ref: '#/components/schemas/BudAmount'
+            parameters:
+              allOf:
+                - $ref: '#/components/schemas/BudDateRangeMetadata'
+                - type: object
+                  properties:
+                    granularity:
+                      type: string
+                      description: The granularity that the balances have been retrieved for.
+                    account_id:
+                      type: string
+                      description: The account ID the balances have been retrieved for.
     AccountV2:
       title: Account
       type: object
@@ -13873,7 +14302,7 @@ components:
           description: Date that the transaction occured compliant with RFC3339.
         posted_date_time:
           type: string
-          description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becamse available, for debits this is the date that the asset ceased to be available
+          description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becomes available, for debits this is the date that the asset ceased to be available
         enrichments:
           $ref: '#/components/schemas/components-schemas-Enrichments'
         merchant_category_code:
