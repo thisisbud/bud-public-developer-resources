@@ -1191,6 +1191,7 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
+              type: object
               oneOf:
                 - title: When Retrieving an Auth Token
                   required:
@@ -3968,6 +3969,89 @@ paths:
                 errors:
                   body:
                     - invalid character 'a' looking for beginning of object key string
+        '401':
+          description: An unauthenticated request was received.
+        '405':
+          description: The request uses an unexpected HTTP method.
+        5XX:
+          description: An unexpected error occurred on the server side.
+    get:
+      security:
+        - OAuth2: []
+      tags:
+        - Manage Customers
+      summary: Retrieve Customers V3
+      description: |
+        This endpoint is used to list customers associated with the current project.
+
+        Customers are listed ordered by their ID. Deleted customers will not be included in the list.
+
+        The list of customers can be filtered by creation date with the `date_from` and `date_to` query parameters, which expect dates in the RFC3339 format.
+
+        If more results pages are available, the response metadata object will contain a  `next_page_token` field which can be used to fetch the next page of results. The token should be provided in the `page_token` query parameter for subsequent requests.
+
+        For more information on how to manage your Bud Customers, please, refer to the following [guide](https://docs.thisisbud.com/docs/setup-customers)
+      operationId: platform_v3_customers_get
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - in: query
+          name: date_from
+          schema:
+            type: string
+          example: '2022-05-28T00:00:00Z'
+          description: |
+            Date (RFC3339) to filter customers created on or after which. To maintain backwards compatibility, dates in the format (YYYY-MM-DD) can also be used and will be assumed to be UTC.
+        - in: query
+          name: date_to
+          schema:
+            type: string
+          example: '2022-05-29T00:00:00Z'
+          description: |
+            Date (RFC3339) to filter customers created on or before which. To maintain backwards compatibility, dates in the format (YYYY-MM-DD) can also be used and will be assumed to be UTC. Uses the current date by default.
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+          description: The number of results to return per page. Defaults to 200.
+        - name: page_token
+          in: query
+          schema:
+            type: string
+          description: |
+            The token required to fetch a specific page of results. Provided by the next_page_token field in the previous request.
+      responses:
+        '200':
+          description: Returns a list of customers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomersGetAllV3Response'
+              example:
+                operation_id: platform_v3_customers_get
+                data:
+                  - customer_id: acbff0b9-299c-4065-b933-4a991e17da6d
+                    idempotent_identifier: acbff0b9-299c-4065-b933-4a991e17da6d
+                    created_at: 2019-02-27T06:11:57+0000
+                  - customer_id: ebb50ae5-8c5c-4205-9b61-e93ce84eb467
+                    created_at: 2019-02-27T06:11:57+0000
+                metadata:
+                  next_page_token: eyJwYWdlX3NpemUiOjIsInBhZ2UiOjF9
+                  results: 2
+        '400':
+          description: The request contains an invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: platform_v3_customers_get_all
+                code_id: bad_request
+                message: invalid page token
+                errors:
+                  page_token:
+                    - Failed to parse page token
         '401':
           description: An unauthenticated request was received.
         '405':
@@ -16296,6 +16380,50 @@ components:
             $ref: '#/components/schemas/IngestResponseV3SubTask'
         metadata:
           $ref: '#/components/schemas/IngestStatusTaskMetadata'
+    CustomersGetAllV3DataItem:
+      type: object
+      description: Representation of a Customer.
+      required:
+        - customer_id
+        - created_at
+      properties:
+        customer_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          description: Date and time at which the Customer has been registered (ISO 8601).
+        idempotent_identifier:
+          type: string
+          description: Client-assigned idempotent customer identifier (omitted if not present).
+    CustomersGetAllV3ResponseMetadata:
+      type: object
+      description: Metadata that defines token-based pagination of results.
+      required:
+        - results
+      properties:
+        next_page_token:
+          type: string
+          description: Page token for next part of the result set, omitted if there are no other pages.
+        results:
+          type: integer
+          description: The number of results returned.
+    CustomersGetAllV3Response:
+      title: List customers response
+      type: object
+      description: Expected response structure.
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomersGetAllV3DataItem'
+        metadata:
+          $ref: '#/components/schemas/CustomersGetAllV3ResponseMetadata'
     CustomerContextType:
       title: Customer Context Type
       type: string
@@ -22817,7 +22945,9 @@ components:
       name: X-Status-Codes
       required: false
       description: comma separated list of status codes filter
-      example: CREATED,SETTLED
+      example:
+        - CREATED
+        - SETTLED
       schema:
         type: array
         items:
