@@ -2668,12 +2668,17 @@ paths:
                               - value: nystar
                                 confidence: '0.25'
                           location:
-                            address_lines:
-                              - 41-02
-                              - Main Street
-                              - Flushing
-                              - '11355'
-                              - New York
+                            address:
+                              address_lines:
+                                - 41-02
+                                - Main Street
+                                - Flushing
+                                - '11355'
+                                - New York
+                              street_address: Main Street
+                              city: Flushing
+                              postal_code: '11355'
+                              region: New York
                             geolocation:
                               longitude: 40.757551
                               latitude: -73.829289
@@ -3203,7 +3208,7 @@ paths:
     get:
       tags:
         - Retrieve Financial Data
-      summary: Retrieve Balances Over Time
+      summary: Retrieve Balances Over Time V3
       description: |
         List the balances of each bank account for a customer across all ingestion sources. Ordered by balance date.
         It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to`  and `from` dates provided. It then checks all the transactions within this range, calculating the balance at  the end of each day.
@@ -3334,7 +3339,7 @@ paths:
     get:
       tags:
         - Retrieve Financial Data
-      summary: Retrieve Balances Over Time By Account
+      summary: Retrieve Balances Over Time By Account V3
       description: |
         List the balances of a specific bank account for a customer across all ingestion sources. Ordered by balance  date.
         It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to`  and `from` dates provided. It then checks all the transactions within this range, calculating the balance at  the end of each day.
@@ -3732,12 +3737,17 @@ paths:
                               - value: nystar
                                 confidence: '0.25'
                           location:
-                            address_lines:
-                              - 41-02
-                              - Main Street
-                              - Flushing
-                              - '11355'
-                              - New York
+                            address:
+                              address_lines:
+                                - 41-02
+                                - Main Street
+                                - Flushing
+                                - '11355'
+                                - New York
+                              street_address: Main Street
+                              city: Flushing
+                              postal_code: '11355'
+                              region: New York
                             geolocation:
                               longitude: 40.757551
                               latitude: -73.829289
@@ -7349,14 +7359,19 @@ paths:
                           - value: speciality coffee
                             confidence: '0.98'
                       location:
-                        address_lines:
-                          - '180'
-                          - Shepherds Bush Rd
-                          - London
-                          - W6 7NL
-                          - United Kingdom
+                        address:
+                          address_lines:
+                            - '180'
+                            - Shepherds Bush Rd
+                            - London
+                            - W6 7NL
+                            - United Kingdom
+                          street_address: Shepherds Bush Rd
+                          city: London
+                          postal_code: W6 7NL
+                          country: United Kingdom
                         geolocation:
-                          longitude: 51.497678,
+                          longitude: 51.497678
                           latitude: -0.223766
                       processor:
                         id: 18f63293-0217-4520-bbf0-071dca7a9d04
@@ -7408,14 +7423,19 @@ paths:
                           - value: tesco
                             confidence: '0.96'
                       location:
-                        address_lines:
-                          - '180'
-                          - Shepherds Bush Rd
-                          - London
-                          - W6 7NL
-                          - United Kingdom
+                        address:
+                          address_lines:
+                            - '180'
+                            - Shepherds Bush Rd
+                            - London
+                            - W6 7NL
+                            - United Kingdom
+                          street_address: Shepherds Bush Rd
+                          city: London
+                          postal_code: W6 7NL
+                          country: United Kingdom
                         geolocation:
-                          longitude: 51.497678,
+                          longitude: 51.497678
                           latitude: -0.223766
                       transaction_types:
                         - card
@@ -8721,23 +8741,34 @@ components:
             address_lines:
               type: array
               description: |
-                The lines of the detected address. These could be anything from a full street address down to a simple town or city.
-                The level of detail depends on the resolution with which we are able to detect the transaction location.
+                The lines of the detected address. These could be anything from a full street address down to a simple town or city. The level of detail depends on the resolution with which we are able to detect the transaction location.
               items:
                 type: string
-            geolocation:
-              type: object
-              description: The geolocation if an exact match is found
-              properties:
-                latitude:
-                  type: number
-                  format: double
-                longitude:
-                  type: number
-                  format: double
+            street_address:
+              type: string
+              description: The street address for the detected location of where the transaction was located
+            city:
+              type: string
+              description: The city for the detected location of where the transaction was located
+            region:
+              type: string
+              description: The region for the detected location of where the transaction was located
+            postal_code:
+              type: string
+              description: The postcode for the detected location of where the transaction was located.
             country:
               type: string
-              description: An ISO-3166 Alpha-3 country code representing the detected country the transaction was located.
+              description: An ISO-3166 Alpha-2 country code representing the detected country the transaction was located.
+        geolocation:
+          type: object
+          description: The geolocation if an exact match is found
+          properties:
+            latitude:
+              type: number
+              format: double
+            longitude:
+              type: number
+              format: double
         tokens:
           type: array
           description: A list of tokenised location string. These could be anything from a full street address down to a simple town or city.
@@ -10855,19 +10886,33 @@ components:
                 The lines of the detected address. These could be anything from a full street address down to a simple town or city. The level of detail depends on the resolution with which we are able to detect the transaction location.
               items:
                 type: string
-            geolocation:
-              type: object
-              description: The geolocation if an exact match is found
-              properties:
-                latitude:
-                  type: number
-                  format: double
-                longitude:
-                  type: number
-                  format: double
+            street_address:
+              type: string
+              description: The street address for the detected location of where the transaction was located
+            city:
+              type: string
+              description: The city for the detected location of where the transaction was located
+            region:
+              type: string
+              description: The region for the detected location of where the transaction was located
+            postal_code:
+              type: string
+              description: The postcode for the detected location of where the transaction was located.
             country:
               type: string
-              description: An ISO-3166 Alpha-3 country code representing the detected country the transaction was located.
+              description: An ISO-3166 Alpha-2 country code representing the detected country the transaction was located.
+        geolocation:
+          type: object
+          description: The geolocation if an exact match is found
+          properties:
+            latitude:
+              description: The latitudinal position of the merchant location
+              type: number
+              format: double
+            longitude:
+              description: The longitudinal position of the merchant location
+              type: number
+              format: double
         tokens:
           type: array
           description: A list of tokenised location string. These could be anything from a full street address down to a simple town or city.
