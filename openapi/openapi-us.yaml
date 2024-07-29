@@ -743,8 +743,7 @@ paths:
                 code_id: failed_validation
                 message: invalid body
                 errors:
-                  body:
-                    - invalid character 'a' looking for beginning of object key string
+                  body: invalid character 'a' looking for beginning of object key string
         '401':
           description: An unauthenticated request was received.
         '405':
@@ -901,8 +900,7 @@ paths:
                 code_id: failed_validation
                 message: Failed validation.
                 errors:
-                  client_id:
-                    - This value should not be blank
+                  client_id: This value should not be blank
         '401':
           description: An unauthenticated request was received.
         '405':
@@ -1237,7 +1235,7 @@ paths:
                       mobile_only: false
                   metadata: null
         '400':
-          description: Bad Request that fails validations on headers & payload
+          description: The request contains an invalid payload.
         '401':
           description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
         5XX:
@@ -1311,7 +1309,7 @@ paths:
                 data:
                   url: https://connect-us.thisisbud.com/connect?nonce=nu9ysswxk3hnrepo&token=b361e184038e25077cab277ede9362289941da928cd0d9c7ea52107aa2ad0d909d87993a532af47d9794cd5f29ba66128b3dc7f705ce9b044c636c28e31e1bb3ff8e17145a49f42f525bff51945c3a2484c89a05c1b1e484f9b84ee0cfee4640453fd599e71b5111bd880a63cc924fca8c6ce831396e2f4f8b3e5ac994c5c9
         '400':
-          description: Bad Request that fails validations on headers & payload
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -1321,8 +1319,7 @@ paths:
                 code_id: failed_validation
                 message: Failed validation.
                 errors:
-                  redirect_url:
-                    - This value should not be blank.
+                  redirect_url: This value should not be blank.
         '401':
           description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
         '405':
@@ -1374,7 +1371,7 @@ paths:
                 '300':
                   description: The notification will not be retried, redirects will not be followed
                 '400':
-                  description: Bad Request that fails validations on headers & payload
+                  description: The request contains an invalid payload.
                 '500':
                   description: An unexpected error occurred on the server side
   /v1/open-banking/connect/{connection_task_id}:
@@ -1450,7 +1447,7 @@ paths:
                     metadata:
                       status: Failed
         '400':
-          description: Bad Request that fails validations on headers & payload
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -1460,8 +1457,7 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  customer_id:
-                    - This value should not be blank
+                  customer_id: This value should not be blank
         '404':
           description: Task not found
         '405':
@@ -1527,7 +1523,7 @@ paths:
                   next_url_delay: 50
                   status: Pending
         '400':
-          description: Bad Request that fails validations on headers & payload
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -1539,16 +1535,14 @@ paths:
                     code_id: failed_validation
                     message: Failed validation
                     errors:
-                      customer_id:
-                        - This value should not be blank
+                      customer_id: This value should not be blank
                 Provider in Maintenance:
                   value:
                     operation_id: open_banking_refresh_post
                     code_id: provider_maintenance
                     message: The provider is in maintenance.
                     errors:
-                      provider:
-                        - The provider is currently disabled due to planned maintenance or known issues.
+                      provider: The provider is currently disabled due to planned maintenance or known issues.
         '405':
           description: The request uses an unexpected HTTP method
         5XX:
@@ -1710,7 +1704,7 @@ paths:
                     metadata:
                       status: Failed
         '400':
-          description: Bad Request that fails validations on headers & payload
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -1720,8 +1714,7 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  customer_id:
-                    - This value should not be blank
+                  customer_id: This value should not be blank
         '405':
           description: The request uses an unexpected HTTP method
         5XX:
@@ -1789,7 +1782,7 @@ paths:
                   next_url_delay: 500
                   status: Pending
         '400':
-          description: The request contains an invalid payload
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -1801,16 +1794,14 @@ paths:
                     code_id: failed_validation
                     message: Failed validation
                     errors:
-                      customer_id:
-                        - This value should not be blank
+                      customer_id: This value should not be blank
                 Provider in Maintenance:
                   value:
                     operation_id: open_banking_refresh_post
                     code_id: provider_maintenance
                     message: The provider is in maintenance.
                     errors:
-                      provider:
-                        - The provider is currently disabled due to planned maintenance or known issues.
+                      provider: The provider is currently disabled due to planned maintenance or known issues.
         '405':
           description: The request uses an unexpected HTTP method
         5XX:
@@ -2082,7 +2073,7 @@ paths:
                     metadata:
                       status: Failed
         '400':
-          description: The request contains an invalid payload
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -2092,8 +2083,7 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  customer_id:
-                    - This value should not be blank
+                  customer_id: This value should not be blank
         '405':
           description: The request uses an unexpected HTTP method
         5XX:
@@ -2170,7 +2160,7 @@ paths:
                 metadata:
                   results: 2
         '400':
-          description: Bad Request that fails validations on headers & payload
+          description: The request contains an invalid payload.
         '401':
           description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
         5XX:
@@ -2219,7 +2209,7 @@ paths:
                   next_url: /v1/open-banking/account-access-consent/revoke/1ceb1d81-a80e-4825-a7c0-4d69424c9874
                   next_url_delay: 50
         '400':
-          description: Bad Request that fails validations on headers & payload
+          description: The request contains an invalid payload.
         '401':
           description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
         5XX:
@@ -2317,7 +2307,7 @@ paths:
                     metadata:
                       status: Failed
         '400':
-          description: Bad Request that fails validations on headers & payload
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -2902,7 +2892,7 @@ paths:
                           - USD
                       result_count: 1
         '400':
-          description: Bad Request
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -2914,8 +2904,7 @@ paths:
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      X-Customer-Id:
-                        - not present
+                      X-Customer-Id: not present
         '401':
           description: Unauthorised
           content:
@@ -3061,7 +3050,7 @@ paths:
                     to: '2022-11-15T00:00:00Z'
                     granularity: daily
         '400':
-          description: Bad Request
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -3183,7 +3172,7 @@ paths:
                     to: '2022-11-15T00:00:00Z'
                     granularity: daily
         '400':
-          description: Bad Request
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -3514,7 +3503,7 @@ paths:
                           - USD
                       result_count: 1
         '400':
-          description: Bad Request
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -3526,8 +3515,7 @@ paths:
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      X-Customer-Id:
-                        - not present
+                      X-Customer-Id: not present
         '401':
           description: Unauthorised
           content:
@@ -3831,7 +3819,7 @@ paths:
                 metadata:
                   results: 1
         '400':
-          description: The request contains an invalid payload
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -3841,8 +3829,7 @@ paths:
                 code_id: validation_error
                 message: Bad request payload
                 errors:
-                  X-Client-ID:
-                    - This value should not be blank
+                  X-Client-ID: This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -3996,20 +3983,19 @@ paths:
                       results: 1
                       exclude_source: true
         '400':
-          description: The request was invalid
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
               examples:
-                Missing Customer Secret:
+                Missing Customer Id:
                   value:
                     operation_id: corrections_v2_similar_categories_get
                     code_id: failed_validation
                     message: failed to parse request
                     errors:
-                      header.X-Customer-Secret:
-                        - This value should not be blank
+                      X-Customer-Id: This value should not be blank
         '404':
           description: Unknown transaction
           content:
@@ -4171,19 +4157,19 @@ paths:
                       results: 1
                       exclude_source: true
         '400':
-          description: The request was invalid
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
               examples:
-                Missing Customer Secret:
+                Missing Customer Id:
                   value:
                     operation_id: corrections_v2_similar_merchants_get
                     code_id: failed_validation
                     message: failed to parse request
                     errors:
-                      header.X-Customer-Secret:
+                      X-Customer-Id:
                         - This value should not be blank
         '404':
           description: Unknown transaction
@@ -4266,7 +4252,7 @@ paths:
                   from: '2023-05-21T07:20:50.52Z'
                   to: '2023-06-21T07:20:50.52Z'
         '400':
-          description: The request contains an invalid payload
+          description: The request contains an invalid payload.
         '401':
           description: An unauthenticated request was received
         5XX:
@@ -4358,7 +4344,7 @@ paths:
                                   currency: USD
                                 transaction_count: 2
         '400':
-          description: The request contains an invalid payload
+          description: The request contains an invalid payload.
         '401':
           description: An unauthenticated request was received
         5XX:
@@ -4441,7 +4427,7 @@ paths:
         '204':
           description: No transactions found
         '400':
-          description: The request contains an invalid payload
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -4451,8 +4437,7 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  client_id:
-                    - This value should not be blank
+                  client_id: This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -4483,7 +4468,7 @@ paths:
                   - name: us-v1
                     description: 'A US categorisation model. This model can be used for the following use cases: affordability assessments, collections assessments, affordability monitoring, customer engagement and product recommendations.'
         '400':
-          description: The request contains an invalid payload
+          description: The request contains an invalid payload.
         '401':
           description: Unauthorised request
         '405':
@@ -4559,7 +4544,7 @@ paths:
                         name: uk-v2
                         description: 'A US categorisation model. This model can be used for the following use cases: affordability assessments, collections assessments, affordability monitoring, customer engagement and product recommendations.'
         '400':
-          description: The request contains an invalid payload
+          description: The request contains an invalid payload.
         '401':
           description: Unauthorised request
         '404':
@@ -4863,7 +4848,7 @@ paths:
                         subcategories:
                           - name: other_general
         '400':
-          description: The request contains an invalid payload
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -4873,8 +4858,7 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  client_id:
-                    - This value should not be blank
+                  client_id: This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -4951,7 +4935,7 @@ paths:
         '204':
           description: No transactions found
         '400':
-          description: The request contains an invalid payload
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -4961,8 +4945,7 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  client_id:
-                    - This value should not be blank
+                  client_id: This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -5229,7 +5212,7 @@ paths:
         '204':
           description: No transactions found
         '400':
-          description: The request contains an invalid payload
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -5239,8 +5222,7 @@ paths:
                 code_id: failed_validation
                 message: Failed validation
                 errors:
-                  client_id:
-                    - This value should not be blank
+                  client_id: This value should not be blank
         '401':
           description: Unauthorised request
         '405':
@@ -5445,7 +5427,7 @@ paths:
                   to: '2023-03-03T11:28:22.00Z'
                   results: 2
         '400':
-          description: Bad Request - the request was unacceptable
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -5455,8 +5437,7 @@ paths:
                 code_id: failed_validation
                 message: Invalid request payload.
                 errors:
-                  from:
-                    - 'invalid ''from'' date: ''7th March 2023'''
+                  from: 'invalid ''from'' date: ''7th March 2023'''
         '401':
           description: Unauthorised Request - the request was not authenticated or authorised
           content:
@@ -5552,7 +5533,7 @@ paths:
         '204':
           description: No subscriptions found
         '400':
-          description: The request contains an invalid payload
+          description: The request contains an invalid payload.
         '401':
           description: Unauthorised request
         '405':
@@ -5618,7 +5599,7 @@ paths:
                     value: '0.00'
                   created_at: '2023-09-19T10:04:43Z'
         '400':
-          description: Bad Request - The request was invalid.
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -5630,16 +5611,14 @@ paths:
                     code_id: failed_validation
                     message: unable to validate request
                     errors:
-                      header.X-Customer-ID:
-                        - 'parameter "X-Customer-ID" in header has an error: value is required but missing'
+                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
                 Invalid Goal:
                   value:
                     operation_id: goals_v1_savings_post
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      targets:
-                        - amount saved at target date will be less than the target amount
+                      targets: amount saved at target date will be less than the target amount
         '401':
           description: Unauthorized - The request was not authorised.
           content:
@@ -5737,7 +5716,7 @@ paths:
                       results: 0
                       account_id: ''
         '400':
-          description: Bad Request - The request was invalid.
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -5749,8 +5728,7 @@ paths:
                     code_id: failed_validation
                     message: unable to validate request
                     errors:
-                      header.X-Customer-ID:
-                        - 'parameter "X-Customer-ID" in header has an error: value is required but missing'
+                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
         '401':
           description: Unauthorized - The request was not authorised.
           content:
@@ -5879,7 +5857,7 @@ paths:
                     value: '0.00'
                   created_at: '2023-09-21T09:20:26Z'
         '400':
-          description: Bad Request - The request was invalid.
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -5891,16 +5869,14 @@ paths:
                     code_id: failed_validation
                     message: unable to validate request
                     errors:
-                      header.X-Customer-ID:
-                        - 'parameter "X-Customer-ID" in header has an error: value is required but missing'
+                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
                 Currency Changed:
                   value:
                     operation_id: goals_v1_savings_patch
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      recurrent_amount.currency:
-                        - cannot be updated
+                      recurrent_amount.currency: cannot be updated
         '401':
           description: Unauthorized - The request was not authorised.
           content:
@@ -6023,7 +5999,7 @@ paths:
                 metadata:
                   goal_id: 19d1def3-5860-11ee-9342-3e1d60bc76f9
         '400':
-          description: Bad Request - The request was invalid.
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -6035,16 +6011,14 @@ paths:
                     code_id: failed_validation
                     message: unable to validate request
                     errors:
-                      header.X-Customer-ID:
-                        - 'parameter "X-Customer-ID" in header has an error: value is required but missing'
+                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
                 Invalid Amount Value:
                   value:
                     operation_id: goals_v1_savings_actions_post
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      amount.value:
-                        - negative value
+                      amount.value: negative value
         '401':
           description: Unauthorized - The request was not authorised.
           content:
@@ -6132,7 +6106,7 @@ paths:
                       page_size: 2
                       goal_id: 19d1def3-5860-11ee-9342-3e1d60bc76f9
         '400':
-          description: Bad Request - The request was invalid.
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -6144,24 +6118,21 @@ paths:
                     code_id: failed_validation
                     message: unable to validate request
                     errors:
-                      header.X-Customer-ID:
-                        - 'parameter "X-Customer-ID" in header has an error: value is required but missing'
+                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
                 Bad Page Token:
                   value:
                     operation_id: goals_v1_savings_actions_get
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      page_token:
-                        - Invalid page token.
+                      page_token: Invalid page token.
                 Page Size Too Large:
                   value:
                     operation_id: goals_v1_savings_actions_get
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      page_size:
-                        - Page size must be between 1 and 200.
+                      page_size: Page size must be between 1 and 200.
         '401':
           description: Unauthorized - The request was not authorised.
           content:
@@ -6236,7 +6207,7 @@ paths:
                 metadata:
                   goal_id: 19d1def3-5860-11ee-9342-3e1d60bc76f9
         '400':
-          description: Bad Request - The request was invalid.
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -6248,16 +6219,14 @@ paths:
                     code_id: failed_validation
                     message: unable to validate request
                     errors:
-                      header.X-Customer-ID:
-                        - 'parameter "X-Customer-ID" in header has an error: value is required but missing'
+                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
                 Invalid Amount Value:
                   value:
                     operation_id: goals_v1_savings_actions_patch
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
-                      amount.value:
-                        - Saved amount exceeds balance of the account.
+                      amount.value: Saved amount exceeds balance of the account.
         '401':
           description: Unauthorized - The request was not authorised.
           content:
@@ -6407,7 +6376,7 @@ paths:
                   _links:
                     transactions: /goals/v1/spending-budgets/f46d76c4-56d3-11ee-ac69-d6df71eb5902/transactions
         '400':
-          description: Bad Request - The request was invalid.
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -6446,7 +6415,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RetrieveSpendingBudgetsResponse'
         '400':
-          description: Bad Request - The request was invalid.
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -6552,7 +6521,7 @@ paths:
                   _links:
                     transactions: /goals/v1/spending-budgets/f46d76c4-56d3-11ee-ac69-d6df71eb5902/transactions
         '400':
-          description: Bad Request - The request was invalid.
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -6667,7 +6636,7 @@ paths:
                   page_size: 100
                   budget_id: 19d1def3-5860-11ee-9342-3e1d60bc76f9
         '400':
-          description: Bad Request - The request was invalid.
+          description: The request contains an invalid payload.
           content:
             application/json:
               schema:
@@ -8995,7 +8964,9 @@ components:
         message:
           type: string
         errors:
-          $ref: '#/components/schemas/Errors'
+          anyOf:
+            - $ref: '#/components/schemas/Error'
+            - $ref: '#/components/schemas/Errors'
     CustomerContextType:
       title: Customer Context Type
       type: string
@@ -10273,7 +10244,6 @@ components:
       required:
         - scheme_name
         - identification
-        - secondary_identification
       properties:
         scheme_name:
           type: string
@@ -10363,6 +10333,7 @@ components:
       required:
         - amount
         - date
+        - time
         - type
         - credit_debit_indicator
       properties:

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a5b631cf-28da-49c1-8d73-dbe42e84dc55",
+		"_postman_id": "1a213ee1-5663-4f80-9ba9-2869c8dec726",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30694952"
@@ -49,7 +49,6 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"name": "Content-Type",
 								"value": "application/x-www-form-urlencoded",
 								"type": "text"
 							}
@@ -105,7 +104,6 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"name": "Content-Type",
 								"value": "application/x-www-form-urlencoded",
 								"type": "text"
 							},
@@ -185,7 +183,6 @@
 									},
 									{
 										"key": "Content-Type",
-										"name": "Content-Type",
 										"value": "application/json",
 										"type": "text"
 									}
@@ -609,8 +606,8 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									}
 								],
 								"body": {
@@ -1304,8 +1301,8 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
@@ -1421,8 +1418,8 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
@@ -1485,13 +1482,13 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "default",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "default"
 									}
 								],
 								"body": {
@@ -1602,8 +1599,8 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
@@ -1725,14 +1722,13 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/bud-accounts+json"
+										"value": "application/bud-accounts+json",
+										"type": "text"
 									}
 								],
 								"body": {
@@ -1781,14 +1777,13 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/bud-accounts+json"
+										"value": "application/bud-accounts+json",
+										"type": "text"
 									}
 								],
 								"body": {
@@ -1825,14 +1820,13 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/bud-transaction-v2+json"
+										"value": "application/bud-transaction-v2+json",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -1883,7 +1877,6 @@
 									},
 									{
 										"key": "Content-Type",
-										"name": "Content-Type",
 										"value": "application/bud-transaction-v2+json",
 										"type": "text"
 									}
@@ -1940,7 +1933,6 @@
 									},
 									{
 										"key": "Content-Type",
-										"name": "Content-Type",
 										"value": "application/bud-transaction-v3+json",
 										"type": "text"
 									},
@@ -1997,7 +1989,6 @@
 									},
 									{
 										"key": "Content-Type",
-										"name": "Content-Type",
 										"value": "application/bud-transaction-v2+json",
 										"type": "text"
 									}
@@ -2137,13 +2128,13 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "default",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "default"
 									}
 								],
 								"body": {
@@ -2226,13 +2217,13 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "default",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "default"
 									}
 								],
 								"body": {
@@ -2340,18 +2331,18 @@
 								"header": [
 									{
 										"key": "Content-Type",
-										"type": "default",
-										"value": "application/json"
+										"value": "application/json",
+										"type": "default"
 									},
 									{
 										"key": "X-Client-Id",
-										"type": "default",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "default"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "default",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "default"
 									}
 								],
 								"url": {
@@ -2472,18 +2463,18 @@
 								"header": [
 									{
 										"key": "Content-Type",
-										"type": "default",
-										"value": "application/json"
+										"value": "application/json",
+										"type": "default"
 									},
 									{
 										"key": "X-Client-Id",
-										"type": "default",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "default"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "default",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "default"
 									}
 								],
 								"url": {
@@ -3448,13 +3439,13 @@
 									},
 									{
 										"key": "X-Client-Id",
-										"type": "default",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "default"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "default",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "default"
 									}
 								],
 								"body": {
@@ -3469,6 +3460,92 @@
 									"path": [
 										"v2",
 										"categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Correct Transaction Merchants V2",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "content-type",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"include_similar\": true,\n    \"transactions\":[\n        \"{{transaction_id}}\"\n    ],\n    \"merchant_id\": \"{{correction_merchant_id}}\"\n}"
+								},
+								"url": {
+									"raw": "{{proxy_url}}corrections/v2/merchants",
+									"host": [
+										"{{proxy_url}}corrections"
+									],
+									"path": [
+										"v2",
+										"merchants"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Correction Merchant Search",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}corrections/v2/merchants/search/tesco",
+									"host": [
+										"{{proxy_url}}corrections"
+									],
+									"path": [
+										"v2",
+										"merchants",
+										"search",
+										"tesco"
 									]
 								}
 							},
@@ -3594,8 +3671,8 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -3642,8 +3719,8 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -3685,13 +3762,13 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									}
 								],
 								"body": {
@@ -3770,13 +3847,13 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									}
 								],
 								"body": {
@@ -3859,13 +3936,13 @@
 								"header": [
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-From",
@@ -3930,13 +4007,13 @@
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -3969,23 +4046,23 @@
 								"header": [
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-From",
-										"type": "text",
-										"value": "2020-01-01"
+										"value": "2020-01-01",
+										"type": "text"
 									},
 									{
 										"key": "X-To",
-										"type": "text",
-										"value": "2023-05-01"
+										"value": "2023-05-01",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4028,13 +4105,13 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4066,13 +4143,13 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4129,13 +4206,13 @@
 									},
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4177,13 +4254,13 @@
 									},
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4230,13 +4307,13 @@
 									},
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4283,13 +4360,13 @@
 									},
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4326,13 +4403,13 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4394,13 +4471,13 @@
 									},
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -5341,13 +5418,13 @@
 						"header": [
 							{
 								"key": "X-Client-Id",
-								"type": "text",
-								"value": "{{api_credentials_id}}"
+								"value": "{{api_credentials_id}}",
+								"type": "text"
 							},
 							{
 								"key": "X-Customer-Id",
-								"type": "text",
-								"value": "{{customer_id}}"
+								"value": "{{customer_id}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -5381,13 +5458,13 @@
 						"header": [
 							{
 								"key": "X-Client-Id",
-								"type": "text",
-								"value": "{{api_credentials_id}}"
+								"value": "{{api_credentials_id}}",
+								"type": "text"
 							},
 							{
 								"key": "X-Customer-Id",
-								"type": "text",
-								"value": "{{customer_id}}"
+								"value": "{{customer_id}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -5421,13 +5498,13 @@
 						"header": [
 							{
 								"key": "X-Client-Id",
-								"type": "text",
-								"value": "{{api_credentials_id}}"
+								"value": "{{api_credentials_id}}",
+								"type": "text"
 							},
 							{
 								"key": "X-Customer-Id",
-								"type": "text",
-								"value": "{{customer_id}}"
+								"value": "{{customer_id}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -6063,13 +6140,13 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									},
 									{
 										"key": "X-Customer-Id",
-										"type": "text",
-										"value": "{{customer_id}}"
+										"value": "{{customer_id}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -6205,8 +6282,8 @@
 								"header": [
 									{
 										"key": "X-Client-Id",
-										"type": "text",
-										"value": "{{api_credentials_id}}"
+										"value": "{{api_credentials_id}}",
+										"type": "text"
 									}
 								],
 								"body": {
