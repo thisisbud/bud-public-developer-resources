@@ -301,6 +301,13 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.11.5: 29/07/2024**
+    > - Added new  __Correction Merchant Search__ endpoint under __Correct Financial Data__.
+    > - Added new  __Correct Transaction Merchant__ endpoint under __Correct Financial Data__.
+
+    **Version 2.11.4: 24/07/2024**
+    > - Remove body requirement from __Reconfirm Consent__
+
     **Version 2.11.3: 01/07/2024**
     > - Added link to __Consents__ guide from __Retrieve Customer Consents__
 
@@ -1141,6 +1148,11 @@ tags:
     x-displayName: Custom Insights
     description: |
       Understand and target messaging to your customers more effectively by defining your own custom insights.
+  - name: Retrieve Report Insights
+    x-displayName: Retrieve Report Insights
+    description: |
+      Retrieve a customer's report insights generated from their financial data. In contrast to the alert style actionable insights,
+      these insights should be used more as a summary.
 paths:
   /v1/oauth/token:
     post:
@@ -3112,14 +3124,6 @@ paths:
         - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/CustomerIPAddress'
         - $ref: '#/components/parameters/ConsentId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReconfirmConsentRequest'
-            example:
-              provider: Barclays
       responses:
         '200':
           description: OK
@@ -3607,14 +3611,19 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           transaction_types:
                             - card
@@ -3951,89 +3960,6 @@ paths:
                 message: invalid body
                 errors:
                   body: invalid character 'a' looking for beginning of object key string
-        '401':
-          description: An unauthenticated request was received.
-        '405':
-          description: The request uses an unexpected HTTP method.
-        5XX:
-          description: An unexpected error occurred on the server side.
-    get:
-      security:
-        - OAuth2: []
-      tags:
-        - Manage Customers
-      summary: Retrieve Customers V3
-      description: |
-        This endpoint is used to list customers associated with the current project.
-
-        Customers are listed ordered by their ID. Deleted customers will not be included in the list.
-
-        The list of customers can be filtered by creation date with the `date_from` and `date_to` query parameters, which expect dates in the RFC3339 format.
-
-        If more results pages are available, the response metadata object will contain a  `next_page_token` field which can be used to fetch the next page of results. The token should be provided in the `page_token` query parameter for subsequent requests.
-
-        For more information on how to manage your Bud Customers, please, refer to the following [guide](https://docs.thisisbud.com/docs/setup-customers)
-      operationId: platform_v3_customers_get
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - in: query
-          name: date_from
-          schema:
-            type: string
-          example: '2022-05-28T00:00:00Z'
-          description: |
-            Date (RFC3339) to filter customers created on or after which. To maintain backwards compatibility, dates in the format (YYYY-MM-DD) can also be used and will be assumed to be UTC.
-        - in: query
-          name: date_to
-          schema:
-            type: string
-          example: '2022-05-29T00:00:00Z'
-          description: |
-            Date (RFC3339) to filter customers created on or before which. To maintain backwards compatibility, dates in the format (YYYY-MM-DD) can also be used and will be assumed to be UTC. Uses the current date by default.
-        - name: page_size
-          in: query
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 1000
-          description: The number of results to return per page. Defaults to 200.
-        - name: page_token
-          in: query
-          schema:
-            type: string
-          description: |
-            The token required to fetch a specific page of results. Provided by the next_page_token field in the previous request.
-      responses:
-        '200':
-          description: Returns a list of customers.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomersGetAllV3Response'
-              example:
-                operation_id: platform_v3_customers_get
-                data:
-                  - customer_id: acbff0b9-299c-4065-b933-4a991e17da6d
-                    idempotent_identifier: acbff0b9-299c-4065-b933-4a991e17da6d
-                    created_at: 2019-02-27T06:11:57+0000
-                  - customer_id: ebb50ae5-8c5c-4205-9b61-e93ce84eb467
-                    created_at: 2019-02-27T06:11:57+0000
-                metadata:
-                  next_page_token: eyJwYWdlX3NpemUiOjIsInBhZ2UiOjF9
-                  results: 2
-        '400':
-          description: The request contains an invalid parameter.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              example:
-                operation_id: platform_v3_customers_get_all
-                code_id: bad_request
-                message: invalid page token
-                errors:
-                  page_token:
-                    - Failed to parse page token
         '401':
           description: An unauthenticated request was received.
         '405':
@@ -5533,7 +5459,7 @@ paths:
     get:
       tags:
         - Retrieve Financial Data
-      summary: Retrieve Balances Over Time
+      summary: Retrieve Balances Over Time V3
       description: |
         List the balances of each bank account for a customer across all ingestion sources. Ordered by balance date.
         It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to`  and `from` dates provided. It then checks all the transactions within this range, calculating the balance at  the end of each day.
@@ -5664,7 +5590,7 @@ paths:
     get:
       tags:
         - Retrieve Financial Data
-      summary: Retrieve Balances Over Time By Account
+      summary: Retrieve Balances Over Time By Account V3
       description: |
         List the balances of a specific bank account for a customer across all ingestion sources. Ordered by balance  date.
         It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to`  and `from` dates provided. It then checks all the transactions within this range, calculating the balance at  the end of each day.
@@ -5921,14 +5847,19 @@ paths:
                                 confidence: '0.98'
                             website: http://www.url.com
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
@@ -5982,14 +5913,19 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           transaction_types:
                             - card
@@ -6246,6 +6182,353 @@ paths:
           description: An unexpected HTTP method was used
         5XX:
           description: An unexpected error occurred on the server side
+  /corrections/v2/merchants:
+    post:
+      tags:
+        - Correct Financial Data
+      summary: Correct Transaction Merchant
+      description: |
+        Allow a customer to change a transaction’s (and similar transactions') merchant.
+        If `include_similar` is set to `true`, then all previous and future transactions (i.e. those that are yet to happen yet) that are similar in nature to the specified transaction id will be corrected with the provided merchant.
+        Similar transactions are determined based on transactions with similar descriptions & amounts.
+      operationId: corrections_v2_merchants_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerMerchantCorrectionRequest'
+            examples:
+              Single Transaction Correction:
+                value:
+                  - transactions:
+                      - 7affc586-5600-4434-ac5f-1a845260d7d9
+                    merchant_id: corrected_merchant_id
+                    include_similar: false
+              Similar Transactions Correction:
+                value:
+                  - transactions:
+                      - 7affc586-5600-4434-ac5f-1a845260d7d9
+                    merchant_id: corrected_merchant_id
+                    include_similar: true
+              Remove Merchant From Single Transaction:
+                value:
+                  - transactions:
+                      - 7affc586-5600-4434-ac5f-1a845260d7d9
+                    merchant_id: ''
+                    include_similar: false
+      responses:
+        '200':
+          description: The request was successfully processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerMerchantCorrectionResponse'
+              examples:
+                Single Transaction Correction:
+                  value:
+                    operation_id: corrections_v2_merchants_post
+                    data:
+                      - transaction_id: 7affc586-5600-4434-ac5f-1a845260d7d9
+                        account_id: 5bd9ecaf31fc2d5172fd89cb61b89fc6
+                        provider: BankOfBud
+                        description: paypal* specialty coffee
+                        credit_debit_indicator: debit
+                        status: booked
+                        amount:
+                          value: '10.99'
+                          currency: GBP
+                        date_time: '2022-05-28T10:00:00Z'
+                        posted_date_time: '2022-05-29T00:00:00Z'
+                        merchant_category_code: '5814'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            id: corrected_merchant_id
+                            slug: corrected_merchant_slug
+                            display_name: corrected_merchant_name
+                            logo: corrected_merchant_logo
+                            website: http://www.corrected_merchant_url.com
+                          location:
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
+                            geolocation:
+                              longitude: 51.497678
+                              latitude: -0.223766
+                          processor:
+                            id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                            slug: paypal
+                            display_name: PayPal
+                            logo: http://url/paypal_logo.jpeg
+                            tokens:
+                              - value: paypal
+                                confidence: '0.92'
+                            website: https://www.paypal.com
+                          regularity:
+                            frequency: monthly
+                            predicted_date_times:
+                              - '2022-06-28T15:00:00Z'
+                              - '2022-07-28T15:00:00Z'
+                              - '2022-08-28T15:00:00Z'
+                            group_label: a_group_id
+                          transaction_types:
+                            - card
+                            - debit
+                          names:
+                            - jane doe
+                        tags:
+                          - regular-transaction
+                    metadata:
+                      effected_transactions_count: 1
+                      include_similar: false
+                      merchant_id: corrected_merchant_id
+                      transactions:
+                        - 7affc586-5600-4434-ac5f-1a845260d7d9
+                Single Transaction Correction Include Similar:
+                  value:
+                    operation_id: corrections_v2_merchants_post
+                    data:
+                      - transaction_id: 7affc586-5600-4434-ac5f-1a845260d7d9
+                        account_id: 5bd9ecaf31fc2d5172fd89cb61b89fc6
+                        provider: BankOfBud
+                        description: paypal* specialty coffee
+                        credit_debit_indicator: debit
+                        status: booked
+                        amount:
+                          value: '10.99'
+                          currency: GBP
+                        date_time: '2022-05-28T10:00:00Z'
+                        posted_date_time: '2022-05-29T00:00:00Z'
+                        merchant_category_code: '5814'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            id: corrected_merchant_id
+                            slug: corrected_merchant_slug
+                            display_name: corrected_merchant_name
+                            logo: corrected_merchant_logo
+                            website: http://www.corrected_merchant_url.com
+                          location:
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
+                            geolocation:
+                              longitude: 51.497678
+                              latitude: -0.223766
+                          processor:
+                            id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                            slug: paypal
+                            display_name: PayPal
+                            logo: http://url/paypal_logo.jpeg
+                            tokens:
+                              - value: paypal
+                                confidence: '0.92'
+                            website: https://www.paypal.com
+                          regularity:
+                            frequency: monthly
+                            predicted_date_times:
+                              - '2022-06-28T15:00:00Z'
+                              - '2022-07-28T15:00:00Z'
+                              - '2022-08-28T15:00:00Z'
+                            group_label: a_group_id
+                          transaction_types:
+                            - card
+                            - debit
+                          names:
+                            - jane doe
+                        tags:
+                          - regular-transaction
+                      - transaction_id: similar_transaction_id
+                        account_id: 37c633a71237b9a8282e09587109668e
+                        provider: BankOfBud
+                        description: Tesco 2956 London GBR
+                        credit_debit_indicator: debit
+                        status: booked
+                        amount:
+                          value: '50.23'
+                          currency: GBP
+                        date_time: '2022-05-26T10:00:00Z'
+                        posted_date_time: '2022-05-27T00:00:00Z'
+                        merchant_category_code: '5411'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: eating_out
+                              confidence: '0.99'
+                            l2:
+                              slug: cafes_and_eating_out
+                              confidence: '0.98'
+                          merchant:
+                            id: corrected_merchant_id
+                            slug: corrected_merchant_slug
+                            display_name: corrected_merchant_name
+                            logo: corrected_merchant_logo
+                            website: http://www.corrected_merchant_url.com
+                          location:
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
+                            geolocation:
+                              longitude: 51.497678
+                              latitude: -0.223766
+                          transaction_types:
+                            - card
+                            - debit
+                    metadata:
+                      effected_transactions_count: 2
+                      include_similar: true
+                      merchant_id: corrected_merchant_id
+                      transactions:
+                        - 7affc586-5600-4434-ac5f-1a845260d7d9
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                Invalid Merchant:
+                  summary: merchant_id doesn't match a known merchant
+                  value:
+                    operation_id: corrections_v2_merchants_post
+                    code_id: failed_validation
+                    message: invalid merchant in request
+                    errors:
+                      body.merchant_id: invalid merchant id
+                Invalid Transaction:
+                  summary: 1 or more transaction ids are invalid
+                  value:
+                    operation_id: corrections_v2_merchants_post
+                    code_id: failed_validation
+                    message: invalid transaction in request
+                    errors: null
+        '401':
+          description: Unauthorised request
+        '405':
+          description: An unexpected HTTP method was used
+        5XX:
+          description: An unexpected error occurred on the server side
+  /corrections/v2/merchants/search/{merchant_query}:
+    get:
+      tags:
+        - Correct Financial Data
+      summary: Correction Merchant Search
+      description: |
+        Allows a customer to find a merchant to be used for a correction.
+      operationId: corrections_v2_merchant_search_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/MerchantCorrectionSearchQuery'
+      responses:
+        '200':
+          description: The request was successfully processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerMerchantCorrectionSearchResponse'
+              example:
+                operation_id: corrections_v2_merchant_search_get
+                data:
+                  - id: f2b21ff7-836d-468c-8928-e81060d49988
+                    name: Apple
+                    slug: apple
+                    logo: https://assets.thisisbud.com/datasci-images/merchant_logos/f2b21ff7-836d-468c-8928-e81060d49988/v1/apple.jpeg
+                    url: https://www.apple.com
+                    online_or_billing_only: false
+                  - id: a3240c82-728d-4d63-b1b8-9569cae844e8
+                    name: Tappily
+                    slug: tappily
+                    logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3240c82-728d-4d63-b1b8-9569cae844e8/v1/tappily.jpeg
+                    url: https://www.tappily.co.uk
+                    online_or_billing_only: false
+                  - id: bbf422fd-0db3-4988-a037-36476f6bd774
+                    name: Zapp
+                    slug: zapp
+                    logo: https://assets.thisisbud.com/datasci-images/merchant_logos/bbf422fd-0db3-4988-a037-36476f6bd774/v1/zapp.jpeg
+                    url: https://tryzapp.com
+                    online_or_billing_only: false
+                  - id: b97244e4-c1bf-4c70-a529-e250fc5baf39
+                    name: WAPPA LTD
+                    slug: wappaltd
+                    logo: https://assets.thisisbud.com/bud-datasci-images/merchant_logo_placeholder.png
+                    online_or_billing_only: false
+                  - id: 2270343a-110d-4554-8871-33f2e18f8311
+                    name: Apple Pay
+                    slug: applepay
+                    logo: https://assets.thisisbud.com/datasci-images/merchant_logos/2270343a-110d-4554-8871-33f2e18f8311/v2/applepay.jpeg
+                    url: https://www.apple.com
+                    online_or_billing_only: false
+                metadata:
+                  query: appl
+                  results: 5
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                Invalid Query Size:
+                  summary: query size to small
+                  value:
+                    operation_id: corrections_v2_merchant_search_get
+                    code_id: failed_validation
+                    message: invalid search query size
+                    errors: null
+        '401':
+          description: Unauthorised request
+        '405':
+          description: An unexpected HTTP method was used
+        '409':
+          description: An unexpected HTTP method was used
+        5XX:
+          description: An unexpected error occurred on the server side
   /corrections/v2/categories/similar/{transaction_id}:
     get:
       tags:
@@ -6316,14 +6599,19 @@ paths:
                                 confidence: '0.98'
                             website: http://www.url.com
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
@@ -6377,14 +6665,19 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           transaction_types:
                             - card
@@ -6425,14 +6718,19 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           transaction_types:
                             - card
@@ -6538,14 +6836,19 @@ paths:
                                 confidence: '0.98'
                             website: http://www.url.com
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
@@ -6599,14 +6902,19 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           transaction_types:
                             - card
@@ -6647,14 +6955,19 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           transaction_types:
                             - card
@@ -12549,14 +12862,19 @@ paths:
                           - value: speciality coffee
                             confidence: '0.98'
                       location:
-                        address_lines:
-                          - '180'
-                          - Shepherds Bush Rd
-                          - London
-                          - W6 7NL
-                          - United Kingdom
+                        address:
+                          address_lines:
+                            - '180'
+                            - Shepherds Bush Rd
+                            - London
+                            - W6 7NL
+                            - United Kingdom
+                          street_address: Shepherds Bush Rd
+                          city: London
+                          postal_code: W6 7NL
+                          country: United Kingdom
                         geolocation:
-                          longitude: 51.497678,
+                          longitude: 51.497678
                           latitude: -0.223766
                       processor:
                         id: 18f63293-0217-4520-bbf0-071dca7a9d04
@@ -12608,14 +12926,19 @@ paths:
                           - value: tesco
                             confidence: '0.96'
                       location:
-                        address_lines:
-                          - '180'
-                          - Shepherds Bush Rd
-                          - London
-                          - W6 7NL
-                          - United Kingdom
+                        address:
+                          address_lines:
+                            - '180'
+                            - Shepherds Bush Rd
+                            - London
+                            - W6 7NL
+                            - United Kingdom
+                          street_address: Shepherds Bush Rd
+                          city: London
+                          postal_code: W6 7NL
+                          country: United Kingdom
                         geolocation:
-                          longitude: 51.497678,
+                          longitude: 51.497678
                           latitude: -0.223766
                       transaction_types:
                         - card
@@ -12785,6 +13108,760 @@ paths:
                     custom_insight_id: 19ebab24-9c73-4802-b5d2-c401f3558d8d
                     link: insights/v1/custom/detail/19ebab24-9c73-4802-b5d2-c401f3558d8d
                     created_at: '2021-08-11T14:00:00Z'
+  /insights/beta/report/income-expenditure:
+    get:
+      tags:
+        - Retrieve Report Insights
+      summary: Retrieve income/expenditure break down reports
+      security:
+        - OAuth2: []
+      description: |
+        Retrieve income/expenditure break down reports. Each report is presented as a total expenditure vs income break
+        down to give a high level overview of a customers spending's in comparison to income. 
+
+        For transactional analysis of particular aggregate, please refer to the transactions reference found within the
+        `_links` properties.
+      operationId: insights_beta_report_income_expenditure_get
+      parameters:
+        - $ref: '#/components/parameters/EnabledInsightsIncomeExpenditure'
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Currency'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomeExpenditureReportResponse'
+              example:
+                operation_id: insights_beta_report_income_expenditure_get
+                data:
+                  insights:
+                    - type: income-loan
+                      currency: GBP
+                      expenditure:
+                        credit_debit_indicator: debit
+                        count: 10
+                        total:
+                          value: '1000.00'
+                          currency: GBP
+                        monthly_average:
+                          value: '250.00'
+                          currency: GBP
+                        breakdown:
+                          - from: '2024-01-17T00:00:00+08:00'
+                            to: '2024-02-16T23:59:59+08:00'
+                            total:
+                              value: '250.00'
+                              currency: GBP
+                            count: 1
+                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                            _links:
+                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
+                          - from: '2024-02-17T00:00:00+08:00'
+                            to: '2024-03-16T23:59:59+08:00'
+                            total:
+                              value: '250.00'
+                              currency: GBP
+                            count: 1
+                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                            _links:
+                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
+                          - from: '2024-04-17T00:00:00+08:00'
+                            to: '2024-05-16T23:59:59+08:00'
+                            total:
+                              value: '250.00'
+                              currency: GBP
+                            average:
+                              value: '250.00'
+                              currency: GBP
+                            count: 1
+                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                            _links:
+                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
+                        relative_to_income: '1'
+                        transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                        _links:
+                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
+                      income:
+                        credit_debit_indicator: credit
+                        count: 4
+                        total:
+                          value: '1000.00'
+                          currency: GBP
+                        monthly_average:
+                          value: '250.00'
+                          currency: GBP
+                        breakdown:
+                          - from: '2024-01-17T00:00:00+08:00'
+                            to: '2024-02-16T23:59:59+08:00'
+                            total:
+                              value: '250.00'
+                              currency: GBP
+                            count: 1
+                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                            _links:
+                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
+                          - from: '2024-02-17T00:00:00+08:00'
+                            to: '2024-03-16T23:59:59+08:00'
+                            total:
+                              value: '250.00'
+                              currency: GBP
+                            count: 1
+                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                            _links:
+                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
+                          - from: '2024-03-17T00:00:00+08:00'
+                            to: '2024-04-16T23:59:59+08:00'
+                            total:
+                              value: '250.00'
+                              currency: GBP
+                            average:
+                              value: '250.00'
+                              currency: GBP
+                            count: 1
+                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                            _links:
+                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
+                        transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                        _links:
+                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
+                      transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                      _links:
+                        transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
+                metadata:
+                  from: '2022-01-01T00:00:00Z'
+                  to: '2022-03-31T00:00:00Z'
+                  currencies:
+                    - GBP
+                  options:
+                    - insight_type: late_income
+                      option: minimum_days_late_threshold
+                      value: '3'
+                    - insight_type: late_income
+                      option: minimum_value_threshold
+                      value: '100.00'
+  /insights/beta/report/income-expenditure/transactions/{reference}:
+    get:
+      tags:
+        - Retrieve Report Insights
+      summary: Retrieve transactions relating to a specific insight report section.
+      security:
+        - OAuth2: []
+      description: |
+        Each report, where appropriate will have a unique reference for that specific aggregated section of the report.
+        using the same parameters used in the call to `insights_beta_report_income_expenditure_get`,
+        in combination with the unique reference, will return the raw transactions
+        list used to produce that aggregation. This is useful if requiring further investigation or analysis.
+        The reference can be found in the `_links` section of the insight reports.
+
+        NOTE:
+        Alterations to the `to`/`from` query properties will result in an alternative dataset being returned.
+      operationId: insights_beta_report_income_expenditure_transactions_get
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Currency'
+        - $ref: '#/components/parameters/TransactionReference'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportInsightsTransactionResponse'
+              example:
+                operation_id: insights_beta_report_income_expenditure_transactions_get
+                data:
+                  - transaction_id: a_transaction_id
+                    account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
+                    provider: a_bank_account_provider
+                    description: SALARY
+                    credit_debit_indicator: credit
+                    status: booked
+                    amount:
+                      value: '3000.00'
+                      currency: GBP
+                    date_time: '2023-04-10T10:00:00Z'
+                    enrichments:
+                      categories:
+                        l1:
+                          slug: income
+                          confidence: '0.99'
+                        l2:
+                          slug: employment_income
+                          confidence: '0.98'
+                      regularity:
+                        slug: monthly
+                        confidence: '0.99'
+                        predicted_date_times:
+                          - '2023-05-10T10:00:00Z'
+                metadata:
+                  transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                  from: '2020-01-01T00:00:00Z'
+                  to: '2020-01-31T00:00:00Z'
+                  currencies:
+                    - GBP
+                  options:
+                    - insight_type: late_income
+                      option: minimum_days_late_threshold
+                      value: '3'
+                    - insight_type: late_income
+                      option: minimum_value_threshold
+                      value: '100.00'
+  /insights/beta/report/merchants:
+    get:
+      tags:
+        - Retrieve Report Insights
+      summary: Retrieve merchant-specific breakdown reports.
+      security:
+        - OAuth2: []
+      description: |
+        Endpoint is responsible for returning merchant based aggregated transaction breakdowns. The reports are presented in
+        a way that allows for a high level overview of a customers spending habits with specific merchants.
+
+        For transactional analysis of particular aggregate, please refer to the transactions reference found within the
+        `_links` properties.
+      operationId: insights_beta_report_merchants_get
+      parameters:
+        - $ref: '#/components/parameters/EnabledInsightsMerchants'
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Currency'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantsReportResponse'
+              example:
+                operation_id: insights_beta_report_merchants_get
+                data:
+                  insights:
+                    hcst_credit:
+                      - type: hcst-credit
+                        currency: GBP
+                        transactions_count: 2
+                        merchants_count: 2
+                        transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                        _links:
+                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
+                metadata:
+                  from: '2022-01-01T00:00:00Z'
+                  to: '2022-03-31T00:00:00Z'
+                  currencies:
+                    - GBP
+                  options: []
+  /insights/beta/report/merchants/transactions/{reference}:
+    get:
+      tags:
+        - Retrieve Report Insights
+      security:
+        - OAuth2: []
+      summary: Retrieve transactions relating to a specific insight report section.
+      description: |
+        Each report, where appropriate will have a unique reference for that specific aggregated section of the report.
+        using the same parameters used in the call to `insights_beta_report_merchants_get`,
+        in combination with the unique reference, will return the raw transactions
+        list used to produce that aggregation. This is useful if requiring further investigation or analysis.
+        The reference can be found in the `_links` section of the insight reports.
+
+        NOTE:
+        Alterations to the `to`/`from` query properties will result in an alternative dataset being returned.
+      operationId: insights_beta_report_merchants_transactions_get
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Currency'
+        - $ref: '#/components/parameters/TransactionReference'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportInsightsTransactionResponse'
+              example:
+                operation_id: insights_beta_report_merchants_transactions_get
+                data:
+                  - transaction_id: a_transaction_id
+                    account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
+                    provider: a_bank_account_provider
+                    description: SALARY
+                    credit_debit_indicator: credit
+                    status: booked
+                    amount:
+                      value: '3000.00'
+                      currency: GBP
+                    date_time: '2023-04-10T10:00:00Z'
+                    enrichments:
+                      categories:
+                        l1:
+                          slug: income
+                          confidence: '0.99'
+                        l2:
+                          slug: employment_income
+                          confidence: '0.98'
+                      regularity:
+                        slug: monthly
+                        confidence: '0.99'
+                        predicted_date_times:
+                          - '2023-05-10T10:00:00Z'
+                metadata:
+                  transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                  from: '2020-01-01T00:00:00Z'
+                  to: '2020-01-31T00:00:00Z'
+                  options: []
+  /insights/beta/report/balance/unauthorised-overdraft:
+    get:
+      tags:
+        - Retrieve Report Insights
+      security:
+        - OAuth2: []
+      summary: Retrieve a report on a customers unauthorised overdraft.
+      description: |
+        Endpoint is responsible for returning balance based aggregated transaction breakdowns and insights.
+        The reports are presented in a way that allows for a high level overview of a customers balances. 
+        This particular route focuses on customer accounts with unauthorised overdrafts.
+
+        For transactional analysis of particular aggregate, please refer to the transactions reference found within the
+        `_links` properties.
+      operationId: insights_beta_report_balance_unauthorised_overdraft_get
+      parameters:
+        - $ref: '#/components/parameters/EnabledInsightsBalanceOverdraft'
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Currency'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorisedOverdraftResponse'
+              examples:
+                unauthorised_overdraft_detected:
+                  summary: Unauthorised overdraft detected
+                  description: |
+                    a simple example where a customers account has been noted to have been in an unauthorised overdraft
+                  value:
+                    operation_id: insights_beta_report_balance_unauthorised_overdraft_get
+                    data:
+                      insights:
+                        - type: unauthorised-overdraft
+                          currency: GBP
+                          days_in_unauthorised_overdraft:
+                            count: 3
+                            ratio: '0.06'
+                          accounts:
+                            - account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
+                              provider: test provider
+                              account_name: current account
+                              days_in_unauthorised_overdraft:
+                                count: 3
+                                ratio: '0.06'
+                              unauthorised_overdraft_occurrences:
+                                - date: '2023-03-20T00:00:00Z'
+                                  amount:
+                                    value: '1200.00'
+                                    currency: GBP
+                                  credit_debit_indicator: debit
+                                - date: '2023-03-21T00:00:00Z'
+                                  amount:
+                                    value: '1200.00'
+                                    currency: GBP
+                                  credit_debit_indicator: debit
+                                - date: '2023-03-22T00:00:00Z'
+                                  amount:
+                                    value: '1200.00'
+                                    currency: GBP
+                                  credit_debit_indicator: debit
+                              balances:
+                                - date: '2023-01-12T00:00:00Z'
+                                  amount:
+                                    value: '100.00'
+                                    currency: GBP
+                                  type: closing_available
+                                  credit_debit_indicator: debit
+                              credit_lines:
+                                - date: '2023-01-12T00:00:00Z'
+                                  type: available
+                                  amount:
+                                    value: '850.00'
+                                    currency: GBP
+                              transactions_reference: 123419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                              _links:
+                                transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
+                    metadata:
+                      from: '2020-01-01T00:00:00Z'
+                      to: '2020-01-31T00:00:00Z'
+                      currencies:
+                        - GBP
+                      options: []
+                no_unauthorised_overdrafts_detected_in_accounts:
+                  summary: No unauthorised access to overdraft detected
+                  description: |
+                    for a given to/from period, no days have been detected as being in overdraft for accounts currently ingested.
+                    An insight will be returned per currency detected from ingested accounts.
+                  value:
+                    operation_id: insights_beta_report_balance_unauthorised_overdraft_get
+                    data:
+                      insights:
+                        - type: unauthorised-overdraft
+                          currency: GBP
+                          days_in_unauthorised_overdraft:
+                            count: 0
+                            ratio: '0.00'
+                          accounts: []
+                    metadata:
+                      from: '2020-01-01T00:00:00Z'
+                      to: '2020-01-31T00:00:00Z'
+                      currencies:
+                        - GBP
+                      options: []
+                no_ingested_data_response:
+                  summary: No data ingested
+                  description: |
+                    In the event a client requests a report for a customer that has no ingested data, 
+                    a response will be returned with no insights available. We do this because we cannot guarantee the
+                    currency of the customers accounts, and therefore cannot return a report with no currency.
+                  value:
+                    operation_id: insights_beta_report_balance_unauthorised_overdraft_get
+                    data:
+                      insights: []
+                    metadata:
+                      from: '2020-01-01T00:00:00Z'
+                      to: '2020-01-31T00:00:00Z'
+                      currencies: []
+                      options: []
+  /insights/beta/report/balance/unauthorised-overdraft/transactions/{reference}:
+    get:
+      tags:
+        - Retrieve Report Insights
+      security:
+        - OAuth2: []
+      summary: Retrieve transactions relating to a specific insight report section.
+      description: |
+        Each report, where appropriate will have a unique reference for that specific aggregated section of the report.
+        using the same parameters used in the call to `insights_beta_report_balance_unauthorised_overdraft_get`,
+        in combination with the unique reference, will return the raw transactions
+        list used to produce that aggregation. This is useful if requiring further investigation or analysis.
+        The reference can be found in the `_links` section of the insight reports.
+
+        NOTE:
+        Alterations to the `to`/`from` query properties will result in an alternative dataset being returned.
+      operationId: insights_beta_report_unauthorised_overdraft_transactions_get
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Currency'
+        - $ref: '#/components/parameters/TransactionReference'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportInsightsTransactionResponse'
+              example:
+                operation_id: insights_beta_report_unauthorised_overdraft_transactions_get
+                data:
+                  - transaction_id: a_transaction_id
+                    account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
+                    provider: a_bank_account_provider
+                    description: SALARY
+                    credit_debit_indicator: credit
+                    status: booked
+                    amount:
+                      value: '3000.00'
+                      currency: GBP
+                    date_time: '2023-04-10T10:00:00Z'
+                    enrichments:
+                      categories:
+                        l1:
+                          slug: income
+                          confidence: '0.99'
+                        l2:
+                          slug: employment_income
+                          confidence: '0.98'
+                      regularity:
+                        slug: monthly
+                        confidence: '0.99'
+                        predicted_date_times:
+                          - '2023-05-10T10:00:00Z'
+                metadata:
+                  transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                  from: '2020-01-01T00:00:00Z'
+                  to: '2020-01-31T00:00:00Z'
+                  options:
+                    - insight_type: late_income
+                      option: minimum_days_late_threshold
+                      value: '3'
+                    - insight_type: late_income
+                      option: minimum_value_threshold
+                      value: '100.00'
+  /insights/beta/report/income-health:
+    get:
+      tags:
+        - Retrieve Report Insights
+      security:
+        - OAuth2: []
+      summary: Retrieve a health report on a customers financial profile.
+      description: |
+        Retrieve a list of insights that reflect various health reports based on a customers ingested data. 
+        Reports found within this grouping reflect aggregations against a customers income sources.
+        Where feasible, deep aggregate analysis is provided to allow for further insight. 
+
+        For transactional analysis of particular aggregate, please refer to the transactions reference found within the
+        `_links` properties.
+      operationId: insights_beta_report_income_health_get
+      parameters:
+        - $ref: '#/components/parameters/EnabledInsightsIncomeHealth'
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Currency'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomeHealthReportResponse'
+              example:
+                operation_id: insights_beta_report_income_health_get
+                data:
+                  insights:
+                    - type: income-health
+                      currency: GBP
+                      total:
+                        value: '1500'
+                        currency: GBP
+                      monthly_average:
+                        value: '1500'
+                        currency: GBP
+                      stability:
+                        value: '0.8'
+                        currency: GBP
+                      regular_income:
+                        stability:
+                          value: '0.8'
+                          currency: GBP
+                        total:
+                          value: '1500'
+                          currency: GBP
+                        monthly_average:
+                          value: '1500'
+                          currency: GBP
+                        sources:
+                          - source_name: customer employer salary
+                            category_l1: income
+                            category_l2: salary
+                            group_id: F30F99BC-3532-44E8-B276-A55B2B026684
+                            frequency: monthly
+                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                            _links:
+                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
+                            monthly_average:
+                              value: '1500'
+                              currency: GBP
+                            total:
+                              value: '1500'
+                              currency: GBP
+                            stability:
+                              value: '0.8'
+                              currency: GBP
+                        transactions_reference: 123419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                        _links:
+                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
+                      irregular_income:
+                        total:
+                          value: '1500'
+                          currency: GBP
+                        monthly_average:
+                          value: '1500'
+                          currency: GBP
+                        _links:
+                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
+                        transactions_reference: 456419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                      _links:
+                        transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
+                      transactions_reference: 789419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                    - type: income-health
+                      currency: EUR
+                      total:
+                        value: '1730.06'
+                        currency: EUR
+                      monthly_average:
+                        value: '1730.06'
+                        currency: EUR
+                      stability:
+                        value: '0.8'
+                        currency: EUR
+                      regular_income:
+                        stability:
+                          value: '0.81'
+                          currency: EUR
+                        total:
+                          value: '1730.06'
+                          currency: EUR
+                        monthly_average:
+                          value: '1730.06'
+                          currency: EUR
+                        sources:
+                          - source_name: customer employer salary
+                            category_l1: income
+                            category_l2: salary
+                            group_id: F30F99BC-3532-44E8-B276-A55B2B026684
+                            frequency: monthly
+                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                            _links:
+                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
+                            monthly_average:
+                              value: '1500'
+                              currency: GBP
+                            total:
+                              value: '1500'
+                              currency: GBP
+                            stability:
+                              value: '0.8'
+                              currency: GBP
+                          - source_name: Bank Interest
+                            category_l1: income
+                            category_l2: interest_or_investments
+                            group_id: F30F99BC-3532-44E8-B276-A55B2B026684
+                            frequency: monthly
+                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                            _links:
+                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
+                            monthly_average:
+                              value: '10'
+                              currency: GBP
+                            total:
+                              value: '10'
+                              currency: GBP
+                            stability:
+                              value: '1'
+                              currency: GBP
+                        transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                        _links:
+                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
+                      irregular_income:
+                        total:
+                          value: '1500'
+                          currency: EUR
+                        monthly_average:
+                          value: '1500'
+                          currency: EUR
+                        transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                        _links:
+                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
+                      transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                      _links:
+                        transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
+                metadata:
+                  from: '2020-01-01T00:00:00Z'
+                  to: '2020-01-31T00:00:00Z'
+                  currencies:
+                    - GBP
+                  options:
+                    - insight_type: late_income
+                      option: minimum_days_late_threshold
+                      value: '3'
+                    - insight_type: late_income
+                      option: minimum_value_threshold
+                      value: '100.00'
+  /insights/beta/report/income-health/transactions/{reference}:
+    get:
+      tags:
+        - Retrieve Report Insights
+      security:
+        - OAuth2: []
+      summary: Retrieve transactions relating to a specific insight report section.
+      description: |
+        Each report, where appropriate will have a unique reference for that specific aggregated section of the report.
+        using the same parameters used in the call to `insights_beta_report_balance_unauthorised_overdraft_get`,
+        in combination with the unique reference, will return the raw transactions
+        list used to produce that aggregation. This is useful if requiring further investigation or analysis.
+        The reference can be found in the `_links` section of the insight reports.
+
+        NOTE:
+        Alterations to the `to`/`from` query properties will result in an alternative dataset being returned.
+      operationId: insights_beta_report_income_health_transactions_get
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Currency'
+        - $ref: '#/components/parameters/TransactionReference'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportInsightsTransactionResponse'
+              example:
+                operation_id: insights_beta_report_income_health_transactions_get
+                data:
+                  - transaction_id: a_transaction_id
+                    account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
+                    provider: a_bank_account_provider
+                    description: SALARY
+                    credit_debit_indicator: credit
+                    status: booked
+                    amount:
+                      value: '3000.00'
+                      currency: GBP
+                    date_time: '2023-04-10T10:00:00Z'
+                    enrichments:
+                      categories:
+                        l1:
+                          slug: income
+                          confidence: '0.99'
+                        l2:
+                          slug: employment_income
+                          confidence: '0.98'
+                      regularity:
+                        slug: monthly
+                        confidence: '0.99'
+                        predicted_date_times:
+                          - '2023-05-10T10:00:00Z'
+                metadata:
+                  transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
+                  from: '2020-01-01T00:00:00Z'
+                  to: '2020-01-31T00:00:00Z'
+                  options:
+                    - insight_type: late_income
+                      option: minimum_days_late_threshold
+                      value: '3'
+                    - insight_type: late_income
+                      option: minimum_value_threshold
+                      value: '100.00'
 components:
   securitySchemes:
     Basic:
@@ -13095,19 +14172,33 @@ components:
                 The lines of the detected address. These could be anything from a full street address down to a simple town or city. The level of detail depends on the resolution with which we are able to detect the transaction location.
               items:
                 type: string
-            geolocation:
-              type: object
-              description: The geolocation if an exact match is found
-              properties:
-                latitude:
-                  type: number
-                  format: double
-                longitude:
-                  type: number
-                  format: double
+            street_address:
+              type: string
+              description: The street address for the detected location of where the transaction was located
+            city:
+              type: string
+              description: The city for the detected location of where the transaction was located
+            region:
+              type: string
+              description: The region for the detected location of where the transaction was located
+            postal_code:
+              type: string
+              description: The postcode for the detected location of where the transaction was located.
             country:
               type: string
-              description: An ISO-3166 Alpha-3 country code representing the detected country the transaction was located.
+              description: An ISO-3166 Alpha-2 country code representing the detected country the transaction was located.
+        geolocation:
+          type: object
+          description: The geolocation if an exact match is found
+          properties:
+            latitude:
+              description: The latitudinal position of the merchant location
+              type: number
+              format: double
+            longitude:
+              description: The longitudinal position of the merchant location
+              type: number
+              format: double
         tokens:
           type: array
           description: A list of tokenised location string. These could be anything from a full street address down to a simple town or city.
@@ -13294,6 +14385,46 @@ components:
             exclude_source:
               type: boolean
               description: Is the request transaction being excluded from the response
+    CustomerMerchantCorrectionResponse:
+      title: Customer Merchant Corrections Response
+      type: object
+      description: Expected response structure for the merchant corrections endpoint
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - corrections_v2_merchants_post
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        metadata:
+          type: object
+          description: Metadata associated with the merchant correction response schema
+          required:
+            - effected_transactions_count
+            - include_similar
+            - merchant_id
+            - transactions
+          properties:
+            effected_transactions_count:
+              type: number
+              description: The number of transaction corrected
+            include_similar:
+              type: boolean
+              description: Value of include_similar in the request
+            merchant_id:
+              type: string
+              description: Value of merchant_id in the request
+            transactions:
+              type: array
+              description: Value of transactions id list in the request
+              items:
+                type: string
     CustomerApplicationID:
       title: Customer Application ID
       type: string
@@ -14059,6 +15190,7 @@ components:
             Prepend with the API host to get a fully resolved URL.
 
             The same headers as [Retrieve Transactions V2](https://docs.thisisbud.com/reference/v2_transactions_get) apply.
+            The response structure matches the [Retrieve Transactions V2](https://docs.thisisbud.com/reference/v2_transactions_get) endpoint.
     OperationId:
       title: Operation Id Field
       type: string
@@ -15441,16 +16573,6 @@ components:
         errors:
           type: object
           description: Extra information on the validation errors
-    ReconfirmConsentRequest:
-      title: Reconfirm Consent Request
-      type: object
-      description: Expected request payload structure
-      required:
-        - provider
-      properties:
-        provider:
-          type: string
-          description: The name of the provider the task is trying to reconfirm consent for
     ConsentReconfirmation:
       title: Consent Reconfirmation Outcome
       type: object
@@ -17950,6 +19072,97 @@ components:
             $ref: '#/components/schemas/CustomerCategoryCorrectionPayload'
         metadata:
           $ref: '#/components/schemas/ResultsMetadata'
+    CustomerMerchantCorrectionPayload:
+      title: Customer Merchant Correction
+      type: object
+      description: Expected request structure for the merchant corrections endpoint
+      required:
+        - transactions
+        - merchant_id
+      properties:
+        transactions:
+          type: array
+          minLength: 1
+          items:
+            type: string
+          description: A list of transaction identifiers to be corrected
+        merchant_id:
+          type: string
+          description: |
+            The identifier of the merchant that the transactions should be assigned
+
+            To remove a merchant instead of replacing it, leave this value blank
+        include_similar:
+          type: boolean
+          description: Correct the merchant of other similar transactions to the specified transactions
+          default: false
+    CustomerMerchantCorrectionRequest:
+      title: Customer Merchant Corrections Request Payload
+      type: array
+      description: Expected request structure for the merchant corrections endpoint
+      items:
+        $ref: '#/components/schemas/CustomerMerchantCorrectionPayload'
+    CustomerMerchantCorrectionSearchResult:
+      type: object
+      required:
+        - id
+        - name
+        - slug
+        - logo
+        - online_or_billing_only
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: UUID corresponding to the merchant, if available. Subject to version control.
+        name:
+          type: string
+          description: UI friendly display name for the merchant.
+        slug:
+          type: string
+          description: Unique human readable identifier of the merchant. Not subject to version control.
+        logo:
+          type: string
+          description: A url to the merchant logo. If not available a placeholder is used
+        url:
+          type: string
+          description: URL supplying merchant website, if available.
+        online_or_billing_only:
+          type: boolean
+    CustomerMerchantCorrectionSearchResponsePayload:
+      title: Customer Merchant Corrections Request Payload
+      type: array
+      description: List of merchant that matched the query. Best match first
+      items:
+        $ref: '#/components/schemas/CustomerMerchantCorrectionSearchResult'
+    CustomerMerchantCorrectionSearchResponseMetadata:
+      title: Customer Merchant Corrections Search Response Metadata
+      type: object
+      required:
+        - query
+        - results
+      properties:
+        query:
+          type: string
+          description: Query used in the request
+        results:
+          type: number
+          description: Number of results returned
+    CustomerMerchantCorrectionSearchResponse:
+      title: Customer Merchant Correction Search Response
+      type: object
+      description: Expected response structure for the merchant corrections search endpoint
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/CustomerMerchantCorrectionSearchResponsePayload'
+        metadata:
+          $ref: '#/components/schemas/CustomerMerchantCorrectionSearchResponseMetadata'
     SavingsGoal:
       title: Savings Goal
       required:
@@ -21609,9 +22822,7 @@ components:
         _links:
           $ref: '#/components/schemas/InsightLinks'
     CreditDebitIndicator:
-      title: Credit Debit Indicator
       type: string
-      description: Whether the associated amount is a credit (positive) or debit (negative) amount.
       enum:
         - credit
         - debit
@@ -22227,6 +23438,692 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/InsightOption'
+    TransactionsReference:
+      type: string
+      description: |
+        A unique identifier to reference a specific transaction subset used within a section of a report.
+    schemas-TransactionsLinks:
+      description: URLs for resources related to this report insight
+      type: object
+      required:
+        - transactions
+      properties:
+        transactions:
+          type: string
+          description: |
+            An endpoint, including options, to make a GET request to in order to retrieve transactions
+            related to the report in question.
+    IncomeExpenditureAnalysis:
+      type: object
+      description: |
+        Object presents a single expenditure group income analysis report. The focus of this object is to present a 
+        view of a single expenditure and its impact on a customers income. The report is broken down into financial months
+        to help identify spikes in income consumed by the expenditure group.
+
+        The type of report is identified by the `type` field. There are several types of analyses:
+          - income-cash-withdrawal: Identifies the total amount of cash withdrawn from a customers account.
+          - income-debt: Identifies debt payments in the customer's expenses.
+          - income-gambling: Identifies gambling related transactions in the customer's report.
+          - income-loan: Identifies loan related transactions.
+          - income-essential-expenditure: Identifies essential expenditure and compares it against income for the time period
+          - income-all-expenditure: Total debits vs income for a specified time period
+      required:
+        - type
+        - currency
+        - expenditure
+        - income
+        - _links
+      properties:
+        type:
+          type: string
+          enum:
+            - income-cash-withdrawal
+            - income-loan
+            - income-gambling
+            - income-debt
+            - income-essential-expenditure
+            - income-all-expenditure
+          description: |
+            A unique human readable string used to identify a expenditure group income analysis report.
+
+            Note, these are subject to change and should not be used to identify a report. These are not unique within
+            a result list and are used to identify the type of report.
+        currency:
+          $ref: '#/components/schemas/BudCurrency'
+        income:
+          type: object
+          required:
+            - credit_debit_indicator
+            - count
+            - total
+            - monthly_average
+            - transactions_reference
+            - _links
+          properties:
+            credit_debit_indicator:
+              $ref: '#/components/schemas/CreditDebitIndicator'
+            count:
+              type: integer
+              description: |
+                The number of transactions related to this insight.
+            total:
+              $ref: '#/components/schemas/BudAmount'
+              description: |
+                The total amount of income for the period of the report for a predefined currency.
+            monthly_average:
+              $ref: '#/components/schemas/BudAmount'
+              description: |
+                The average amount of income for the period of the report for a predefined currency.
+            breakdown:
+              type: array
+              items:
+                type: object
+                description: |
+                  A breakdown of the specific transactional group for the period of the report. 
+                  The breakdown of data is defined by the granularity of the report, defaulting to monthly. 
+                  The `to`/`from` properties within the object refer to the datetime boundaries of subsection.
+                required:
+                  - from
+                  - to
+                  - total
+                  - count
+                  - transactions_reference
+                  - _links
+                properties:
+                  from:
+                    $ref: '#/components/schemas/schemas-DateTimeISO8601'
+                  to:
+                    $ref: '#/components/schemas/schemas-DateTimeISO8601'
+                  total:
+                    $ref: '#/components/schemas/BudAmount'
+                    description: |
+                      The total amount of expenditure for the period of the report for a predefined currency.
+                  count:
+                    type: integer
+                    description: |
+                      The number of transactions related to this insight.
+                  transactions_reference:
+                    $ref: '#/components/schemas/TransactionsReference'
+                  _links:
+                    $ref: '#/components/schemas/schemas-TransactionsLinks'
+            transactions_reference:
+              $ref: '#/components/schemas/TransactionsReference'
+            _links:
+              $ref: '#/components/schemas/schemas-TransactionsLinks'
+        expenditure:
+          type: object
+          required:
+            - credit_debit_indicator
+            - count
+            - total
+            - monthly_average
+            - relative_to_income
+            - transactions_reference
+            - _links
+          properties:
+            credit_debit_indicator:
+              $ref: '#/components/schemas/CreditDebitIndicator'
+            count:
+              type: integer
+              description: |
+                The number of transactions related to this insight.
+            total:
+              $ref: '#/components/schemas/BudAmount'
+              description: |
+                The total amount of expenditure for the period of the report for a predefined currency.
+            monthly_average:
+              $ref: '#/components/schemas/BudAmount'
+              description: |
+                The average amount of income for the period of the report for a predefined currency.
+            relative_to_income:
+              type: string
+              description: |
+                A percentage value to represent the scale another value is in relation to a customers income.
+            transactions_reference:
+              $ref: '#/components/schemas/TransactionsReference'
+            _links:
+              $ref: '#/components/schemas/schemas-TransactionsLinks'
+        transactions_reference:
+          $ref: '#/components/schemas/TransactionsReference'
+        _links:
+          $ref: '#/components/schemas/schemas-TransactionsLinks'
+    IncomeExpenditureReportResponse:
+      type: object
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_beta_report_income_expenditure_get
+        data:
+          type: object
+          required:
+            - insights
+          properties:
+            insights:
+              type: array
+              items:
+                $ref: '#/components/schemas/IncomeExpenditureAnalysis'
+              description: |
+                An array of income/expenditure analysis reports (insights). Each object in the list
+                represents a single insight.
+        metadata:
+          type: object
+          required:
+            - from
+            - to
+            - options
+          properties:
+            from:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            to:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/InsightOption'
+    ReportInsightsTransactionResponse:
+      type: object
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_beta_report_income_expenditure_transactions_get
+            - insights_beta_report_income_health_transactions_get
+            - insights_beta_report_merchants_transactions_get
+            - insights_beta_report_unauthorised_overdraft_transactions_get
+        data:
+          type: array
+          description: |-
+            Transactions in the Bud Transactions V2 format that triggered the insight, for insights based on transaction data. If there are no specific relevant transactions, this will be an empty list.
+            For clients making use of the deprecated client taxonomy support, the categories in this response will be set to the client categories.
+          items:
+            $ref: '#/components/schemas/Transaction'
+        metadata:
+          type: object
+          required:
+            - from
+            - to
+            - transactions_reference
+            - options
+          properties:
+            from:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            to:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            transactions_reference:
+              $ref: '#/components/schemas/TransactionsReference'
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/InsightOption'
+    HCSTCreditAnalysis:
+      type: object
+      description: |
+        Object represents analysis indicating interactions with high-cost short-term credit providers.
+      required:
+        - type
+        - currency
+        - transactions_count
+        - merchants_count
+        - transactions_reference
+        - _links
+      properties:
+        type:
+          type: string
+          enum:
+            - hcst-credit
+          description: |
+            A unique human readable string used to identify the report type.
+        currency:
+          $ref: '#/components/schemas/BudCurrency'
+        transactions_count:
+          type: integer
+          description: |
+            The number of transactions related to this insight.
+        merchants_count:
+          type: integer
+          description: |
+            The number of unique merchants related to this insight.
+        transactions_reference:
+          $ref: '#/components/schemas/TransactionsReference'
+        _links:
+          $ref: '#/components/schemas/schemas-TransactionsLinks'
+    MerchantsReportResponse:
+      description: |
+        Object represents a set of merchant-related insights generated for the customer inspecting
+        transactions over a given period of time. The insights include:
+          - hcst_credit: Identifies interactions with high-cost short-term credit providers.
+      type: object
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_beta_report_merchants_get
+        data:
+          type: object
+          required:
+            - insights
+          properties:
+            insights:
+              type: object
+              required:
+                - hcst_credit
+              properties:
+                hcst_credit:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/HCSTCreditAnalysis'
+        metadata:
+          type: object
+          required:
+            - from
+            - to
+            - options
+          properties:
+            from:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            to:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/InsightOption'
+    DaysInUnauthorisedOverdraft:
+      description: |
+        Object represents the number of days a customer has been in an unauthorised overdraft. Should be noted that
+        this is a percentage of the total number of days in the report period OR the total number of days ingested for 
+        a given account. The report period is defined by the `from` and `to` parameters.
+      type: object
+      required:
+        - count
+        - ratio
+      properties:
+        count:
+          type: integer
+          description: |
+            The total number of days a customer has been in an unauthorised overdraft.
+        ratio:
+          type: string
+          description: |
+            A percentage of the numbers of unauthorised overdraft/total number of days in the report period.
+    UnauthorisedOverdraftDate:
+      type: object
+      required:
+        - date
+        - amount
+        - credit_debit_indicator
+      properties:
+        date:
+          $ref: '#/components/schemas/schemas-DateTimeISO8601'
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        credit_debit_indicator:
+          $ref: '#/components/schemas/CreditDebitIndicator'
+    balance:
+      type: object
+      required:
+        - date
+        - type
+        - amount
+        - credit_debit_indicator
+      properties:
+        date:
+          $ref: '#/components/schemas/schemas-DateTimeISO8601'
+        type:
+          description: |
+            Type is a string used to represent the type of balance returned, the full descriptions of each can be
+            found below:
+            https://docs.thisisbud.com/docs/accounts#balances-and-credit-lines
+          type: string
+          enum:
+            - closing_available
+            - closing_booked
+            - closing_cleared
+            - expected
+            - forward_available
+            - information
+            - interim_available
+            - interim_booked
+            - interim_cleared
+            - opening_available
+            - opening_booked
+            - opening_cleared
+            - previously_closed_booked
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        credit_debit_indicator:
+          $ref: '#/components/schemas/CreditDebitIndicator'
+    CreditLine:
+      type: object
+      required:
+        - date
+        - type
+        - amount
+      properties:
+        date:
+          $ref: '#/components/schemas/schemas-DateTimeISO8601'
+        type:
+          type: string
+          description: |
+            Type is a string used to represent the type of creditline returned, the full descriptions of each can be
+            found below:
+            https://docs.thisisbud.com/docs/accounts#balances-and-credit-lines
+          enum:
+            - available
+            - credit
+            - emergency
+            - pre_agreed
+            - temporary
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+    UnauthorisedOverdraftAccount:
+      type: object
+      required:
+        - account_id
+        - provider
+        - account_name
+        - days_in_unauthorised_overdraft
+        - unauthorised_overdraft_occurrences
+        - balances
+        - credit_lines
+        - transactions_reference
+        - _links
+      properties:
+        account_id:
+          type: string
+          description: |
+            A unique identifier for a specific account. The account_id can be found in the _links section of the insight report.
+        provider:
+          type: string
+          description: |
+            The name of the provider of the account.
+        account_name:
+          type: string
+          description: |
+            The name of the account.
+        days_in_unauthorised_overdraft:
+          $ref: '#/components/schemas/DaysInUnauthorisedOverdraft'
+        unauthorised_overdraft_occurrences:
+          description: |
+            This field contains an array of balances for the given account when its suspected the account entered an 
+            unauthorised overdraft. The items of the array are the account balance at points in time when the customer
+            exceeded their credit allowance on the account.
+          type: array
+          items:
+            $ref: '#/components/schemas/UnauthorisedOverdraftDate'
+        balances:
+          type: array
+          description: |
+            A list of balances for the account. The balances returned here will represent the latest up to date
+            ingested balances for the account.
+          items:
+            $ref: '#/components/schemas/balance'
+        credit_lines:
+          type: array
+          description: |
+            A list of credit lines for the account. The credit lines returned here will represent the latest up to date
+            ingested balances for the account. It is possible that an account does not have any registered credit lines.
+          items:
+            $ref: '#/components/schemas/CreditLine'
+        transactions_reference:
+          $ref: '#/components/schemas/TransactionsReference'
+        _links:
+          $ref: '#/components/schemas/schemas-TransactionsLinks'
+    UnauthorisedOverdraftInsight:
+      type: object
+      required:
+        - type
+        - currency
+        - days_in_unauthorised_overdraft
+        - accounts
+      properties:
+        type:
+          type: string
+          enum:
+            - unauthorised-overdraft
+          description: |
+            A unique human readable string used to identify a unauthorised overdraft report.
+
+            Note, these are subject to change and should not be used to identify a report. These are not unique within
+            a result list and are used to identify the type of report.
+        currency:
+          $ref: '#/components/schemas/BudCurrency'
+        days_in_unauthorised_overdraft:
+          $ref: '#/components/schemas/DaysInUnauthorisedOverdraft'
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnauthorisedOverdraftAccount'
+    UnauthorisedOverdraftResponse:
+      type: object
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_beta_report_balance_unauthorised_overdraft_get
+        data:
+          type: object
+          required:
+            - insights
+          properties:
+            insights:
+              type: array
+              items:
+                $ref: '#/components/schemas/UnauthorisedOverdraftInsight'
+        metadata:
+          type: object
+          required:
+            - from
+            - to
+            - options
+            - currencies
+          properties:
+            from:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            to:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            currencies:
+              type: array
+              description: A list of currencies returned in the results. If the currency query parameter is used, this will only contain the specified currency.
+              items:
+                $ref: '#/components/schemas/BudCurrency'
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/InsightOption'
+    IncomeStability:
+      type: object
+      required:
+        - value
+        - currency
+      properties:
+        value:
+          type: string
+          description: |
+            A number between 0 to 1 representing how stable a customers income is. The closer the number is
+            to 1 represents a higher stability.
+        currency:
+          $ref: '#/components/schemas/BudCurrency'
+    Frequency:
+      type: string
+      enum:
+        - daily
+        - weekly
+        - biweekly
+        - monthly
+        - quarterly
+        - six_monthly
+        - annually
+        - unknown
+    RegularTransactionIncomeGroup:
+      type: object
+      required:
+        - source_name
+        - group_id
+        - category_l1
+        - category_l2
+        - frequency
+        - total
+        - monthly_average
+        - stability
+        - transactions_reference
+        - _links
+      properties:
+        source_name:
+          type: string
+          description: A human readable to represent a regular transactional group
+        group_id:
+          type: string
+          format: uuid
+          description: a unique identifier to identify a regular transaction group
+        category_l1:
+          type: string
+        category_l2:
+          type: string
+        frequency:
+          $ref: '#/components/schemas/Frequency'
+        total:
+          $ref: '#/components/schemas/BudAmount'
+        monthly_average:
+          $ref: '#/components/schemas/BudAmount'
+        stability:
+          $ref: '#/components/schemas/IncomeStability'
+        transactions_reference:
+          $ref: '#/components/schemas/TransactionsReference'
+        _links:
+          $ref: '#/components/schemas/schemas-TransactionsLinks'
+    RegularTransactions:
+      type: object
+      required:
+        - stability
+        - total
+        - monthly_average
+        - transactions_reference
+        - _links
+        - sources
+      properties:
+        stability:
+          $ref: '#/components/schemas/IncomeStability'
+        total:
+          $ref: '#/components/schemas/BudAmount'
+        monthly_average:
+          $ref: '#/components/schemas/BudAmount'
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegularTransactionIncomeGroup'
+        transactions_reference:
+          $ref: '#/components/schemas/TransactionsReference'
+        _links:
+          $ref: '#/components/schemas/schemas-TransactionsLinks'
+    IrregularTransactions:
+      type: object
+      required:
+        - total
+        - monthly_average
+        - transactions_reference
+        - _links
+      properties:
+        total:
+          $ref: '#/components/schemas/BudAmount'
+        monthly_average:
+          $ref: '#/components/schemas/BudAmount'
+        transactions_reference:
+          $ref: '#/components/schemas/TransactionsReference'
+        _links:
+          $ref: '#/components/schemas/schemas-TransactionsLinks'
+    IncomeHealthReportResponse:
+      type: object
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_beta_report_income_health_get
+        data:
+          required:
+            - insights
+          properties:
+            insights:
+              type: array
+              items:
+                description: |
+                  An analytical report on the overall health of a customers income sources. The report presents an 
+                  overall stability, regularity, and longevity insight. In addition to this we present a drilled down insight
+                  into the individual regular income sources for a customer. This enables a client to identify 
+                  major sources of income and their impact on the overall health of a customers income.
+                type: object
+                required:
+                  - type
+                  - currency
+                  - total
+                  - stability
+                  - monthly_average
+                  - regular_income
+                  - irregular_income
+                  - transactions_reference
+                  - _links
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - income-health
+                  currency:
+                    $ref: '#/components/schemas/BudCurrency'
+                  stability:
+                    $ref: '#/components/schemas/IncomeStability'
+                  total:
+                    $ref: '#/components/schemas/BudAmount'
+                  monthly_average:
+                    $ref: '#/components/schemas/BudAmount'
+                  regular_income:
+                    $ref: '#/components/schemas/RegularTransactions'
+                  irregular_income:
+                    $ref: '#/components/schemas/IrregularTransactions'
+                  transactions_reference:
+                    $ref: '#/components/schemas/TransactionsReference'
+                  _links:
+                    $ref: '#/components/schemas/schemas-TransactionsLinks'
+        metadata:
+          type: object
+          required:
+            - from
+            - to
+            - currencies
+            - options
+          properties:
+            from:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            to:
+              $ref: '#/components/schemas/schemas-DateTimeISO8601'
+            currencies:
+              type: array
+              description: A list of currencies returned in the results. If the currency query parameter is used, this will only contain the specified currency.
+              items:
+                $ref: '#/components/schemas/BudCurrency'
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/InsightOption'
   parameters:
     SmartFinderFrom:
       in: header
@@ -22440,13 +24337,6 @@ components:
         enum:
           - connection_expired
           - connection_already_started
-    RedirectURLCallbackErrorMessage:
-      in: query
-      name: error_message
-      description: |
-        Human-readable description providing slightly more information to the `error`.
-      schema:
-        type: string
     OBProvidersQueryTypeFilter:
       in: query
       required: false
@@ -22731,6 +24621,14 @@ components:
         type: string
       required: true
       description: Name of the provider (banking institution)
+    MerchantCorrectionSearchQuery:
+      in: path
+      name: merchant_query
+      schema:
+        type: string
+        minLength: 3
+      required: true
+      description: Merchant Name Query
     QueryExcludeSource:
       in: query
       name: exclude_source
@@ -23229,6 +25127,65 @@ components:
       schema:
         type: string
         format: uuid
+    EnabledInsightsIncomeExpenditure:
+      in: query
+      name: enabled_insights
+      required: false
+      schema:
+        type: string
+        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
+        enum:
+          - income-cash-withdrawal
+          - income-loan
+          - income-gambling
+          - income-debt
+          - income-essential-expenditure
+          - income-all-expenditure
+    Currency:
+      in: query
+      name: currency
+      required: false
+      description: |
+        Used to limit the insight reports returned, to only those in the specified currency. The value should represent
+        a valid ISO currency code. an example would be "GBP" or "EUR".
+
+        Please refer to https://www.iso.org/iso-4217-currency-codes.html for more details.
+      schema:
+        type: string
+    TransactionReference:
+      in: path
+      required: true
+      name: reference
+      schema:
+        description: A unique reference used to identify a group of transactions in report for aggregation analysis
+        type: string
+    EnabledInsightsMerchants:
+      in: query
+      name: enabled_insights
+      required: false
+      schema:
+        type: string
+        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
+        enum:
+          - hcst-credit
+    EnabledInsightsBalanceOverdraft:
+      in: query
+      name: enabled_insights
+      required: false
+      schema:
+        type: string
+        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
+        enum:
+          - unauthorised-overdraft
+    EnabledInsightsIncomeHealth:
+      in: query
+      name: enabled_insights
+      required: false
+      schema:
+        type: string
+        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
+        enum:
+          - income-health
 x-tagGroups:
   - name: ''
     tags:
@@ -23290,4 +25247,5 @@ x-tagGroups:
     tags:
       - Retrieve Actionable Insights
       - Custom Insights
+      - Retrieve Report Insights
       - Insights API
