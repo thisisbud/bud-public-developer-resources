@@ -3607,14 +3607,19 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           transaction_types:
                             - card
@@ -3951,89 +3956,6 @@ paths:
                 message: invalid body
                 errors:
                   body: invalid character 'a' looking for beginning of object key string
-        '401':
-          description: An unauthenticated request was received.
-        '405':
-          description: The request uses an unexpected HTTP method.
-        5XX:
-          description: An unexpected error occurred on the server side.
-    get:
-      security:
-        - OAuth2: []
-      tags:
-        - Manage Customers
-      summary: Retrieve Customers V3
-      description: |
-        This endpoint is used to list customers associated with the current project.
-
-        Customers are listed ordered by their ID. Deleted customers will not be included in the list.
-
-        The list of customers can be filtered by creation date with the `date_from` and `date_to` query parameters, which expect dates in the RFC3339 format.
-
-        If more results pages are available, the response metadata object will contain a  `next_page_token` field which can be used to fetch the next page of results. The token should be provided in the `page_token` query parameter for subsequent requests.
-
-        For more information on how to manage your Bud Customers, please, refer to the following [guide](https://docs.thisisbud.com/docs/setup-customers)
-      operationId: platform_v3_customers_get
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - in: query
-          name: date_from
-          schema:
-            type: string
-          example: '2022-05-28T00:00:00Z'
-          description: |
-            Date (RFC3339) to filter customers created on or after which. To maintain backwards compatibility, dates in the format (YYYY-MM-DD) can also be used and will be assumed to be UTC.
-        - in: query
-          name: date_to
-          schema:
-            type: string
-          example: '2022-05-29T00:00:00Z'
-          description: |
-            Date (RFC3339) to filter customers created on or before which. To maintain backwards compatibility, dates in the format (YYYY-MM-DD) can also be used and will be assumed to be UTC. Uses the current date by default.
-        - name: page_size
-          in: query
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 1000
-          description: The number of results to return per page. Defaults to 200.
-        - name: page_token
-          in: query
-          schema:
-            type: string
-          description: |
-            The token required to fetch a specific page of results. Provided by the next_page_token field in the previous request.
-      responses:
-        '200':
-          description: Returns a list of customers.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomersGetAllV3Response'
-              example:
-                operation_id: platform_v3_customers_get
-                data:
-                  - customer_id: acbff0b9-299c-4065-b933-4a991e17da6d
-                    idempotent_identifier: acbff0b9-299c-4065-b933-4a991e17da6d
-                    created_at: 2019-02-27T06:11:57+0000
-                  - customer_id: ebb50ae5-8c5c-4205-9b61-e93ce84eb467
-                    created_at: 2019-02-27T06:11:57+0000
-                metadata:
-                  next_page_token: eyJwYWdlX3NpemUiOjIsInBhZ2UiOjF9
-                  results: 2
-        '400':
-          description: The request contains an invalid parameter.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              example:
-                operation_id: platform_v3_customers_get_all
-                code_id: bad_request
-                message: invalid page token
-                errors:
-                  page_token:
-                    - Failed to parse page token
         '401':
           description: An unauthenticated request was received.
         '405':
@@ -5533,7 +5455,7 @@ paths:
     get:
       tags:
         - Retrieve Financial Data
-      summary: Retrieve Balances Over Time
+      summary: Retrieve Balances Over Time V3
       description: |
         List the balances of each bank account for a customer across all ingestion sources. Ordered by balance date.
         It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to`  and `from` dates provided. It then checks all the transactions within this range, calculating the balance at  the end of each day.
@@ -5664,7 +5586,7 @@ paths:
     get:
       tags:
         - Retrieve Financial Data
-      summary: Retrieve Balances Over Time By Account
+      summary: Retrieve Balances Over Time By Account V3
       description: |
         List the balances of a specific bank account for a customer across all ingestion sources. Ordered by balance  date.
         It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to`  and `from` dates provided. It then checks all the transactions within this range, calculating the balance at  the end of each day.
@@ -5921,14 +5843,19 @@ paths:
                                 confidence: '0.98'
                             website: http://www.url.com
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
@@ -5982,14 +5909,19 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           transaction_types:
                             - card
@@ -6316,14 +6248,19 @@ paths:
                                 confidence: '0.98'
                             website: http://www.url.com
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
@@ -6377,14 +6314,19 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           transaction_types:
                             - card
@@ -6425,14 +6367,19 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           transaction_types:
                             - card
@@ -6538,14 +6485,19 @@ paths:
                                 confidence: '0.98'
                             website: http://www.url.com
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
@@ -6599,14 +6551,19 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           transaction_types:
                             - card
@@ -6647,14 +6604,19 @@ paths:
                               - value: tesco
                                 confidence: '0.96'
                           location:
-                            address_lines:
-                              - '180'
-                              - Shepherds Bush Rd
-                              - London
-                              - W6 7NL
-                              - United Kingdom
+                            address:
+                              address_lines:
+                                - '180'
+                                - Shepherds Bush Rd
+                                - London
+                                - W6 7NL
+                                - United Kingdom
+                              street_address: Shepherds Bush Rd
+                              city: London
+                              postal_code: W6 7NL
+                              country: United Kingdom
                             geolocation:
-                              longitude: 51.497678,
+                              longitude: 51.497678
                               latitude: -0.223766
                           transaction_types:
                             - card
@@ -12549,14 +12511,19 @@ paths:
                           - value: speciality coffee
                             confidence: '0.98'
                       location:
-                        address_lines:
-                          - '180'
-                          - Shepherds Bush Rd
-                          - London
-                          - W6 7NL
-                          - United Kingdom
+                        address:
+                          address_lines:
+                            - '180'
+                            - Shepherds Bush Rd
+                            - London
+                            - W6 7NL
+                            - United Kingdom
+                          street_address: Shepherds Bush Rd
+                          city: London
+                          postal_code: W6 7NL
+                          country: United Kingdom
                         geolocation:
-                          longitude: 51.497678,
+                          longitude: 51.497678
                           latitude: -0.223766
                       processor:
                         id: 18f63293-0217-4520-bbf0-071dca7a9d04
@@ -12608,14 +12575,19 @@ paths:
                           - value: tesco
                             confidence: '0.96'
                       location:
-                        address_lines:
-                          - '180'
-                          - Shepherds Bush Rd
-                          - London
-                          - W6 7NL
-                          - United Kingdom
+                        address:
+                          address_lines:
+                            - '180'
+                            - Shepherds Bush Rd
+                            - London
+                            - W6 7NL
+                            - United Kingdom
+                          street_address: Shepherds Bush Rd
+                          city: London
+                          postal_code: W6 7NL
+                          country: United Kingdom
                         geolocation:
-                          longitude: 51.497678,
+                          longitude: 51.497678
                           latitude: -0.223766
                       transaction_types:
                         - card
@@ -13095,19 +13067,33 @@ components:
                 The lines of the detected address. These could be anything from a full street address down to a simple town or city. The level of detail depends on the resolution with which we are able to detect the transaction location.
               items:
                 type: string
-            geolocation:
-              type: object
-              description: The geolocation if an exact match is found
-              properties:
-                latitude:
-                  type: number
-                  format: double
-                longitude:
-                  type: number
-                  format: double
+            street_address:
+              type: string
+              description: The street address for the detected location of where the transaction was located
+            city:
+              type: string
+              description: The city for the detected location of where the transaction was located
+            region:
+              type: string
+              description: The region for the detected location of where the transaction was located
+            postal_code:
+              type: string
+              description: The postcode for the detected location of where the transaction was located.
             country:
               type: string
-              description: An ISO-3166 Alpha-3 country code representing the detected country the transaction was located.
+              description: An ISO-3166 Alpha-2 country code representing the detected country the transaction was located.
+        geolocation:
+          type: object
+          description: The geolocation if an exact match is found
+          properties:
+            latitude:
+              description: The latitudinal position of the merchant location
+              type: number
+              format: double
+            longitude:
+              description: The longitudinal position of the merchant location
+              type: number
+              format: double
         tokens:
           type: array
           description: A list of tokenised location string. These could be anything from a full street address down to a simple town or city.
@@ -14059,6 +14045,7 @@ components:
             Prepend with the API host to get a fully resolved URL.
 
             The same headers as [Retrieve Transactions V2](https://docs.thisisbud.com/reference/v2_transactions_get) apply.
+            The response structure matches the [Retrieve Transactions V2](https://docs.thisisbud.com/reference/v2_transactions_get) endpoint.
     OperationId:
       title: Operation Id Field
       type: string
