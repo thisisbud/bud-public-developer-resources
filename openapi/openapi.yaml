@@ -301,6 +301,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.11.4: 24/07/2024**
+    > - Remove body requirement from __Reconfirm Consent__
+
     **Version 2.11.3: 01/07/2024**
     > - Added link to __Consents__ guide from __Retrieve Customer Consents__
 
@@ -3112,14 +3115,6 @@ paths:
         - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/CustomerIPAddress'
         - $ref: '#/components/parameters/ConsentId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReconfirmConsentRequest'
-            example:
-              provider: Barclays
       responses:
         '200':
           description: OK
@@ -15428,16 +15423,6 @@ components:
         errors:
           type: object
           description: Extra information on the validation errors
-    ReconfirmConsentRequest:
-      title: Reconfirm Consent Request
-      type: object
-      description: Expected request payload structure
-      required:
-        - provider
-      properties:
-        provider:
-          type: string
-          description: The name of the provider the task is trying to reconfirm consent for
     ConsentReconfirmation:
       title: Consent Reconfirmation Outcome
       type: object
