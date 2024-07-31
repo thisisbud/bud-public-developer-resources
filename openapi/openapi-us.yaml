@@ -217,9 +217,20 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 1.10.0: 30/07/2024**
+    > - Added __Income Expenditure Report Insight Beta__ endpoint.
+    > - Added __Income Expenditure Report Insight Transactions Beta__ endpoint.
+    > - Added __Income Health Insight Report Beta__ endpoint.
+    > - Added __Income Health Report Insight Transactions Beta__ endpoint.
+    > - Added __Unauthorised Overdraft Insight Report Beta__ endpoint.
+    > - Added __Unauthorised Overdraft Insight Report Transactions Beta__ endpoint.
+    > - Added __Merchant Report Insight Beta__ endpoint.
+    > - Added __Merchant Report Insight Transactions Beta__ endpoint.
+
     **Version 1.9.3: 29/07/2024**
     > - Added new  __Correction Merchant Search__ endpoint under __Correct Financial Data__.
     > - Added new  __Correct Transaction Merchant__ endpoint under __Correct Financial Data__.
+
 
     **Version 1.9.2: 21/06/2024**
     > - Added __website__ field to merchant field in enrichments field in  __Retrieve Transactions V2__.
@@ -3882,13 +3893,13 @@ paths:
                 value:
                   - transactions:
                       - 7affc586-5600-4434-ac5f-1a845260d7d9
-                    merchant_id: corrected_merchant_id
+                    merchant_id: 9f967c91-7cf5-46a4-bc0b-92541a4ea7da
                     include_similar: false
               Similar Transactions Correction:
                 value:
                   - transactions:
                       - 7affc586-5600-4434-ac5f-1a845260d7d9
-                    merchant_id: corrected_merchant_id
+                    merchant_id: 9f967c91-7cf5-46a4-bc0b-92541a4ea7da
                     include_similar: true
               Remove Merchant From Single Transaction:
                 value:
@@ -3929,11 +3940,11 @@ paths:
                               slug: cafes_and_eating_out
                               confidence: '0.98'
                           merchant:
-                            id: corrected_merchant_id
-                            slug: corrected_merchant_slug
-                            display_name: corrected_merchant_name
-                            logo: corrected_merchant_logo
-                            website: http://www.corrected_merchant_url.com
+                            id: 9f967c91-7cf5-46a4-bc0b-92541a4ea7da
+                            slug: pactcoffee
+                            display_name: Pact Coffee
+                            logo: https://assets.thisisbud.com/datasci-images/merchant_logos/9f967c91-7cf5-46a4-bc0b-92541a4ea7da/v1/pactcoffee.jpeg
+                            website: https://www.pactcoffee.com
                           location:
                             address:
                               address_lines:
@@ -3975,7 +3986,7 @@ paths:
                     metadata:
                       effected_transactions_count: 1
                       include_similar: false
-                      merchant_id: corrected_merchant_id
+                      merchant_id: 9f967c91-7cf5-46a4-bc0b-92541a4ea7da
                       transactions:
                         - 7affc586-5600-4434-ac5f-1a845260d7d9
                 Single Transaction Correction Include Similar:
@@ -4003,11 +4014,11 @@ paths:
                               slug: cafes_and_eating_out
                               confidence: '0.98'
                           merchant:
-                            id: corrected_merchant_id
-                            slug: corrected_merchant_slug
-                            display_name: corrected_merchant_name
-                            logo: corrected_merchant_logo
-                            website: http://www.corrected_merchant_url.com
+                            id: 9f967c91-7cf5-46a4-bc0b-92541a4ea7da
+                            slug: pactcoffee
+                            display_name: Pact Coffee
+                            logo: https://assets.thisisbud.com/datasci-images/merchant_logos/9f967c91-7cf5-46a4-bc0b-92541a4ea7da/v1/pactcoffee.jpeg
+                            website: https://www.pactcoffee.com
                           location:
                             address:
                               address_lines:
@@ -4067,11 +4078,11 @@ paths:
                               slug: cafes_and_eating_out
                               confidence: '0.98'
                           merchant:
-                            id: corrected_merchant_id
-                            slug: corrected_merchant_slug
-                            display_name: corrected_merchant_name
-                            logo: corrected_merchant_logo
-                            website: http://www.corrected_merchant_url.com
+                            id: 9f967c91-7cf5-46a4-bc0b-92541a4ea7da
+                            slug: pactcoffee
+                            display_name: Pact Coffee
+                            logo: https://assets.thisisbud.com/datasci-images/merchant_logos/9f967c91-7cf5-46a4-bc0b-92541a4ea7da/v1/pactcoffee.jpeg
+                            website: https://www.pactcoffee.com
                           location:
                             address:
                               address_lines:
@@ -4093,7 +4104,7 @@ paths:
                     metadata:
                       effected_transactions_count: 2
                       include_similar: true
-                      merchant_id: corrected_merchant_id
+                      merchant_id: 9f967c91-7cf5-46a4-bc0b-92541a4ea7da
                       transactions:
                         - 7affc586-5600-4434-ac5f-1a845260d7d9
         '400':
@@ -4149,34 +4160,29 @@ paths:
                 operation_id: corrections_v2_merchant_search_get
                 data:
                   - id: f2b21ff7-836d-468c-8928-e81060d49988
-                    name: Apple
+                    display_name: Apple
                     slug: apple
                     logo: https://assets.thisisbud.com/datasci-images/merchant_logos/f2b21ff7-836d-468c-8928-e81060d49988/v1/apple.jpeg
-                    url: https://www.apple.com
-                    online_or_billing_only: false
+                    website: https://www.apple.com
                   - id: a3240c82-728d-4d63-b1b8-9569cae844e8
-                    name: Tappily
+                    display_name: Tappily
                     slug: tappily
                     logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3240c82-728d-4d63-b1b8-9569cae844e8/v1/tappily.jpeg
-                    url: https://www.tappily.co.uk
-                    online_or_billing_only: false
+                    website: https://www.tappily.co.uk
                   - id: bbf422fd-0db3-4988-a037-36476f6bd774
-                    name: Zapp
+                    display_name: Zapp
                     slug: zapp
                     logo: https://assets.thisisbud.com/datasci-images/merchant_logos/bbf422fd-0db3-4988-a037-36476f6bd774/v1/zapp.jpeg
-                    url: https://tryzapp.com
-                    online_or_billing_only: false
+                    website: https://tryzapp.com
                   - id: b97244e4-c1bf-4c70-a529-e250fc5baf39
-                    name: WAPPA LTD
+                    display_name: WAPPA LTD
                     slug: wappaltd
                     logo: https://assets.thisisbud.com/bud-datasci-images/merchant_logo_placeholder.png
-                    online_or_billing_only: false
                   - id: 2270343a-110d-4554-8871-33f2e18f8311
-                    name: Apple Pay
+                    display_name: Apple Pay
                     slug: applepay
                     logo: https://assets.thisisbud.com/datasci-images/merchant_logos/2270343a-110d-4554-8871-33f2e18f8311/v2/applepay.jpeg
-                    url: https://www.apple.com
-                    online_or_billing_only: false
+                    website: https://www.apple.com
                 metadata:
                   query: appl
                   results: 5
@@ -4198,8 +4204,20 @@ paths:
           description: Unauthorised request
         '405':
           description: An unexpected HTTP method was used
-        '409':
+        '429':
           description: An unexpected HTTP method was used
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                Too Many Requests:
+                  summary: making too many requests to endpoint
+                  value:
+                    operation_id: unknown
+                    code_id: unknown
+                    message: Too many requests
+                    errors: null
         5XX:
           description: An unexpected error occurred on the server side
   /corrections/v2/categories/similar/{transaction_id}:
@@ -13326,16 +13344,15 @@ components:
       type: object
       required:
         - id
-        - name
+        - display_name
         - slug
         - logo
-        - online_or_billing_only
       properties:
         id:
           type: string
           format: uuid
           description: UUID corresponding to the merchant, if available. Subject to version control.
-        name:
+        display_name:
           type: string
           description: UI friendly display name for the merchant.
         slug:
@@ -13344,11 +13361,9 @@ components:
         logo:
           type: string
           description: A url to the merchant logo. If not available a placeholder is used
-        url:
+        website:
           type: string
           description: URL supplying merchant website, if available.
-        online_or_billing_only:
-          type: boolean
     CustomerMerchantCorrectionSearchResponsePayload:
       title: Customer Merchant Corrections Request Payload
       type: array
