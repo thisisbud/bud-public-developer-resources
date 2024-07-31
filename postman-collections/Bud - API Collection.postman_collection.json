@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "1a213ee1-5663-4f80-9ba9-2869c8dec726",
+		"_postman_id": "ab513e5e-b14d-4184-ae3f-6b0ec9af2fea",
 		"name": "Bud - API Collection",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30694952"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -5034,6 +5033,525 @@
 											"key": "regular_payment_changed.minimum_percentage_change_threshold",
 											"value": "",
 											"description": "A minimum percentage change between the previous and latest amounts.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Retrieve Report Insights",
+					"item": [
+						{
+							"name": "Get Income Expenditure Insights",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/beta/report/income-expenditure",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"beta",
+										"report",
+										"income-expenditure"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": null,
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": null,
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "enabled_insights",
+											"value": null,
+											"description": "A comma-separated list of insight types.",
+											"disabled": true
+										},
+										{
+											"key": "currency",
+											"value": null,
+											"description": "A 3 digit ISO 4217 currency code (Eg, AUD, GBP, USD)",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Income Expenditure Insights Transactions",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/beta/report/income-expenditure/transactions/{{transactions_reference}}",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"beta",
+										"report",
+										"income-expenditure",
+										"transactions",
+										"{{transactions_reference}}"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": null,
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": null,
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "enabled_insights",
+											"value": null,
+											"description": "A comma-separated list of insight types.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Income Health Insights",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/beta/report/income-health",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"beta",
+										"report",
+										"income-health"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": null,
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": null,
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "enabled_insights",
+											"value": null,
+											"description": "A comma-separated list of insight types.",
+											"disabled": true
+										},
+										{
+											"key": "currency",
+											"value": null,
+											"description": "A 3 digit ISO 4217 currency code (Eg, AUD, GBP, USD)",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Income Health Insights Transactions",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/beta/report/income-health/transactions/{{transactions_reference}}",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"beta",
+										"report",
+										"income-health",
+										"transactions",
+										"{{transactions_reference}}"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": null,
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": null,
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "enabled_insights",
+											"value": null,
+											"description": "A comma-separated list of insight types.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get merchants Insights",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/beta/report/merchants",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"beta",
+										"report",
+										"merchants"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": null,
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": null,
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "enabled_insights",
+											"value": null,
+											"description": "A comma-separated list of insight types.",
+											"disabled": true
+										},
+										{
+											"key": "currency",
+											"value": null,
+											"description": "A 3 digit ISO 4217 currency code (Eg, AUD, GBP, USD)",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get merchants Insights Transactions",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/beta/report/merchants/transactions/{{transactions_reference}}",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"beta",
+										"report",
+										"merchants",
+										"transactions",
+										"{{transactions_reference}}"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": null,
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": null,
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "enabled_insights",
+											"value": null,
+											"description": "A comma-separated list of insight types.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Unauthorised Overdraft Insights",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/beta/report/balance/unauthorised-overdraft",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"beta",
+										"report",
+										"balance",
+										"unauthorised-overdraft"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": null,
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": null,
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "enabled_insights",
+											"value": null,
+											"description": "A comma-separated list of insight types.",
+											"disabled": true
+										},
+										{
+											"key": "currency",
+											"value": null,
+											"description": "A 3 digit ISO 4217 currency code (Eg, AUD, GBP, USD)",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Unauthorised Overdraft Insights Transactions",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/beta/report/balance/unauthorised-overdraft/transactions/{{transactions_reference}}",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"beta",
+										"report",
+										"balance",
+										"unauthorised-overdraft",
+										"transactions",
+										"{{transactions_reference}}"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": null,
+											"description": "A start time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": null,
+											"description": "An end time in RFC3339 format.",
+											"disabled": true
+										},
+										{
+											"key": "enabled_insights",
+											"value": null,
+											"description": "A comma-separated list of insight types.",
 											"disabled": true
 										}
 									]
