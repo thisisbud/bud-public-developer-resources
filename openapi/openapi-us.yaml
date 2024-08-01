@@ -217,6 +217,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 1.10.1: 01/08/2024**
+    > - Add status field to __Ingest Transactions V2__ on application/bud-transaction-v3+json format.
+
     **Version 1.10.0: 30/07/2024**
     > - Added __Income Expenditure Report Insight Beta__ endpoint.
     > - Added __Income Expenditure Report Insight Transactions Beta__ endpoint.
@@ -2542,6 +2545,7 @@ paths:
                         amount: '-10.98'
                         date_time: '2022-10-10T23:00:00Z'
                         currency: USD
+                        status: pending
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
                         description: The RSPCA, Southwater
@@ -2627,7 +2631,7 @@ paths:
                         account_id: 2f5b2055-6253-4cd0-b646-06788342a609
                         description: PAYPAL GOOGLE*YOUTUBEPREMIUM INTERNVJKK
                         credit_debit_indicator: debit
-                        status: booked
+                        status: pending
                         amount:
                           value: '12.04'
                           currency: USD
@@ -11893,6 +11897,14 @@ components:
           format: datetime
           description: The date detailing when the transaction occurred, compliant with RFC3339
           example: '2022-11-10T23:00:00Z'
+        status:
+          type: string
+          enum:
+            - pending
+            - booked
+          default: booked
+          description: The status of the transaction. If not provided, the default value is `booked`.
+          example: booked
         amount:
           type: string
           description: |
