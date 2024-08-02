@@ -13305,6 +13305,14 @@ components:
       description: Expected request structure for the category corrections endpoint
       items:
         $ref: '#/components/schemas/CustomerCategoryCorrectionPayload'
+    CategoryCorrectionResponseMetadata:
+      title: Results Metadata Object
+      type: object
+      description: Metadata associated with the response schema
+      properties:
+        results:
+          type: number
+          description: The number of category correction rules created
     CustomerCategoryCorrectionResponse:
       title: Customer Category Corrections Response
       type: object
@@ -13321,14 +13329,13 @@ components:
           items:
             $ref: '#/components/schemas/CustomerCategoryCorrectionPayload'
         metadata:
-          $ref: '#/components/schemas/ResultsMetadata'
+          $ref: '#/components/schemas/CategoryCorrectionResponseMetadata'
     CustomerMerchantCorrectionPayload:
       title: Customer Merchant Correction
       type: object
       description: Expected request structure for the merchant corrections endpoint
       required:
         - transactions
-        - merchant_id
       properties:
         transactions:
           type: array
