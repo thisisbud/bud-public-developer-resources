@@ -212,10 +212,16 @@ info:
     | 25/01/2024           | Deprecated **Retrieve Ingestion Task Status V2** in favour of **Retrieve Ingestion Task Status V3**               |
     | 21/05/2024           | Deprecated **Initiate Refresh** in favour of **Initiate Refresh V2** (Six month deprecation Notice)               |
     | 21/05/2024           | Deprecated **Retrieve Refresh Status** in favour of **Retrieve Refresh Status V2** (Six month deprecation Notice) |
+    | 27/08/2024           | Deprecated **Retrieve Affordability Transactions** in favour of **Retrieve Affordability Transactions V2**        |
+    | 28/08/2024           | Deprecated **Retrieve Balances Over Time** in favour of **Retrieve Balances Over Time V3**                        |
 
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
+
+    **Version 1.10.2: 28/08/2024**
+    > - Added __Retrieve Accounts V3__ endpoint.
+    > - Added __Retrieve Accounts By ID V3__ endpoint.
 
     **Version 1.10.1: 01/08/2024**
     > - Add status field to __Ingest Transactions V2__ on application/bud-transaction-v3+json format.
@@ -499,11 +505,6 @@ tags:
     x-displayName: Custom Insights
     description: |
       Understand and target messaging to your customers more effectively by defining your own custom insights.
-  - name: Retrieve Report Insights
-    x-displayName: Retrieve Report Insights
-    description: |
-      Retrieve a customer's report insights generated from their financial data. In contrast to the alert style actionable insights,
-      these insights should be used more as a summary.
   - name: Characteristics API
     description: |
 
@@ -2649,7 +2650,7 @@ paths:
                           merchant:
                             id: 78f20914-afcd-46da-9c0c-27b51a8a7e7b
                             slug: youtube
-                            display_name: Youtube
+                            display_name: YouTube
                             logo: http://url/youtube.jpeg
                             tokens:
                               - value: youtube
@@ -2662,50 +2663,72 @@ paths:
                             tokens:
                               - value: paypal
                                 confidence: '0.96'
-                          names:
-                            - jane doe
                           transaction_types:
                             - card
                             - debit
                       - transaction_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         account_id: 2f5b2055-6253-4cd0-b646-06788342a609
-                        description: STARBACKS NY0812C
+                        description: dunkin purchase 06/04 urbana oh
                         credit_debit_indicator: debit
                         status: booked
                         amount:
-                          value: '6.04'
+                          value: '2.99'
                           currency: USD
-                        date_time: 2023-11-10T23:00:00Z00:00
-                        merchant_category_code: '1234'
+                        date_time: '2023-11-10T11:48:05-05:00'
+                        merchant_category_code: '5814'
                         enrichments:
                           categories:
                             l1:
-                              slug: eating_out
+                              slug: food_and_drink
                               confidence: '0.99'
                             l2:
-                              slug: cafes_and_eating_out
+                              slug: eating_out_and_takeaways
                               confidence: '0.98'
                           merchant:
+                            id: ba8ef908-b624-4116-8b26-571e48d1bf4c
+                            slug: dunkin
+                            display_name: Dunkin'
+                            logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ba8ef908-b624-4116-8b26-571e48d1bf4c/v3/dunkin.jpeg
                             tokens:
-                              - value: starbacks
-                                confidence: '0.92'
-                              - value: nystar
-                                confidence: '0.25'
+                              - value: dunkin
+                                confidence: '1.00'
                           location:
                             address:
                               address_lines:
-                                - 41-02
-                                - Main Street
-                                - Flushing
-                                - '11355'
-                                - New York
-                              street_address: Main Street
-                              city: Flushing
-                              postal_code: '11355'
-                              region: New York
+                                - 1129 E US Highway 36
+                                - Urbana
+                                - OH
+                                - '43078'
+                              street_address: 1129 E US Highway 36
+                              city: Urbana
+                              region: OH
+                              postal_code: '43078'
+                              country: US
                             geolocation:
-                              longitude: 40.757551
-                              latitude: -73.829289
+                              latitude: 40.106604
+                              longitude: -83.729653
+                            tokens:
+                              - oh
+                              - urbana
+                      - transaction_id: cfb6dd1f4c73e1fc36aac756e12644d7
+                        account_id: 37c633a71237b9a8282e09587109668e
+                        description: J BLOGGS RENT
+                        credit_debit_indicator: debit
+                        amount:
+                          value: '1350.00'
+                          currency: USD
+                        date_time: '2022-05-30T00:00:00Z'
+                        status: booked
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: mortgage_and_rent
+                              confidence: '0.90'
+                            l2:
+                              slug: rent
+                              confidence: '0.90'
+                          names:
+                            - j bloggs
                 metadata:
                   task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
                   next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
@@ -2810,6 +2833,352 @@ paths:
           description: The request uses an unexpected HTTP method
         5XX:
           description: An unexpected error occurred on the server side
+  /financial/v3/accounts:
+    get:
+      tags:
+        - Retrieve Financial Data
+      summary: Retrieve Accounts V3
+      description: |
+        Retrieves a list of a customer's connected accounts. The result can be filtered using the parameters outlined below.
+        > 📘 Note: > > For more information on the Account object, please refer to our handy [guide](https://docs.thisisbud.com/docs/accounts).
+      operationId: financial_v3_accounts
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/QueryCurrency'
+        - $ref: '#/components/parameters/QueryProvider'
+        - in: query
+          name: account_type
+          schema:
+            type: string
+          example: current_account
+          description: |
+            Use this parameter to filter the results returned on the `account_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `account_type` will be returned.
+            Currently supported values include (but are not necessarily limited to):
+              - `charge_card`
+              - `credit_card`
+              - `current_account`
+              - `e_money`
+              - `investment`
+              - `loan`
+              - `mortgage`
+              - `other`
+              - `pre_paid_card`
+              - `savings`
+        - in: query
+          name: usage_type
+          schema:
+            type: string
+          example: personal
+          description: |
+            Use this parameter to filter the results returned on the `usage_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `usage_type` will be returned.
+            Currently supported values include (but are not necessarily limited to):
+              - `personal`
+              - `business`
+        - in: query
+          name: holder_relationship_type
+          schema:
+            type: string
+          example: joint
+          description: |
+            Use this parameter to filter the results returned on the `holder_relationship_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `holder_relationship_type` will be returned.
+            Currently supported values include (but are not necessarily limited to):
+              - `sole`
+              - `joint`
+              - `delegate`
+              - `unknown`
+        - in: query
+          name: include_all_balances
+          schema:
+            type: boolean
+          example: true
+          description: |
+            Use this parameter to include all balances associated with each account.  If this parameter is not provided then only the pending and booked balance will be returned where available.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAccountsV3Response'
+              examples:
+                Account Without Parties Data:
+                  value:
+                    operation_id: financial_v3_accounts
+                    data:
+                      - account_id: RxsYshVGded4JeilkXgWKdXA
+                        currency: USD
+                        holders:
+                          - name: Olivia Johnson
+                            relationship: unknown
+                        account_name: Plaid Checking
+                        account_type: current_account
+                        usage_type: personal
+                        provider: plaid
+                        identifiers:
+                          plaid_account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk7
+                          plaid_official_name: Plaid Gold Standard 0% Interest Checking
+                        balances:
+                          booked:
+                            date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '3552.61'
+                              currency: USD
+                            credit_debit_indicator: credit
+                          pending:
+                            date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '3552.61'
+                              currency: USD
+                            credit_debit_indicator: credit
+                        credit_lines:
+                          limit:
+                            date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '1000.00'
+                              currency: USD
+                    metadata:
+                      parameters:
+                        currencies:
+                          - USD
+                      results: 1
+                Account With Parties Data:
+                  value:
+                    operation_id: financial_v3_accounts
+                    data:
+                      - account_id: RxsYshVGded4JeilkXgWKdXA
+                        currency: USD
+                        holders:
+                          - name: Liam Johnson
+                            relationship: joint
+                          - name: Olivia Johnson
+                            relationship: joint
+                        account_name: Household Account
+                        account_type: current_account
+                        usage_type: personal
+                        provider: BankOfBud
+                        identifiers:
+                          plaid_account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk7
+                          plaid_official_name: Plaid Gold Standard 0% Interest Checking
+                        balances:
+                          booked:
+                            date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '3552.61'
+                              currency: USD
+                            credit_debit_indicator: credit
+                          pending:
+                            date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '3552.61'
+                              currency: USD
+                            credit_debit_indicator: credit
+                        credit_lines:
+                          limit:
+                            date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '1000.00'
+                              currency: USD
+                    metadata:
+                      parameters:
+                        currencies:
+                          - USD
+                      results: 1
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                CustomerID Not Sent:
+                  value:
+                    operation_id: financial_v3_accounts
+                    code_id: failed_validation
+                    message: Invalid request payload.
+                    errors:
+                      X-Customer-Id: not present
+                CustomerID and CustomerSecret Not Sent:
+                  value:
+                    operation_id: financial_v3_accounts
+                    code_id: failed_validation
+                    message: Invalid request payload.
+                    errors:
+                      X-Customer-Id:
+                        - not present
+                      X-Customer-Secret:
+                        - not present
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Unauthorised request
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
+  /financial/v3/accounts/{account_id}:
+    get:
+      tags:
+        - Retrieve Financial Data
+      summary: Retrieve Account By ID V3
+      description: |
+        Retrieves a customer's connected account by its ID.
+        > 📘 Note: > > For more information on the Account object, please refer to our handy [guide](https://docs.thisisbud.com/docs/accounts).
+      operationId: financial_v3_accounts_account_id
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/PathAccountID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveAccountByIDV3Response'
+              examples:
+                Single Holder Personal Account:
+                  value:
+                    operation_id: financial_v3_accounts_account_id
+                    data:
+                      account_id: RxsYshVGded4JeilkXgWKdXA
+                      currency: USD
+                      holders:
+                        - name: Olivia Johnson
+                          relationship: unknown
+                      account_name: My Current Account
+                      account_type: current_account
+                      provider: plaid
+                      identifiers:
+                        plaid_account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk7
+                        plaid_official_name: Plaid Gold Standard 0% Interest Checking
+                      balances:
+                        booked:
+                          date: '2023-01-12T00:00:00Z'
+                          amount:
+                            value: '3552.61'
+                            currency: USD
+                          credit_debit_indicator: credit
+                        pending:
+                          date: '2023-01-12T00:00:00Z'
+                          amount:
+                            value: '3552.61'
+                            currency: USD
+                          credit_debit_indicator: credit
+                      credit_lines:
+                        limit:
+                          date: '2023-01-12T00:00:00Z'
+                          amount:
+                            value: '1000.00'
+                            currency: USD
+                    metadata:
+                      parameters:
+                        currencies:
+                          - USD
+                      results: 1
+                Multiple Holder Joint Account:
+                  value:
+                    operation_id: financial_v3_accounts_account_id
+                    data:
+                      account_id: RxsYshVGded4JeilkXgWKdXA
+                      currency: USD
+                      holders:
+                        - name: Liam Johnson
+                          relationship: joint
+                        - name: Olivia Johnson
+                          relationship: joint
+                      account_name: Household Account
+                      account_type: current_account
+                      provider: plaid
+                      identifiers:
+                        plaid_account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk7
+                        plaid_official_name: Plaid Gold Standard 0% Interest Checking
+                      balances:
+                        booked:
+                          date: '2023-01-12T00:00:00Z'
+                          amount:
+                            value: '3552.61'
+                            currency: USD
+                          credit_debit_indicator: credit
+                        pending:
+                          date: '2023-01-12T00:00:00Z'
+                          amount:
+                            value: '3552.61'
+                            currency: USD
+                          credit_debit_indicator: credit
+                      credit_lines:
+                        limit:
+                          date: '2023-01-12T00:00:00Z'
+                          amount:
+                            value: '1000.00'
+                            currency: USD
+                    metadata:
+                      parameters:
+                        currencies:
+                          - USD
+                      results: 1
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                CustomerID Not Sent:
+                  value:
+                    operation_id: financial_v3_accounts_account_id
+                    code_id: failed_validation
+                    message: Invalid request payload.
+                    errors:
+                      X-Customer-Id: not present
+                CustomerID and CustomerSecret Not Sent:
+                  value:
+                    operation_id: financial_v3_accounts_account_id
+                    code_id: failed_validation
+                    message: Invalid request payload.
+                    errors:
+                      X-Customer-Id:
+                        - not present
+                      X-Customer-Secret:
+                        - not present
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Unauthorised request
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
   /financial/v2/accounts:
     get:
       tags:
@@ -2979,6 +3348,7 @@ paths:
 
         Results are limited to up to 5000 balance items across all accounts.
       operationId: financial_v2_balances_get
+      deprecated: true
       security:
         - OAuth2: []
       parameters:
@@ -3122,6 +3492,7 @@ paths:
 
         Results are limited to up to 5000 balance items.
       operationId: financial_v2_accounts_balances_get
+      deprecated: true
       security:
         - OAuth2: []
       parameters:
@@ -3734,47 +4105,55 @@ paths:
                               confidence: '0.14'
                           names:
                             - john doe
-                      - transaction_id: '692529081001'
+                      - transaction_id: '692529081052'
                         account_id: 2f5b2055-6253-4cd0-b646-06788342a609
                         provider: finicity
-                        description: STARBUCKS NY0812C
+                        description: dunkin purchase 06/04 urbana oh
                         credit_debit_indicator: debit
                         status: booked
                         amount:
-                          value: '6.04'
+                          value: '2.99'
                           currency: USD
-                        date_time: 2023-11-10T23:00:00Z00:00
-                        posted_date_time: 2023-11-10T23:00:00Z00:00
+                        date_time: '2023-11-10T11:48:05-05:00'
+                        posted_date_time: '2023-11-10T11:48:05-05:00'
                         merchant_category_code: '5814'
                         enrichments:
                           categories:
                             l1:
-                              slug: eating_out
+                              slug: food_and_drink
                               confidence: '0.99'
                             l2:
-                              slug: cafes_and_eating_out
+                              slug: eating_out_and_takeaways
                               confidence: '0.98'
                           merchant:
+                            id: ba8ef908-b624-4116-8b26-571e48d1bf4c
+                            slug: dunkin
+                            display_name: Dunkin'
+                            logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ba8ef908-b624-4116-8b26-571e48d1bf4c/v3/dunkin.jpeg
                             tokens:
-                              - value: starbucks
-                                confidence: '0.92'
-                              - value: nystar
-                                confidence: '0.25'
+                              - value: dunkin
+                                confidence: '1.00'
                           location:
                             address:
                               address_lines:
-                                - 41-02
-                                - Main Street
-                                - Flushing
-                                - '11355'
-                                - New York
-                              street_address: Main Street
-                              city: Flushing
-                              postal_code: '11355'
-                              region: New York
+                                - 1129 E US Highway 36
+                                - Urbana
+                                - OH
+                                - '43078'
+                              street_address: 1129 E US Highway 36
+                              city: Urbana
+                              region: OH
+                              postal_code: '43078'
+                              country: US
                             geolocation:
-                              longitude: 40.757551
-                              latitude: -73.829289
+                              latitude: 40.106604
+                              longitude: -83.729653
+                            tokens:
+                              - oh
+                              - urbana
+                          transaction_types:
+                            - card
+                            - debit
                     metadata:
                       results: 2
                       next_page_token: eyJvZmZzZXQiOjEwMH0
@@ -7981,760 +8360,6 @@ paths:
                     custom_insight_id: 19ebab24-9c73-4802-b5d2-c401f3558d8d
                     link: insights/v1/custom/detail/19ebab24-9c73-4802-b5d2-c401f3558d8d
                     created_at: '2021-08-11T14:00:00Z'
-  /insights/beta/report/income-expenditure:
-    get:
-      tags:
-        - Retrieve Report Insights
-      summary: Retrieve income/expenditure break down reports
-      security:
-        - OAuth2: []
-      description: |
-        Retrieve income/expenditure break down reports. Each report is presented as a total expenditure vs income break
-        down to give a high level overview of a customers spending's in comparison to income. 
-
-        For transactional analysis of particular aggregate, please refer to the transactions reference found within the
-        `_links` properties.
-      operationId: insights_beta_report_income_expenditure_get
-      parameters:
-        - $ref: '#/components/parameters/EnabledInsightsIncomeExpenditure'
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/parameters-From'
-        - $ref: '#/components/parameters/parameters-To'
-        - $ref: '#/components/parameters/Currency'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IncomeExpenditureReportResponse'
-              example:
-                operation_id: insights_beta_report_income_expenditure_get
-                data:
-                  insights:
-                    - type: income-loan
-                      currency: USD
-                      expenditure:
-                        credit_debit_indicator: debit
-                        count: 10
-                        total:
-                          value: '1000.00'
-                          currency: USD
-                        monthly_average:
-                          value: '250.00'
-                          currency: USD
-                        breakdown:
-                          - from: '2024-01-17T00:00:00+08:00'
-                            to: '2024-02-16T23:59:59+08:00'
-                            total:
-                              value: '250.00'
-                              currency: USD
-                            count: 1
-                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                            _links:
-                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
-                          - from: '2024-02-17T00:00:00+08:00'
-                            to: '2024-03-16T23:59:59+08:00'
-                            total:
-                              value: '250.00'
-                              currency: USD
-                            count: 1
-                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                            _links:
-                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
-                          - from: '2024-04-17T00:00:00+08:00'
-                            to: '2024-05-16T23:59:59+08:00'
-                            total:
-                              value: '250.00'
-                              currency: USD
-                            average:
-                              value: '250.00'
-                              currency: USD
-                            count: 1
-                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                            _links:
-                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
-                        relative_to_income: '1'
-                        transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                        _links:
-                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
-                      income:
-                        credit_debit_indicator: credit
-                        count: 4
-                        total:
-                          value: '1000.00'
-                          currency: USD
-                        monthly_average:
-                          value: '250.00'
-                          currency: USD
-                        breakdown:
-                          - from: '2024-01-17T00:00:00+08:00'
-                            to: '2024-02-16T23:59:59+08:00'
-                            total:
-                              value: '250.00'
-                              currency: USD
-                            count: 1
-                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                            _links:
-                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
-                          - from: '2024-02-17T00:00:00+08:00'
-                            to: '2024-03-16T23:59:59+08:00'
-                            total:
-                              value: '250.00'
-                              currency: USD
-                            count: 1
-                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                            _links:
-                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
-                          - from: '2024-03-17T00:00:00+08:00'
-                            to: '2024-04-16T23:59:59+08:00'
-                            total:
-                              value: '250.00'
-                              currency: USD
-                            average:
-                              value: '250.00'
-                              currency: USD
-                            count: 1
-                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                            _links:
-                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
-                        transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                        _links:
-                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
-                      transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                      _links:
-                        transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
-                metadata:
-                  from: '2022-01-01T00:00:00Z'
-                  to: '2022-03-31T00:00:00Z'
-                  currencies:
-                    - USD
-                  options:
-                    - insight_type: late_income
-                      option: minimum_days_late_threshold
-                      value: '3'
-                    - insight_type: late_income
-                      option: minimum_value_threshold
-                      value: '100.00'
-  /insights/beta/report/income-expenditure/transactions/{reference}:
-    get:
-      tags:
-        - Retrieve Report Insights
-      summary: Retrieve transactions relating to a specific insight report section.
-      security:
-        - OAuth2: []
-      description: |
-        Each report, where appropriate will have a unique reference for that specific aggregated section of the report.
-        using the same parameters used in the call to `insights_beta_report_income_expenditure_get`,
-        in combination with the unique reference, will return the raw transactions
-        list used to produce that aggregation. This is useful if requiring further investigation or analysis.
-        The reference can be found in the `_links` section of the insight reports.
-
-        NOTE:
-        Alterations to the `to`/`from` query properties will result in an alternative dataset being returned.
-      operationId: insights_beta_report_income_expenditure_transactions_get
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/parameters-From'
-        - $ref: '#/components/parameters/parameters-To'
-        - $ref: '#/components/parameters/Currency'
-        - $ref: '#/components/parameters/TransactionReference'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReportInsightsTransactionResponse'
-              example:
-                operation_id: insights_beta_report_income_expenditure_transactions_get
-                data:
-                  - transaction_id: a_transaction_id
-                    account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
-                    provider: a_bank_account_provider
-                    description: SALARY
-                    credit_debit_indicator: credit
-                    status: booked
-                    amount:
-                      value: '3000.00'
-                      currency: USD
-                    date_time: '2023-04-10T10:00:00Z'
-                    enrichments:
-                      categories:
-                        l1:
-                          slug: income
-                          confidence: '0.99'
-                        l2:
-                          slug: employment_income
-                          confidence: '0.98'
-                      regularity:
-                        slug: monthly
-                        confidence: '0.99'
-                        predicted_date_times:
-                          - '2023-05-10T10:00:00Z'
-                metadata:
-                  transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                  from: '2020-01-01T00:00:00Z'
-                  to: '2020-01-31T00:00:00Z'
-                  currencies:
-                    - USD
-                  options:
-                    - insight_type: late_income
-                      option: minimum_days_late_threshold
-                      value: '3'
-                    - insight_type: late_income
-                      option: minimum_value_threshold
-                      value: '100.00'
-  /insights/beta/report/merchants:
-    get:
-      tags:
-        - Retrieve Report Insights
-      summary: Retrieve merchant-specific breakdown reports.
-      security:
-        - OAuth2: []
-      description: |
-        Endpoint is responsible for returning merchant based aggregated transaction breakdowns. The reports are presented in
-        a way that allows for a high level overview of a customers spending habits with specific merchants.
-
-        For transactional analysis of particular aggregate, please refer to the transactions reference found within the
-        `_links` properties.
-      operationId: insights_beta_report_merchants_get
-      parameters:
-        - $ref: '#/components/parameters/EnabledInsightsMerchants'
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/parameters-From'
-        - $ref: '#/components/parameters/parameters-To'
-        - $ref: '#/components/parameters/Currency'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MerchantsReportResponse'
-              example:
-                operation_id: insights_beta_report_merchants_get
-                data:
-                  insights:
-                    hcst_credit:
-                      - type: hcst-credit
-                        currency: USD
-                        transactions_count: 2
-                        merchants_count: 2
-                        transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                        _links:
-                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions?category_l1=bills&category_l2=tv_and_broadband&date_from=2022-01-01T00%3A00%3A00Z&date_to=2022-03-31T00%3A00%3A00Z
-                metadata:
-                  from: '2022-01-01T00:00:00Z'
-                  to: '2022-03-31T00:00:00Z'
-                  currencies:
-                    - USD
-                  options: []
-  /insights/beta/report/merchants/transactions/{reference}:
-    get:
-      tags:
-        - Retrieve Report Insights
-      security:
-        - OAuth2: []
-      summary: Retrieve transactions relating to a specific insight report section.
-      description: |
-        Each report, where appropriate will have a unique reference for that specific aggregated section of the report.
-        using the same parameters used in the call to `insights_beta_report_merchants_get`,
-        in combination with the unique reference, will return the raw transactions
-        list used to produce that aggregation. This is useful if requiring further investigation or analysis.
-        The reference can be found in the `_links` section of the insight reports.
-
-        NOTE:
-        Alterations to the `to`/`from` query properties will result in an alternative dataset being returned.
-      operationId: insights_beta_report_merchants_transactions_get
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/parameters-From'
-        - $ref: '#/components/parameters/parameters-To'
-        - $ref: '#/components/parameters/Currency'
-        - $ref: '#/components/parameters/TransactionReference'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReportInsightsTransactionResponse'
-              example:
-                operation_id: insights_beta_report_merchants_transactions_get
-                data:
-                  - transaction_id: a_transaction_id
-                    account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
-                    provider: a_bank_account_provider
-                    description: SALARY
-                    credit_debit_indicator: credit
-                    status: booked
-                    amount:
-                      value: '3000.00'
-                      currency: USD
-                    date_time: '2023-04-10T10:00:00Z'
-                    enrichments:
-                      categories:
-                        l1:
-                          slug: income
-                          confidence: '0.99'
-                        l2:
-                          slug: employment_income
-                          confidence: '0.98'
-                      regularity:
-                        slug: monthly
-                        confidence: '0.99'
-                        predicted_date_times:
-                          - '2023-05-10T10:00:00Z'
-                metadata:
-                  transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                  from: '2020-01-01T00:00:00Z'
-                  to: '2020-01-31T00:00:00Z'
-                  options: []
-  /insights/beta/report/balance/unauthorised-overdraft:
-    get:
-      tags:
-        - Retrieve Report Insights
-      security:
-        - OAuth2: []
-      summary: Retrieve a report on a customers unauthorised overdraft.
-      description: |
-        Endpoint is responsible for returning balance based aggregated transaction breakdowns and insights.
-        The reports are presented in a way that allows for a high level overview of a customers balances. 
-        This particular route focuses on customer accounts with unauthorised overdrafts.
-
-        For transactional analysis of particular aggregate, please refer to the transactions reference found within the
-        `_links` properties.
-      operationId: insights_beta_report_balance_unauthorised_overdraft_get
-      parameters:
-        - $ref: '#/components/parameters/EnabledInsightsBalanceOverdraft'
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/parameters-From'
-        - $ref: '#/components/parameters/parameters-To'
-        - $ref: '#/components/parameters/Currency'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorisedOverdraftResponse'
-              examples:
-                unauthorised_overdraft_detected:
-                  summary: Unauthorised overdraft detected
-                  description: |
-                    a simple example where a customers account has been noted to have been in an unauthorised overdraft
-                  value:
-                    operation_id: insights_beta_report_balance_unauthorised_overdraft_get
-                    data:
-                      insights:
-                        - type: unauthorised-overdraft
-                          currency: USD
-                          days_in_unauthorised_overdraft:
-                            count: 3
-                            ratio: '0.06'
-                          accounts:
-                            - account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
-                              provider: test provider
-                              account_name: current account
-                              days_in_unauthorised_overdraft:
-                                count: 3
-                                ratio: '0.06'
-                              unauthorised_overdraft_occurrences:
-                                - date: '2023-03-20T00:00:00Z'
-                                  amount:
-                                    value: '1200.00'
-                                    currency: USD
-                                  credit_debit_indicator: debit
-                                - date: '2023-03-21T00:00:00Z'
-                                  amount:
-                                    value: '1200.00'
-                                    currency: USD
-                                  credit_debit_indicator: debit
-                                - date: '2023-03-22T00:00:00Z'
-                                  amount:
-                                    value: '1200.00'
-                                    currency: USD
-                                  credit_debit_indicator: debit
-                              balances:
-                                - date: '2023-01-12T00:00:00Z'
-                                  amount:
-                                    value: '100.00'
-                                    currency: USD
-                                  type: closing_available
-                                  credit_debit_indicator: debit
-                              credit_lines:
-                                - date: '2023-01-12T00:00:00Z'
-                                  type: available
-                                  amount:
-                                    value: '850.00'
-                                    currency: USD
-                              transactions_reference: 123419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                              _links:
-                                transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
-                    metadata:
-                      from: '2020-01-01T00:00:00Z'
-                      to: '2020-01-31T00:00:00Z'
-                      currencies:
-                        - USD
-                      options: []
-                no_unauthorised_overdrafts_detected_in_accounts:
-                  summary: No unauthorised access to overdraft detected
-                  description: |
-                    for a given to/from period, no days have been detected as being in overdraft for accounts currently ingested.
-                    An insight will be returned per currency detected from ingested accounts.
-                  value:
-                    operation_id: insights_beta_report_balance_unauthorised_overdraft_get
-                    data:
-                      insights:
-                        - type: unauthorised-overdraft
-                          currency: USD
-                          days_in_unauthorised_overdraft:
-                            count: 0
-                            ratio: '0.00'
-                          accounts: []
-                    metadata:
-                      from: '2020-01-01T00:00:00Z'
-                      to: '2020-01-31T00:00:00Z'
-                      currencies:
-                        - USD
-                      options: []
-                no_ingested_data_response:
-                  summary: No data ingested
-                  description: |
-                    In the event a client requests a report for a customer that has no ingested data, 
-                    a response will be returned with no insights available. We do this because we cannot guarantee the
-                    currency of the customers accounts, and therefore cannot return a report with no currency.
-                  value:
-                    operation_id: insights_beta_report_balance_unauthorised_overdraft_get
-                    data:
-                      insights: []
-                    metadata:
-                      from: '2020-01-01T00:00:00Z'
-                      to: '2020-01-31T00:00:00Z'
-                      currencies: []
-                      options: []
-  /insights/beta/report/balance/unauthorised-overdraft/transactions/{reference}:
-    get:
-      tags:
-        - Retrieve Report Insights
-      security:
-        - OAuth2: []
-      summary: Retrieve transactions relating to a specific insight report section.
-      description: |
-        Each report, where appropriate will have a unique reference for that specific aggregated section of the report.
-        using the same parameters used in the call to `insights_beta_report_balance_unauthorised_overdraft_get`,
-        in combination with the unique reference, will return the raw transactions
-        list used to produce that aggregation. This is useful if requiring further investigation or analysis.
-        The reference can be found in the `_links` section of the insight reports.
-
-        NOTE:
-        Alterations to the `to`/`from` query properties will result in an alternative dataset being returned.
-      operationId: insights_beta_report_unauthorised_overdraft_transactions_get
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/parameters-From'
-        - $ref: '#/components/parameters/parameters-To'
-        - $ref: '#/components/parameters/Currency'
-        - $ref: '#/components/parameters/TransactionReference'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReportInsightsTransactionResponse'
-              example:
-                operation_id: insights_beta_report_unauthorised_overdraft_transactions_get
-                data:
-                  - transaction_id: a_transaction_id
-                    account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
-                    provider: a_bank_account_provider
-                    description: SALARY
-                    credit_debit_indicator: credit
-                    status: booked
-                    amount:
-                      value: '3000.00'
-                      currency: USD
-                    date_time: '2023-04-10T10:00:00Z'
-                    enrichments:
-                      categories:
-                        l1:
-                          slug: income
-                          confidence: '0.99'
-                        l2:
-                          slug: employment_income
-                          confidence: '0.98'
-                      regularity:
-                        slug: monthly
-                        confidence: '0.99'
-                        predicted_date_times:
-                          - '2023-05-10T10:00:00Z'
-                metadata:
-                  transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                  from: '2020-01-01T00:00:00Z'
-                  to: '2020-01-31T00:00:00Z'
-                  options:
-                    - insight_type: late_income
-                      option: minimum_days_late_threshold
-                      value: '3'
-                    - insight_type: late_income
-                      option: minimum_value_threshold
-                      value: '100.00'
-  /insights/beta/report/income-health:
-    get:
-      tags:
-        - Retrieve Report Insights
-      security:
-        - OAuth2: []
-      summary: Retrieve a health report on a customers financial profile.
-      description: |
-        Retrieve a list of insights that reflect various health reports based on a customers ingested data. 
-        Reports found within this grouping reflect aggregations against a customers income sources.
-        Where feasible, deep aggregate analysis is provided to allow for further insight. 
-
-        For transactional analysis of particular aggregate, please refer to the transactions reference found within the
-        `_links` properties.
-      operationId: insights_beta_report_income_health_get
-      parameters:
-        - $ref: '#/components/parameters/EnabledInsightsIncomeHealth'
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/parameters-From'
-        - $ref: '#/components/parameters/parameters-To'
-        - $ref: '#/components/parameters/Currency'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IncomeHealthReportResponse'
-              example:
-                operation_id: insights_beta_report_income_health_get
-                data:
-                  insights:
-                    - type: income-health
-                      currency: USD
-                      total:
-                        value: '1500'
-                        currency: USD
-                      monthly_average:
-                        value: '1500'
-                        currency: USD
-                      stability:
-                        value: '0.8'
-                        currency: USD
-                      regular_income:
-                        stability:
-                          value: '0.8'
-                          currency: USD
-                        total:
-                          value: '1500'
-                          currency: USD
-                        monthly_average:
-                          value: '1500'
-                          currency: USD
-                        sources:
-                          - source_name: customer employer salary
-                            category_l1: income
-                            category_l2: salary
-                            group_id: F30F99BC-3532-44E8-B276-A55B2B026684
-                            frequency: monthly
-                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                            _links:
-                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
-                            monthly_average:
-                              value: '1500'
-                              currency: USD
-                            total:
-                              value: '1500'
-                              currency: USD
-                            stability:
-                              value: '0.8'
-                              currency: USD
-                        transactions_reference: 123419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                        _links:
-                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
-                      irregular_income:
-                        total:
-                          value: '1500'
-                          currency: USD
-                        monthly_average:
-                          value: '1500'
-                          currency: USD
-                        _links:
-                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
-                        transactions_reference: 456419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                      _links:
-                        transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
-                      transactions_reference: 789419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                    - type: income-health
-                      currency: EUR
-                      total:
-                        value: '1730.06'
-                        currency: EUR
-                      monthly_average:
-                        value: '1730.06'
-                        currency: EUR
-                      stability:
-                        value: '0.8'
-                        currency: EUR
-                      regular_income:
-                        stability:
-                          value: '0.81'
-                          currency: EUR
-                        total:
-                          value: '1730.06'
-                          currency: EUR
-                        monthly_average:
-                          value: '1730.06'
-                          currency: EUR
-                        sources:
-                          - source_name: customer employer salary
-                            category_l1: income
-                            category_l2: salary
-                            group_id: F30F99BC-3532-44E8-B276-A55B2B026684
-                            frequency: monthly
-                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                            _links:
-                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
-                            monthly_average:
-                              value: '1500'
-                              currency: USD
-                            total:
-                              value: '1500'
-                              currency: USD
-                            stability:
-                              value: '0.8'
-                              currency: USD
-                          - source_name: Bank Interest
-                            category_l1: income
-                            category_l2: interest_or_investments
-                            group_id: F30F99BC-3532-44E8-B276-A55B2B026684
-                            frequency: monthly
-                            transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                            _links:
-                              transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
-                            monthly_average:
-                              value: '10'
-                              currency: USD
-                            total:
-                              value: '10'
-                              currency: USD
-                            stability:
-                              value: '1'
-                              currency: USD
-                        transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                        _links:
-                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
-                      irregular_income:
-                        total:
-                          value: '1500'
-                          currency: EUR
-                        monthly_average:
-                          value: '1500'
-                          currency: EUR
-                        transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                        _links:
-                          transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
-                      transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                      _links:
-                        transactions: https://api-sandbox.thisisbud.com/financial/v2/transactions
-                metadata:
-                  from: '2020-01-01T00:00:00Z'
-                  to: '2020-01-31T00:00:00Z'
-                  currencies:
-                    - USD
-                  options:
-                    - insight_type: late_income
-                      option: minimum_days_late_threshold
-                      value: '3'
-                    - insight_type: late_income
-                      option: minimum_value_threshold
-                      value: '100.00'
-  /insights/beta/report/income-health/transactions/{reference}:
-    get:
-      tags:
-        - Retrieve Report Insights
-      security:
-        - OAuth2: []
-      summary: Retrieve transactions relating to a specific insight report section.
-      description: |
-        Each report, where appropriate will have a unique reference for that specific aggregated section of the report.
-        using the same parameters used in the call to `insights_beta_report_balance_unauthorised_overdraft_get`,
-        in combination with the unique reference, will return the raw transactions
-        list used to produce that aggregation. This is useful if requiring further investigation or analysis.
-        The reference can be found in the `_links` section of the insight reports.
-
-        NOTE:
-        Alterations to the `to`/`from` query properties will result in an alternative dataset being returned.
-      operationId: insights_beta_report_income_health_transactions_get
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/parameters-From'
-        - $ref: '#/components/parameters/parameters-To'
-        - $ref: '#/components/parameters/Currency'
-        - $ref: '#/components/parameters/TransactionReference'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReportInsightsTransactionResponse'
-              example:
-                operation_id: insights_beta_report_income_health_transactions_get
-                data:
-                  - transaction_id: a_transaction_id
-                    account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
-                    provider: a_bank_account_provider
-                    description: SALARY
-                    credit_debit_indicator: credit
-                    status: booked
-                    amount:
-                      value: '3000.00'
-                      currency: USD
-                    date_time: '2023-04-10T10:00:00Z'
-                    enrichments:
-                      categories:
-                        l1:
-                          slug: income
-                          confidence: '0.99'
-                        l2:
-                          slug: employment_income
-                          confidence: '0.98'
-                      regularity:
-                        slug: monthly
-                        confidence: '0.99'
-                        predicted_date_times:
-                          - '2023-05-10T10:00:00Z'
-                metadata:
-                  transactions_reference: 402419e92096bd4ab499de51bffcdcacb13eeb4b6452b327a334799ffd9f4df5
-                  from: '2020-01-01T00:00:00Z'
-                  to: '2020-01-31T00:00:00Z'
-                  options:
-                    - insight_type: late_income
-                      option: minimum_days_late_threshold
-                      value: '3'
-                    - insight_type: late_income
-                      option: minimum_value_threshold
-                      value: '100.00'
   /characteristics/v1/customer:
     get:
       tags:
@@ -9863,42 +9488,43 @@ components:
       properties:
         address:
           type: object
-          description: The address of the detected location.
+          description: The address where the transaction occurred. The level of detail depends on the resolution with which we are able to detect the transaction location.
           properties:
             address_lines:
               type: array
-              description: |
-                The lines of the detected address. These could be anything from a full street address down to a simple town or city. The level of detail depends on the resolution with which we are able to detect the transaction location.
+              description: A list of all the address lines detected for the transaction. This could be anything from a full street address down to just the region.
               items:
                 type: string
             street_address:
               type: string
-              description: The street address for the detected location of where the transaction was located
+              description: The street address where the transaction occurred. Typically this will consist of the street number and street name with an optional suite.
             city:
               type: string
-              description: The city for the detected location of where the transaction was located
+              description: The city or town where the transaction occurred.
             region:
               type: string
-              description: The region for the detected location of where the transaction was located
+              description: The state or region where the transaction occurred.
             postal_code:
               type: string
-              description: The postcode for the detected location of where the transaction was located.
+              description: The postal code where the transaction occurred. For US addresses this is the 5-digit ZIP code.
             country:
               type: string
-              description: An ISO-3166 Alpha-2 country code representing the detected country the transaction was located.
+              description: The ISO 3166-1 alpha-2 country code representing the country where the transaction occurred.
         geolocation:
           type: object
-          description: The geolocation if an exact match is found
+          description: The geolocation where the transaction occurred. This is only available if we are able to narrow down the transaction location to an exact match.
           properties:
             latitude:
               type: number
               format: double
+              description: The latitudinal position where the transaction occurred.
             longitude:
               type: number
               format: double
+              description: The longitudinal position where the transaction occurred.
         tokens:
           type: array
-          description: A list of tokenised location string. These could be anything from a full street address down to a simple town or city.
+          description: A list of substrings from the description identified as being relevant to the transaction location.
           items:
             type: string
     Token:
@@ -12053,44 +11679,43 @@ components:
       properties:
         address:
           type: object
-          description: The address of the detected location.
+          description: The address where the transaction occurred. The level of detail depends on the resolution with which we are able to detect the transaction location.
           properties:
             address_lines:
               type: array
-              description: |
-                The lines of the detected address. These could be anything from a full street address down to a simple town or city. The level of detail depends on the resolution with which we are able to detect the transaction location.
+              description: A list of all the address lines detected for the transaction. This could be anything from a full street address down to just the region.
               items:
                 type: string
             street_address:
               type: string
-              description: The street address for the detected location of where the transaction was located
+              description: The street address where the transaction occurred. Typically this will consist of the street number and street name with an optional suite.
             city:
               type: string
-              description: The city for the detected location of where the transaction was located
+              description: The city or town where the transaction occurred.
             region:
               type: string
-              description: The region for the detected location of where the transaction was located
+              description: The county or region where the transaction occurred.
             postal_code:
               type: string
-              description: The postcode for the detected location of where the transaction was located.
+              description: The postcode where the transaction occurred.
             country:
               type: string
-              description: An ISO-3166 Alpha-2 country code representing the detected country the transaction was located.
+              description: The ISO 3166-1 alpha-2 country code representing the country where the transaction occurred.
         geolocation:
           type: object
-          description: The geolocation if an exact match is found
+          description: The geolocation where the transaction occurred. This is only available if we are able to narrow down the transaction location to an exact match.
           properties:
             latitude:
-              description: The latitudinal position of the merchant location
               type: number
               format: double
+              description: The latitudinal position where the transaction occurred.
             longitude:
-              description: The longitudinal position of the merchant location
               type: number
               format: double
+              description: The longitudinal position where the transaction occurred.
         tokens:
           type: array
-          description: A list of tokenised location string. These could be anything from a full street address down to a simple town or city.
+          description: A list of substrings from the description identified as being relevant to the transaction location.
           items:
             type: string
     SyncEnrichments:
@@ -12381,6 +12006,476 @@ components:
         operation_id: ingest_transactions_get
         code_id: not_found
         message: Task not found
+    AccountV3Balance:
+      type: object
+      title: Balance
+      required:
+        - date
+        - amount
+        - credit_debit_indicator
+      properties:
+        date:
+          type: string
+          description: |
+            The date when the balance was last updated in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+            Examples:
+              - `2023-01-17T17:29:51Z`
+              - `2023-01-17T17:29:51-08:00`
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        credit_debit_indicator:
+          type: string
+          description: The credit or debit state of the given balance
+          enum:
+            - credit
+            - debit
+    AccountV3Balance_WithType:
+      type: object
+      title: Balance
+      required:
+        - date
+        - amount
+        - credit_debit_indicator
+      properties:
+        date:
+          type: string
+          description: |
+            The date when the balance was last updated in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+            Examples:
+              - `2023-01-17T17:29:51Z`
+              - `2023-01-17T17:29:51-08:00`
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        credit_debit_indicator:
+          type: string
+          description: The credit or debit state of the given balance
+          enum:
+            - credit
+            - debit
+        type:
+          type: string
+          description: |
+            The type for the given balance
+
+            Currently supported values include (but are not necessarily limited to):
+              - `closing_available`
+              - `closing_booked`
+              - `closing_cleared`
+              - `expected`
+              - `forward_available`
+              - `information`
+              - `interim_available`
+              - `interim_booked`
+              - `interim_cleared`
+              - `opening_available`
+              - `opening_booked`
+              - `opening_cleared`
+              - `previously_closed_booked`
+          enum:
+            - closing_available
+            - closing_booked
+            - closing_cleared
+            - expected
+            - forward_available
+            - information
+            - interim_available
+            - interim_booked
+            - interim_cleared
+            - opening_available
+            - opening_booked
+            - opening_cleared
+            - previously_closed_booked
+    AccountV3CreditLine:
+      type: object
+      title: Credit_Line
+      required:
+        - date
+        - amount
+      properties:
+        date:
+          type: string
+          description: |
+            The date when the credit line was last updated in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+            Examples:
+              - `2023-01-17T17:29:51Z`
+              - `2023-01-17T17:29:51-08:00`
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+    AccountV3CreditLine_WithType:
+      type: object
+      title: Credit_Line
+      required:
+        - date
+        - type
+        - amount
+      properties:
+        date:
+          type: string
+          description: |
+            The date when the credit line was last updated in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+            Examples:
+              - `2023-01-17T17:29:51Z`
+              - `2023-01-17T17:29:51-08:00`
+        type:
+          type: string
+          description: |
+            The type of the given credit line.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `available`
+              - `credit`
+              - `emergency`
+              - `pre_agreed`
+              - `temporary`
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+    AccountV3:
+      title: Account
+      type: object
+      required:
+        - account_id
+        - currency
+      properties:
+        account_id:
+          type: string
+          description: |
+            A unique id associated with the account.
+
+            Example: `sdb4eRMaad8XVEvdIoISOQ`
+        currency:
+          $ref: '#/components/schemas/BudCurrency'
+        holders:
+          type: array
+          description: |
+            The account holder(s).
+          items:
+            title: Account_Holder
+            type: object
+            properties:
+              name:
+                type: string
+                description: |
+                  The name of the given account holder.
+
+                  Example: `John Smith`
+              relationship:
+                type: string
+                description: |
+                  The relationship that the individual holder has with the account. If parties data is not present, this will always be `unknown`.
+
+                  Currently supported values include (but are not necessarily limited to):
+                    - `sole`
+                    - `joint`
+                    - `delegate`
+                    - `unknown`
+        account_name:
+          type: string
+          description: |
+            The name associated with the account, this is often a friendly name assigned to the account to make it easier to refer to.
+
+            Example: `Household Savings Account`
+
+            Not present if empty.
+        account_type:
+          type: string
+          description: |
+            The type of account.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `charge_card`
+              - `credit_card`
+              - `current_account`
+              - `e_money`
+              - `investment`
+              - `loan`
+              - `mortgage`
+              - `other`
+              - `pre_paid_card`
+              - `savings`
+
+            Not present if empty.
+        usage_type:
+          type: string
+          description: |
+            The intended usage of the account.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `personal`
+              - `business`
+
+            Not present if empty.
+        provider:
+          type: string
+          description: |
+            The account's provider, this is usually the bank or building society the account is held with.
+
+            Example: `Nationwide`
+
+            Not present if empty.
+        identifiers:
+          type: object
+          description: These are wellknown fields which uniquely identify the account.
+          properties:
+            uk_sort_code:
+              type: string
+              description: |
+                A six digit number identifying the UK bank or building society the account is held with. This is usually supplied alongside a `uk_account_number` to uniquely identify the account.
+
+                Example: `601613`
+            uk_account_number:
+              type: string
+              description: |
+                An eight digit number uniquely identifying the account for the UK bank or building society the account is held with. This is usually supplied alongside a `uk_sort_code` to uniquely identify the account from accounts with other UK banks or building societies.
+
+                Example: `31926819`
+            nz_account_number:
+              type: string
+              description: |
+                A sixteen digit number uniquely identifying the account and New Zealand bank the account is held with.
+
+                Example: `1212341234567123`
+            iban:
+              type: string
+              description: |
+                A thirty-four character alphanumerical code (ISO 13616), internationally and uniquely identifying the account.
+
+                Example: `GB29NWBK60161331926819`
+            pan:
+              type: string
+              description: |
+                A number between 14 and 19 digits that uniquely identifies the account, this is usually the number printed on the card assigned to the account.
+
+                Example: `4444333322221111`
+        balances:
+          type: object
+          description: |
+            The balances ingested for the account.
+            This field is only present if booked balance was found from ingested balances.
+          properties:
+            booked:
+              description: |
+                The booked balance for the account at the given date. 
+                This field is only present if booked balance was found from ingested balances.
+              allOf:
+                - $ref: '#/components/schemas/AccountV3Balance'
+            pending:
+              description: |
+                The pending balance for the account at the given date.
+                This field is only present if pending balance was found from ingested balances.
+              allOf:
+                - $ref: '#/components/schemas/AccountV3Balance'
+            all_balances:
+              type: array
+              description: |
+                All balances stored for the account.
+                Only included if the `include_all_balances` query parameter is set
+              items:
+                $ref: '#/components/schemas/AccountV3Balance_WithType'
+        credit_lines:
+          type: object
+          title: Credit Lines
+          description: |
+            The latest credit limit available for the account. 
+            This field will only be present if the credit limit was found from ingested balances.
+          properties:
+            limit:
+              type: object
+              description: |
+                The credit limit for the account at the given date.
+                This field will only be present if the credit limit was found from ingested balances.
+              allOf:
+                - $ref: '#/components/schemas/AccountV3CreditLine'
+            all_credit_lines:
+              type: array
+              description: |
+                All credit lines stored for the account.
+                Only included if the `include_all_balances` query parameter is set
+              items:
+                $ref: '#/components/schemas/AccountV3CreditLine_WithType'
+        transaction_windows:
+          type: array
+          title: Transaction Windows
+          description: |
+            The transaction windows indicate for which periods we have full coverage of transactions ingested for the account.
+
+            Not present if no transaction data has been ingested.
+          items:
+            type: object
+            title: Transaction Window
+            required:
+              - from
+              - to
+            properties:
+              from:
+                type: string
+                description: A [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339) datetime recording the start of the window
+              to:
+                type: string
+                description: A [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339) datetime recording the end of the window
+    ListAccountsV3Response:
+      title: Retrieve Accounts Response
+      type: object
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - financial_v3_accounts
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountV3'
+        metadata:
+          type: object
+          required:
+            - parameters
+            - results
+          properties:
+            parameters:
+              type: object
+              properties:
+                currencies:
+                  description: The Currency values supplied in the request to generate the given result set.
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/BudCurrency'
+                account_types:
+                  description: |
+                    The Account Type values supplied in the request to generate the given result set.
+
+                    Currently supported values include (but are not necessarily limited to):
+                      - `charge_card`
+                      - `credit_card`
+                      - `current_account`
+                      - `e_money`
+                      - `investment`
+                      - `loan`
+                      - `mortgage`
+                      - `other`
+                      - `pre_paid_card`
+                      - `savings`
+                  type: array
+                  items:
+                    type: string
+                usage_types:
+                  description: |
+                    The Usage Type values supplied in the request to generate the given result set.
+
+                    Currently supported values include (but are not necessarily limited to):
+                      - `personal`
+                      - `business`
+                  type: array
+                  items:
+                    type: string
+                holder_types:
+                  description: |
+                    The Holder Type values supplied in the request to generate the given result set.
+
+                    Currently supported values include (but are not necessarily limited to):
+                      - `sole`
+                      - `joint`
+                      - `delegate`
+                      - `unknown`
+                  type: array
+                  items:
+                    type: string
+                providers:
+                  description: The Provider values supplied in the request to generate the given result set.
+                  type: array
+                  items:
+                    type: string
+                include_all_balances:
+                  type: boolean
+                  description: All balances and credit lines stored for the accounts are returned
+            results:
+              type: number
+              description: The number of accounts returned in the results
+    RetrieveAccountByIDV3Response:
+      title: Retrieve Accounts by ID Response
+      type: object
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - financial_v3_accounts_account_id
+        data:
+          $ref: '#/components/schemas/AccountV3'
+        metadata:
+          type: object
+          required:
+            - parameters
+            - results
+          properties:
+            parameters:
+              type: object
+              properties:
+                currencies:
+                  description: The Currency values supplied in the request to generate the given result set.
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/BudCurrency'
+                account_types:
+                  description: |
+                    The Account Type values supplied in the request to generate the given result set.
+
+                    Currently supported values include (but are not necessarily limited to):
+                      - `charge_card`
+                      - `credit_card`
+                      - `current_account`
+                      - `e_money`
+                      - `investment`
+                      - `loan`
+                      - `mortgage`
+                      - `other`
+                      - `pre_paid_card`
+                      - `savings`
+                  type: array
+                  items:
+                    type: string
+                usage_types:
+                  description: |
+                    The Usage Type values supplied in the request to generate the given result set.
+
+                    Currently supported values include (but are not necessarily limited to):
+                      - `personal`
+                      - `business`
+                  type: array
+                  items:
+                    type: string
+                holder_types:
+                  description: |
+                    The Holder Type values supplied in the request to generate the given result set.
+
+                    Currently supported values include (but are not necessarily limited to):
+                      - `sole`
+                      - `joint`
+                      - `delegate`
+                      - `unknown`
+                  type: array
+                  items:
+                    type: string
+                providers:
+                  description: The Provider values supplied in the request to generate the given result set.
+                  type: array
+                  items:
+                    type: string
+                include_all_balances:
+                  type: boolean
+                  description: All balances and credit lines stored for the accounts are returned
+            results:
+              type: integer
+              description: The number of accounts returned in the results
     USAccountV2:
       title: Account
       type: object
@@ -15736,6 +15831,7 @@ components:
             | `pending`               | A transaction which has not been booked                   |
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
             | `subscription`          | A transaction associated with a subscription service      |
+            | `online`                | A transaction associated with an online merchant          |
           items:
             type: string
     InsightCausedBy:
@@ -16258,692 +16354,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/InsightOption'
-    TransactionsReference:
-      type: string
-      description: |
-        A unique identifier to reference a specific transaction subset used within a section of a report.
-    TransactionsLinks:
-      description: URLs for resources related to this report insight
-      type: object
-      required:
-        - transactions
-      properties:
-        transactions:
-          type: string
-          description: |
-            An endpoint, including options, to make a GET request to in order to retrieve transactions
-            related to the report in question.
-    IncomeExpenditureAnalysis:
-      type: object
-      description: |
-        Object presents a single expenditure group income analysis report. The focus of this object is to present a 
-        view of a single expenditure and its impact on a customers income. The report is broken down into financial months
-        to help identify spikes in income consumed by the expenditure group.
-
-        The type of report is identified by the `type` field. There are several types of analyses:
-          - income-cash-withdrawal: Identifies the total amount of cash withdrawn from a customers account.
-          - income-debt: Identifies debt payments in the customer's expenses.
-          - income-gambling: Identifies gambling related transactions in the customer's report.
-          - income-loan: Identifies loan related transactions.
-          - income-essential-expenditure: Identifies essential expenditure and compares it against income for the time period
-          - income-all-expenditure: Total debits vs income for a specified time period
-      required:
-        - type
-        - currency
-        - expenditure
-        - income
-        - _links
-      properties:
-        type:
-          type: string
-          enum:
-            - income-cash-withdrawal
-            - income-loan
-            - income-gambling
-            - income-debt
-            - income-essential-expenditure
-            - income-all-expenditure
-          description: |
-            A unique human readable string used to identify a expenditure group income analysis report.
-
-            Note, these are subject to change and should not be used to identify a report. These are not unique within
-            a result list and are used to identify the type of report.
-        currency:
-          $ref: '#/components/schemas/BudCurrency'
-        income:
-          type: object
-          required:
-            - credit_debit_indicator
-            - count
-            - total
-            - monthly_average
-            - transactions_reference
-            - _links
-          properties:
-            credit_debit_indicator:
-              $ref: '#/components/schemas/CreditDebitIndicator'
-            count:
-              type: integer
-              description: |
-                The number of transactions related to this insight.
-            total:
-              $ref: '#/components/schemas/BudAmount'
-              description: |
-                The total amount of income for the period of the report for a predefined currency.
-            monthly_average:
-              $ref: '#/components/schemas/BudAmount'
-              description: |
-                The average amount of income for the period of the report for a predefined currency.
-            breakdown:
-              type: array
-              items:
-                type: object
-                description: |
-                  A breakdown of the specific transactional group for the period of the report. 
-                  The breakdown of data is defined by the granularity of the report, defaulting to monthly. 
-                  The `to`/`from` properties within the object refer to the datetime boundaries of subsection.
-                required:
-                  - from
-                  - to
-                  - total
-                  - count
-                  - transactions_reference
-                  - _links
-                properties:
-                  from:
-                    $ref: '#/components/schemas/DateTimeISO8601'
-                  to:
-                    $ref: '#/components/schemas/DateTimeISO8601'
-                  total:
-                    $ref: '#/components/schemas/BudAmount'
-                    description: |
-                      The total amount of expenditure for the period of the report for a predefined currency.
-                  count:
-                    type: integer
-                    description: |
-                      The number of transactions related to this insight.
-                  transactions_reference:
-                    $ref: '#/components/schemas/TransactionsReference'
-                  _links:
-                    $ref: '#/components/schemas/TransactionsLinks'
-            transactions_reference:
-              $ref: '#/components/schemas/TransactionsReference'
-            _links:
-              $ref: '#/components/schemas/TransactionsLinks'
-        expenditure:
-          type: object
-          required:
-            - credit_debit_indicator
-            - count
-            - total
-            - monthly_average
-            - relative_to_income
-            - transactions_reference
-            - _links
-          properties:
-            credit_debit_indicator:
-              $ref: '#/components/schemas/CreditDebitIndicator'
-            count:
-              type: integer
-              description: |
-                The number of transactions related to this insight.
-            total:
-              $ref: '#/components/schemas/BudAmount'
-              description: |
-                The total amount of expenditure for the period of the report for a predefined currency.
-            monthly_average:
-              $ref: '#/components/schemas/BudAmount'
-              description: |
-                The average amount of income for the period of the report for a predefined currency.
-            relative_to_income:
-              type: string
-              description: |
-                A percentage value to represent the scale another value is in relation to a customers income.
-            transactions_reference:
-              $ref: '#/components/schemas/TransactionsReference'
-            _links:
-              $ref: '#/components/schemas/TransactionsLinks'
-        transactions_reference:
-          $ref: '#/components/schemas/TransactionsReference'
-        _links:
-          $ref: '#/components/schemas/TransactionsLinks'
-    IncomeExpenditureReportResponse:
-      type: object
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          type: string
-          enum:
-            - insights_beta_report_income_expenditure_get
-        data:
-          type: object
-          required:
-            - insights
-          properties:
-            insights:
-              type: array
-              items:
-                $ref: '#/components/schemas/IncomeExpenditureAnalysis'
-              description: |
-                An array of income/expenditure analysis reports (insights). Each object in the list
-                represents a single insight.
-        metadata:
-          type: object
-          required:
-            - from
-            - to
-            - options
-          properties:
-            from:
-              $ref: '#/components/schemas/DateTimeISO8601'
-            to:
-              $ref: '#/components/schemas/DateTimeISO8601'
-            options:
-              type: array
-              items:
-                $ref: '#/components/schemas/InsightOption'
-    ReportInsightsTransactionResponse:
-      type: object
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          type: string
-          enum:
-            - insights_beta_report_income_expenditure_transactions_get
-            - insights_beta_report_income_health_transactions_get
-            - insights_beta_report_merchants_transactions_get
-            - insights_beta_report_unauthorised_overdraft_transactions_get
-        data:
-          type: array
-          description: |-
-            Transactions in the Bud Transactions V2 format that triggered the insight, for insights based on transaction data. If there are no specific relevant transactions, this will be an empty list.
-            For clients making use of the deprecated client taxonomy support, the categories in this response will be set to the client categories.
-          items:
-            $ref: '#/components/schemas/components-schemas-Transaction'
-        metadata:
-          type: object
-          required:
-            - from
-            - to
-            - transactions_reference
-            - options
-          properties:
-            from:
-              $ref: '#/components/schemas/DateTimeISO8601'
-            to:
-              $ref: '#/components/schemas/DateTimeISO8601'
-            transactions_reference:
-              $ref: '#/components/schemas/TransactionsReference'
-            options:
-              type: array
-              items:
-                $ref: '#/components/schemas/InsightOption'
-    HCSTCreditAnalysis:
-      type: object
-      description: |
-        Object represents analysis indicating interactions with high-cost short-term credit providers.
-      required:
-        - type
-        - currency
-        - transactions_count
-        - merchants_count
-        - transactions_reference
-        - _links
-      properties:
-        type:
-          type: string
-          enum:
-            - hcst-credit
-          description: |
-            A unique human readable string used to identify the report type.
-        currency:
-          $ref: '#/components/schemas/BudCurrency'
-        transactions_count:
-          type: integer
-          description: |
-            The number of transactions related to this insight.
-        merchants_count:
-          type: integer
-          description: |
-            The number of unique merchants related to this insight.
-        transactions_reference:
-          $ref: '#/components/schemas/TransactionsReference'
-        _links:
-          $ref: '#/components/schemas/TransactionsLinks'
-    MerchantsReportResponse:
-      description: |
-        Object represents a set of merchant-related insights generated for the customer inspecting
-        transactions over a given period of time. The insights include:
-          - hcst_credit: Identifies interactions with high-cost short-term credit providers.
-      type: object
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          type: string
-          enum:
-            - insights_beta_report_merchants_get
-        data:
-          type: object
-          required:
-            - insights
-          properties:
-            insights:
-              type: object
-              required:
-                - hcst_credit
-              properties:
-                hcst_credit:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/HCSTCreditAnalysis'
-        metadata:
-          type: object
-          required:
-            - from
-            - to
-            - options
-          properties:
-            from:
-              $ref: '#/components/schemas/DateTimeISO8601'
-            to:
-              $ref: '#/components/schemas/DateTimeISO8601'
-            options:
-              type: array
-              items:
-                $ref: '#/components/schemas/InsightOption'
-    DaysInUnauthorisedOverdraft:
-      description: |
-        Object represents the number of days a customer has been in an unauthorised overdraft. Should be noted that
-        this is a percentage of the total number of days in the report period OR the total number of days ingested for 
-        a given account. The report period is defined by the `from` and `to` parameters.
-      type: object
-      required:
-        - count
-        - ratio
-      properties:
-        count:
-          type: integer
-          description: |
-            The total number of days a customer has been in an unauthorised overdraft.
-        ratio:
-          type: string
-          description: |
-            A percentage of the numbers of unauthorised overdraft/total number of days in the report period.
-    UnauthorisedOverdraftDate:
-      type: object
-      required:
-        - date
-        - amount
-        - credit_debit_indicator
-      properties:
-        date:
-          $ref: '#/components/schemas/DateTimeISO8601'
-        amount:
-          $ref: '#/components/schemas/BudAmount'
-        credit_debit_indicator:
-          $ref: '#/components/schemas/CreditDebitIndicator'
-    balance:
-      type: object
-      required:
-        - date
-        - type
-        - amount
-        - credit_debit_indicator
-      properties:
-        date:
-          $ref: '#/components/schemas/DateTimeISO8601'
-        type:
-          description: |
-            Type is a string used to represent the type of balance returned, the full descriptions of each can be
-            found below:
-            https://docs.thisisbud.com/docs/accounts#balances-and-credit-lines
-          type: string
-          enum:
-            - closing_available
-            - closing_booked
-            - closing_cleared
-            - expected
-            - forward_available
-            - information
-            - interim_available
-            - interim_booked
-            - interim_cleared
-            - opening_available
-            - opening_booked
-            - opening_cleared
-            - previously_closed_booked
-        amount:
-          $ref: '#/components/schemas/BudAmount'
-        credit_debit_indicator:
-          $ref: '#/components/schemas/CreditDebitIndicator'
-    CreditLine:
-      type: object
-      required:
-        - date
-        - type
-        - amount
-      properties:
-        date:
-          $ref: '#/components/schemas/DateTimeISO8601'
-        type:
-          type: string
-          description: |
-            Type is a string used to represent the type of creditline returned, the full descriptions of each can be
-            found below:
-            https://docs.thisisbud.com/docs/accounts#balances-and-credit-lines
-          enum:
-            - available
-            - credit
-            - emergency
-            - pre_agreed
-            - temporary
-        amount:
-          $ref: '#/components/schemas/BudAmount'
-    UnauthorisedOverdraftAccount:
-      type: object
-      required:
-        - account_id
-        - provider
-        - account_name
-        - days_in_unauthorised_overdraft
-        - unauthorised_overdraft_occurrences
-        - balances
-        - credit_lines
-        - transactions_reference
-        - _links
-      properties:
-        account_id:
-          type: string
-          description: |
-            A unique identifier for a specific account. The account_id can be found in the _links section of the insight report.
-        provider:
-          type: string
-          description: |
-            The name of the provider of the account.
-        account_name:
-          type: string
-          description: |
-            The name of the account.
-        days_in_unauthorised_overdraft:
-          $ref: '#/components/schemas/DaysInUnauthorisedOverdraft'
-        unauthorised_overdraft_occurrences:
-          description: |
-            This field contains an array of balances for the given account when its suspected the account entered an 
-            unauthorised overdraft. The items of the array are the account balance at points in time when the customer
-            exceeded their credit allowance on the account.
-          type: array
-          items:
-            $ref: '#/components/schemas/UnauthorisedOverdraftDate'
-        balances:
-          type: array
-          description: |
-            A list of balances for the account. The balances returned here will represent the latest up to date
-            ingested balances for the account.
-          items:
-            $ref: '#/components/schemas/balance'
-        credit_lines:
-          type: array
-          description: |
-            A list of credit lines for the account. The credit lines returned here will represent the latest up to date
-            ingested balances for the account. It is possible that an account does not have any registered credit lines.
-          items:
-            $ref: '#/components/schemas/CreditLine'
-        transactions_reference:
-          $ref: '#/components/schemas/TransactionsReference'
-        _links:
-          $ref: '#/components/schemas/TransactionsLinks'
-    UnauthorisedOverdraftInsight:
-      type: object
-      required:
-        - type
-        - currency
-        - days_in_unauthorised_overdraft
-        - accounts
-      properties:
-        type:
-          type: string
-          enum:
-            - unauthorised-overdraft
-          description: |
-            A unique human readable string used to identify a unauthorised overdraft report.
-
-            Note, these are subject to change and should not be used to identify a report. These are not unique within
-            a result list and are used to identify the type of report.
-        currency:
-          $ref: '#/components/schemas/BudCurrency'
-        days_in_unauthorised_overdraft:
-          $ref: '#/components/schemas/DaysInUnauthorisedOverdraft'
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/UnauthorisedOverdraftAccount'
-    UnauthorisedOverdraftResponse:
-      type: object
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          type: string
-          enum:
-            - insights_beta_report_balance_unauthorised_overdraft_get
-        data:
-          type: object
-          required:
-            - insights
-          properties:
-            insights:
-              type: array
-              items:
-                $ref: '#/components/schemas/UnauthorisedOverdraftInsight'
-        metadata:
-          type: object
-          required:
-            - from
-            - to
-            - options
-            - currencies
-          properties:
-            from:
-              $ref: '#/components/schemas/DateTimeISO8601'
-            to:
-              $ref: '#/components/schemas/DateTimeISO8601'
-            currencies:
-              type: array
-              description: A list of currencies returned in the results. If the currency query parameter is used, this will only contain the specified currency.
-              items:
-                $ref: '#/components/schemas/BudCurrency'
-            options:
-              type: array
-              items:
-                $ref: '#/components/schemas/InsightOption'
-    IncomeStability:
-      type: object
-      required:
-        - value
-        - currency
-      properties:
-        value:
-          type: string
-          description: |
-            A number between 0 to 1 representing how stable a customers income is. The closer the number is
-            to 1 represents a higher stability.
-        currency:
-          $ref: '#/components/schemas/BudCurrency'
-    Frequency:
-      type: string
-      enum:
-        - daily
-        - weekly
-        - biweekly
-        - monthly
-        - quarterly
-        - six_monthly
-        - annually
-        - unknown
-    RegularTransactionIncomeGroup:
-      type: object
-      required:
-        - source_name
-        - group_id
-        - category_l1
-        - category_l2
-        - frequency
-        - total
-        - monthly_average
-        - stability
-        - transactions_reference
-        - _links
-      properties:
-        source_name:
-          type: string
-          description: A human readable to represent a regular transactional group
-        group_id:
-          type: string
-          format: uuid
-          description: a unique identifier to identify a regular transaction group
-        category_l1:
-          type: string
-        category_l2:
-          type: string
-        frequency:
-          $ref: '#/components/schemas/Frequency'
-        total:
-          $ref: '#/components/schemas/BudAmount'
-        monthly_average:
-          $ref: '#/components/schemas/BudAmount'
-        stability:
-          $ref: '#/components/schemas/IncomeStability'
-        transactions_reference:
-          $ref: '#/components/schemas/TransactionsReference'
-        _links:
-          $ref: '#/components/schemas/TransactionsLinks'
-    RegularTransactions:
-      type: object
-      required:
-        - stability
-        - total
-        - monthly_average
-        - transactions_reference
-        - _links
-        - sources
-      properties:
-        stability:
-          $ref: '#/components/schemas/IncomeStability'
-        total:
-          $ref: '#/components/schemas/BudAmount'
-        monthly_average:
-          $ref: '#/components/schemas/BudAmount'
-        sources:
-          type: array
-          items:
-            $ref: '#/components/schemas/RegularTransactionIncomeGroup'
-        transactions_reference:
-          $ref: '#/components/schemas/TransactionsReference'
-        _links:
-          $ref: '#/components/schemas/TransactionsLinks'
-    IrregularTransactions:
-      type: object
-      required:
-        - total
-        - monthly_average
-        - transactions_reference
-        - _links
-      properties:
-        total:
-          $ref: '#/components/schemas/BudAmount'
-        monthly_average:
-          $ref: '#/components/schemas/BudAmount'
-        transactions_reference:
-          $ref: '#/components/schemas/TransactionsReference'
-        _links:
-          $ref: '#/components/schemas/TransactionsLinks'
-    IncomeHealthReportResponse:
-      type: object
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          type: string
-          enum:
-            - insights_beta_report_income_health_get
-        data:
-          required:
-            - insights
-          properties:
-            insights:
-              type: array
-              items:
-                description: |
-                  An analytical report on the overall health of a customers income sources. The report presents an 
-                  overall stability, regularity, and longevity insight. In addition to this we present a drilled down insight
-                  into the individual regular income sources for a customer. This enables a client to identify 
-                  major sources of income and their impact on the overall health of a customers income.
-                type: object
-                required:
-                  - type
-                  - currency
-                  - total
-                  - stability
-                  - monthly_average
-                  - regular_income
-                  - irregular_income
-                  - transactions_reference
-                  - _links
-                properties:
-                  type:
-                    type: string
-                    enum:
-                      - income-health
-                  currency:
-                    $ref: '#/components/schemas/BudCurrency'
-                  stability:
-                    $ref: '#/components/schemas/IncomeStability'
-                  total:
-                    $ref: '#/components/schemas/BudAmount'
-                  monthly_average:
-                    $ref: '#/components/schemas/BudAmount'
-                  regular_income:
-                    $ref: '#/components/schemas/RegularTransactions'
-                  irregular_income:
-                    $ref: '#/components/schemas/IrregularTransactions'
-                  transactions_reference:
-                    $ref: '#/components/schemas/TransactionsReference'
-                  _links:
-                    $ref: '#/components/schemas/TransactionsLinks'
-        metadata:
-          type: object
-          required:
-            - from
-            - to
-            - currencies
-            - options
-          properties:
-            from:
-              $ref: '#/components/schemas/DateTimeISO8601'
-            to:
-              $ref: '#/components/schemas/DateTimeISO8601'
-            currencies:
-              type: array
-              description: A list of currencies returned in the results. If the currency query parameter is used, this will only contain the specified currency.
-              items:
-                $ref: '#/components/schemas/BudCurrency'
-            options:
-              type: array
-              items:
-                $ref: '#/components/schemas/InsightOption'
     CustomerCharacteristicSimple:
       title: Customer Characteristic
       type: object
@@ -17267,12 +16677,12 @@ components:
       description: |
         Enable transaction ID generation based on the contents of the transaction data. The transaction ID field still needs to be provided, but it will not be validated or checked for uniqueness and instead overwritten with a generated value.
         When generating IDs from transaction data, the following fields are taken into account: account ID, description, amount, currency and date.
-    QueryCurrencyUSD:
+    QueryCurrency:
       in: query
       name: currency
       schema:
         type: string
-      example: USD
+      example: GBP
       description: Use this parameter to filter the results returned on the `currency` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `currency` will be returned.
     QueryProvider:
       in: query
@@ -17281,6 +16691,20 @@ components:
         type: string
       example: BankOfBud
       description: Use this parameter to filter the results returned on the `provider` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `provider` will be returned.
+    PathAccountID:
+      in: path
+      name: account_id
+      schema:
+        type: string
+      required: true
+      description: The account ID to retrieve data for.
+    QueryCurrencyUSD:
+      in: query
+      name: currency
+      schema:
+        type: string
+      example: USD
+      description: Use this parameter to filter the results returned on the `currency` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `currency` will be returned.
     QueryFromBudDate:
       in: query
       name: from
@@ -17319,13 +16743,6 @@ components:
           - `posted_date_time`
 
         Defaults to `date_time`.
-    PathAccountID:
-      in: path
-      name: account_id
-      schema:
-        type: string
-      required: true
-      description: The account ID to retrieve data for.
     MerchantCorrectionSearchQuery:
       in: path
       name: merchant_query
@@ -17392,13 +16809,6 @@ components:
         Examples:
           - `shopping` - Filters the result set to only include data where the l1 category is `shopping`.
           - `shopping.groceries` - Filters the result set to only include data where the l1 category is `shopping` and the l2 category is `groceries`.
-    QueryCurrency:
-      in: query
-      name: currency
-      schema:
-        type: string
-      example: GBP
-      description: Use this parameter to filter the results returned on the `currency` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `currency` will be returned.
     CategoryTotalsQueryCategoryFilter:
       in: query
       name: category_label
@@ -17765,65 +17175,6 @@ components:
       schema:
         type: string
         format: uuid
-    EnabledInsightsIncomeExpenditure:
-      in: query
-      name: enabled_insights
-      required: false
-      schema:
-        type: string
-        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
-        enum:
-          - income-cash-withdrawal
-          - income-loan
-          - income-gambling
-          - income-debt
-          - income-essential-expenditure
-          - income-all-expenditure
-    Currency:
-      in: query
-      name: currency
-      required: false
-      description: |
-        Used to limit the insight reports returned, to only those in the specified currency. The value should represent
-        a valid ISO currency code. an example would be "GBP" or "EUR".
-
-        Please refer to https://www.iso.org/iso-4217-currency-codes.html for more details.
-      schema:
-        type: string
-    TransactionReference:
-      in: path
-      required: true
-      name: reference
-      schema:
-        description: A unique reference used to identify a group of transactions in report for aggregation analysis
-        type: string
-    EnabledInsightsMerchants:
-      in: query
-      name: enabled_insights
-      required: false
-      schema:
-        type: string
-        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
-        enum:
-          - hcst-credit
-    EnabledInsightsBalanceOverdraft:
-      in: query
-      name: enabled_insights
-      required: false
-      schema:
-        type: string
-        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
-        enum:
-          - unauthorised-overdraft
-    EnabledInsightsIncomeHealth:
-      in: query
-      name: enabled_insights
-      required: false
-      schema:
-        type: string
-        description: A comma-separated list of insight types to check for. If not specified, a default list will be used, which may be added to over time.
-        enum:
-          - income-health
 x-tagGroups:
   - name: ''
     tags:
@@ -17867,7 +17218,6 @@ x-tagGroups:
     tags:
       - Retrieve Actionable Insights
       - Custom Insights
-      - Retrieve Report Insights
       - Insights API
   - name: ''
     tags:
