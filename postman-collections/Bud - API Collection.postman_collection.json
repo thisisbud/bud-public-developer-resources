@@ -2245,6 +2245,166 @@
 							"response": []
 						},
 						{
+							"name": "Retrieve Accounts V3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has data\"] = jsonData.data;",
+											"var firstElement = jsonData.data[0]",
+											"",
+											"pm.environment.set(\"bank_account_id\", firstElement.account_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}financial/v3/accounts",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v3",
+										"accounts"
+									],
+									"query": [
+										{
+											"key": "currency",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the currency associated with each result. Multiple values are accepted. If this parameter is not provided then results of any currency will be returned.",
+											"disabled": true
+										},
+										{
+											"key": "provider",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the provider associated with each result. Multiple values are accepted. If this parameter is not provided then results of any provider will be returned",
+											"disabled": true
+										},
+										{
+											"key": "account_type",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the account_type associated with each result. Multiple values are accepted. If this parameter is not provided then results of any account_type will be returned.",
+											"disabled": true
+										},
+										{
+											"key": "usage_type",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the usage_type associated with each result. Multiple values are accepted. If this parameter is not provided then results of any usage_type will be returned.",
+											"disabled": true
+										},
+										{
+											"key": "holder_relationship_type",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the holder_relationship_type associated with each result. Multiple values are accepted. If this parameter is not provided then results of any holder_relationship_type will be returned.",
+											"disabled": true
+										},
+										{
+											"key": "include_all_balances",
+											"value": null,
+											"description": "Use this parameter to include all balances associated with each account. If this parameter is not provided then only the pending and booked balance will be returned where available.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Account By ID V3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}financial/v3/accounts/{{bank_account_id}}",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v3",
+										"accounts",
+										"{{bank_account_id}}"
+									]
+								},
+								"description": "Retrieves a customer's connected account by its ID."
+							},
+							"response": []
+						},
+						{
 							"name": "Retrieve Balances over time",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
