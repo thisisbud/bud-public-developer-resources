@@ -4925,6 +4925,7 @@ paths:
           description: An unexpected error occurred on the server side
   /financial/v2/accounts:
     get:
+      deprecated: true
       tags:
         - Retrieve Financial Data
       summary: Retrieve Accounts V2
@@ -5116,6 +5117,7 @@ paths:
                 message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
   /financial/v2/accounts/{account_id}:
     get:
+      deprecated: true
       tags:
         - Retrieve Financial Data
       summary: Retrieve Account By ID V2
@@ -18556,7 +18558,6 @@ components:
     AccountV2:
       title: Account
       type: object
-      deprecated: true
       required:
         - account_id
         - currency
@@ -18793,7 +18794,6 @@ components:
     ListAccountsV2Response:
       title: Retrieve Accounts Response
       type: object
-      deprecated: true
       required:
         - operation_id
         - data
