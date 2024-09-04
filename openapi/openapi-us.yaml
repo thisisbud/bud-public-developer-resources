@@ -13131,7 +13131,6 @@ components:
     AccountV2:
       title: Account
       type: object
-      deprecated: true
       required:
         - account_id
         - currency
