@@ -304,6 +304,10 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.12.3: 04/09/2024**
+    > - Deprecated __Retrieve Accounts V2__ endpoint.
+    > - Deprecated __Retrieve Accounts By ID V2__ endpoint.
+
     **Version 2.12.2: 28/08/2024**
     > - Added __Retrieve Accounts V3__ endpoint.
     > - Added __Retrieve Accounts By ID V3__ endpoint.
@@ -3745,6 +3749,7 @@ paths:
       summary: Retrieve Ingestion Task Status V2
       description: |
         Check the status of an ingest request. Please note that this works for both the Ingest Transactions endpoints And Ingest Accounts endpoints.
+        Ingestion tasks are accessible for 15 minutes after ingestion, after which they are deleted.
 
         The given status has an overall value and a specific status for each given customer.
       operationId: v2_ingest_status_get
@@ -5320,7 +5325,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListAccountsV3Response'
               examples:
-                Account Without Parties Data:
+                Account:
                   value:
                     operation_id: financial_v3_accounts
                     data:
@@ -5336,48 +5341,6 @@ paths:
                         identifiers:
                           uk_sort_code: '126432'
                           uk_account_number: '31510604'
-                        balances:
-                          booked:
-                            date: '2023-01-12T00:00:00Z'
-                            amount:
-                              value: '3552.61'
-                              currency: GBP
-                            credit_debit_indicator: credit
-                          pending:
-                            date: '2023-01-12T00:00:00Z'
-                            amount:
-                              value: '3552.61'
-                              currency: GBP
-                            credit_debit_indicator: credit
-                        credit_lines:
-                          limit:
-                            date: '2023-01-12T00:00:00Z'
-                            amount:
-                              value: '1000.00'
-                              currency: GBP
-                    metadata:
-                      parameters:
-                        currencies:
-                          - GBP
-                      results: 1
-                Account With Parties Data:
-                  value:
-                    operation_id: financial_v3_accounts
-                    data:
-                      - account_id: RxsYshVGded4JeilkXgWKdXA
-                        currency: GBP
-                        holders:
-                          - name: David Smith
-                            relationship: joint
-                          - name: Jane Smith
-                            relationship: joint
-                        account_name: Household Account
-                        account_type: current_account
-                        usage_type: personal
-                        provider: BankOfBud
-                        identifiers:
-                          uk_sort_code: '124332'
-                          uk_account_number: '12642318'
                         balances:
                           booked:
                             date: '2023-01-12T00:00:00Z'
@@ -5470,7 +5433,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RetrieveAccountByIDV3Response'
               examples:
-                Single Holder Personal Account:
+                Account:
                   value:
                     operation_id: financial_v3_accounts_account_id
                     data:
@@ -5492,47 +5455,6 @@ paths:
                             value: '3552.61'
                             currency: GBP
                           credit_debit_indicator: debit
-                      credit_lines:
-                        limit:
-                          date: '2023-01-12T00:00:00Z'
-                          amount:
-                            value: '1000.00'
-                            currency: GBP
-                    metadata:
-                      parameters:
-                        currencies:
-                          - GBP
-                      results: 1
-                Multiple Holder Joint Account:
-                  value:
-                    operation_id: financial_v3_accounts_account_id
-                    data:
-                      account_id: RxsYshVGded4JeilkXgWKdXA
-                      currency: GBP
-                      holders:
-                        - name: David Smith
-                          relationship: joint
-                        - name: Jane Smith
-                          relationship: joint
-                      account_name: Household Account
-                      account_type: current_account
-                      provider: BankOfBud
-                      identifiers:
-                        uk_sort_code: '124332'
-                        uk_account_number: '12642318'
-                      balances:
-                        booked:
-                          date: '2023-01-12T00:00:00Z'
-                          amount:
-                            value: '3552.61'
-                            currency: GBP
-                          credit_debit_indicator: credit
-                        pending:
-                          date: '2023-01-12T00:00:00Z'
-                          amount:
-                            value: '3552.61'
-                            currency: GBP
-                          credit_debit_indicator: credit
                       credit_lines:
                         limit:
                           date: '2023-01-12T00:00:00Z'
@@ -15919,6 +15841,7 @@ components:
         - internal_error
         - internal_timeout
         - internal_transient_error
+        - provider_unauthorised
         - provider_endpoint_deprecated
         - provider_endpoint_unimplemented
         - provider_endpoint_unsupported
@@ -16176,6 +16099,7 @@ components:
                 - internal_error
                 - internal_timeout
                 - internal_transient_error
+                - provider_unauthorised
                 - provider_endpoint_deprecated
                 - provider_endpoint_unimplemented
                 - provider_endpoint_unsupported
@@ -18632,6 +18556,7 @@ components:
     AccountV2:
       title: Account
       type: object
+      deprecated: true
       required:
         - account_id
         - currency
@@ -18868,6 +18793,7 @@ components:
     ListAccountsV2Response:
       title: Retrieve Accounts Response
       type: object
+      deprecated: true
       required:
         - operation_id
         - data
