@@ -219,6 +219,10 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 1.10.3: 04/09/2024**
+    > - Deprecated __Retrieve Accounts V2__ endpoint.
+    > - Deprecated __Retrieve Accounts By ID V2__ endpoint.
+
     **Version 1.10.2: 28/08/2024**
     > - Added __Retrieve Accounts V3__ endpoint.
     > - Added __Retrieve Accounts By ID V3__ endpoint.
@@ -2768,6 +2772,7 @@ paths:
       summary: Retrieve Ingestion Task Status V3
       description: |
         Check the status of an ingest request. Please note that this works for both the Ingest Transactions endpoints And Ingest Accounts endpoints.
+        Ingestion tasks are accessible for 15 minutes after ingestion, after which they are deleted.
         Reports status of the ingestion task, with details for each subtask (1 per customer).
       operationId: v3_ingest_status_get
       security:
@@ -10230,6 +10235,7 @@ components:
         - internal_error
         - internal_timeout
         - internal_transient_error
+        - provider_unauthorised
         - provider_endpoint_deprecated
         - provider_endpoint_unimplemented
         - provider_endpoint_unsupported
@@ -13125,6 +13131,7 @@ components:
     AccountV2:
       title: Account
       type: object
+      deprecated: true
       required:
         - account_id
         - currency
