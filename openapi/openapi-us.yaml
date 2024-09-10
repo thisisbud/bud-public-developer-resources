@@ -219,6 +219,10 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+
+    **Version 1.10.4: 04/09/2024**
+    > - Added result field to __Retrieve Ingestion Task Status V3__ endpoint response.
+
     **Version 1.10.3: 04/09/2024**
     > - Deprecated __Retrieve Accounts V2__ endpoint.
     > - Deprecated __Retrieve Accounts By ID V2__ endpoint.
@@ -2805,9 +2809,11 @@ paths:
                     data:
                       - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
                         status: Completed
+                        result: success
                     metadata:
                       task_id: 3d592efc-493a-4548-8008-f738fd0877ab
                       status: Completed
+                      result: success
                       ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
                       ingest_route: v2_ingest_transactions_post
                       ingest_schema: application/bud-transaction-v3+json
@@ -2817,11 +2823,13 @@ paths:
                     data:
                       - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
                         status: Failed
+                        result: data_mapping_error
                         error:
                           accounts[0].currency: 'unexpected currency code: GlkjlkjBP, expected ISO-4217 currency code'
                     metadata:
                       task_id: 3d592efc-493a-4548-8008
                       status: Failed
+                      result: data_mapping_error
         '401':
           description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
         '404':
@@ -11904,6 +11912,17 @@ components:
                 - date
               ba466961-d623-4173-9001-2f6487a9a41e:
                 - date
+    IngestTaskResult:
+      title: Ingestion Task Result
+      type: string
+      description: |
+        Indicates the outcome of the ingest task. Either success or various error codes:
+        | code | description |
+        | ---- | ----------- |
+        | success | Ingestion completed successfully. Data is now available. |
+        | validation_error | The request format is invalid. Please review the endpoint documentation for correct parameters and headers. |
+        | data_mapping_error | The data payload does not match the expected schema. Ensure your data aligns with the defined structure. |
+        | internal_error | Something went wrong on our side. Please retry your request later. |
     IngestResponseV3SubTask:
       title: Customer Ingest Task
       description: A single customer ingest task status
@@ -11924,6 +11943,8 @@ components:
             - Completed
             - Failed
             - Pending
+        result:
+          $ref: '#/components/schemas/IngestTaskResult'
         error:
           description: Any error messages describing why a sub task has failed.
           type: object
@@ -11951,6 +11972,8 @@ components:
           description: Unique task identifier.
         status:
           $ref: '#/components/schemas/OverallIngestResponseStatus'
+        result:
+          $ref: '#/components/schemas/IngestTaskResult'
         ingest_request_id:
           type: string
           format: uuid
