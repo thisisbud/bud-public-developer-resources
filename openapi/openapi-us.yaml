@@ -214,6 +214,8 @@ info:
     | 21/05/2024           | Deprecated **Retrieve Refresh Status** in favour of **Retrieve Refresh Status V2** (Six month deprecation Notice) |
     | 27/08/2024           | Deprecated **Retrieve Affordability Transactions** in favour of **Retrieve Affordability Transactions V2**        |
     | 28/08/2024           | Deprecated **Retrieve Balances Over Time** in favour of **Retrieve Balances Over Time V3**                        |
+    | 04/09/2024           | Deprecated **Retrieve Account V2** in favour of **Retrieve Account V3**                                           |
+    | 04/09/2024           | Deprecated **Retrieve Account By ID V2** in favour of **Retrieve Account By ID V3**                               |
 
     ## Changelog
 
@@ -3197,12 +3199,16 @@ paths:
       tags:
         - Retrieve Financial Data
       summary: Retrieve Accounts V2
+      deprecated: true
       description: |
         Retrieves a list of a customer's connected accounts. The result can be filtered using the parameters outlined below.
 
-        > 📘 Note:
+        > ❗️ Deprecation:
         >
-        > For more information on the Account object, please refer to our handy [guide](https://docs-us.thisisbud.com/docs/accounts).
+        > Support will cease for this endpoint on the 1st of April 2025 - 
+        > please complete your migration to the Retrieve Accounts V3 endpoint by 
+        > that point in time. For further details, contact your Bud account manager or 
+        > email help@thisisbud.com.
       operationId: financial_v2_accounts
       security:
         - OAuth2: []
@@ -3864,12 +3870,16 @@ paths:
       tags:
         - Retrieve Financial Data
       summary: Retrieve Account By ID V2
+      deprecated: true
       description: |
         Retrieves a customer's connected account by its ID.
 
-        > 📘 Note:
+        > ❗️ Deprecation:
         >
-        > For more information on the Account object, please refer to our handy [guide](https://docs-us.thisisbud.com/docs/accounts).
+        > Support will cease for this endpoint on the 1st of April 2025 - 
+        > please complete your migration to the Retrieve Accounts By ID V3 endpoint by 
+        > that point in time. For further details, contact your Bud account manager or 
+        > email help@thisisbud.com.
       operationId: financial_v2_accounts_account_id
       security:
         - OAuth2: []
