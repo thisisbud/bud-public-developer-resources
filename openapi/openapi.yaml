@@ -17762,6 +17762,7 @@ components:
       type: string
       description: |
         Indicates the outcome of the ingest task. Either success or various error codes:
+
         | code | description |
         | ---- | ----------- |
         | success | Ingestion completed successfully. Data is now available. |
