@@ -10254,6 +10254,7 @@ components:
         - internal_timeout
         - internal_transient_error
         - provider_unauthorised
+        - provider_unavailable
         - provider_endpoint_deprecated
         - provider_endpoint_unimplemented
         - provider_endpoint_unsupported
