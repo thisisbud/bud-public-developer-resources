@@ -4938,7 +4938,13 @@ paths:
       summary: Retrieve Accounts V2
       description: |
         Retrieves a list of a customer's connected accounts. The result can be filtered using the parameters outlined below.
-        > ❗️ Deprecation: > > Support will cease for this endpoint on the 1st of April 2025 -  > please complete your migration to the Retrieve Accounts V3 endpoint by  > that point in time. For further details, contact your Bud account manager or  > email help@thisisbud.com.
+
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of April 2025 - 
+        > please complete your migration to the Retrieve Accounts V3 endpoint by 
+        > that point in time. For further details, contact your Bud account manager or 
+        > email help@thisisbud.com.
       operationId: financial_v2_accounts
       security:
         - OAuth2: []
@@ -5130,7 +5136,13 @@ paths:
       summary: Retrieve Account By ID V2
       description: |
         Retrieves a customer's connected account by its ID.
-        > ❗️ Deprecation: > > Support will cease for this endpoint on the 1st of April 2025 -  > please complete your migration to the Retrieve Accounts By ID V3 endpoint by  > that point in time. For further details, contact your Bud account manager or  > email help@thisisbud.com.
+
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of April 2025 - 
+        > please complete your migration to the Retrieve Accounts By ID V3 endpoint by 
+        > that point in time. For further details, contact your Bud account manager or 
+        > email help@thisisbud.com.
       operationId: financial_v2_accounts_account_id
       security:
         - OAuth2: []
