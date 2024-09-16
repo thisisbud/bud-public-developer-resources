@@ -2920,7 +2920,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListAccountsV3Response'
               examples:
-                Account Without Parties Data:
+                Account:
                   value:
                     operation_id: financial_v3_accounts
                     data:
@@ -2933,48 +2933,6 @@ paths:
                         account_type: current_account
                         usage_type: personal
                         provider: plaid
-                        identifiers:
-                          plaid_account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk7
-                          plaid_official_name: Plaid Gold Standard 0% Interest Checking
-                        balances:
-                          booked:
-                            date: '2023-01-12T00:00:00Z'
-                            amount:
-                              value: '3552.61'
-                              currency: USD
-                            credit_debit_indicator: credit
-                          pending:
-                            date: '2023-01-12T00:00:00Z'
-                            amount:
-                              value: '3552.61'
-                              currency: USD
-                            credit_debit_indicator: credit
-                        credit_lines:
-                          limit:
-                            date: '2023-01-12T00:00:00Z'
-                            amount:
-                              value: '1000.00'
-                              currency: USD
-                    metadata:
-                      parameters:
-                        currencies:
-                          - USD
-                      results: 1
-                Account With Parties Data:
-                  value:
-                    operation_id: financial_v3_accounts
-                    data:
-                      - account_id: RxsYshVGded4JeilkXgWKdXA
-                        currency: USD
-                        holders:
-                          - name: Liam Johnson
-                            relationship: joint
-                          - name: Olivia Johnson
-                            relationship: joint
-                        account_name: Household Account
-                        account_type: current_account
-                        usage_type: personal
-                        provider: BankOfBud
                         identifiers:
                           plaid_account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk7
                           plaid_official_name: Plaid Gold Standard 0% Interest Checking
@@ -3070,7 +3028,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RetrieveAccountByIDV3Response'
               examples:
-                Single Holder Personal Account:
+                Account:
                   value:
                     operation_id: financial_v3_accounts_account_id
                     data:
@@ -3080,47 +3038,6 @@ paths:
                         - name: Olivia Johnson
                           relationship: unknown
                       account_name: My Current Account
-                      account_type: current_account
-                      provider: plaid
-                      identifiers:
-                        plaid_account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk7
-                        plaid_official_name: Plaid Gold Standard 0% Interest Checking
-                      balances:
-                        booked:
-                          date: '2023-01-12T00:00:00Z'
-                          amount:
-                            value: '3552.61'
-                            currency: USD
-                          credit_debit_indicator: credit
-                        pending:
-                          date: '2023-01-12T00:00:00Z'
-                          amount:
-                            value: '3552.61'
-                            currency: USD
-                          credit_debit_indicator: credit
-                      credit_lines:
-                        limit:
-                          date: '2023-01-12T00:00:00Z'
-                          amount:
-                            value: '1000.00'
-                            currency: USD
-                    metadata:
-                      parameters:
-                        currencies:
-                          - USD
-                      results: 1
-                Multiple Holder Joint Account:
-                  value:
-                    operation_id: financial_v3_accounts_account_id
-                    data:
-                      account_id: RxsYshVGded4JeilkXgWKdXA
-                      currency: USD
-                      holders:
-                        - name: Liam Johnson
-                          relationship: joint
-                        - name: Olivia Johnson
-                          relationship: joint
-                      account_name: Household Account
                       account_type: current_account
                       provider: plaid
                       identifiers:
@@ -3205,10 +3122,7 @@ paths:
 
         > ❗️ Deprecation:
         >
-        > Support will cease for this endpoint on the 1st of April 2025 - 
-        > please complete your migration to the Retrieve Accounts V3 endpoint by 
-        > that point in time. For further details, contact your Bud account manager or 
-        > email help@thisisbud.com.
+        > Support will cease for this endpoint on the 1st of April 2025 - please complete your migration to the Retrieve Accounts V3 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
       operationId: financial_v2_accounts
       security:
         - OAuth2: []
@@ -3876,10 +3790,7 @@ paths:
 
         > ❗️ Deprecation:
         >
-        > Support will cease for this endpoint on the 1st of April 2025 - 
-        > please complete your migration to the Retrieve Accounts By ID V3 endpoint by 
-        > that point in time. For further details, contact your Bud account manager or 
-        > email help@thisisbud.com.
+        > Support will cease for this endpoint on the 1st of April 2025 - please complete your migration to the Retrieve Accounts V3 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
       operationId: financial_v2_accounts_account_id
       security:
         - OAuth2: []
