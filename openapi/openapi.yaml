@@ -4941,7 +4941,6 @@ paths:
 
         > ❗️ Deprecation:
         >
-
         > Support will cease for this endpoint on the 1st of April 2025 - please complete your migration to the Retrieve Accounts V3 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
       operationId: financial_v2_accounts
       security:
