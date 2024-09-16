@@ -304,6 +304,11 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.13.0: 16/09/2024**
+    > - Added __Book Transactions V3__ endpoint.
+    > - Added __Decline Transactions V3__ endpoint.
+    > - Added status filter to __Retrieve Transactions V2__.
+
     **Version 2.12.4: 04/09/2024**
     > - Added __Result__ field to __Retrieve Ingestion Task Status V3__ endpoint response.
 
@@ -3837,6 +3842,182 @@ paths:
           description: The request uses an unexpected HTTP method
         5XX:
           description: An unexpected error occurred on the server side
+  /ingestion/v3/transactions/book:
+    post:
+      tags:
+        - Ingest First Party Data
+      summary: Book Transactions V3
+      description: |
+        The Book Transactions V3 endpoint, allows transactions ingested with a `status` of `pending` to set their status to `booked`.
+
+        The date_time field indicates the timestamp when the transaction booked. This is reflected in the `date_time` of __Retrieve Transactions V2__.
+      operationId: v3_ingest_transactions_book_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionSettlementV3Request'
+            example:
+              - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                transactions:
+                  - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                    date_time: '2022-10-11T23:00:00Z'
+                  - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
+                    date_time: '2022-11-11T23:00:00Z'
+      responses:
+        '202':
+          description: |
+            A new Task has been created to book the given transactions. The generated `task_id` can be used to check the Task's status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionSettlementV3Response'
+              example:
+                operation_id: v3_ingest_transactions_book_post
+                metadata:
+                  task_id: 444ddd34-7d02-4b57-a55e-63b15b25d453
+                  next_url: /v2/ingest/status/444ddd34-7d02-4b57-a55e-63b15b25d453
+                  next_url_delay: 250
+        '400':
+          description: There was something invalid in the request payload. Check the response for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorWihoutErrRequired'
+              example:
+                operation_id: v3_ingest_transactions_book_post
+                code_id: failed_body_decode
+                message: Unable to parse request.
+        '401':
+          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
+        5XX:
+          description: An unexpected error occurred on the server side
+      callbacks:
+        TransactionBookCompletedCallback:
+          https://example.com/booked:
+            description: |
+              This callback is sent to your pre-configured webhook URL for the `first_party_ingester.transactions.booked` event.
+            post:
+              security: []
+              parameters:
+                - $ref: '#/components/parameters/SignatureHeaderParameter'
+                - $ref: '#/components/parameters/SigningIdHeaderParameter'
+              summary: Transaction Book Completed Callback
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/TransactionSettlementV3WebookBody'
+                    example:
+                      data:
+                        event: first_party_ingester.transactions.booked
+                        operation_id: v3_ingest_transactions_book_post
+                        status: Completed
+                        task_id: 444ddd34-7d02-4b57-a55e-63b15b25d453
+              responses:
+                '200':
+                  description: Your server returns this code if it accepts the callback
+                '300':
+                  description: The notification will not be retried, redirects will not be followed
+                '400':
+                  description: The notification will not be retried
+                '500':
+                  description: |
+                    The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
+  /ingestion/v3/transactions/decline:
+    post:
+      tags:
+        - Ingest First Party Data
+      summary: Decline Transactions V3
+      description: |
+        The Decline Transactions V3 endpoint, allows transactions ingested with a `status` of `pending` to set their status to `declined`.
+
+        The date_time field indicates the timestamp when the transaction declined. This is reflected in the `date_time` of __Retrieve Transactions V2__.
+      operationId: v3_ingest_transactions_decline_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionSettlementV3Request'
+            example:
+              - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                transactions:
+                  - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                    date_time: '2022-10-11T23:00:00Z'
+                  - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
+                    date_time: '2022-11-11T23:00:00Z'
+      responses:
+        '202':
+          description: |
+            A new Task has been created to decline the given transactions. The generated `task_id` can be used to check the Task's status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionSettlementV3Response'
+              example:
+                operation_id: v3_ingest_transactions_decline_post
+                metadata:
+                  task_id: 444ddd34-7d02-4b57-a55e-63b15b25d453
+                  next_url: /v2/ingest/status/444ddd34-7d02-4b57-a55e-63b15b25d453
+                  next_url_delay: 250
+        '400':
+          description: Payload request was invalid. Check the response for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorWihoutErrRequired'
+              example:
+                operation_id: v3_ingest_transactions_decline_post
+                code_id: failed_body_decode
+                message: Unable to parse request.
+        '401':
+          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
+        5XX:
+          description: An unexpected error occurred on the server side
+      callbacks:
+        TransactionDeclineCompletedCallback:
+          https://example.com/declined:
+            description: |
+              This callback is sent to your pre-configured webhook URL for the `first_party_ingester.transactions.declined` event.
+            post:
+              security: []
+              parameters:
+                - $ref: '#/components/parameters/SignatureHeaderParameter'
+                - $ref: '#/components/parameters/SigningIdHeaderParameter'
+              summary: Transaction Book Completed Callback
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/TransactionSettlementV3WebookBody'
+                    example:
+                      data:
+                        event: first_party_ingester.transactions.declined
+                        operation_id: v3_ingest_transactions_decline_post
+                        status: Completed
+                        task_id: 444ddd34-7d02-4b57-a55e-63b15b25d453
+              responses:
+                '200':
+                  description: Your server returns this code if it accepts the callback
+                '300':
+                  description: The notification will not be retried, redirects will not be followed
+                '400':
+                  description: The notification will not be retried
+                '500':
+                  description: |
+                    The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
   /ingestion/v3/tasks/{task_id}:
     get:
       tags:
@@ -6126,6 +6307,19 @@ paths:
             The `updated_after` parameter lets you retrieve transactions that have been modified since  a specific date and time. This format should follow the RFC3339 standard (e.g., "2024-06-01T11:00:00Z").
             This parameter is particularly useful for keeping local copies of transactions up-to-date. By storing the  timestamp of your last successful fetch, you can request only transactions updated after that point during  subsequent retrievals. 
             This approach ensures you only fetch the latest changes, making the process more streamlined.
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum:
+              - booked
+              - pending
+              - declined
+          example: booked
+          description: |
+            Statuses of transactions to be returned. This parameter can be supplied multiple times to fetch transactions with a combination of statuses.
+
+            By default, declined transactions are excluded from the results.
       responses:
         '200':
           description: The request was successfully processed.
@@ -14345,6 +14539,7 @@ components:
           enum:
             - booked
             - pending
+            - declined
         amount:
           $ref: '#/components/schemas/BudAmount'
         date_time:
@@ -17493,6 +17688,7 @@ components:
           enum:
             - pending
             - booked
+            - declined
           default: booked
           description: The status of the transaction. If not provided, the default value is `booked`.
           example: booked
@@ -17863,6 +18059,122 @@ components:
         operation_id: ingest_transactions_get
         code_id: not_found
         message: Task not found
+    TransactionSettlementV3Request:
+      type: array
+      items:
+        type: object
+        required:
+          - customer_id
+        properties:
+          customer_id:
+            $ref: '#/components/schemas/CustomerID'
+          customer_secret:
+            $ref: '#/components/schemas/CustomerSecret'
+          transactions:
+            type: array
+            items:
+              type: object
+              required:
+                - transaction_id
+                - date_time
+              properties:
+                transaction_id:
+                  type: string
+                  description: The unique identifier of a transaction to be booked.
+                date_time:
+                  type: string
+                  description: |
+                    The datetime when the transaction transitioned to booked in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+                    Examples:
+                      - `2023-01-17T17:29:51Z`
+                      - `2023-01-17T17:29:51-08:00`
+    TransactionSettlementV3Response:
+      title: Settle Transactions V3 Response
+      type: object
+      required:
+        - operation_id
+        - metadata
+      properties:
+        operation_id:
+          type: string
+        metadata:
+          type: object
+          required:
+            - task_id
+          properties:
+            task_id:
+              type: string
+              format: uuid
+              description: Can be used with the transaction status endpoint to retrieve the status of the full enriched process
+            next_url:
+              type: string
+              format: url
+              description: The URL to call to obtain the current status of the task.
+              example: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+            next_url_delay:
+              type: number
+              description: The time in milliseconds that the client should wait before trying to retrieve the current status of the task.
+              example: 500
+    BadRequestErrorWihoutErrRequired:
+      type: object
+      title: JSON Decoding Error
+      required:
+        - operation_id
+        - code_id
+        - message
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+        message:
+          type: string
+          description: High level description of what has failed
+        errors:
+          type: object
+          description: Contains more details on the decoding error
+    TransactionSettlementV3WebookBody:
+      title: Transaction Settlement Webhook Payload
+      type: object
+      description: |
+        The payload send to the client defined webhook (via the console) when a Book or Decline settlement task is Completed.
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - event
+            - operation_id
+            - status
+            - task_id
+          properties:
+            event:
+              description: The type of settlement task that completed.
+              type: string
+              enum:
+                - first_party_ingester.transactions.booked
+                - first_party_ingester.transactions.declined
+            operation_id:
+              description: The operation ID of settlement task that completed.
+              type: string
+              enum:
+                - v3_ingest_transactions_book_post
+                - v3_ingest_transactions_decline_post
+            status:
+              description: The status of the settlement task that completed.
+              type: string
+              enum:
+                - Completed
+                - PartialCompleted
+                - Failed
+            task_id:
+              description: |
+                The task_id of the settlement task that completed.
+
+                This can be used to check full status and errors of the task using the __Retrieve Ingestion Task Status V3__ endpoint. 
+              type: string
     IngestResponseV3SubTask:
       title: Customer Ingest Task
       description: A single customer ingest task status
