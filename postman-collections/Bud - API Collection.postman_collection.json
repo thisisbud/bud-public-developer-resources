@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ab513e5e-b14d-4184-ae3f-6b0ec9af2fea",
+		"_postman_id": "019a2b3a-b26b-427f-8a06-b32187f681ca",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -49,6 +49,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
 								"type": "text"
 							}
 						],
