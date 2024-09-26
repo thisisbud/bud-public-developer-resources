@@ -3526,6 +3526,8 @@ paths:
 
         The detailed location enrichment response is an additional addon, otherwise only tokens are returned 
         (read more about this in the location [guide](https://docs.thisisbud.com/docs/locations)).
+
+        An ingestion request with an empty transaction list and provided transaction windows will be treated as a request to clear persisted transactions in the specified windows.
       operationId: v2_ingest_transactions_post
       security:
         - OAuth2: []
@@ -9459,7 +9461,7 @@ paths:
               metadata:
                 loan_product_code: credit_card_1234
       responses:
-        '200':
+        '201':
           description: The request was successfully processed.
           content:
             application/json:
@@ -9681,7 +9683,7 @@ paths:
                     text/html:
                       schema: {}
       responses:
-        '200':
+        '201':
           description: The request was successfully processed.
           content:
             application/json:
@@ -17373,7 +17375,7 @@ components:
         accounts:
           type: array
           description: List of accounts that belongs to the customer.
-          minLength: 1
+          minItems: 1
           items:
             $ref: '#/components/schemas/IngestCustomerAccount'
     IngestAccountsRequest:
@@ -17741,6 +17743,7 @@ components:
       type: array
       description: |
         If not provided, the transaction window is inferred from the date of the first and last transactions.
+        Only a single window per customer account is supported.
       items:
         $ref: '#/components/schemas/TransactionWindow'
     IngestTransactionsV3Request:
@@ -17751,7 +17754,6 @@ components:
         type: object
         required:
           - customer_id
-          - transactions
         properties:
           customer_id:
             $ref: '#/components/schemas/CustomerID'
@@ -17762,7 +17764,7 @@ components:
           transactions:
             type: array
             description: List of transactions belonging to the customer.
-            minLength: 1
+            minItems: 1
             items:
               $ref: '#/components/schemas/CustomerTransactionV3'
           transaction_windows:
@@ -18106,7 +18108,10 @@ components:
             task_id:
               type: string
               format: uuid
-              description: Can be used with the transaction status endpoint to retrieve the status of the full enriched process
+              description: |
+                The task_id of the async settlement task.
+
+                This can be used to check the status and errors of the task using the __Retrieve Ingestion Task Status V3__ endpoint. 
             next_url:
               type: string
               format: url
@@ -18312,7 +18317,6 @@ components:
       title: Client Metadata
       description: A set of Client Metadata
       type: object
-      maxLength: 255
       properties:
         idempotent_identifier:
           $ref: '#/components/schemas/IdempotentIdentifier'
@@ -19476,25 +19480,27 @@ components:
           type: object
           description: |
             The balances ingested for the account.
-            This field is only present if booked balance was found from ingested balances.
+            > 📘 Note
+            >
+            > Normalised balances are derived from ingested data, therefore we're unable to guarantee that either a `booked` or `pending` balance will always be present. Where possible we will look to return both.
           properties:
             booked:
               description: |
                 The booked balance for the account at the given date. 
-                This field is only present if booked balance was found from ingested balances.
+                This field is not guaranteed to be present. It will only exist if a booked balance was found from ingested balances.
               allOf:
                 - $ref: '#/components/schemas/AccountV3Balance'
             pending:
               description: |
                 The pending balance for the account at the given date.
-                This field is only present if pending balance was found from ingested balances.
+                This field is not guaranteed to be present. It will only exist if a pending balance was found from ingested balances.
               allOf:
                 - $ref: '#/components/schemas/AccountV3Balance'
             all_balances:
               type: array
               description: |
-                All balances stored for the account.
-                Only included if the `include_all_balances` query parameter is set
+                A granular breakdown of balance types ingested for the account.
+                **NOTE: Only included if the `include_all_balances` query parameter is set.**
               items:
                 $ref: '#/components/schemas/AccountV3Balance_WithType'
         credit_lines:
@@ -20249,7 +20255,7 @@ components:
       properties:
         transactions:
           type: array
-          minLength: 1
+          minItems: 1
           items:
             type: string
           description: A list of transaction identifiers to be corrected
@@ -23250,7 +23256,7 @@ components:
       title: Payment Services
       description: A payment service supported by a payment provider
       type: array
-      minLength: 1
+      minItems: 1
       items:
         type: string
         enum:
@@ -23261,7 +23267,7 @@ components:
       title: Payment provider supported currencies
       description: The currencies supported by the payment provider
       type: array
-      minLength: 1
+      minItems: 1
       items:
         type: string
         enum:
@@ -23438,8 +23444,6 @@ components:
         provider:
           type: string
           description: The name (identifier) of the payment provider
-          items:
-            type: string
         provider_types:
           $ref: '#/components/schemas/ProviderTypes'
         payment_details:
@@ -23828,6 +23832,9 @@ components:
           description: The created at timestamp for the payment
         required_action:
           type: string
+          enum:
+            - confirm_single_payment
+            - null
           nullable: true
           description: |
             This field will indicate that there is an action required to be taken by the client in order to complete the payment.
@@ -23835,10 +23842,6 @@ components:
             | Value  |  Description |
             |:-------|:-------------|
             | confirm_single_payment | If present, this value indicates that client has yet to confirm the single payment once the customer has successfully authorised the payment with the provider. This confirmation can be accomplished using the Confirm Single Payment API Endpoint. Please note this step will only be relevant for clients using Bud as a Technical Service Provider (TSP) |
-          items:
-            type: string
-            enum:
-              - confirm_single_payment
     ListSinglePaymentResponse:
       title: List Payment Status Response
       type: object
@@ -24134,10 +24137,9 @@ components:
             | Value  |  Description |
             |:-------|:-------------|
             | confirm_standing_order | If present, this value indicates that client has yet to confirm the standing order once the customer has successfully authorised the payment with the provider. This confirmation can be accomplished using the Confirm Standing Order API Endpoint. Please note this step will only be relevant for clients using Bud as a Technical Service Provider (TSP) |
-          items:
-            type: string
-            enum:
-              - confirm_standing_order
+          enum:
+            - confirm_standing_order
+            - null
     ListStandingOrderResponse:
       title: List Standing Order Response
       type: object
@@ -24360,10 +24362,9 @@ components:
             | Value  |  Description |
             |:-------|:-------------|
             | confirm_scheduled_payment | If present, this value indicates that client has yet to confirm the Scheduled Payment once the customer has successfully authorised the payment with the provider. This confirmation can be accomplished using the Confirm Scheduled Payment API Endpoint. Please note this step will only be relevant for clients using Bud as a Technical Service Provider (TSP) |
-          items:
-            type: string
-            enum:
-              - confirm_scheduled_payment
+          enum:
+            - confirm_scheduled_payment
+            - null
     ListScheduledPaymentResponse:
       title: List Scheduled Payment Response
       type: object
@@ -24446,6 +24447,7 @@ components:
               description: The authorisation URL for a relevant payment provider. Redirect your Customer to this url to allow them to authorise the scheduled instruction
             required_action:
               type: string
+              nullable: true
               description: |
                 If present, this fild will indicate the next required action (if any) to be taken by the client in order to complete the payment flow
 
