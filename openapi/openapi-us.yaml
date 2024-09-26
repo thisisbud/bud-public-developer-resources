@@ -8894,7 +8894,7 @@ components:
         accounts:
           type: array
           description: List of accounts that belongs to the customer.
-          minLength: 1
+          minItems: 1
           items:
             $ref: '#/components/schemas/PlaidCustomerAccount'
     PlaidCustomerAccount:
@@ -9042,7 +9042,7 @@ components:
         transactions:
           type: array
           description: List of transactions that belongs to the customer.
-          minLength: 1
+          minItems: 1
           items:
             $ref: '#/components/schemas/PlaidTransaction'
         transaction_windows:
@@ -9157,7 +9157,7 @@ components:
         accounts:
           type: array
           description: List of accounts that belongs to the customer.
-          minLength: 1
+          minItems: 1
           items:
             $ref: '#/components/schemas/FinicityCustomerAccount'
     FinicityCustomerAccount:
@@ -9258,7 +9258,7 @@ components:
         transactions:
           type: array
           description: List of transactions that belongs to the customer.
-          minLength: 1
+          minItems: 1
           items:
             $ref: '#/components/schemas/FinicityTransaction'
         transaction_windows:
@@ -9968,7 +9968,6 @@ components:
       title: Client Metadata
       description: A set of Client Metadata
       type: object
-      maxLength: 255
       properties:
         idempotent_identifier:
           $ref: '#/components/schemas/IdempotentIdentifier'
@@ -11413,7 +11412,7 @@ components:
         accounts:
           type: array
           description: List of accounts that belongs to the customer.
-          minLength: 1
+          minItems: 1
           items:
             $ref: '#/components/schemas/IngestCustomerAccount'
     IngestAccountsRequest:
@@ -11710,6 +11709,7 @@ components:
       type: array
       description: |
         If not provided, the transaction window is inferred from the date of the first and last transactions.
+        Only a single window per customer account is supported.
       items:
         $ref: '#/components/schemas/TransactionWindow'
     IngestTransactionsV3Request:
@@ -11720,7 +11720,6 @@ components:
         type: object
         required:
           - customer_id
-          - transactions
         properties:
           customer_id:
             $ref: '#/components/schemas/CustomerID'
@@ -11731,7 +11730,7 @@ components:
           transactions:
             type: array
             description: List of transactions belonging to the customer.
-            minLength: 1
+            minItems: 1
             items:
               $ref: '#/components/schemas/CustomerTransactionV3'
           transaction_windows:
@@ -12075,7 +12074,10 @@ components:
             task_id:
               type: string
               format: uuid
-              description: Can be used with the transaction status endpoint to retrieve the status of the full enriched process
+              description: |
+                The task_id of the async settlement task.
+
+                This can be used to check the status and errors of the task using the __Retrieve Ingestion Task Status V3__ endpoint. 
             next_url:
               type: string
               format: url
@@ -12516,25 +12518,27 @@ components:
           type: object
           description: |
             The balances ingested for the account.
-            This field is only present if booked balance was found from ingested balances.
+            > 📘 Note
+            >
+            > Normalised balances are derived from ingested data, therefore we're unable to guarantee that either a `booked` or `pending` balance will always be present. Where possible we will look to return both.
           properties:
             booked:
               description: |
                 The booked balance for the account at the given date. 
-                This field is only present if booked balance was found from ingested balances.
+                This field is not guaranteed to be present. It will only exist if a booked balance was found from ingested balances.
               allOf:
                 - $ref: '#/components/schemas/AccountV3Balance'
             pending:
               description: |
                 The pending balance for the account at the given date.
-                This field is only present if pending balance was found from ingested balances.
+                This field is not guaranteed to be present. It will only exist if a pending balance was found from ingested balances.
               allOf:
                 - $ref: '#/components/schemas/AccountV3Balance'
             all_balances:
               type: array
               description: |
-                All balances stored for the account.
-                Only included if the `include_all_balances` query parameter is set
+                A granular breakdown of balance types ingested for the account.
+                **NOTE: Only included if the `include_all_balances` query parameter is set.**
               items:
                 $ref: '#/components/schemas/AccountV3Balance_WithType'
         credit_lines:
@@ -13696,7 +13700,7 @@ components:
       properties:
         transactions:
           type: array
-          minLength: 1
+          minItems: 1
           items:
             type: string
           description: A list of transaction identifiers to be corrected
