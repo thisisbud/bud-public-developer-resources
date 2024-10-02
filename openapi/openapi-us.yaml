@@ -216,6 +216,7 @@ info:
     | 28/08/2024           | Deprecated **Retrieve Balances Over Time** in favour of **Retrieve Balances Over Time V3**                        |
     | 04/09/2024           | Deprecated **Retrieve Account V2** in favour of **Retrieve Account V3**                                           |
     | 04/09/2024           | Deprecated **Retrieve Account By ID V2** in favour of **Retrieve Account By ID V3**                               |
+    | 02/10/2024           | Deprecated **Retrieve Affordability Transactions** in favour of **Retrieve Affordability Transactions V2**        |
 
     ## Changelog
 
