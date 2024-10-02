@@ -298,7 +298,9 @@ info:
     | 27/08/2024           | Deprecated **Retrieve Affordability Transactions** in favour of **Retrieve Affordability Transactions V2** (Three month deprecation Notice)                                                                                                                                                                                                                                                                                                |
     | 28/08/2024           | Deprecated **Retrieve Balances Over Time** in favour of **Retrieve Balances Over Time V3** (Three month deprecation Notice)                                                                                                                                                                                                                                                                                                                |
     | 04/09/2024           | Deprecated **Retrieve Account V2** in favour of **Retrieve Account V3** (Six month deprecation notice)                                                                                                                                                                                                                                                                                                                                     |
-    | 04/09/2024           | Deprecated **Retrieve Account By ID V2** in favour of **Retrieve Account By ID V3** (Six month deprecation notice)                                                                                                                                                                                                                                                                                                                         |
+    | 04/09/2024           | Deprecated **Retrieve Account By ID V2** in favour of **Retrieve Account By ID V3** (Six month deprecation notice)
+
+    | 02/10/2024           | Deprecated **Retrieve Affordability Transactions** in favour of **Retrieve Affordability Transactions V2** (Three month deprecation Notice)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
     ## Changelog
 
@@ -10749,7 +10751,11 @@ paths:
       tags:
         - Retrieve Affordability Report
       summary: Retrieve Affordability Transactions
-      description: View the transactions that were used to calculate a customer's Retrieve Affordability Report.
+      description: |
+        View the transactions that were used to calculate a customer's Retrieve Affordability Report.
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 31st of Jan 2025 - please complete your migration to the Retrieve Affordability Transactions V2 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
       operationId: v1_affordability_transactions_get
       deprecated: true
       security:
