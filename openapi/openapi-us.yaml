@@ -2633,7 +2633,11 @@ paths:
           description: |
             The synchronous enrichment request has succeeded and enriched transaction returned. 
             A new Task has been created to ingest and fully enrich the given transactions. 
+
             The generated `task_id` can be used to check the Task's status
+
+            Note: If the endpoint is used with in synchronously and it's been agreed with Bud to 
+            not store data, the `metadata.task_id` attribute in the response body will be present but empty.
           content:
             application/json:
               schema:
@@ -10208,7 +10212,8 @@ components:
           description: The start datetime (ISO8601) of the maintenance window
         end:
           type: string
-          description: The end datetime (ISO8601) of the maintenance window
+          nullable: true
+          description: The end datetime (ISO8601) of the maintenance window. When this value is `null` it means Bud will manually remove the maintenance flag when the provider is back healthy.
     OBProvider:
       title: Open Banking Providers
       type: object
@@ -11948,6 +11953,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TransactionForSyncIngest'
+    IngestV2SyncMetadata:
+      title: Created Task Details
+      description: Metadata on the created task, including the task_id
+      type: object
+      required:
+        - task_id
+      properties:
+        task_id:
+          type: string
+          nullable: true
+          format: uuid
+          description: Can be used with the transaction status endpoint to retrieve the status of the full enriched process
+        next_url:
+          type: string
+          format: url
+          description: The URL to call to obtain the current status of the task.
+          example: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+        next_url_delay:
+          type: number
+          description: The time in milliseconds that the client should wait before trying to retrieve the current status of the task.
+          example: 500
     IngestV2SyncResponse:
       title: Ingest Transactions V2 Sync Response
       type: object
@@ -11963,7 +11989,7 @@ components:
               items:
                 $ref: '#/components/schemas/IngestV2SyncResponseData'
             metadata:
-              $ref: '#/components/schemas/IngestV2Metadata'
+              $ref: '#/components/schemas/IngestV2SyncMetadata'
     ValidationError:
       type: object
       title: Validation Errors
