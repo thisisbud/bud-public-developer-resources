@@ -3041,7 +3041,7 @@ paths:
       description: |
         Retrieves a list of a customer's connected accounts. The result can be filtered using the parameters outlined below.
         > 📘 Note: > > For more information on the Account object, please refer to our handy [guide](https://docs.thisisbud.com/docs/accounts).
-      operationId: financial_v3_accounts
+      operationId: financial_v3_accounts_get
       security:
         - OAuth2: []
       parameters:
@@ -3107,7 +3107,7 @@ paths:
               examples:
                 Account:
                   value:
-                    operation_id: financial_v3_accounts
+                    operation_id: financial_v3_accounts_get
                     data:
                       - account_id: RxsYshVGded4JeilkXgWKdXA
                         currency: USD
@@ -3154,14 +3154,14 @@ paths:
               examples:
                 CustomerID Not Sent:
                   value:
-                    operation_id: financial_v3_accounts
+                    operation_id: financial_v3_accounts_get
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
                       X-Customer-Id: not present
                 CustomerID and CustomerSecret Not Sent:
                   value:
-                    operation_id: financial_v3_accounts
+                    operation_id: financial_v3_accounts_get
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
@@ -12620,7 +12620,7 @@ components:
         operation_id:
           type: string
           enum:
-            - financial_v3_accounts
+            - financial_v3_accounts_get
         data:
           type: array
           items:
