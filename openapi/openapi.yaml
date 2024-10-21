@@ -306,6 +306,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version: 2.13.1: 21/10/2024**
+    > - Added settlement (book and decline) route enums for __Retrieve Ingestion Task Status V2__ and __Retrieve Ingestion Task Status V3__ endpoint responses.
+
     **Version 2.13.0: 16/09/2024**
     > - Added __Book Transactions V3__ endpoint.
     > - Added __Decline Transactions V3__ endpoint.
@@ -18038,6 +18041,8 @@ components:
             - ingest_transactions_post
             - v2_ingest_accounts_post
             - v2_ingest_transactions_post
+            - v3_ingest_transactions_book_post
+            - v3_ingest_transactions_decline_post
         ingest_schema:
           type: string
           description: The account/transaction schema used for the ingest
