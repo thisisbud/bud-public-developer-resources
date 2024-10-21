@@ -6332,6 +6332,8 @@ paths:
             Statuses of transactions to be returned. This parameter can be supplied multiple times to fetch transactions with a combination of statuses.
 
             By default, declined transactions are excluded from the results.
+            Note: Transactions ingested via Open Banking will only come as `booked` or `pending`.
+            The `declined` status is only applicable to transactions ingested through our `Ingest First Party Data` endpoint.
       responses:
         '200':
           description: The request was successfully processed.
