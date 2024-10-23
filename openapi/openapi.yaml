@@ -306,6 +306,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version: 2.13.2: 23/10/2024**
+    > - Fixed operation ID for __Retrieve Accounts By ID V3__ endpoint
+
     **Version: 2.13.1: 21/10/2024**
     > - Added settlement (book and decline) route enums for __Retrieve Ingestion Task Status V2__ and __Retrieve Ingestion Task Status V3__ endpoint responses.
 
@@ -5625,7 +5628,7 @@ paths:
       description: |
         Retrieves a customer's connected account by its ID.
         > 📘 Note: > > For more information on the Account object, please refer to our handy [guide](https://docs.thisisbud.com/docs/accounts).
-      operationId: financial_v3_accounts_account_id
+      operationId: financial_v3_accounts_account_id_get
       security:
         - OAuth2: []
       parameters:
@@ -5643,7 +5646,7 @@ paths:
               examples:
                 Account:
                   value:
-                    operation_id: financial_v3_accounts_account_id
+                    operation_id: financial_v3_accounts_account_id_get
                     data:
                       account_id: RxsYshVGded4JeilkXgWKdXA
                       currency: GBP
@@ -5671,8 +5674,7 @@ paths:
                             currency: GBP
                     metadata:
                       parameters:
-                        currencies:
-                          - GBP
+                        account_id: RxsYshVGded4JeilkXgWKdXA
                       results: 1
         '400':
           description: The request contains an invalid payload.
@@ -5683,14 +5685,14 @@ paths:
               examples:
                 CustomerID Not Sent:
                   value:
-                    operation_id: financial_v3_accounts_account_id
+                    operation_id: financial_v3_accounts_account_id_get
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
                       X-Customer-Id: not present
                 CustomerID and CustomerSecret Not Sent:
                   value:
-                    operation_id: financial_v3_accounts_account_id
+                    operation_id: financial_v3_accounts_account_id_get
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
@@ -19676,7 +19678,7 @@ components:
         operation_id:
           type: string
           enum:
-            - financial_v3_accounts_account_id
+            - financial_v3_accounts_account_id_get
         data:
           $ref: '#/components/schemas/AccountV3'
         metadata:
