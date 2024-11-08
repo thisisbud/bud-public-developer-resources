@@ -17368,6 +17368,7 @@ components:
             - Mortgage
             - PrePaidCard
             - Savings
+            - CheckingAccount
         holder_name:
           type: string
           description: The name of the account holder
