@@ -306,6 +306,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version: 2.13.3: 29/10/2024**
+    >- Add `X-Bud-Categorisation-Model` header to __Ingest Transactions V2__ endpoint.
+
     **Version: 2.13.2: 23/10/2024**
     > - Fixed operation ID for __Retrieve Accounts By ID V3__ endpoint
 
@@ -3546,6 +3549,7 @@ paths:
         - $ref: '#/components/parameters/IngestTransactionsV2ContentType'
         - $ref: '#/components/parameters/DisableSynchronous'
         - $ref: '#/components/parameters/GenerateTransactionIDs'
+        - $ref: '#/components/parameters/BudCategorisationModel'
       requestBody:
         required: true
         content:
@@ -25688,6 +25692,18 @@ components:
       description: |
         Enable transaction ID generation based on the contents of the transaction data. The transaction ID field still needs to be provided, but it will not be validated or checked for uniqueness and instead overwritten with a generated value.
         When generating IDs from transaction data, the following fields are taken into account: account ID, description, amount, currency and date.
+    BudCategorisationModel:
+      in: header
+      name: X-Bud-Categorisation-Model
+      description: |
+        Overrides the default categorisation model for both the returned enrichment and the persisted enrichment.
+
+        Possible values can be retrieved from the __Retrieve Available Categorisation Models V2__ endpoint.
+
+        It should be noted that only models for the customers region will be used. For example, if a customer is created with the region "GB", then only "uk-v*" models will be utilised.
+        If a model is specified that cannot be used, then the default model will be used instead.
+      schema:
+        type: string
     PathCustomerID:
       in: path
       name: customer_id
