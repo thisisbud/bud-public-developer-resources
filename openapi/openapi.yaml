@@ -306,6 +306,12 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version: 2.13.4: 11/11/2024**
+    >- Add `suggested_description` and `suggested_logo` field to __Retrieve Transactions V2__ endpoint response.
+    >- Add `suggested_description` and `suggested_logo` field to __Ingest Transactions V2__ endpoint sync response.
+    >- Extend `status` enum with `declined` for __Ingest Transactions V2__ endpoint sync response.
+    >- Extend `status` description for when `declined` is returned for __Retrieve Transactions V2__ endpoint response.
+
     **Version: 2.13.3: 29/10/2024**
     >- Add `X-Bud-Categorisation-Model` header to __Ingest Transactions V2__ endpoint.
 
@@ -3604,6 +3610,8 @@ paths:
                         description: paypal* specialty coffee london GBR
                         credit_debit_indicator: debit
                         status: pending
+                        suggested_description: specialty coffee PayPal gbr london
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3af57fc-ec8a-4258-a8da-8d34f11640f6/v2/paypal.jpeg
                         amount:
                           value: '10.99'
                           currency: GBP
@@ -3642,6 +3650,8 @@ paths:
                         description: caffe nero 495 ladbroke london gbr
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: Caffè Nero
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf/v2/caffnero.jpeg
                         amount:
                           value: '3.29'
                           currency: GBP
@@ -3691,6 +3701,7 @@ paths:
                           currency: GBP
                         date_time: '2022-05-30T00:00:00Z'
                         status: booked
+                        suggested_description: JOHN SMITH RENT SHARE
                         enrichments:
                           categories:
                             l1:
@@ -6358,6 +6369,8 @@ paths:
                         description: tesco store 2613 on 28 may visa
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: Tesco
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/17ac2742-8c93-4c11-a01f-17ad65b950ce/v2/tesco.jpeg
                         amount:
                           value: '20.25'
                           currency: GBP
@@ -6414,6 +6427,8 @@ paths:
                         description: caffe nero 495 ladbroke london gbr
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: Caffè Nero
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf/v2/caffnero.jpeg
                         amount:
                           value: '3.29'
                           currency: GBP
@@ -6462,6 +6477,7 @@ paths:
                         description: JOHN SMITH RENT SHARE
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: JOHN SMITH RENT SHARE
                         amount:
                           value: '375.00'
                           currency: GBP
@@ -6496,9 +6512,10 @@ paths:
                       - transaction_id: da4ad499c86956e65e811fc88f6b54af
                         account_id: 72fa858459bd32ce0b5fd9daf813fd07
                         provider: BankOfBud
-                        description: ''
+                        description: a
                         credit_debit_indicator: credit
                         status: pending
+                        suggested_description: a
                         amount:
                           value: '10.99'
                           currency: GBP
@@ -6797,6 +6814,8 @@ paths:
                         description: paypal* specialty coffee
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: specialty coffee PayPal
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3af57fc-ec8a-4258-a8da-8d34f11640f6/v2/paypal.jpeg
                         amount:
                           value: '10.99'
                           currency: GBP
@@ -6871,6 +6890,8 @@ paths:
                         description: paypal* specialty coffee
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: specialty coffee PayPal
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3af57fc-ec8a-4258-a8da-8d34f11640f6/v2/paypal.jpeg
                         amount:
                           value: '10.99'
                           currency: GBP
@@ -6935,6 +6956,7 @@ paths:
                         description: specialty coffee
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: specialty coffee
                         amount:
                           value: '50.23'
                           currency: GBP
@@ -7138,6 +7160,8 @@ paths:
                         description: paypal* specialty coffee
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: specialty coffee PayPal
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3af57fc-ec8a-4258-a8da-8d34f11640f6/v2/paypal.jpeg
                         amount:
                           value: '10.99'
                           currency: GBP
@@ -7205,6 +7229,8 @@ paths:
                         description: Tesco 2956 London GBR
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: Tesco
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/17ac2742-8c93-4c11-a01f-17ad65b950ce/v2/tesco.jpeg
                         amount:
                           value: '50.23'
                           currency: GBP
@@ -7258,6 +7284,8 @@ paths:
                         description: Tesco 2956 London GBR
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: Tesco
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/17ac2742-8c93-4c11-a01f-17ad65b950ce/v2/tesco.jpeg
                         amount:
                           value: '50.23'
                           currency: GBP
@@ -7375,6 +7403,8 @@ paths:
                         description: paypal* specialty coffee
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: specialty coffee PayPal
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3af57fc-ec8a-4258-a8da-8d34f11640f6/v2/paypal.jpeg
                         amount:
                           value: '10.99'
                           currency: GBP
@@ -7442,6 +7472,8 @@ paths:
                         description: Tesco 2956 London GBR
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: Tesco
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/17ac2742-8c93-4c11-a01f-17ad65b950ce/v2/tesco.jpeg
                         amount:
                           value: '50.23'
                           currency: GBP
@@ -7495,6 +7527,8 @@ paths:
                         description: Tesco 2956 London GBR
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: Tesco
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/17ac2742-8c93-4c11-a01f-17ad65b950ce/v2/tesco.jpeg
                         amount:
                           value: '50.23'
                           currency: GBP
@@ -10845,9 +10879,11 @@ paths:
                   - transaction_id: da4ad499c86956e65e811fc88f6b54af
                     account_id: 72fa858459bd32ce0b5fd9daf813fd07
                     provider: BankOfBud
-                    description: ''
+                    description: PayPal Transfer John Doe
                     credit_debit_indicator: credit
                     status: pending
+                    suggested_description: john doe
+                    suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3af57fc-ec8a-4258-a8da-8d34f11640f6/v2/paypal.jpeg
                     amount:
                       value: '10.99'
                       currency: GBP
@@ -14162,6 +14198,8 @@ paths:
                     description: paypal* specialty coffee
                     credit_debit_indicator: debit
                     status: booked
+                    suggested_description: specialty coffee PayPal
+                    suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3af57fc-ec8a-4258-a8da-8d34f11640f6/v2/paypal.jpeg
                     amount:
                       value: '10.99'
                       currency: GBP
@@ -14226,6 +14264,8 @@ paths:
                     description: Tesco 2956 London GBR
                     credit_debit_indicator: debit
                     status: booked
+                    suggested_description: Tesco
+                    suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/17ac2742-8c93-4c11-a01f-17ad65b950ce/v2/tesco.jpeg
                     amount:
                       value: '50.23'
                       currency: GBP
@@ -14538,6 +14578,7 @@ components:
         - credit_debit_indicator
         - status
         - date_time
+        - suggested_description
       properties:
         transaction_id:
           type: string
@@ -14559,11 +14600,20 @@ components:
             - debit
         status:
           type: string
-          description: Status of the transaction. Defaults to booked.
+          description: |
+            Status of the transaction. Defaults to booked.
+
+            Note: declined transactions are only available for transactions ingested by First Party Ingestion endpoints.
           enum:
             - booked
             - pending
             - declined
+        suggested_description:
+          type: string
+          description: The description Bud suggests client apps show for a given transaction.
+        suggested_logo:
+          type: string
+          description: The logo Bud suggests client apps show for a given transaction.
         amount:
           $ref: '#/components/schemas/BudAmount'
         date_time:
@@ -14825,6 +14875,7 @@ components:
         - credit_debit_indicator
         - status
         - date_time
+        - suggested_description
       properties:
         transaction_id:
           type: string
@@ -14847,6 +14898,13 @@ components:
           enum:
             - booked
             - pending
+            - declined
+        suggested_description:
+          type: string
+          description: The description Bud suggests client apps show for a given transaction.
+        suggested_logo:
+          type: string
+          description: The logo Bud suggests client apps show for a given transaction.
         amount:
           $ref: '#/components/schemas/BudAmount'
         date_time:
@@ -17805,6 +17863,7 @@ components:
         - credit_debit_indicator
         - status
         - date_time
+        - suggested_description
       properties:
         transaction_id:
           type: string
@@ -17827,6 +17886,13 @@ components:
           enum:
             - booked
             - pending
+            - declined
+        suggested_description:
+          type: string
+          description: The description Bud suggests client apps show for a given transaction.
+        suggested_logo:
+          type: string
+          description: The logo Bud suggests client apps show for a given transaction.
         amount:
           $ref: '#/components/schemas/BudAmount'
         date_time:
@@ -22800,6 +22866,79 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/InsightOption'
+    InsightsTransaction:
+      title: Transaction
+      type: object
+      description: A financial transaction
+      required:
+        - transaction_id
+        - account_id
+        - description
+        - amount
+        - credit_debit_indicator
+        - status
+        - date_time
+      properties:
+        transaction_id:
+          type: string
+          description: Unique identifier for the transaction. May be mutable depending on original ingestion source.
+        account_id:
+          type: string
+          description: Identifier for the account associated with the transaction.
+        provider:
+          type: string
+          description: Name of the transaction source provider. Optional as it may not have been supplied when using first party data.
+        description:
+          type: string
+          description: Description of the transaction.
+        credit_debit_indicator:
+          type: string
+          description: Credit/Debit Indicator
+          enum:
+            - credit
+            - debit
+        status:
+          type: string
+          description: |
+            Status of the transaction. Defaults to booked.
+
+            Note: declined transactions are only available for transactions ingested by First Party Ingestion endpoints.
+          enum:
+            - booked
+            - pending
+            - declined
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        date_time:
+          type: string
+          description: Date that the transaction occured compliant with RFC3339.
+        posted_date_time:
+          type: string
+          description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becomes available, for debits this is the date that the asset ceased to be available
+        enrichments:
+          $ref: '#/components/schemas/Enrichments'
+        merchant_category_code:
+          type: string
+          description: Merchant category code conforming to ISO 18245, related to the type of services or goods the merchant provides for the transaction.
+        tags:
+          type: array
+          description: |
+            A list of potential tags associated with the transaction after contextual enrichment, which can be used for filtering.
+
+            Region and client specific.
+
+            | Value                   | Description                                               |
+            |:------------------------|:----------------------------------------------------------|
+            | `benefit`               | A government/non-profit benefit transaction               |
+            | `debt-collection`       | A transaction associated with a known debt-collector      |
+            | `loan`                  | A transaction associated with a loan                      |
+            | `income`                | A transaction associated with income                      |
+            | `pending`               | A transaction which has not been booked                   |
+            | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
+            | `subscription`          | A transaction associated with a subscription service      |
+            | `online`                | A transaction associated with an online merchant          |
+          items:
+            type: string
     ReportInsightsTransactionResponse:
       type: object
       required:
@@ -22820,7 +22959,7 @@ components:
             Transactions in the Bud Transactions V2 format that triggered the insight, for insights based on transaction data. If there are no specific relevant transactions, this will be an empty list.
             For clients making use of the deprecated client taxonomy support, the categories in this response will be set to the client categories.
           items:
-            $ref: '#/components/schemas/Transaction'
+            $ref: '#/components/schemas/InsightsTransaction'
         metadata:
           type: object
           required:
@@ -24836,7 +24975,7 @@ components:
             Transactions in the Bud Transactions V2 format that triggered the insight, for insights based on transaction data. If there are no specific relevant transactions, this will be an empty list.
             For clients making use of the deprecated client taxonomy support, the categories in this response will be set to the client categories.
           items:
-            $ref: '#/components/schemas/Transaction'
+            $ref: '#/components/schemas/InsightsTransaction'
     CommonInsightDataResponse:
       title: Common Insight Details Response
       description: Common parts of the insight details response, shared by all insight types
@@ -24984,7 +25123,7 @@ components:
               type: array
               description: The transaction or transactions that most immediately triggered the insight, in our Transactions V2 format.
               items:
-                $ref: '#/components/schemas/Transaction'
+                $ref: '#/components/schemas/InsightsTransaction'
     TransactionTotals:
       title: Transaction Totals
       description: Total income and expenses for the customer across the period checked for insights
@@ -25181,7 +25320,7 @@ components:
               type: array
               description: The transaction or transactions that most immediately triggered the insight, in our Transactions V2 format.
               items:
-                $ref: '#/components/schemas/Transaction'
+                $ref: '#/components/schemas/InsightsTransaction'
     SpendingInsightsResponse:
       title: Spending Insights Response
       description: Spending insights response, providing identified balances insights for this customer.
