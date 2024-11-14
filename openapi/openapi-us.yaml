@@ -222,6 +222,10 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version: 2.11.4: 12/11/2024**
+    >- Improve `suggested_description` and `suggested_logo` examples for __Retrieve Transactions V2__ endpoint response.
+    >- Improve `suggested_description` and `suggested_logo` examples for __Ingest Transactions V2__ endpoint response.
+
     **Version: 2.11.3: 11/11/2024**
     >- Add `suggested_description` and `suggested_logo` field to __Retrieve Transactions V2__ endpoint response.
     >- Add `suggested_description` and `suggested_logo` field to __Ingest Transactions V2__ endpoint sync response.
@@ -4468,8 +4472,8 @@ paths:
                         description: paypal* specialty coffee
                         credit_debit_indicator: debit
                         status: booked
-                        suggested_description: specialty coffee PayPal
-                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3af57fc-ec8a-4258-a8da-8d34f11640f6/v2/paypal.jpeg
+                        suggested_description: Pact Coffee
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/9f967c91-7cf5-46a4-bc0b-92541a4ea7da/v1/pactcoffee.jpeg
                         amount:
                           value: '10.99'
                           currency: GBP
@@ -4544,8 +4548,8 @@ paths:
                         description: paypal* specialty coffee
                         credit_debit_indicator: debit
                         status: booked
-                        suggested_description: specialty coffee PayPal
-                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3af57fc-ec8a-4258-a8da-8d34f11640f6/v2/paypal.jpeg
+                        suggested_description: Pact Coffee
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/9f967c91-7cf5-46a4-bc0b-92541a4ea7da/v1/pactcoffee.jpeg
                         amount:
                           value: '10.99'
                           currency: GBP
@@ -8272,8 +8276,8 @@ paths:
                     description: paypal* specialty coffee
                     credit_debit_indicator: debit
                     status: booked
-                    suggested_description: specialty coffee PayPal
-                    suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3af57fc-ec8a-4258-a8da-8d34f11640f6/v2/paypal.jpeg
+                    suggested_description: Specialty Coffee Supplier Ltd.
+                    suggested_logo: http://url/specialty_coffee_supplier_logo.jpeg
                     amount:
                       value: '10.99'
                       currency: USD
@@ -16189,7 +16193,7 @@ components:
             For clients making use of the deprecated client taxonomy support, the categories in this response will be set to the client categories.
           items:
             $ref: '#/components/schemas/InsightsTransaction'
-    CommonInsightDataResponse:
+    CommonInsightDataResponseNoDetails:
       title: Common Insight Details Response
       description: Common parts of the insight details response, shared by all insight types
       type: object
@@ -16197,7 +16201,6 @@ components:
         - id
         - type
         - caused_by
-        - details
       properties:
         id:
           type: string
@@ -16208,10 +16211,6 @@ components:
           example: late_income
         caused_by:
           $ref: '#/components/schemas/InsightCausedBy'
-        details:
-          type: object
-          description: Additional data specific to the triggered insight type.
-          additionalProperties: true
     CannotCoverBillsInsightDetails:
       title: Cannot Cover Bills Insight Details
       description: Details for a 'cannot cover bills' insight
@@ -16229,8 +16228,10 @@ components:
       title: Cannot Cover Bills Insight Details Response
       description: Details response for a 'cannot cover bills' insight
       allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - $ref: '#/components/schemas/CommonInsightDataResponseNoDetails'
         - type: object
+          required:
+            - details
           properties:
             type:
               type: string
@@ -16250,8 +16251,10 @@ components:
       title: Close To Credit Limit Insight Details Response
       description: Details response for a 'close to credit limit' insight
       allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - $ref: '#/components/schemas/CommonInsightDataResponseNoDetails'
         - type: object
+          required:
+            - details
           properties:
             type:
               type: string
@@ -16263,8 +16266,10 @@ components:
       title: In Overdraft Insight Details Response
       description: Details response for an 'in overdraft' insight
       allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - $ref: '#/components/schemas/CommonInsightDataResponseNoDetails'
         - type: object
+          required:
+            - details
           properties:
             type:
               type: string
@@ -16278,8 +16283,10 @@ components:
       title: Low Balance Insight Details Response
       description: Details response for a low balance insight
       allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - $ref: '#/components/schemas/CommonInsightDataResponseNoDetails'
         - type: object
+          required:
+            - details
           properties:
             type:
               type: string
@@ -16410,8 +16417,10 @@ components:
       title: Gambling Income Insight Details Response
       description: Details response for a 'gambling income' insight
       allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - $ref: '#/components/schemas/CommonInsightDataResponseNoDetails'
         - type: object
+          required:
+            - details
           properties:
             type:
               type: string
@@ -16433,8 +16442,10 @@ components:
       title: Late Income Insight Details Response
       description: Details response for a 'late income' insight
       allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - $ref: '#/components/schemas/CommonInsightDataResponseNoDetails'
         - type: object
+          required:
+            - details
           properties:
             type:
               type: string
@@ -16453,8 +16464,10 @@ components:
       title: Pension Income Insight Details Response
       description: Details response for a 'pension income' insight
       allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - $ref: '#/components/schemas/CommonInsightDataResponseNoDetails'
         - type: object
+          required:
+            - details
           properties:
             type:
               type: string
@@ -16477,7 +16490,7 @@ components:
       title: Regular Income Changed Insight Details Response
       description: Details response for a 'regular income changed' insight
       allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - $ref: '#/components/schemas/CommonInsightDataResponseNoDetails'
         - type: object
           properties:
             type:
@@ -16592,8 +16605,10 @@ components:
       title: Late Payment Insight Details Response
       description: Details response for a 'late payment' insight
       allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - $ref: '#/components/schemas/CommonInsightDataResponseNoDetails'
         - type: object
+          required:
+            - details
           properties:
             type:
               type: string
@@ -16605,8 +16620,10 @@ components:
       title: New Insurance Expense Insight Details Response
       description: Details response for a 'new insurance expense' insight
       allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - $ref: '#/components/schemas/CommonInsightDataResponseNoDetails'
         - type: object
+          required:
+            - details
           properties:
             type:
               type: string
@@ -16631,8 +16648,10 @@ components:
       title: Regular Payment Changed Insight Details Response
       description: Details response for a 'regular payment changed' insight
       allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - $ref: '#/components/schemas/CommonInsightDataResponseNoDetails'
         - type: object
+          required:
+            - details
           properties:
             type:
               type: string
@@ -16644,8 +16663,10 @@ components:
       title: Suspected Duplicate Charge Insight Details Response
       description: Details response for a 'suspected duplicate charge' insight
       allOf:
-        - $ref: '#/components/schemas/CommonInsightDataResponse'
+        - $ref: '#/components/schemas/CommonInsightDataResponseNoDetails'
         - type: object
+          required:
+            - details
           properties:
             type:
               type: string
