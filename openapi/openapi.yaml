@@ -306,6 +306,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version: 2.13.6: 15/11/2024**
+    >- Add __Generate Card Summary URL__ endpoint.
+
     **Version: 2.13.5: 12/11/2024**
     >- Improve `suggested_description` and `suggested_logo` examples for __Retrieve Transactions V2__ endpoint response.
     >- Improve `suggested_description` and `suggested_logo` examples for __Ingest Transactions V2__ endpoint response.
@@ -1206,6 +1209,9 @@ tags:
     x-displayName: Custom Insights
     description: |
       Understand and target messaging to your customers more effectively by defining your own custom insights.
+  - name: Weekly Summary
+    x-displayName: Weekly Summary
+    description: Retrieve a weekly summary of a customer's financial data.
 paths:
   /v1/oauth/token:
     post:
@@ -14474,6 +14480,73 @@ paths:
                     custom_insight_id: 19ebab24-9c73-4802-b5d2-c401f3558d8d
                     link: insights/v1/custom/detail/19ebab24-9c73-4802-b5d2-c401f3558d8d
                     created_at: '2021-08-11T14:00:00Z'
+  /insights/v1/summary-url:
+    post:
+      tags:
+        - Weekly Summary
+      summary: Generate Card Summary URL
+      description: Generates customer's weekly summary insights.
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: insights_v1_summary_url_post
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateCardSummaryURLRequest'
+      responses:
+        '200':
+          description: Successful response containing the card summary URL and metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateCardSummaryURLResponse'
+              example:
+                operation_id: insights_v1_summary_url_post
+                data:
+                  url: https://widgets.thisisbud.com/summary/123e4567-e89b-12d3-a456-426655440000
+        '400':
+          description: Not supported summary type was requested
+        '401':
+          description: Customer doesn't exist
+        '422':
+          description: A summary card summary couldn't be generated for the customer
+          content:
+            application/json:
+              schema:
+                required:
+                  - operation_id
+                  - code_id
+                  - message
+                properties:
+                  operation_id:
+                    type: string
+                    enum:
+                      - insights_v1_summary_url_post
+                  code_id:
+                    type: string
+                    enum:
+                      - failed_validation
+                      - customer_no_summary
+                      - not_enough_data
+                    example: customer_no_summary
+                  message:
+                    type: string
+                    example: 'Customer has no summary available for type: monthly'
+                  errors:
+                    type: object
+                    additionalProperties: true
+              example:
+                operation_id: insights_v1_summary_url_post
+                code_id: not_enough_data
+                message: not enough data to generate summary
+        5XX:
+          description: An unexpected error occurred on the server side
 components:
   securitySchemes:
     Basic:
@@ -25497,6 +25570,34 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/InsightOption'
+    GenerateCardSummaryURLRequest:
+      type: object
+      required:
+        - summary_type
+      properties:
+        summary_type:
+          type: string
+          enum:
+            - daily
+            - weekly
+            - biweekly
+            - monthly
+            - quarterly
+            - six_monthly
+            - annually
+    GenerateCardSummaryURLResponse:
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_summary_url_post
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
   parameters:
     SmartFinderFrom:
       in: header
@@ -26633,4 +26734,5 @@ x-tagGroups:
     tags:
       - Retrieve Actionable Insights
       - Custom Insights
+      - Weekly Summary
       - Insights API
