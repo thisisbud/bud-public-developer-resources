@@ -7124,6 +7124,121 @@ paths:
                     errors: null
         5XX:
           description: An unexpected error occurred on the server side
+  /corrections/v2/custom-merchants:
+    post:
+      tags:
+        - Correct Financial Data
+      summary: Create a new custom merchant
+      description: |
+        Creates a new custom merchant for use in the merchant corrections flow.
+      operationId: corrections_v2_custom_merchants_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomMerchantRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - operation_id
+                  - data
+                properties:
+                  operation_id:
+                    type: string
+                    enum:
+                      - corrections_v2_custom_merchants_post
+                  data:
+                    type: object
+                    required:
+                      - custom_merchant_id
+                    properties:
+                      custom_merchant_id:
+                        type: string
+                        format: uuid
+                example:
+                  operation_id: corrections_v2_custom_merchants_post
+                  data:
+                    custom_merchant_id: 43730d83-479b-4125-8853-0276fa8c45a1
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: corrections_v2_custom_merchants_post
+                code_id: failed_validation
+                message: validation failed
+                errors:
+                  validation_errors:
+                    - name cannot be empty
+        5XX:
+          description: An unexpected error occurred on the server side
+    get:
+      tags:
+        - Correct Financial Data
+      summary: Fetch custom merchants for customer
+      description: |
+        Retrieves custom merchants for a given customer
+      operationId: corrections_v2_custom_merchants_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - operation_id
+                  - data
+                properties:
+                  operation_id:
+                    type: string
+                    enum:
+                      - corrections_v2_custom_merchants_get
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CustomMerchant'
+              example:
+                operation_id: corrections_v2_custom_merchants_get
+                data:
+                  - custom_merchant_id: 43297d36-2d86-460f-832c-c384f319af64
+                    name: Krystian Wines
+                    suggested_url: https://www.example.com/
+                    online_or_billing_only: false
+                    created_at: '2024-11-14T12:15:52Z'
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: corrections_v2_custom_merchants_get
+                code_id: failed_validation
+                message: validation failed
+                errors:
+                  validation_errors:
+                    - X-Customer-ID header must be valid UUID
+        5XX:
+          description: An unexpected error occurred on the server side
   /corrections/v2/categories/similar/{transaction_id}:
     get:
       tags:
@@ -20523,6 +20638,51 @@ components:
           $ref: '#/components/schemas/CustomerMerchantCorrectionSearchResponsePayload'
         metadata:
           $ref: '#/components/schemas/CustomerMerchantCorrectionSearchResponseMetadata'
+    CustomMerchant:
+      title: Custom Merchant
+      description: Custom Merchant Object
+      type: object
+      required:
+        - custom_merchant_id
+        - name
+        - suggested_url
+        - online_or_billing_only
+        - created_at
+      properties:
+        custom_merchant_id:
+          format: uuid
+          type: string
+          description: UUID representing the custom merchant.
+        name:
+          type: string
+          description: Provided name for the custom merchant.
+        suggested_url:
+          type: string
+          description: Provided URL for the custom merchant
+        online_or_billing_only:
+          type: boolean
+          description: Provided online or billing only identifier for the custom merchant.
+        created_at:
+          type: string
+          description: Date that the custom merchant was created, compliant with RFC3339.
+    CustomMerchantRequest:
+      title: Custom Merchant Request
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: The display name of the custom merchant to be created
+          example: Krystian Wines
+        suggested_url:
+          type: string
+          description: A suggested URL for the merchant, to help bud identify it and expand our merchant database.
+          example: http://www.example.com
+        online_or_billing_only:
+          type: boolean
+          description: This is used to indicate if the custom merchant being created is an exclusively online or billing merchant.
+          example: false
     SavingsGoal:
       title: Savings Goal
       required:
