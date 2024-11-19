@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "019a2b3a-b26b-427f-8a06-b32187f681ca",
+		"_postman_id": "205705bd-b0d4-4963-822f-c803632c716e",
 		"name": "Bud - API Collection",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28818977"
 	},
 	"item": [
 		{
@@ -6096,6 +6097,60 @@
 										"v1",
 										"custom",
 										"profile"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Weekly Summary",
+					"item": [
+						{
+							"name": "Generate Card Summary URL",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "undefined",
+											"type": "any"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "summary_type",
+											"value": "weekly",
+											"description": "Possible values: \n- daily\n- weekly\n- biweekly\n- monthly\n- quarterly\n- six_monthly\n- yearly",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{proxy_url}}insights/v1/summary-url",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"v1",
+										"summary-url"
 									]
 								}
 							},
