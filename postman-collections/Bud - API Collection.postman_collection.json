@@ -3820,6 +3820,89 @@
 							"response": []
 						},
 						{
+							"name": "Create Custom Merchant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"Krystian Wines\",\n\t\"suggested_url\": \"http://example.com/\",\n\t\"online_or_billing_only\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}corrections/v2/custom-merchants",
+									"host": [
+										"{{proxy_url}}corrections"
+									],
+									"path": [
+										"v2",
+										"custom-merchants"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Custom Merchants for Customer",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}corrections/v2/custom-merchants",
+									"host": [
+										"{{proxy_url}}corrections"
+									],
+									"path": [
+										"v2",
+										"custom-merchants"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Similar Transactions",
 							"request": {
 								"auth": {
