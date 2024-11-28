@@ -222,6 +222,11 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version: 2.13.6: 26/11/2024**
+    >- Add `provider` and `transaction_type` field to __Ingest Transactions V2__ endpoint request.
+    >- Add `transaction_type` field to __Ingest Transactions V2__ endpoint sync response.
+    >- Add `transaction_type` field to __Retrieve Transactions V2__ endpoint response.
+
     **Version: 2.13.5: 15/11/2024**
     >- Add __Generate Card Summary URL__ endpoint.
 
@@ -2588,12 +2593,20 @@ paths:
                         date_time: '2022-10-10T23:00:00Z'
                         currency: USD
                         status: pending
+                        provider: Citibank
+                        transaction_type:
+                          code: POS_MAG
+                          description: Magnetic-Stripe POS
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
                         description: The RSPCA, Southwater
                         amount: '-10.98'
                         date_time: '2022-11-10T23:00:00Z'
                         currency: USD
+                        provider: Citibank
+                        transaction_type:
+                          code: POS_MAG
+                          description: Magnetic-Stripe POS
                     transaction_windows:
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         start: '2022-10-10T23:00:00Z'
@@ -2680,6 +2693,9 @@ paths:
                         status: pending
                         suggested_description: YouTube
                         suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/1ee20c33-71c6-46d4-9374-f9f8cb5cc90e/v2/youtube.jpeg
+                        transaction_type:
+                          code: PP
+                          description: PayPal
                         amount:
                           value: '12.04'
                           currency: USD
@@ -2720,6 +2736,9 @@ paths:
                         status: booked
                         suggested_description: Dunkin' Donuts
                         suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ad5af5cd-b8ef-4d33-8e71-5875974bfd45/v1/dunkindonuts.jpeg
+                        transaction_type:
+                          code: POS_CTLS
+                          description: Contactless POS
                         amount:
                           value: '2.99'
                           currency: USD
@@ -11904,6 +11923,31 @@ components:
         merchant_name:
           type: string
           description: Merchant name
+        provider:
+          type: string
+          description: |
+            The name of the financial institution the transaction has come from
+
+            example: `HSBC`, `NatWest`
+
+            Note: if this field is supplied, the value will be normalised to lowercase and `-`, and ` ` characters will be replaced with `_`.
+        transaction_type:
+          type: object
+          description: |
+            The code and a description of the transaction type. Providing these fields may help improve enrichment accuracy.
+          properties:
+            code:
+              type: string
+              description: |
+                The code representing the type of the given transaction. This typically comes in the form of a proprietary code respective to the __provider__.
+
+                example: `POS_CTLS`
+            description:
+              type: string
+              description: |
+                A human-readable description of the given __code__.
+
+                example: `Contactless POS`
     TransactionWindow:
       type: object
       title: Transaction Window
@@ -12138,6 +12182,23 @@ components:
         suggested_logo:
           type: string
           description: The logo Bud suggests client apps show for a given transaction.
+        transaction_type:
+          type: object
+          description: |
+            The code and a description of the transaction type. Providing these fields may help improve enrichment accuracy.
+          properties:
+            code:
+              type: string
+              description: |
+                The code representing the type of the given transaction. This typically comes in the form of a proprietary code respective to the __provider__.
+
+                example: `POS_CTLS`
+            description:
+              type: string
+              description: |
+                A human-readable description of the given __code__.
+
+                example: `Contactless POS`
         amount:
           $ref: '#/components/schemas/BudAmount'
         date_time:
@@ -16991,6 +17052,23 @@ components:
         suggested_logo:
           type: string
           description: The logo Bud suggests client apps show for a given transaction.
+        transaction_type:
+          type: object
+          description: |
+            The code and a description of the transaction type. Providing these fields may help improve enrichment accuracy.
+          properties:
+            code:
+              type: string
+              description: |
+                The code representing the type of the given transaction. This typically comes in the form of a proprietary code respective to the __provider__.
+
+                example: `POS_CTLS`
+            description:
+              type: string
+              description: |
+                A human-readable description of the given __code__.
+
+                example: `Contactless POS`
         amount:
           $ref: '#/components/schemas/BudAmount'
         date_time:
