@@ -6188,7 +6188,7 @@
 					]
 				},
 				{
-					"name": "Weekly Summary",
+					"name": "Frontend Widgets",
 					"item": [
 						{
 							"name": "Generate Card Summary URL",
@@ -6234,6 +6234,45 @@
 									"path": [
 										"v1",
 										"summary-url"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Generate Financial Calendar URL",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "undefined",
+											"type": "any"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/v1/financial-calendar/url",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"v1",
+										"financial-calendar",
+										"url"
 									]
 								}
 							},
