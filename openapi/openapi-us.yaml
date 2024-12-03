@@ -222,7 +222,10 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
-    **Version: 2.13.14: 02/12/2024**
+    **Version: 2.15.15: 02/12/2024**
+    >- Add `credit_total` and `debit_total` field metadata of __Category Totals V2__ endpoint response.
+
+    **Version: 2.15.14: 02/12/2024**
     >- Add __Generate Financial Calendar URL__ endpoint.
 
     **Version: 2.13.6: 26/11/2024**
@@ -5343,6 +5346,16 @@ paths:
                 metadata:
                   from: '2023-05-21T07:20:50.52Z'
                   to: '2023-06-21T07:20:50.52Z'
+                  credit_total:
+                    - amount:
+                        value: '357.90'
+                        currency: USD
+                      transaction_count: 1
+                  debit_total:
+                    - amount:
+                        value: '397.80'
+                        currency: USD
+                      transaction_count: 2
         '400':
           description: The request contains an invalid payload.
         '401':
@@ -14254,6 +14267,18 @@ components:
               example: '2023-05-21T07:20:50.52Z'
               description: |
                 RFC3339 compliant date stamp indicating the end of the transaction window used in this calculation
+            credit_total:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+              description: |
+                The total across credit transactions from all included categories
+            debit_total:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+              description: |
+                The total across debit transactions from all included categories
     CategoriesTotalTrendsV2Response:
       type: object
       properties:
