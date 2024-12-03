@@ -306,6 +306,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version: 2.13.14: 02/12/2024**
+    >- Add __Generate Financial Calendar URL__ endpoint.
+
     **Version: 2.13.7: 26/11/2024**
     >- Add `provider` and `transaction_type` field to __Ingest Transactions V2__ endpoint request.
     >- Add `transaction_type` field to __Ingest Transactions V2__ endpoint sync response.
@@ -1214,9 +1217,9 @@ tags:
     x-displayName: Custom Insights
     description: |
       Understand and target messaging to your customers more effectively by defining your own custom insights.
-  - name: Weekly Summary
-    x-displayName: Weekly Summary
-    description: Retrieve a weekly summary of a customer's financial data.
+  - name: Frontend Widgets
+    x-displayName: Frontend Widgets
+    description: A collection of frontend widgets representing customer financial data.
 paths:
   /v1/oauth/token:
     post:
@@ -14629,7 +14632,7 @@ paths:
   /insights/v1/summary-url:
     post:
       tags:
-        - Weekly Summary
+        - Frontend Widgets
       summary: Generate Card Summary URL
       description: Generates customer's weekly summary insights.
       deprecated: false
@@ -14691,6 +14694,35 @@ paths:
                 operation_id: insights_v1_summary_url_post
                 code_id: not_enough_data
                 message: not enough data to generate summary
+        5XX:
+          description: An unexpected error occurred on the server side
+  /insights/v1/financial-calendar/url:
+    post:
+      tags:
+        - Frontend Widgets
+      summary: Generate Financial Calendar URL
+      description: Generates a URL to access the customer's financial calendar.
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: insights_v1_financial_calendar_url_post
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+      responses:
+        '201':
+          description: Financial calendar URL created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateFinancialCalendarURLResponse'
+              example:
+                operation_id: insights_v1_financial_calendar_url_post
+                data:
+                  url: https://widgets.thisisbud.com/financial-calendar?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+        '400':
+          description: Bad Request
         5XX:
           description: An unexpected error occurred on the server side
 components:
@@ -25865,6 +25897,19 @@ components:
             url:
               type: string
               format: uri
+    GenerateFinancialCalendarURLResponse:
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_financial_calendar_url_post
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
   parameters:
     SmartFinderFrom:
       in: header
@@ -27001,5 +27046,5 @@ x-tagGroups:
     tags:
       - Retrieve Actionable Insights
       - Custom Insights
-      - Weekly Summary
+      - Frontend Widgets
       - Insights API
