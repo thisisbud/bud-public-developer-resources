@@ -6316,6 +6316,45 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Generate Recurring and Forecasted Transactions URL",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "undefined",
+											"type": "any"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/v1/recurring-and-forecasted-transactions/url",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"v1",
+										"recurring-and-forecasted-transactions",
+										"url"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
