@@ -306,6 +306,19 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version: 2.15.18: 03/12/2024**
+    >- Corrects response code of card summary URL generation endpoint.
+    >- Updates financial calendar URL generation successful response description.
+
+    **Version: 2.15.17: 02/12/2024**
+    >- Add __Recurring and Forecasted Transactions URL__ endpoint.
+
+    **Version: 2.15.16: 02/12/2024**
+    >- Add __Generate Balances Over Time URL__ endpoint.
+
+    **Version: 2.15.15: 02/12/2024**
+    >- Add `credit_total` and `debit_total` field metadata of __Category Totals V2__ endpoint response.
+
     **Version: 2.15.14: 02/12/2024**
     >- Add __Generate Financial Calendar URL__ endpoint.
 
@@ -4981,6 +4994,16 @@ paths:
                 metadata:
                   from: '2023-05-21T07:20:50.52Z'
                   to: '2023-06-21T07:20:50.52Z'
+                  credit_total:
+                    - amount:
+                        value: '357.90'
+                        currency: GBP
+                      transaction_count: 1
+                  debit_total:
+                    - amount:
+                        value: '397.80'
+                        currency: GBP
+                      transaction_count: 2
         '400':
           description: The request contains an invalid payload.
         '401':
@@ -14649,7 +14672,7 @@ paths:
             schema:
               $ref: '#/components/schemas/GenerateCardSummaryURLRequest'
       responses:
-        '200':
+        '201':
           description: Successful response containing the card summary URL and metadata.
           content:
             application/json:
@@ -14712,7 +14735,7 @@ paths:
         - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '201':
-          description: Financial calendar URL created.
+          description: Successful response containing the financial calendar URL and metadata.
           content:
             application/json:
               schema:
@@ -14721,6 +14744,64 @@ paths:
                 operation_id: insights_v1_financial_calendar_url_post
                 data:
                   url: https://widgets.thisisbud.com/financial-calendar?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+        '400':
+          description: Bad Request
+        5XX:
+          description: An unexpected error occurred on the server side
+  /insights/v1/balances-over-time/url:
+    post:
+      tags:
+        - Frontend Widgets
+      summary: Generate Balances Over Time URL
+      description: Generates a URL to access the customer's balances over time.
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: insights_v1_balances_over_time_url_post
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+      responses:
+        '201':
+          description: Successful response containing Balances Over Time URL and metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateBalancesOverTimeURLResponse'
+              example:
+                operation_id: insights_v1_balances_over_time_url_post
+                data:
+                  url: https://widgets.thisisbud.com/balances-over-time?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+        '400':
+          description: Bad Request
+        5XX:
+          description: An unexpected error occurred on the server side
+  /insights/v1/recurring-and-forecasted-transactions/url:
+    post:
+      tags:
+        - Frontend Widgets
+      summary: Generate Recurring and Forecasted Transactions URL
+      description: Generates a URL to access the customer's recurring and forecasted transactions.
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: insights_v1_recurring_and_forecasted_transactions_url_post
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+      responses:
+        '201':
+          description: Successful response containing recurring and forecasted transactions URL and metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateRecurringAndForecastedTransactionsURLResponse'
+              example:
+                operation_id: insights_v1_recurring_and_forecasted_transactions_url_post
+                data:
+                  url: https://widgets.thisisbud.com/recurring-and-forecasted-transactions?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
         '400':
           description: Bad Request
         5XX:
@@ -19212,6 +19293,18 @@ components:
               example: '2023-05-21T07:20:50.52Z'
               description: |
                 RFC3339 compliant date stamp indicating the end of the transaction window used in this calculation
+            credit_total:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+              description: |
+                The total across credit transactions from all included categories
+            debit_total:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+              description: |
+                The total across debit transactions from all included categories
     CategoriesTotalTrendsV2Response:
       type: object
       properties:
@@ -25904,6 +25997,32 @@ components:
           type: string
           enum:
             - insights_v1_financial_calendar_url_post
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+    GenerateBalancesOverTimeURLResponse:
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_balances_over_time_url_post
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+    GenerateRecurringAndForecastedTransactionsURLResponse:
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_recurring_and_forecasted_transactions_url_post
         data:
           type: object
           properties:
