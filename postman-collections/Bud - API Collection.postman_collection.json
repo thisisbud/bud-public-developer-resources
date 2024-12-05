@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "205705bd-b0d4-4963-822f-c803632c716e",
+		"_postman_id": "4e9aca8e-fe20-4554-89b2-5442e4ae2ecc",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "28818977"
+		"_exporter_id": "30390585"
 	},
 	"item": [
 		{
@@ -1793,7 +1793,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"accounts\": [\n      {\n        \"provider\": \"Barclays\",\n        \"account_id\": \"{{account_id}}\",\n        \"currency\": \"GBP\",\n        \"account_type\": \"Personal\",\n        \"account_sub_type\": \"CurrentAccount\",\n        \"details\": [\n          {\n            \"scheme_name\": \"UK.OBIE.SortCodeAccountNumber\",\n            \"identification\": \"98765432165444\",\n            \"secondary_identification\": \"00021\",\n            \"name\": \"Mr Kevin\"\n          }\n        ],\n        \"balances\": [\n          {\n            \"amount\": {\n              \"value\": \"7400.00\",\n              \"currency\": \"GBP\"\n            },\n            \"credit_debit_indicator\": \"incoming_credit\",\n            \"credit_line\": [\n              {\n                \"included\": true,\n                \"amount\": {\n                  \"value\": \"200.00\",\n                  \"currency\": \"GBP\"\n                },\n                \"type\": \"Credit\"\n              }\n            ],\n            \"date\": \"2023-04-04\",\n            \"time\": \"00:00:00\",\n            \"type\": \"InterimBooked\"\n          }\n        ]\n      }\n    ]\n  }\n ]"
+									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"accounts\": [\n      {\n        \"provider\": \"Barclays\",\n        \"account_id\": \"{{account_id}}\",\n        \"currency\": \"GBP\",\n        \"account_type\": \"Personal\",\n        \"account_sub_type\": \"CurrentAccount\",\n        \"account_identifiers\": [\n          {\n            \"type\": \"uk_sort_code\",\n            \"value\": \"987654\"\n          },\n          {\n            \"type\": \"uk_account_number\",\n            \"value\": \"32165444\"\n          }\n        ],\n        \"balances\": [\n          {\n            \"amount\": {\n              \"value\": \"7400.00\",\n              \"currency\": \"GBP\"\n            },\n            \"credit_debit_indicator\": \"incoming_credit\",\n            \"credit_line\": [\n              {\n                \"included\": true,\n                \"amount\": {\n                  \"value\": \"200.00\",\n                  \"currency\": \"GBP\"\n                },\n                \"type\": \"Credit\"\n              }\n            ],\n            \"date\": \"2023-04-04\",\n            \"time\": \"00:00:00\",\n            \"type\": \"InterimBooked\"\n          }\n        ]\n      }\n    ]\n  }\n ]"
 								},
 								"url": {
 									"raw": "{{proxy_url}}v2/ingest/accounts",
