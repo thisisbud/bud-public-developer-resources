@@ -222,10 +222,6 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
-    **Version: 2.15.18: 03/12/2024**
-    >- Corrects response code of card summary URL generation endpoint.
-    >- Updates financial calendar URL generation successful response description.
-
     **Version: 2.15.17: 02/12/2024**
     >- Add __Recurring and Forecasted Transactions URL__ endpoint.
 
@@ -2453,11 +2449,9 @@ paths:
                         currency: USD
                         account_type: Personal
                         account_sub_type: CurrentAccount
-                        details:
-                          - scheme_name: UK.OBIE.SortCodeAccountNumber
-                            identification: '98765432165444'
-                            secondary_identification: '00021'
-                            name: Mr Kevin
+                        account_identifiers:
+                          - type: us_account_number
+                            value: '98765432165444'
                         balances:
                           - amount:
                               value: '7.00'
@@ -2479,11 +2473,9 @@ paths:
                         currency: USD
                         account_type: Personal
                         account_sub_type: CurrentAccount
-                        details:
-                          - scheme_name: UK.OBIE.SortCodeAccountNumber
-                            identification: '12312312313200'
-                            secondary_identification: '00022'
-                            name: Mr Kevin
+                        account_identifiers:
+                          - type: us_account_number
+                            value: '12312312313200'
                         balances:
                           - amount:
                               value: '70005.00'
@@ -8733,7 +8725,7 @@ paths:
               $ref: '#/components/schemas/GenerateCardSummaryURLRequest'
       responses:
         '201':
-          description: Successful response containing the card summary URL and metadata.
+          description: Successful response containing the Card Summary URL and metadata.
           content:
             application/json:
               schema:
@@ -8795,7 +8787,7 @@ paths:
         - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '201':
-          description: Successful response containing the financial calendar URL and metadata.
+          description: Successful response containing the Financial Calendar URL and metadata.
           content:
             application/json:
               schema:
@@ -8853,7 +8845,7 @@ paths:
         - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '201':
-          description: Successful response containing recurring and forecasted transactions URL and metadata.
+          description: Successful response containing the Recurring and Forecasted Transactions URL and metadata.
           content:
             application/json:
               schema:
@@ -11566,6 +11558,25 @@ components:
         name:
           type: string
           description: The name of the account holder
+    IngestAccountIdentifiers:
+      title: Ingest Account Identifiers
+      type: object
+      description: Schema to define identifiers for a given account
+      required:
+        - type
+        - value
+      properties:
+        type:
+          type: string
+          description: The type of identifier detailed within the value field associated with the account
+          enum:
+            - uk_sort_code
+            - uk_account_number
+            - iban
+            - us_account_number
+        value:
+          type: string
+          description: The identifier associated with the account
     BudCurrency:
       title: Currency
       description: |
@@ -11709,7 +11720,6 @@ components:
         - currency
         - account_type
         - account_sub_type
-        - details
         - balances
       properties:
         provider:
@@ -11744,10 +11754,16 @@ components:
           type: string
           description: The name of the account holder
         details:
+          deprecated: true
           type: array
           description: Provides the details to identify an account
           items:
             $ref: '#/components/schemas/IngestAccountDetails'
+        account_identifiers:
+          type: array
+          description: Provides the details to identify an account
+          items:
+            $ref: '#/components/schemas/IngestAccountIdentifiers'
         balances:
           type: array
           description: The balances associated with the account
@@ -11774,7 +11790,7 @@ components:
           items:
             $ref: '#/components/schemas/IngestCustomerAccount'
     IngestAccountsRequest:
-      title: Bud V1 Accounts Request
+      title: Bud Accounts Request
       description: Ingest accounts expected request body.
       type: array
       items:
