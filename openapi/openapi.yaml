@@ -11254,6 +11254,7 @@ paths:
                     description: SALARY
                     credit_debit_indicator: credit
                     status: booked
+                    suggested_description: salary
                     amount:
                       value: '3000.00'
                       currency: GBP
@@ -11372,6 +11373,7 @@ paths:
                     description: SALARY
                     credit_debit_indicator: credit
                     status: booked
+                    suggested_description: salary
                     amount:
                       value: '3000.00'
                       currency: GBP
@@ -11560,6 +11562,7 @@ paths:
                     description: SALARY
                     credit_debit_indicator: credit
                     status: booked
+                    suggested_description: salary
                     amount:
                       value: '3000.00'
                       currency: GBP
@@ -11802,6 +11805,7 @@ paths:
                     description: SALARY
                     credit_debit_indicator: credit
                     status: booked
+                    suggested_description: salary
                     amount:
                       value: '3000.00'
                       currency: GBP
@@ -13869,6 +13873,7 @@ paths:
                           description: SALARY
                           credit_debit_indicator: credit
                           status: booked
+                          suggested_description: salary
                           amount:
                             value: '3000.00'
                             currency: GBP
@@ -13987,6 +13992,7 @@ paths:
                         description: SALARY
                         credit_debit_indicator: credit
                         status: booked
+                        suggested_description: salary
                         amount:
                           value: '2400.00'
                           currency: GBP
@@ -14064,6 +14070,7 @@ paths:
                           description: MORTGAGE
                           credit_debit_indicator: debit
                           status: booked
+                          suggested_description: mortgage
                           amount:
                             value: '1400.00'
                             currency: GBP
@@ -14178,6 +14185,7 @@ paths:
                         description: MORTGAGE
                         credit_debit_indicator: debit
                         status: booked
+                        suggested_description: mortgage
                         amount:
                           value: '1400.00'
                           currency: GBP
@@ -23367,6 +23375,7 @@ components:
         - credit_debit_indicator
         - status
         - date_time
+        - suggested_description
       properties:
         transaction_id:
           type: string
@@ -23404,6 +23413,12 @@ components:
         posted_date_time:
           type: string
           description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becomes available, for debits this is the date that the asset ceased to be available
+        suggested_description:
+          type: string
+          description: The description Bud suggests client apps show for a given transaction.
+        suggested_logo:
+          type: string
+          description: The logo Bud suggests client apps show for a given transaction.
         enrichments:
           $ref: '#/components/schemas/Enrichments'
         merchant_category_code:
