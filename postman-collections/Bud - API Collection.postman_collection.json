@@ -4428,6 +4428,65 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Retrieve Statistics For Essential Total Spend",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}aggregations/v2/totals/essential-statistics",
+									"host": [
+										"{{proxy_url}}aggregations"
+									],
+									"path": [
+										"v2",
+										"totals",
+										"essential-statistics"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2020-01-01T00:00:00Z",
+											"description": "RFC3339 Timestamp indicating the start of the window of transactions to include."
+										},
+										{
+											"key": "to",
+											"value": "2023-01-01T00:00:00Z",
+											"description": "RFC3339 Timestamp indicating the end of the window of transactions to include."
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
