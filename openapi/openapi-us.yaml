@@ -222,6 +222,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version: 2.15.19: 10/12/2024**
+    >- Add __Merchant Feedback__ endpoint.
+
     **Version: 2.15.18: 05/12/2024**
     >- Add __Essential Spend Statistics__ endpoint.
 
@@ -5429,6 +5432,78 @@ paths:
                     message: transaction not found
         5XX:
           description: An unexpected error occurred on the server side.
+  /corrections/v2/merchant-feedback/merchant/{merchant_id}:
+    post:
+      tags:
+        - Correct Financial Data
+      summary: Suggests changes to a merchant
+      description: |
+        Records feedback we can use to improve our merchant database.
+      operationId: corrections_v2_merchant_feedback_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - name: merchant_id
+          in: path
+          required: true
+          description: The ID of the merchant to submit feedback for.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MerchantFeedbackRequest'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - operation_id
+                  - data
+                properties:
+                  operation_id:
+                    type: string
+                    enum:
+                      - corrections_v2_merchant_feedback_post
+                  data:
+                    $ref: '#/components/schemas/MerchantFeedbackResponse'
+                example:
+                  operation_id: corrections_v2_merchant_feedback_post
+                  data:
+                    merchant_id: a8f0ec99-ed01-4ba2-a4ad-8d0275f15158
+                    logo_feedback: missing_logo
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: corrections_v2_merchant_feedback_post
+                code_id: failed_validation
+                message: validation failed
+                errors:
+                  validation_errors:
+                    - $.logo_feedback must be valid enum
+        '404':
+          description: The merchant was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestNotFoundResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Route or resource not found
+                errors: {}
+        5XX:
+          description: An unexpected error occurred on the server side
   /aggregations/v2/totals/categories:
     get:
       tags:
@@ -14533,6 +14608,46 @@ components:
           type: boolean
           description: This is used to indicate if the custom merchant being created is an exclusively online or billing merchant.
           example: false
+    MerchantFeedbackRequest:
+      title: Merchant Feedback Request
+      type: object
+      required:
+        - logo_feedback
+      properties:
+        logo_feedback:
+          type: string
+          description: The type of feedback for the merchant.
+          enum:
+            - missing_logo
+            - wrong_logo
+            - low_quality_logo
+            - out_of_date_logo
+        suggested_logo:
+          type: string
+        suggested_url:
+          type: string
+    MerchantFeedbackResponse:
+      title: Merchant Feedback Response
+      type: object
+      required:
+        - merchant_id
+        - logo_feedback
+      properties:
+        merchant_id:
+          type: string
+          description: The merchant the feedback has been created for.
+        logo_feedback:
+          type: string
+          description: The type of feedback for the merchant.
+          enum:
+            - missing_logo
+            - wrong_logo
+            - low_quality_logo
+            - out_of_date_logo
+        suggested_logo:
+          type: string
+        suggested_url:
+          type: string
     CategoryTotalAmountWithTrxCount:
       type: object
       title: Amount with transaction count
