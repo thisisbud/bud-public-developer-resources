@@ -3994,6 +3994,50 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Provide Merchant Feedback",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+									{
+										"key": "token",
+										"value": "{{auth_token}}",
+										"type": "string"
+									}
+									]
+								},
+								"method": "POST",
+								"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-Client-Id",
+									"value": "{{api_credentials_id}}",
+									"type": "default"
+								}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"logo_feedback\": \"missing_logo\",\n    \"suggested_logo\": \"https://www.example.com/\",\n    \"suggested_url\": \"https://www.example.com/\"\n}"
+								},
+								"url": {
+									"raw": "{{proxy_url}}corrections/v2/merchant-feedback/merchant/{merchant_id}",
+									"host": [
+										"{{proxy_url}}corrections"
+									],
+									"path": [
+										"v2",
+									"merchant-feedback",
+									"merchant",
+									"{merchant_id}"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
