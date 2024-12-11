@@ -2555,6 +2555,78 @@ paths:
           description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
         5XX:
           description: An unexpected error occurred on the server side
+      callbacks:
+        FPIIngestSucceededCallback:
+          '{$request.body#/redirect_url}':
+            description: |
+              Should the ingestion task succeed, this callback is sent to your configured 'First Party Data Ingestion Events' webhook URL on the completion of a Ingest Accounts task.
+            post:
+              security: []
+              parameters:
+                - $ref: '#/components/parameters/SignatureHeaderParameter'
+                - $ref: '#/components/parameters/SigningIdHeaderParameter'
+              summary: First Party Ingestion Succeeded Callback
+              requestBody:
+                required: true
+                description: Should the ingestion task succeed, this callback is sent to your configured 'First Party Data Ingestion Events' webhook URL on the completion of a Ingest Accounts task.
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/FPIIngestSucceededWebhookBody'
+                    examples:
+                      Success:
+                        description: Successful ingestion
+                        value:
+                          data:
+                            event: first_party_ingester.ingest.succeeded
+                            operation_id: v2_ingest_accounts_post
+                            task_id: 6d37e192-1fdb-407d-82c6-58ee38cb60db
+              responses:
+                '200':
+                  description: Your server returns this code if it accepts the callback
+                '300':
+                  description: The notification will not be retried, redirects will not be followed
+                '400':
+                  description: The notification will not be retried
+                '500':
+                  description: |
+                    The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
+        FPIIngestFailedCallback:
+          '{$request.body#/redirect_url}':
+            description: |
+              Should the ingestion task fail, this callback is sent to your configured 'First Party Data Ingestion Events' webhook URL on the completion of a Ingest Accounts task.
+            post:
+              security: []
+              parameters:
+                - $ref: '#/components/parameters/SignatureHeaderParameter'
+                - $ref: '#/components/parameters/SigningIdHeaderParameter'
+              summary: First Party Ingestion Failed Callback
+              requestBody:
+                required: true
+                description: Should the ingestion task fail, this callback is sent to your configured 'First Party Data Ingestion Events' webhook URL on the completion of a Ingest Accounts task.
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/FPIIngestFailedWebhookBody'
+                    examples:
+                      Success:
+                        description: Failed Ingestion
+                        value:
+                          data:
+                            event: first_party_ingester.ingest.failed
+                            operation_id: v2_ingest_transactions_post
+                            task_id: 6d37e192-1fdb-407d-82c6-58ee38cb60db
+                            result: data_mapping_error
+              responses:
+                '200':
+                  description: Your server returns this code if it accepts the callback
+                '300':
+                  description: The notification will not be retried, redirects will not be followed
+                '400':
+                  description: The notification will not be retried
+                '500':
+                  description: |
+                    The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
   /v2/ingest/transactions:
     post:
       tags:
@@ -2841,6 +2913,78 @@ paths:
           description: An unexpected timeout occurred on the enrichment server. Sync Only
         5XX:
           description: An unexpected error occurred on the server side
+      callbacks:
+        FPIIngestSucceededCallback:
+          '{$request.body#/redirect_url}':
+            description: |
+              Should the ingestion task succeed, this callback is sent to your configured 'First Party Data Ingestion Events' webhook URL on the completion of a Ingest Transactions task.
+            post:
+              security: []
+              parameters:
+                - $ref: '#/components/parameters/SignatureHeaderParameter'
+                - $ref: '#/components/parameters/SigningIdHeaderParameter'
+              summary: First Party Ingestion Succeeded Callback
+              requestBody:
+                required: true
+                description: Should the ingestion task succeed, this callback is sent to your configured 'First Party Data Ingestion Events' webhook URL on the completion of a Ingest Transactions task.
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/FPIIngestSucceededWebhookBody'
+                    examples:
+                      Success:
+                        description: Successful ingestion
+                        value:
+                          data:
+                            event: first_party_ingester.ingest.succeeded
+                            operation_id: v2_ingest_accounts_post
+                            task_id: 6d37e192-1fdb-407d-82c6-58ee38cb60db
+              responses:
+                '200':
+                  description: Your server returns this code if it accepts the callback
+                '300':
+                  description: The notification will not be retried, redirects will not be followed
+                '400':
+                  description: The notification will not be retried
+                '500':
+                  description: |
+                    The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
+        FPIIngestFailedCallback:
+          '{$request.body#/redirect_url}':
+            description: |
+              Should the ingestion task fail, this callback is sent to your configured 'First Party Data Ingestion Events' webhook URL on the completion of a Ingest Transactions task.
+            post:
+              security: []
+              parameters:
+                - $ref: '#/components/parameters/SignatureHeaderParameter'
+                - $ref: '#/components/parameters/SigningIdHeaderParameter'
+              summary: First Party Ingestion Failed Callback
+              requestBody:
+                required: true
+                description: Should the ingestion task fail, this callback is sent to your configured 'First Party Data Ingestion Events' webhook URL on the completion of a Ingest Transactions task.
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/FPIIngestFailedWebhookBody'
+                    examples:
+                      Success:
+                        description: First Party Ingestion Failed
+                        value:
+                          data:
+                            event: first_party_ingester.ingest.failed
+                            operation_id: v2_ingest_transactions_post
+                            task_id: 6d37e192-1fdb-407d-82c6-58ee38cb60db
+                            result: data_mapping_error
+              responses:
+                '200':
+                  description: Your server returns this code if it accepts the callback
+                '300':
+                  description: The notification will not be retried, redirects will not be followed
+                '400':
+                  description: The notification will not be retried
+                '500':
+                  description: |
+                    The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
   /ingestion/v3/transactions/book:
     post:
       tags:
@@ -12031,6 +12175,65 @@ components:
             invalid_fields:
               accounts[0]:
                 - currency
+    FPIIngestSucceededWebhookBody:
+      title: FPI Ingestion Succeeded Webhook Payload
+      type: object
+      description: |
+        The payload sent to the client defined webhook (via the console) when an First Party Ingestion task succeeds.
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - event
+            - task_id
+            - operation_id
+          properties:
+            event:
+              description: The event type
+              type: string
+              example: first_party_ingester.ingest.succeeded
+            task_id:
+              description: The associated task ID
+              type: string
+              example: 3928aca4-b73c-4f13-a540-1b3759e06d27
+            operation_id:
+              description: The endpoint ID the operation was related to
+              type: string
+              example: v2_ingest_transactions_post
+    FPIIngestFailedWebhookBody:
+      title: FPI Ingestion Failed Webhook Payload
+      type: object
+      description: |
+        The payload sent to the client defined webhook (via the console) when an First Party Ingestion task fails.
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - event
+            - task_id
+            - operation_id
+            - result
+          properties:
+            event:
+              description: The event type
+              type: string
+              example: first_party_ingester.ingest.failed
+            task_id:
+              description: The associated task ID
+              type: string
+              example: 3928aca4-b73c-4f13-a540-1b3759e06d27
+            operation_id:
+              description: The endpoint ID the operation was related to
+              type: string
+              example: v2_ingest_transactions_post
+            result:
+              description: The error outcome of the ingestion if it failed
+              type: string
+              example: data_mapping_error
     CustomerID:
       type: string
       format: uuid
