@@ -2416,7 +2416,7 @@ paths:
     post:
       tags:
         - Ingest First Party Data
-      summary: Ingest Accounts V2
+      summary: Ingest Accounts
       description: |
         This endpoint is for pushing customer(s) account(s) and balance(s) through the Bud architecture.
         It can ingest data for multiple customers per request.
@@ -2634,7 +2634,7 @@ paths:
     post:
       tags:
         - Ingest First Party Data
-      summary: Ingest Transactions V2
+      summary: Ingest Transactions
       description: |
         This endpoint should be used to ingest customer transactions into the Bud Platform.
 
@@ -2992,9 +2992,9 @@ paths:
     post:
       tags:
         - Ingest First Party Data
-      summary: Book Transactions V3
+      summary: Book Transactions
       description: |
-        The Book Transactions V3 endpoint, allows transactions ingested with a `status` of `pending` to set their status to `booked`.
+        The Book Transactions endpoint, allows transactions ingested with a `status` of `pending` to set their status to `booked`.
 
         The date_time field indicates the timestamp when the transaction booked. This is reflected in the `date_time` of __Retrieve Transactions V2__.
       operationId: v3_ingest_transactions_book_post
@@ -3080,9 +3080,9 @@ paths:
     post:
       tags:
         - Ingest First Party Data
-      summary: Decline Transactions V3
+      summary: Decline Transactions
       description: |
-        The Decline Transactions V3 endpoint, allows transactions ingested with a `status` of `pending` to set their status to `declined`.
+        The Decline Transactions endpoint, allows transactions ingested with a `status` of `pending` to set their status to `declined`.
 
         The date_time field indicates the timestamp when the transaction declined. This is reflected in the `date_time` of __Retrieve Transactions V2__.
       operationId: v3_ingest_transactions_decline_post
@@ -3168,7 +3168,7 @@ paths:
     get:
       tags:
         - Ingest First Party Data
-      summary: Retrieve Ingestion Task Status V3
+      summary: Retrieve Ingestion Task Status
       description: |
         Check the status of an ingest request. Please note that this works for both the Ingest Transactions endpoints And Ingest Accounts endpoints.
         Ingestion tasks are accessible for 15 minutes after ingestion, after which they are deleted.
