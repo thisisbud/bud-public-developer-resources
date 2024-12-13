@@ -6070,11 +6070,27 @@ paths:
         - Retrieve Financial Data
       summary: Retrieve Balances Over Time
       description: |
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of April 2025 - please complete your migration to the Retrieve Balances Over Time V3 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
+
         List the balances of each bank account for a customer across all ingestion sources. Ordered by balance date.
-        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to`  and `from` dates provided. It then checks all the transactions within this range, calculating the balance at  the end of each day.
-        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the  account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint returns an empty list.
-        You can only request balances within transaction windows, therefore if you ingest transactions without a  transaction window, you won't be able to request balance for that time range. However those transactions will be used to calculate the balance as well.
-        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the  data supplied from this service by including the transaction_window field upon account ingestion.
+
+        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` 
+        and `from` dates provided. It then checks all the transactions within this range, calculating the balance at 
+        the end of each day.
+
+        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the 
+        account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint
+        returns an empty list.
+
+        You can only request balances within transaction windows, therefore if you ingest transactions without a 
+        transaction window, you won't be able to request balance for that time range. However those transactions will be
+        used to calculate the balance as well.
+
+        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the 
+        data supplied from this service by including the transaction_window field upon account ingestion.
+
         Results are limited to up to 5000 balance items across all accounts.
       operationId: financial_v2_balances_get
       deprecated: true
@@ -6201,11 +6217,28 @@ paths:
         - Retrieve Financial Data
       summary: Retrieve Balances Over Time By Account
       description: |
-        List the balances of a specific bank account for a customer across all ingestion sources. Ordered by balance  date.
-        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to`  and `from` dates provided. It then checks all the transactions within this range, calculating the balance at  the end of each day.
-        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the  account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint returns an empty list.
-        You can only request balances within transaction windows, therefore if you ingest transactions without a  transaction window, you won't be able to request balance for that time range. However those transactions will be used to calculate the balance as well.
-        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the  data supplied from this service by including the transaction_window field upon account ingestion.
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of April 2025 - please complete your migration to the Retrieve Balances Over Time By Account V3 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
+
+        List the balances of a specific bank account for a customer across all ingestion sources. Ordered by balance 
+        date.
+
+        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` 
+        and `from` dates provided. It then checks all the transactions within this range, calculating the balance at 
+        the end of each day.
+
+        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the 
+        account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint
+        returns an empty list.
+
+        You can only request balances within transaction windows, therefore if you ingest transactions without a 
+        transaction window, you won't be able to request balance for that time range. However those transactions will be
+        used to calculate the balance as well.
+
+        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the 
+        data supplied from this service by including the transaction_window field upon account ingestion.
+
         Results are limited to up to 5000 balance items.
       operationId: financial_v2_accounts_balances_get
       deprecated: true
