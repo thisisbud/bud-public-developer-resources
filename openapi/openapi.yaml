@@ -3505,8 +3505,8 @@ paths:
                         status: pending
                         provider: Monzo
                         transaction_type:
-                          code: POS_CTLS
-                          description: Contactless POS
+                          bud_code: DEB
+                          description: Debit card transaction
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
                         description: The RSPCA, Southwater
@@ -3515,8 +3515,8 @@ paths:
                         currency: GBP
                         provider: Monzo
                         transaction_type:
-                          code: POS_MAG
-                          description: Magnetic-Stripe POS
+                          bud_code: DEB
+                          description: Debit card transaction
                     transaction_windows:
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         start: '2022-10-10T23:00:00Z'
@@ -3549,7 +3549,7 @@ paths:
                         suggested_description: Specialty Coffee Supplier Ltd.
                         suggested_logo: http://url/specialty_coffee_supplier_logo.jpeg
                         transaction_type:
-                          code: PP
+                          bud_code: DEB
                           description: PayPal
                         amount:
                           value: '10.99'
@@ -3592,8 +3592,8 @@ paths:
                         suggested_description: Caffè Nero
                         suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf/v2/caffnero.jpeg
                         transaction_type:
-                          code: POS_CTLS
-                          description: Contactless POS
+                          bud_code: DEB
+                          description: Debit card transaction
                         amount:
                           value: '3.29'
                           currency: GBP
@@ -3645,8 +3645,8 @@ paths:
                         status: booked
                         suggested_description: JOHN SMITH RENT SHARE
                         transaction_type:
-                          code: BACS
-                          description: BACS Transfer
+                          bud_code: BAT
+                          description: Bank Transfer
                         enrichments:
                           categories:
                             l1:
@@ -6392,8 +6392,8 @@ paths:
                         suggested_description: Tesco
                         suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/17ac2742-8c93-4c11-a01f-17ad65b950ce/v2/tesco.jpeg
                         transaction_type:
-                          code: POS_CTLS
-                          description: Contactless POS
+                          bud_code: DEB
+                          description: Debit card transaction
                         amount:
                           value: '20.25'
                           currency: GBP
@@ -6453,8 +6453,8 @@ paths:
                         suggested_description: Caffè Nero
                         suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf/v2/caffnero.jpeg
                         transaction_type:
-                          code: POS_CTLS
-                          description: Contactless POS
+                          bud_code: DEB
+                          description: Debit card transaction
                         amount:
                           value: '3.29'
                           currency: GBP
@@ -6505,8 +6505,8 @@ paths:
                         status: booked
                         suggested_description: JOHN SMITH RENT SHARE
                         transaction_type:
-                          code: BACS
-                          description: BACS Transfer
+                          bud_code: BAT
+                          description: Bank Transfer
                         amount:
                           value: '375.00'
                           currency: GBP
@@ -14993,22 +14993,7 @@ components:
           type: string
           description: The logo Bud suggests client apps show for a given transaction.
         transaction_type:
-          type: object
-          description: |
-            The code and a description of the transaction type. Providing these fields may help improve enrichment accuracy.
-          properties:
-            code:
-              type: string
-              description: |
-                The code representing the type of the given transaction. This typically comes in the form of a proprietary code respective to the __provider__.
-
-                example: `POS_CTLS`
-            description:
-              type: string
-              description: |
-                A human-readable description of the given __code__.
-
-                example: `Contactless POS`
+          $ref: '#/components/schemas/BudTransactionType'
         amount:
           $ref: '#/components/schemas/BudAmount'
         date_time:
@@ -15301,22 +15286,7 @@ components:
           type: string
           description: The logo Bud suggests client apps show for a given transaction.
         transaction_type:
-          type: object
-          description: |
-            The code and a description of the transaction type. Providing these fields may help improve enrichment accuracy.
-          properties:
-            code:
-              type: string
-              description: |
-                The code representing the type of the given transaction. This typically comes in the form of a proprietary code respective to the __provider__.
-
-                example: `POS_CTLS`
-            description:
-              type: string
-              description: |
-                A human-readable description of the given __code__.
-
-                example: `Contactless POS`
+          $ref: '#/components/schemas/BudTransactionType'
         amount:
           $ref: '#/components/schemas/BudAmount'
         date_time:
@@ -18162,6 +18132,35 @@ components:
         enum:
           - categories
           - merchants
+    BudTransactionType:
+      title: transaction_type
+      type: object
+      description: |
+        The code and a description of the transaction type. Providing these fields may help improve enrichment accuracy.
+      properties:
+        bud_code:
+          type: string
+          description: |
+            The code representing the type of the given transaction. This typically comes in the form of a proprietary code respective to the __provider__.
+
+            Current list of valid accepted codes:
+            | Code  | Meaning
+            |:------|:-------------------------------------------------------------------|
+            | DEB   | [Debit / Credit] Card                                              |
+            | CSQ   | Cash / Cheque(s)                                                   |
+            | CHG   | Charge                                                             |
+            | COR   | Correction                                                         |
+            | CPT   | Cashpoint / ATM                                                    |
+            | INT   | Interest                                                           |
+            | OTH   | Other                                                              |
+            | BAT   | Bank Transfer (e.g. FP/MP/IB/BACS/CHAPS/SWIFT)                     |
+            | DD    | Direct Debit                                                       |
+            | SO    | Standing Order                                                     |
+        description:
+          type: string
+          description: |
+            A human-readable description of the given __bud_code__.
+            example: `Contactless POS`
     CustomerTransactionV3:
       title: Customer Transaction V3
       description: A schema for Bud V3 transaction format
@@ -18227,22 +18226,7 @@ components:
 
             Note: if this field is supplied, the value will be normalised to lowercase and `-`, and ` ` characters will be replaced with `_`.
         transaction_type:
-          type: object
-          description: |
-            The code and a description of the transaction type. Providing these fields may help improve enrichment accuracy.
-          properties:
-            code:
-              type: string
-              description: |
-                The code representing the type of the given transaction. This typically comes in the form of a proprietary code respective to the __provider__.
-
-                example: `POS_CTLS`
-            description:
-              type: string
-              description: |
-                A human-readable description of the given __code__.
-
-                example: `Contactless POS`
+          $ref: '#/components/schemas/BudTransactionType'
     TransactionWindow:
       type: object
       title: Transaction Window
@@ -18343,22 +18327,7 @@ components:
           type: string
           description: The logo Bud suggests client apps show for a given transaction.
         transaction_type:
-          type: object
-          description: |
-            The code and a description of the transaction type. Providing these fields may help improve enrichment accuracy.
-          properties:
-            code:
-              type: string
-              description: |
-                The code representing the type of the given transaction. This typically comes in the form of a proprietary code respective to the __provider__.
-
-                example: `POS_CTLS`
-            description:
-              type: string
-              description: |
-                A human-readable description of the given __code__.
-
-                example: `Contactless POS`
+          $ref: '#/components/schemas/BudTransactionType'
         amount:
           $ref: '#/components/schemas/BudAmount'
         date_time:
