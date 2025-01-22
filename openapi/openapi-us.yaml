@@ -12359,6 +12359,7 @@ components:
             The code representing the type of the given transaction. This typically comes in the form of a proprietary code respective to the __provider__.
 
             Current list of valid accepted codes:
+
             | Code  | Meaning
             |:------|:-------------------------------------------------------------------|
             | DEB   | [Debit / Credit] Card                                              |
