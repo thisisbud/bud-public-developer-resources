@@ -222,6 +222,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version: 2.15.20: 23/12/2024**
+    >- Add new labels parameters to the __Retrieve Categories V2__ endpoint.
+
     **Version: 2.15.19: 10/12/2024**
     >- Add __Merchant Feedback__ endpoint.
 
@@ -15007,6 +15010,17 @@ components:
             title: Category Name
             description: The name of the category.
             type: string
+          labels:
+            title: Labels
+            description: |
+              Cross category labels used in our engage products, all subcategories will inherit the labels of their parents.
+
+              You can use these labels to understand how certain category determinations are being made, such as if a category considered essential.
+            type: array
+            example:
+              - essential
+            items:
+              type: string
           subcategories:
             title: Subcategories
             description: The respective subcategories for the given category.
@@ -15020,6 +15034,17 @@ components:
                   title: Subcategory Name
                   description: The name of the subcategory.
                   type: string
+                labels:
+                  title: Labels
+                  description: |
+                    Cross category labels used in our engage products.
+
+                    You can use these labels to understand how certain category determinations are being made, such as if a category considered essential.
+                  type: array
+                  example:
+                    - essential
+                  items:
+                    type: string
     GetCategoriesV2Response:
       title: Categories Response
       type: object
