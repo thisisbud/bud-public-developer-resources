@@ -9095,8 +9095,6 @@ paths:
         - `biweekly`
         - `monthly`
         - `quarterly`
-        - `six_monthly`
-        - `annually`
         - `unknown`
       operationId: v2_future_transactions_get
       security:
@@ -15150,8 +15148,6 @@ components:
             - biweekly
             - monthly
             - quarterly
-            - six_monthly
-            - annually
         predicted_date_times:
           type: array
           description: Expected date times for the Transaction to repeat.
@@ -18607,6 +18603,7 @@ components:
         | validation_error | The request format is invalid. Please review the endpoint documentation for correct parameters and headers. |
         | data_mapping_error | The data payload does not match the expected schema. Ensure your data aligns with the defined structure. |
         | internal_error | Something went wrong on our side. Please retry your request later. |
+        | timed_out | The task did not complete in due time. |
     IngestResponseV3SubTask:
       title: Customer Ingest Task
       description: A single customer ingest task status
@@ -22166,8 +22163,6 @@ components:
                 - biweekly
                 - monthly
                 - quarterly
-                - six_monthly
-                - annually
                 - unknown
             confidence:
               type: string
@@ -22709,7 +22704,7 @@ components:
         metadata:
           $ref: '#/components/schemas/TransactionsResultsMetadata'
     GetProductsResponseV2:
-      title: Retrieve Financial Products V2 Response Strucutre
+      title: Retrieve Financial Products V2 Response Structure
       type: object
       required:
         - operation_id
