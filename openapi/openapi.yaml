@@ -15027,6 +15027,15 @@ components:
             | `online`                | A transaction associated with an online merchant          |
           items:
             type: string
+        client_attributes:
+          $ref: '#/components/schemas/ClientAttributes'
+    ClientAttributes:
+      title: Client Attributes
+      type: object
+      description: |
+        An optional map of key-value string pairs that allows clients to attach arbitrary metadata to the transaction.
+        This field can be used to store any relevant information specific to the client's needs, such as:
+        These attributes can be added using the [Ingest Transactions](#operation/v2_ingest_transactions_post) endpoint.
     Enrichments:
       title: Enrichments
       type: object
@@ -18161,6 +18170,16 @@ components:
           description: |
             A human-readable description of the given __bud_code__.
             example: `Contactless POS`
+    BudClientAttributes:
+      title: Client Attributes
+      type: object
+      description: |
+        An optional map of key-value string pairs that allows clients to attach arbitrary metadata to the transaction.
+        This field can be used to store any relevant information specific to the client's needs.
+        It accepts a maximum of 16 key-value pairs. With a maximum key length of 64 characters and a maximum value length of 256 characters.
+      example:
+        fraud_score: '0.8'
+        overdraft_used: 'true'
     CustomerTransactionV3:
       title: Customer Transaction V3
       description: A schema for Bud V3 transaction format
@@ -18227,6 +18246,8 @@ components:
             Note: if this field is supplied, the value will be normalised to lowercase and `-`, and ` ` characters will be replaced with `_`.
         transaction_type:
           $ref: '#/components/schemas/BudTransactionType'
+        client_attributes:
+          $ref: '#/components/schemas/BudClientAttributes'
     TransactionWindow:
       type: object
       title: Transaction Window
