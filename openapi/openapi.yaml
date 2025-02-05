@@ -4660,7 +4660,10 @@ paths:
       tags:
         - Manage Customers
       summary: Update Customer Context
-      description: Set the customer level context.
+      description: |
+        Updates the customer context.
+        All three body parameters (region, locale, and models) will overwrite any existing values.
+        If a parameter is not provided, it's corresponding context field will be set to empty.
       operationId: v1_customer_context_put
       parameters:
         - $ref: '#/components/parameters/PathCustomerID'
