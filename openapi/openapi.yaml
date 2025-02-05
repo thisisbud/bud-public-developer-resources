@@ -14735,42 +14735,13 @@ paths:
               example:
                 operation_id: insights_v1_summary_url_post
                 data:
-                  url: https://widgets.thisisbud.com/summary/123e4567-e89b-12d3-a456-426655440000
+                  url: https://widgets.thisisbud.com/summary/953ea9c1-faee-4daf-9790-4cfd649f66f7?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+                metadata:
+                  sufficient_data: true
         '400':
           description: Not supported summary type was requested
         '401':
           description: Customer doesn't exist
-        '422':
-          description: A summary card summary couldn't be generated for the customer
-          content:
-            application/json:
-              schema:
-                required:
-                  - operation_id
-                  - code_id
-                  - message
-                properties:
-                  operation_id:
-                    type: string
-                    enum:
-                      - insights_v1_summary_url_post
-                  code_id:
-                    type: string
-                    enum:
-                      - failed_validation
-                      - customer_no_summary
-                      - not_enough_data
-                    example: customer_no_summary
-                  message:
-                    type: string
-                    example: 'Customer has no summary available for type: monthly'
-                  errors:
-                    type: object
-                    additionalProperties: true
-              example:
-                operation_id: insights_v1_summary_url_post
-                code_id: not_enough_data
-                message: not enough data to generate summary
         5XX:
           description: An unexpected error occurred on the server side
   /insights/v1/financial-calendar/url:
@@ -14798,6 +14769,8 @@ paths:
                 operation_id: insights_v1_financial_calendar_url_post
                 data:
                   url: https://widgets.thisisbud.com/financial-calendar?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+                metadata:
+                  sufficient_data: true
         '400':
           description: Bad Request
         5XX:
@@ -14827,6 +14800,8 @@ paths:
                 operation_id: insights_v1_balances_over_time_url_post
                 data:
                   url: https://widgets.thisisbud.com/balances-over-time?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+                metadata:
+                  sufficient_data: true
         '400':
           description: Bad Request
         5XX:
@@ -14856,6 +14831,8 @@ paths:
                 operation_id: insights_v1_recurring_and_forecasted_transactions_url_post
                 data:
                   url: https://widgets.thisisbud.com/recurring-and-forecasted-transactions?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+                metadata:
+                  sufficient_data: true
         '400':
           description: Bad Request
         5XX:
@@ -26139,6 +26116,11 @@ components:
             url:
               type: string
               format: uri
+        metadata:
+          type: object
+          properties:
+            sufficient_data:
+              type: boolean
     GenerateFinancialCalendarURLResponse:
       type: object
       properties:
@@ -26152,6 +26134,11 @@ components:
             url:
               type: string
               format: uri
+        metadata:
+          type: object
+          properties:
+            sufficient_data:
+              type: boolean
     GenerateBalancesOverTimeURLResponse:
       type: object
       properties:
@@ -26165,6 +26152,11 @@ components:
             url:
               type: string
               format: uri
+        metadata:
+          type: object
+          properties:
+            sufficient_data:
+              type: boolean
     GenerateRecurringAndForecastedTransactionsURLResponse:
       type: object
       properties:
@@ -26178,6 +26170,11 @@ components:
             url:
               type: string
               format: uri
+        metadata:
+          type: object
+          properties:
+            sufficient_data:
+              type: boolean
   parameters:
     SmartFinderFrom:
       in: header
