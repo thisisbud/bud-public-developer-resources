@@ -222,6 +222,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version: 2.15.21: 30/01/2024**
+    >- Add `country_code` field to __Ingest Transactions V2__ request.
+
     **Version: 2.15.20: 23/12/2024**
     >- Add new labels parameters to the __Retrieve Categories V2__ endpoint.
 
@@ -2680,9 +2683,10 @@ paths:
                         description: The RSPCA, Southwater
                         amount: '-10.98'
                         date_time: '2022-10-10T23:00:00Z'
-                        currency: USD
+                        currency: GBP
                         status: pending
                         provider: Citibank
+                        country_code: GB
                         transaction_type:
                           bud_code: DEB
                           description: Debit card transaction
@@ -2691,11 +2695,19 @@ paths:
                         description: The RSPCA, Southwater
                         amount: '-10.98'
                         date_time: '2022-11-10T23:00:00Z'
-                        currency: USD
+                        currency: GBP
                         provider: Citibank
+                        country_code: GB
                         transaction_type:
                           bud_code: DEB
                           description: Debit card transaction
+                      - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                        transaction_id: d2ea249c-0d1b-4346-b88e-53ec8bc32083
+                        description: Trader Joe's
+                        amount: '-9.98'
+                        date_time: '2022-11-10T23:00:00Z'
+                        currency: USD
+                        provider: Citibank
                     transaction_windows:
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         start: '2022-10-10T23:00:00Z'
@@ -12458,6 +12470,17 @@ components:
             example: `HSBC`, `NatWest`
 
             Note: if this field is supplied, the value will be normalised to lowercase and `-`, and ` ` characters will be replaced with `_`.
+        country_code:
+          type: string
+          description: |
+            The country where the transaction occurred, specified using either:
+            - A 2-letter ISO 3166-1 alpha-2 code (e.g., "US", "GB")
+            - A 3-letter ISO 3166-1 alpha-3 code (e.g., "USA", "GBR") 
+            - A UN M.49 numeric code (e.g., "840" for United States)
+
+            This field enhances merchant identification accuracy and enables automatic travel detection. 
+            When the country_code differs from the `region` in the customer-context, the transaction is assigned appropriate l1 and l2 travel categories.
+            The value is also used to populate the `country` field in location enrichment data. However, it is converted to a 2-letter ISO 3166-1 alpha-2 code when displayed.
         transaction_type:
           $ref: '#/components/schemas/BudTransactionType'
         client_attributes:
@@ -12613,7 +12636,10 @@ components:
               description: The postcode where the transaction occurred.
             country:
               type: string
-              description: The ISO 3166-1 alpha-2 country code representing the country where the transaction occurred.
+              description: |
+                The ISO 3166-1 alpha-2 country code representing the country where the transaction occurred.
+
+                If a location could not be determined, but a `country_code` was supplied in the ingestion request; that value will be reflected here.
         geolocation:
           type: object
           description: The geolocation where the transaction occurred. This is only available if we are able to narrow down the transaction location to an exact match.
