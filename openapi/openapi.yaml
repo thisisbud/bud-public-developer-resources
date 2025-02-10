@@ -1167,6 +1167,11 @@ tags:
 
       Use this for retrieving financial data for customers of the Assess Dashboard
       (where the `bucket_id` is `assess-dashboard`) as it appears in said dashboard.
+  - name: Retrieve Affordability Report V2
+    x-displayName: Retrieve Affordability Report V2
+    description: |
+      Breakdown your customer's transactions by fixed/flexible spend and discretionary vs non discretionary high-level totals.
+      Retrieve Affordability Report V2 endpoints are designed to closely reflect the assess dashboard aggregations/definitions.
   - name: Retrieve Affordability Report
     x-displayName: Retrieve Affordability Report
     description: |
@@ -10699,6 +10704,334 @@ paths:
           description: Forbidden
         '404':
           description: Bucket not found
+  /affordability/v2/report:
+    get:
+      tags:
+        - Retrieve Affordability Report V2
+      summary: Retrieve Affordability Report V2
+      description: Get an overview of a customer's financial status.
+      operationId: v2_affordability_report
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/URLMonthFrom'
+        - $ref: '#/components/parameters/URLMonthTo'
+        - $ref: '#/components/parameters/Timezone'
+        - $ref: '#/components/parameters/OverallTotals'
+        - $ref: '#/components/parameters/MonthlyTotals'
+        - in: query
+          name: currency
+          schema:
+            type: string
+            description: Currency code for relevant transactions (default `GBP`).
+      responses:
+        '200':
+          description: The request was successfully processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2AffordabilityReportResponse'
+              examples:
+                Income and expenditure:
+                  value:
+                    operation_id: v2_affordability_report
+                    data:
+                      months_assessed:
+                        start: 2022-01
+                        end: 2022-03
+                      accounts:
+                        connected: 3
+                        holder_names:
+                          - John Doe
+                        missing_data:
+                          income: false
+                          expenditure: false
+                      assessment:
+                        income:
+                          net_disposable:
+                            predicted_monthly:
+                              value: '1500.00'
+                              currency: GBP
+                            _links:
+                              transactions: /affordability/v3/transactions?criteria=net_disposable_income
+                          net_discretionary:
+                            predicted_monthly:
+                              value: '70.00'
+                              currency: GBP
+                            _links:
+                              income_transactions: /affordability/v3/transactions?criteria=net_disposable_income
+                              expenditure_transactions: /affordability/v3/transactions?criteria=essential_expenditure
+                        expenditure:
+                          fixed:
+                            predicted_monthly:
+                              value: '1000.00'
+                              currency: GBP
+                            _links:
+                              transactions: /affordability/v3/transactions?criteria=fixed_expenditure
+                          flexible:
+                            predicted_monthly_range:
+                              low:
+                                value: '10.00'
+                                currency: GBP
+                              high:
+                                value: '100.00'
+                                currency: GBP
+                              average:
+                                value: '56.00'
+                                currency: GBP
+                            _links:
+                              transactions: /affordability/v3/transactions?criteria=flexible_expenditure
+                          essential:
+                            predicted_monthly:
+                              value: '500.00'
+                              currency: GBP
+                            _links:
+                              transactions: /affordability/v3/transactions?criteria=essential_expenditure
+                          non_essential:
+                            predicted_monthly:
+                              value: '80.00'
+                              currency: GBP
+                            _links:
+                              transactions: /affordability/v3/transactions?criteria=non_essential_expenditure
+                Overall and monthly totals included:
+                  value:
+                    operation_id: v2_affordability_report
+                    data:
+                      months_assessed:
+                        start: 2023-01
+                        end: 2023-06
+                      accounts:
+                        connected: 1
+                        holder_names: []
+                        missing_data:
+                          income: false
+                          expenditure: false
+                      assessment:
+                        income:
+                          net_disposable:
+                            overall_total:
+                              value: '13800.00'
+                              currency: GBP
+                            monthly_totals:
+                              - month: 2023-01
+                                amount:
+                                  value: '2300.00'
+                                  currency: GBP
+                              - month: 2023-02
+                                amount:
+                                  value: '2300.00'
+                                  currency: GBP
+                              - month: 2023-03
+                                amount:
+                                  value: '2300.00'
+                                  currency: GBP
+                              - month: 2023-04
+                                amount:
+                                  value: '2300.00'
+                                  currency: GBP
+                              - month: 2023-05
+                                amount:
+                                  value: '2300.00'
+                                  currency: GBP
+                              - month: 2023-06
+                                amount:
+                                  value: '2300.00'
+                                  currency: GBP
+                            predicted_monthly:
+                              value: '2300.00'
+                              currency: GBP
+                            _links:
+                              transactions: /affordability/v3/transactions?criteria=net_disposable_income&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                          net_discretionary:
+                            overall_total:
+                              value: '-9.00'
+                              currency: GBP
+                            monthly_totals:
+                              - month: 2023-01
+                                amount:
+                                  value: '12.00'
+                                  currency: GBP
+                              - month: 2023-02
+                                amount:
+                                  value: '12.00'
+                                  currency: GBP
+                              - month: 2023-03
+                                amount:
+                                  value: '-69.00'
+                                  currency: GBP
+                              - month: 2023-04
+                                amount:
+                                  value: '12.00'
+                                  currency: GBP
+                              - month: 2023-05
+                                amount:
+                                  value: '12.00'
+                                  currency: GBP
+                              - month: 2023-06
+                                amount:
+                                  value: '12.00'
+                                  currency: GBP
+                            predicted_monthly:
+                              value: '-1.50'
+                              currency: GBP
+                            _links:
+                              income_transactions: /affordability/v3/transactions?criteria=net_disposable_income&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                              expenditure_transactions: /affordability/v3/transactions?criteria=essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                        expenditure:
+                          essential:
+                            overall_total:
+                              value: '13809.00'
+                              currency: GBP
+                            monthly_totals:
+                              - month: 2023-01
+                                amount:
+                                  value: '2288.00'
+                                  currency: GBP
+                              - month: 2023-02
+                                amount:
+                                  value: '2288.00'
+                                  currency: GBP
+                              - month: 2023-03
+                                amount:
+                                  value: '2369.00'
+                                  currency: GBP
+                              - month: 2023-04
+                                amount:
+                                  value: '2288.00'
+                                  currency: GBP
+                              - month: 2023-05
+                                amount:
+                                  value: '2288.00'
+                                  currency: GBP
+                              - month: 2023-06
+                                amount:
+                                  value: '2288.00'
+                                  currency: GBP
+                            predicted_monthly:
+                              value: '2301.50'
+                              currency: GBP
+                            _links:
+                              transactions: /affordability/v3/transactions?criteria=essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                          non_essential:
+                            overall_total:
+                              value: '4232.44'
+                              currency: GBP
+                            monthly_totals:
+                              - month: 2023-01
+                                amount:
+                                  value: '1198.52'
+                                  currency: GBP
+                              - month: 2023-02
+                                amount:
+                                  value: '591.20'
+                                  currency: GBP
+                              - month: 2023-03
+                                amount:
+                                  value: '747.84'
+                                  currency: GBP
+                              - month: 2023-04
+                                amount:
+                                  value: '534.80'
+                                  currency: GBP
+                              - month: 2023-05
+                                amount:
+                                  value: '597.20'
+                                  currency: GBP
+                              - month: 2023-06
+                                amount:
+                                  value: '562.88'
+                                  currency: GBP
+                            predicted_monthly:
+                              value: '705.41'
+                              currency: GBP
+                            _links:
+                              transactions: /affordability/v3/transactions?criteria=non_essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                          fixed:
+                            overall_total:
+                              value: '12466.08'
+                              currency: GBP
+                            monthly_totals:
+                              - month: 2023-01
+                                amount:
+                                  value: '2024.00'
+                                  currency: GBP
+                              - month: 2023-02
+                                amount:
+                                  value: '2104.08'
+                                  currency: GBP
+                              - month: 2023-03
+                                amount:
+                                  value: '2102.32'
+                                  currency: GBP
+                              - month: 2023-04
+                                amount:
+                                  value: '2062.96'
+                                  currency: GBP
+                              - month: 2023-05
+                                amount:
+                                  value: '2108.96'
+                                  currency: GBP
+                              - month: 2023-06
+                                amount:
+                                  value: '2063.76'
+                                  currency: GBP
+                            predicted_monthly:
+                              value: '2077.68'
+                              currency: GBP
+                            _links:
+                              transactions: /affordability/v3/transactions?criteria=fixed_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                          flexible:
+                            overall_total:
+                              value: '5575.36'
+                              currency: GBP
+                            monthly_totals:
+                              - month: 2023-01
+                                amount:
+                                  value: '1462.52'
+                                  currency: GBP
+                              - month: 2023-02
+                                amount:
+                                  value: '775.12'
+                                  currency: GBP
+                              - month: 2023-03
+                                amount:
+                                  value: '1014.52'
+                                  currency: GBP
+                              - month: 2023-04
+                                amount:
+                                  value: '759.84'
+                                  currency: GBP
+                              - month: 2023-05
+                                amount:
+                                  value: '776.24'
+                                  currency: GBP
+                              - month: 2023-06
+                                amount:
+                                  value: '787.12'
+                                  currency: GBP
+                            predicted_monthly_range:
+                              low:
+                                value: '759.84'
+                                currency: GBP
+                              high:
+                                value: '1462.52'
+                                currency: GBP
+                              average:
+                                value: '929.23'
+                                currency: GBP
+                            _links:
+                              transactions: /affordability/v3/transactions?criteria=flexible_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+        '400':
+          description: The request contains an invalid payload.
+        '401':
+          description: Unauthorised request
+        '405':
+          description: An unexpected HTTP method was used
+        5XX:
+          description: An unexpected error occurred on the server side
   /v1/affordability/report:
     get:
       tags:
@@ -11103,9 +11436,62 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListTransactionsResponse'
+                $ref: '#/components/schemas/AffordabilityTransactionResponse'
               example:
-                operation_id: v2_transactions_get
+                operation_id: v2_affordability_transactions_get
+                data:
+                  - transaction_id: da4ad499c86956e65e811fc88f6b54af
+                    account_id: 72fa858459bd32ce0b5fd9daf813fd07
+                    provider: BankOfBud
+                    description: PayPal Transfer John Doe
+                    credit_debit_indicator: credit
+                    status: pending
+                    suggested_description: john doe
+                    suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3af57fc-ec8a-4258-a8da-8d34f11640f6/v2/paypal.jpeg
+                    amount:
+                      value: '10.99'
+                      currency: GBP
+                    date_time: '2022-01-02T15:00:00Z'
+                metadata:
+                  results: 1
+        '400':
+          description: The request contains an invalid payload.
+        '401':
+          description: Unauthorised request
+        '405':
+          description: An unexpected HTTP method was used
+        5XX:
+          description: An unexpected error occurred on the server side
+  /affordability/v3/transactions:
+    get:
+      tags:
+        - Retrieve Affordability Report V2
+      summary: Retrieve Affordability Transactions V3
+      description: |
+        This is a complimentary endpoint to the Retrieve Affordability Report V2 endpoint. This endpoint
+        is designed to allow clients to retrieve transactions used to generate sections of the V2 affordability report.
+
+        Transactions returned via this endpoint are filtered based on the criteria provided in the request, and
+        resemble the V2 transaction response format found in the v2_transactions_get endpoint.
+      operationId: v3_affordability_transactions_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/DateFrom'
+        - $ref: '#/components/parameters/DateTo'
+        - $ref: '#/components/parameters/Criteria'
+      responses:
+        '200':
+          description: The request was successfully processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AffordabilityTransactionResponse'
+              example:
+                operation_id: v3_affordability_transactions_get
                 data:
                   - transaction_id: da4ad499c86956e65e811fc88f6b54af
                     account_id: 72fa858459bd32ce0b5fd9daf813fd07
@@ -23122,6 +23508,20 @@ components:
                   description: An expense that a customer does not necessarily need to make per month, and isn’t necessarily the same in £ amount each month.
                   allOf:
                     - $ref: '#/components/schemas/ReportTotal'
+    V2AffordabilityReportResponse:
+      title: Retrieve Affordability Report Schema
+      type: object
+      description: Expected response structure
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - v2_affordability_report
+        data:
+          $ref: '#/components/schemas/AffordabilityReport'
     AffordabilityReportResponse:
       title: Retrieve Affordability Report Schema
       type: object
@@ -23247,6 +23647,34 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SpendingGroupTransaction'
+    AffordabilityTransactionResponse:
+      title: Retrieve Affordability Transaction Schema
+      type: object
+      description: Expected response structure
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - v2_affordability_transactions_get
+            - v3_affordability_transactions_get
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        metadata:
+          type: object
+          required:
+            - results
+          properties:
+            results:
+              type: integer
+              description: The number of results returned.
+            next_page_token:
+              type: string
+              description: The token required to retrieve the next page of results. Will be omitted if no next page exists.
     CreditDebitIndicator:
       type: string
       enum:
@@ -27297,6 +27725,7 @@ x-tagGroups:
       - Customer Applications
       - Customer Application Links
       - Aggregation Buckets
+      - Retrieve Affordability Report V2
       - Retrieve Affordability Report
       - Retrieve Affordability Risk Insights
       - Assess API
