@@ -11037,7 +11037,13 @@ paths:
       tags:
         - Retrieve Affordability Report
       summary: Retrieve Affordability Report
-      description: Get an overview of a customer's financial status.
+      description: |
+        Get an overview of a customer's financial status.
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 31st of August 2025 - please complete your migration to the Retrieve Affordability Report V2 endpoint by that point in time. 
+        > For further details, contact your Bud account manager or email help@thisisbud.com.
+      deprecated: true
       operationId: v1_affordability_report
       security:
         - OAuth2: []
@@ -11420,6 +11426,11 @@ paths:
       description: |
         View the transactions that were used to calculate a customer's Retrieve Affordability Report, but in the same
         response format as Retrieve Transactions V2.
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 31st of August 2025 - please complete your migration to the Retrieve Affordability Transactions V3 endpoint by that point in time. 
+        > For further details, contact your Bud account manager or email help@thisisbud.com.
+      deprecated: true
       operationId: v2_affordability_transactions_get
       security:
         - OAuth2: []
