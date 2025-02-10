@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "4e9aca8e-fe20-4554-89b2-5442e4ae2ecc",
+		"_postman_id": "7c5b75f5-003d-4502-9a01-ff12fda1f229",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30390585"
+		"_exporter_id": "7397722"
 	},
 	"item": [
 		{
@@ -4001,24 +4001,24 @@
 								"auth": {
 									"type": "bearer",
 									"bearer": [
-									{
-										"key": "token",
-										"value": "{{auth_token}}",
-										"type": "string"
-									}
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
 									]
 								},
 								"method": "POST",
 								"header": [
-								{
-									"key": "content-type",
-									"value": "application/json"
-								},
-								{
-									"key": "X-Client-Id",
-									"value": "{{api_credentials_id}}",
-									"type": "default"
-								}
+									{
+										"key": "content-type",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									}
 								],
 								"body": {
 									"mode": "raw",
@@ -4031,9 +4031,9 @@
 									],
 									"path": [
 										"v2",
-									"merchant-feedback",
-									"merchant",
-									"{merchant_id}"
+										"merchant-feedback",
+										"merchant",
+										"{merchant_id}"
 									]
 								}
 							},
@@ -4507,7 +4507,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{proxy_url}}aggregations/v2/totals/essential-statistics",
+									"raw": "{{proxy_url}}aggregations/v2/totals/essential-statistics?from=2020-01-01T00:00:00Z&to=2023-01-01T00:00:00Z",
 									"host": [
 										"{{proxy_url}}aggregations"
 									],
@@ -7324,6 +7324,62 @@
 							"response": []
 						},
 						{
+							"name": "Retrieve Affordability Report V2",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}affordability/v2/report",
+									"host": [
+										"{{proxy_url}}affordability"
+									],
+									"path": [
+										"v2",
+										"report"
+									],
+									"query": [
+										{
+											"key": "month_from",
+											"value": "2022-12",
+											"disabled": true
+										},
+										{
+											"key": "month_to",
+											"value": "2023-04",
+											"disabled": true
+										},
+										{
+											"key": "currency",
+											"value": "GBP",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Retrieve Affordability Transactions",
 							"request": {
 								"auth": {
@@ -7356,6 +7412,59 @@
 									],
 									"path": [
 										"affordability",
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "criteria",
+											"value": "essential_expenditure"
+										},
+										{
+											"key": "date_from",
+											"value": "2023-01-01T00:00:00Z"
+										},
+										{
+											"key": "date_to",
+											"value": "2023-04-30T23:59:59Z"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Affordability Transactions V3",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}affordability/v3/transactions?criteria=essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-04-30T23:59:59Z",
+									"host": [
+										"{{proxy_url}}affordability"
+									],
+									"path": [
+										"v3",
 										"transactions"
 									],
 									"query": [
