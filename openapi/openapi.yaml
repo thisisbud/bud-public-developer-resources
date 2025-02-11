@@ -10756,21 +10756,21 @@ paths:
                               value: '1500.00'
                               currency: GBP
                             _links:
-                              transactions: /affordability/v3/transactions?criteria=net_disposable_income
+                              transactions: /affordability/v2/transactions?criteria=net_disposable_income
                           net_discretionary:
                             predicted_monthly:
                               value: '70.00'
                               currency: GBP
                             _links:
-                              income_transactions: /affordability/v3/transactions?criteria=net_disposable_income
-                              expenditure_transactions: /affordability/v3/transactions?criteria=essential_expenditure
+                              income_transactions: /affordability/v2/transactions?criteria=net_disposable_income
+                              expenditure_transactions: /affordability/v2/transactions?criteria=essential_expenditure
                         expenditure:
                           fixed:
                             predicted_monthly:
                               value: '1000.00'
                               currency: GBP
                             _links:
-                              transactions: /affordability/v3/transactions?criteria=fixed_expenditure
+                              transactions: /affordability/v2/transactions?criteria=fixed_expenditure
                           flexible:
                             predicted_monthly_range:
                               low:
@@ -10783,19 +10783,19 @@ paths:
                                 value: '56.00'
                                 currency: GBP
                             _links:
-                              transactions: /affordability/v3/transactions?criteria=flexible_expenditure
+                              transactions: /affordability/v2/transactions?criteria=flexible_expenditure
                           essential:
                             predicted_monthly:
                               value: '500.00'
                               currency: GBP
                             _links:
-                              transactions: /affordability/v3/transactions?criteria=essential_expenditure
+                              transactions: /affordability/v2/transactions?criteria=essential_expenditure
                           non_essential:
                             predicted_monthly:
                               value: '80.00'
                               currency: GBP
                             _links:
-                              transactions: /affordability/v3/transactions?criteria=non_essential_expenditure
+                              transactions: /affordability/v2/transactions?criteria=non_essential_expenditure
                 Overall and monthly totals included:
                   value:
                     operation_id: v2_affordability_report
@@ -10844,7 +10844,7 @@ paths:
                               value: '2300.00'
                               currency: GBP
                             _links:
-                              transactions: /affordability/v3/transactions?criteria=net_disposable_income&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                              transactions: /affordability/v2/transactions?criteria=net_disposable_income&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
                           net_discretionary:
                             overall_total:
                               value: '-9.00'
@@ -10878,8 +10878,8 @@ paths:
                               value: '-1.50'
                               currency: GBP
                             _links:
-                              income_transactions: /affordability/v3/transactions?criteria=net_disposable_income&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
-                              expenditure_transactions: /affordability/v3/transactions?criteria=essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                              income_transactions: /affordability/v2/transactions?criteria=net_disposable_income&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                              expenditure_transactions: /affordability/v2/transactions?criteria=essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
                         expenditure:
                           essential:
                             overall_total:
@@ -10914,7 +10914,7 @@ paths:
                               value: '2301.50'
                               currency: GBP
                             _links:
-                              transactions: /affordability/v3/transactions?criteria=essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                              transactions: /affordability/v2/transactions?criteria=essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
                           non_essential:
                             overall_total:
                               value: '4232.44'
@@ -10948,7 +10948,7 @@ paths:
                               value: '705.41'
                               currency: GBP
                             _links:
-                              transactions: /affordability/v3/transactions?criteria=non_essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                              transactions: /affordability/v2/transactions?criteria=non_essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
                           fixed:
                             overall_total:
                               value: '12466.08'
@@ -10982,7 +10982,7 @@ paths:
                               value: '2077.68'
                               currency: GBP
                             _links:
-                              transactions: /affordability/v3/transactions?criteria=fixed_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                              transactions: /affordability/v2/transactions?criteria=fixed_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
                           flexible:
                             overall_total:
                               value: '5575.36'
@@ -11023,7 +11023,7 @@ paths:
                                 value: '929.23'
                                 currency: GBP
                             _links:
-                              transactions: /affordability/v3/transactions?criteria=flexible_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
+                              transactions: /affordability/v2/transactions?criteria=flexible_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-06-30T23:59:59+01:00&currency=GBP
         '400':
           description: The request contains an invalid payload.
         '401':
@@ -11424,13 +11424,11 @@ paths:
         - Retrieve Affordability Report
       summary: Retrieve Affordability Transactions V2
       description: |
-        View the transactions that were used to calculate a customer's Retrieve Affordability Report, but in the same
-        response format as Retrieve Transactions V2.
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 31st of August 2025 - please complete your migration to the Retrieve Affordability Transactions V3 endpoint by that point in time. 
-        > For further details, contact your Bud account manager or email help@thisisbud.com.
-      deprecated: true
+        This is a complimentary endpoint to the Retrieve Affordability Report V2 endpoint. This endpoint
+        is designed to allow clients to retrieve transactions used to generate sections of the V2 affordability report.
+
+        Transactions returned via this endpoint are filtered based on the criteria provided in the request, and
+        resemble the V2 transaction response format found in the v2_transactions_get endpoint.
       operationId: v2_affordability_transactions_get
       security:
         - OAuth2: []
@@ -11450,59 +11448,6 @@ paths:
                 $ref: '#/components/schemas/AffordabilityTransactionResponse'
               example:
                 operation_id: v2_affordability_transactions_get
-                data:
-                  - transaction_id: da4ad499c86956e65e811fc88f6b54af
-                    account_id: 72fa858459bd32ce0b5fd9daf813fd07
-                    provider: BankOfBud
-                    description: PayPal Transfer John Doe
-                    credit_debit_indicator: credit
-                    status: pending
-                    suggested_description: john doe
-                    suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/a3af57fc-ec8a-4258-a8da-8d34f11640f6/v2/paypal.jpeg
-                    amount:
-                      value: '10.99'
-                      currency: GBP
-                    date_time: '2022-01-02T15:00:00Z'
-                metadata:
-                  results: 1
-        '400':
-          description: The request contains an invalid payload.
-        '401':
-          description: Unauthorised request
-        '405':
-          description: An unexpected HTTP method was used
-        5XX:
-          description: An unexpected error occurred on the server side
-  /affordability/v3/transactions:
-    get:
-      tags:
-        - Retrieve Affordability Report V2
-      summary: Retrieve Affordability Transactions V3
-      description: |
-        This is a complimentary endpoint to the Retrieve Affordability Report V2 endpoint. This endpoint
-        is designed to allow clients to retrieve transactions used to generate sections of the V2 affordability report.
-
-        Transactions returned via this endpoint are filtered based on the criteria provided in the request, and
-        resemble the V2 transaction response format found in the v2_transactions_get endpoint.
-      operationId: v3_affordability_transactions_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/DateFrom'
-        - $ref: '#/components/parameters/DateTo'
-        - $ref: '#/components/parameters/Criteria'
-      responses:
-        '200':
-          description: The request was successfully processed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AffordabilityTransactionResponse'
-              example:
-                operation_id: v3_affordability_transactions_get
                 data:
                   - transaction_id: da4ad499c86956e65e811fc88f6b54af
                     account_id: 72fa858459bd32ce0b5fd9daf813fd07
@@ -23670,7 +23615,6 @@ components:
           type: string
           enum:
             - v2_affordability_transactions_get
-            - v3_affordability_transactions_get
         data:
           type: array
           items:
