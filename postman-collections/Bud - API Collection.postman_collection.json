@@ -7433,7 +7433,7 @@
 							"response": []
 						},
 						{
-							"name": "Retrieve Affordability Transactions V3",
+							"name": "Retrieve Affordability Transactions V2",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -7459,7 +7459,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}affordability/v3/transactions?criteria=essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-04-30T23:59:59Z",
+									"raw": "{{proxy_url}}affordability/v2/transactions?criteria=essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-04-30T23:59:59Z",
 									"host": [
 										"{{proxy_url}}affordability"
 									],
