@@ -11421,7 +11421,7 @@ paths:
   /affordability/v2/transactions:
     get:
       tags:
-        - Retrieve Affordability Report
+        - Retrieve Affordability Report V2
       summary: Retrieve Affordability Transactions V2
       description: |
         This is a complimentary endpoint to the Retrieve Affordability Report V2 endpoint. This endpoint
