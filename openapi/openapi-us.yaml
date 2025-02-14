@@ -5832,6 +5832,16 @@ paths:
                   from: '2018-01-01'
                   to: '2018-01-17'
                   results: 2
+                  credit_total:
+                    - transaction_count: 2
+                      amount:
+                        currency: USD
+                        value: '18.77'
+                  debit_total:
+                    - transaction_count: 16
+                      amount:
+                        currency: USD
+                        value: '370.46'
         '204':
           description: No transactions found
         '400':
@@ -14687,7 +14697,7 @@ components:
           type: string
         suggested_url:
           type: string
-    CategoryTotalAmountWithTrxCount:
+    TotalAmountWithTrxCount:
       type: object
       title: Amount with transaction count
       description: Amount of money in the cash transaction entry, including the number of transactions used in the calculation.
@@ -14708,11 +14718,11 @@ components:
         credit_total:
           type: array
           items:
-            $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+            $ref: '#/components/schemas/TotalAmountWithTrxCount'
         debit_total:
           type: array
           items:
-            $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+            $ref: '#/components/schemas/TotalAmountWithTrxCount'
         name:
           type: string
           description: Category id as slug.
@@ -14724,11 +14734,11 @@ components:
         credit_total:
           type: array
           items:
-            $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+            $ref: '#/components/schemas/TotalAmountWithTrxCount'
         debit_total:
           type: array
           items:
-            $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+            $ref: '#/components/schemas/TotalAmountWithTrxCount'
         name:
           type: string
           description: Category id as slug.
@@ -14771,13 +14781,13 @@ components:
             credit_total:
               type: array
               items:
-                $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+                $ref: '#/components/schemas/TotalAmountWithTrxCount'
               description: |
                 The total across credit transactions from all included categories
             debit_total:
               type: array
               items:
-                $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+                $ref: '#/components/schemas/TotalAmountWithTrxCount'
               description: |
                 The total across debit transactions from all included categories
     CategoriesTotalTrendsV2Response:
@@ -14840,12 +14850,12 @@ components:
               type: array
               description: Sum of all debit transactions categorized with an essential labeled category by currency
               items:
-                $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+                $ref: '#/components/schemas/TotalAmountWithTrxCount'
             nonessential_spend:
               description: Sum of all debit transactions categorized with an nonessential labeled category by currency
               type: array
               items:
-                $ref: '#/components/schemas/CategoryTotalAmountWithTrxCount'
+                $ref: '#/components/schemas/TotalAmountWithTrxCount'
             essential_percentage_overall_spend:
               type: array
               description: essential percentage of essential + nonessential debit transactions by currency
@@ -14964,6 +14974,16 @@ components:
               type: array
               items:
                 type: string
+            credit_total:
+              type: array
+              description: The total credit amount over this period by currency
+              items:
+                $ref: '#/components/schemas/TotalAmountWithTrxCount'
+            debit_total:
+              type: array
+              description: The total debit amount over this period by currency
+              items:
+                $ref: '#/components/schemas/TotalAmountWithTrxCount'
     MerchantTotalsResponseV2:
       title: Merchant Totals
       type: object
