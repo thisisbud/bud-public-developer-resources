@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "7c5b75f5-003d-4502-9a01-ff12fda1f229",
+		"_postman_id": "f4f3ed6d-b2a5-4ce4-a2e7-e2120e143d0c",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "7397722"
@@ -6458,6 +6458,45 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Generate Spending Analysis URL",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "undefined",
+											"type": "any"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}insights/v1/spending-analysis/url",
+									"host": [
+										"{{proxy_url}}insights"
+									],
+									"path": [
+										"v1",
+										"spending-analysis",
+										"url"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
@@ -7459,7 +7498,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}affordability/v2/transactions?criteria=essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-04-30T23:59:59Z",
+									"raw": "{{proxy_url}}affordability/v3/transactions?criteria=essential_expenditure&date_from=2023-01-01T00:00:00Z&date_to=2023-04-30T23:59:59Z",
 									"host": [
 										"{{proxy_url}}affordability"
 									],
