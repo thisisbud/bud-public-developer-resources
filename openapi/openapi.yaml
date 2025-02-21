@@ -306,7 +306,10 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
-    **Version: 2.15.21: 30/01/2024**
+    **Version: 2.15.23: 20/02/2024**
+    >- Add __Generate Spending Analysis URL__ endpoint.
+
+    **Version: 2.15.22: 20/02/2024**
     >- Updated list of possible tags in __Retrieve Transactions V2__ endpoint response.
 
     **Version: 2.15.21: 30/01/2024**
@@ -15195,6 +15198,36 @@ paths:
           description: Bad Request
         5XX:
           description: An unexpected error occurred on the server side
+  /insights/v1/spending-analysis/url:
+    post:
+      tags:
+        - Frontend Widgets
+      security:
+        - OAuth2: []
+      operationId: insights_v1_spending_analysis_url_post
+      summary: Create Spending Analysis URL
+      description: Generates a URL to access the customer's spending analysis.
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerSecret'
+      responses:
+        '201':
+          description: Successful response containing Spending Analysis URL and metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateSpendingAnalysisURLResponse'
+              example:
+                operation_id: insights_v1_spending_analysis_url_post
+                data:
+                  url: https://widgets.thisisbud.com/spending-analysis?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+                metadata:
+                  sufficient_data: true
+        '400':
+          description: Bad Request
+        5XX:
+          description: An unexpected error occurred on the server side
 components:
   securitySchemes:
     Basic:
@@ -26574,6 +26607,24 @@ components:
           type: string
           enum:
             - insights_v1_recurring_and_forecasted_transactions_url_post
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+        metadata:
+          type: object
+          properties:
+            sufficient_data:
+              type: boolean
+    GenerateSpendingAnalysisURLResponse:
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_spending_analysis_url_post
         data:
           type: object
           properties:
