@@ -9038,7 +9038,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       requestBody:
         content:
           application/json:
@@ -9076,7 +9075,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '201':
           description: Successful response containing the Financial Calendar URL and metadata.
@@ -9107,7 +9105,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '201':
           description: Successful response containing Balances Over Time URL and metadata.
@@ -9138,7 +9135,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '201':
           description: Successful response containing the Recurring and Forecasted Transactions URL and metadata.
@@ -9163,12 +9159,11 @@ paths:
       security:
         - OAuth2: []
       operationId: insights_v1_spending_analysis_url_post
-      summary: Create Spending Analysis URL
+      summary: Generate Spending Analysis URL
       description: Generates a URL to access the customer's spending analysis.
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerSecret'
       responses:
         '201':
           description: Successful response containing Spending Analysis URL and metadata.
