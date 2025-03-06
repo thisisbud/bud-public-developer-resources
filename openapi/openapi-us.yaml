@@ -785,7 +785,7 @@ paths:
                 region: US
                 locale: en-US
                 models:
-                  categorisation: us-v1
+                  categorisation: us-v3
               client_metadata:
                 idempotent_identifier: your_internal_id
       responses:
@@ -805,7 +805,7 @@ paths:
                     locale: en-US
                     host_secret: true
                     models:
-                      categorisation: us-v1
+                      categorisation: us-v3
                   client_metadata:
                     idempotent_identifier: your_internal_id
                 metadata:
@@ -826,7 +826,7 @@ paths:
                     locale: en-US
                     host_secret: true
                     models:
-                      categorisation: us-v1
+                      categorisation: us-v3
                   client_metadata:
                     idempotent_identifier: your_internal_id
                 metadata:
@@ -959,7 +959,7 @@ paths:
                 region: US
                 locale: en-US
                 models:
-                  categorisation: us-v1
+                  categorisation: us-v3
       responses:
         '201':
           description: The resource has been successfully created.
@@ -976,7 +976,7 @@ paths:
                       region: US
                       locale: en-US
                       models:
-                        categorisation: us-v1
+                        categorisation: us-v3
                       host_secret: true
                   - customer_id: 8d3e9cd4-fa92-4252-8725-9b20af307b76
                     customer_context:
@@ -985,7 +985,7 @@ paths:
                       locale: en-US
                       host_secret: true
                       models:
-                        categorisation: us-v1
+                        categorisation: us-v3
                 metadata:
                   created_at: '2023-01-01T07:02:11Z'
         '400':
@@ -1160,7 +1160,7 @@ paths:
                   region: US
                   locale: en-US
                   models:
-                    categorisation: us-v1
+                    categorisation: us-v3
         '401':
           description: An unauthenticated request was received.
         '404':
@@ -1193,7 +1193,7 @@ paths:
               region: US
               locale: en-US
               models:
-                categorisation: us-v1
+                categorisation: us-v3
       responses:
         '200':
           description: OK
@@ -1207,7 +1207,7 @@ paths:
                   region: US
                   locale: en-US
                   models:
-                    categorisation: us-v1
+                    categorisation: us-v3
         '401':
           description: An unauthenticated request was received.
         '404':
@@ -2672,6 +2672,7 @@ paths:
         - $ref: '#/components/parameters/DisableSynchronous'
         - $ref: '#/components/parameters/GenerateTransactionIDs'
         - $ref: '#/components/parameters/BudCategorisationModel'
+        - $ref: '#/components/parameters/NoCustomerHeader'
       requestBody:
         required: true
         content:
@@ -4004,7 +4005,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetBalancesV3Response'
               example:
-                operation_id: financial_v2_balances_get
+                operation_id: financial_v3_balances_get
                 data:
                   - account_id: 705e95fea8312d9a9b227b682033d55f
                     balances:
@@ -4084,7 +4085,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ServerErrorResponse'
               example:
-                operation_id: financial_v2_balances_get
+                operation_id: financial_v3_balances_get
                 code_id: internal_error
                 message: Internal server error has occurred.
   /financial/v3/accounts/{account_id}/balances:
@@ -4136,7 +4137,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetBalancesForAccountIDV3Response'
               example:
-                operation_id: financial_v2_accounts_balances_get
+                operation_id: financial_v3_accounts_balances_get
                 data:
                   - date: '2022-11-15T23:59:59Z'
                     booked:
@@ -4190,7 +4191,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestNotFoundResponse'
               example:
-                operation_id: financial_v2_accounts_balances_get
+                operation_id: financial_v3_accounts_balances_get
                 code_id: account_not_found
                 message: The specified account could not be found. Please check the account identifier is correct. The account might be closed or suspended.
         '500':
@@ -4200,7 +4201,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ServerErrorResponse'
               example:
-                operation_id: financial_v2_accounts_balances_get
+                operation_id: financial_v3_accounts_balances_get
                 code_id: internal_error
                 message: Internal server error has occurred.
   /financial/v2/accounts/{account_id}:
@@ -5889,7 +5890,7 @@ paths:
               example:
                 operation_id: resources_v2_models_get
                 data:
-                  - name: us-v1
+                  - name: us-v3
                     description: 'A US categorisation model. This model can be used for the following use cases: affordability assessments, collections assessments, affordability monitoring, customer engagement and product recommendations.'
         '400':
           description: The request contains an invalid payload.
@@ -5953,7 +5954,7 @@ paths:
                         - holiday_and_travel_expenses
                     metadata:
                       model:
-                        name: us-v1
+                        name: us-v3
                         description: 'A US categorisation model. This model can be used for the following use cases: affordability assessments, collections assessments, affordability monitoring, customer engagement and product recommendations.'
                 map:
                   value:
@@ -5965,7 +5966,7 @@ paths:
                           - name: holiday_and_travel_expenses
                     metadata:
                       model:
-                        name: uk-v2
+                        name: us-v3
                         description: 'A US categorisation model. This model can be used for the following use cases: affordability assessments, collections assessments, affordability monitoring, customer engagement and product recommendations.'
         '400':
           description: The request contains an invalid payload.
@@ -12075,14 +12076,16 @@ components:
           description: The sub type of the account
           enum:
             - ChargeCard
+            - CheckingAccount
             - CreditCard
             - CurrentAccount
             - EMoney
+            - Investment
             - Loan
             - Mortgage
             - PrePaidCard
             - Savings
-            - CheckingAccount
+            - Other
         holder_name:
           type: string
           description: The name of the account holder
@@ -18237,6 +18240,15 @@ components:
         If a model is specified that cannot be used, then the default model will be used instead.
       schema:
         type: string
+    NoCustomerHeader:
+      in: header
+      name: X-No-Customer
+      schema:
+        type: boolean
+      description: |-
+        If provided as true, the customer_id is not required in the request. This is only available with X-Disable-Synchronous not set or set to false.
+        **Note:** This functionality is not available by default. In order to use it, please raise a Support request.
+      example: true
     QueryCurrency:
       in: query
       name: currency
