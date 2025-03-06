@@ -3501,6 +3501,7 @@ paths:
         - $ref: '#/components/parameters/DisableSynchronous'
         - $ref: '#/components/parameters/GenerateTransactionIDs'
         - $ref: '#/components/parameters/BudCategorisationModel'
+        - $ref: '#/components/parameters/NoCustomerHeader'
       requestBody:
         required: true
         content:
@@ -4735,9 +4736,6 @@ paths:
                 data:
                   - name: uk-v2
                     description: 'A UK categorisation model. This model can be used for the following use cases: affordability assessments, collections assessments, affordability monitoring, customer engagement and product recommendations.'
-                  - name: uk-v1
-                    description: 'A UK categorisation model. This model can be used for the following use cases: affordability assessments, collections assessments, affordability monitoring, customer engagement and product recommendations.'
-                    deprecated: true
         '400':
           description: The request contains an invalid payload.
         '401':
@@ -6092,7 +6090,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetBalancesV3Response'
               example:
-                operation_id: financial_v2_balances_get
+                operation_id: financial_v3_balances_get
                 data:
                   - account_id: 705e95fea8312d9a9b227b682033d55f
                     balances:
@@ -6172,7 +6170,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ServerErrorResponse'
               example:
-                operation_id: financial_v2_balances_get
+                operation_id: financial_v3_balances_get
                 code_id: internal_error
                 message: Internal server error has occurred.
   /financial/v3/accounts/{account_id}/balances:
@@ -6224,7 +6222,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetBalancesForAccountIDV3Response'
               example:
-                operation_id: financial_v2_accounts_balances_get
+                operation_id: financial_v3_accounts_balances_get
                 data:
                   - date: '2022-11-15T23:59:59Z'
                     booked:
@@ -6278,7 +6276,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestNotFoundResponse'
               example:
-                operation_id: financial_v2_accounts_balances_get
+                operation_id: financial_v3_accounts_balances_get
                 code_id: account_not_found
                 message: The specified account could not be found. Please check the account identifier is correct. The account might be closed or suspended.
         '500':
@@ -6288,7 +6286,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ServerErrorResponse'
               example:
-                operation_id: financial_v2_accounts_balances_get
+                operation_id: financial_v3_accounts_balances_get
                 code_id: internal_error
                 message: Internal server error has occurred.
   /financial/v2/transactions:
@@ -18205,14 +18203,16 @@ components:
           description: The sub type of the account
           enum:
             - ChargeCard
+            - CheckingAccount
             - CreditCard
             - CurrentAccount
             - EMoney
+            - Investment
             - Loan
             - Mortgage
             - PrePaidCard
             - Savings
-            - CheckingAccount
+            - Other
         holder_name:
           type: string
           description: The name of the account holder
@@ -26999,6 +26999,15 @@ components:
         If a model is specified that cannot be used, then the default model will be used instead.
       schema:
         type: string
+    NoCustomerHeader:
+      in: header
+      name: X-No-Customer
+      schema:
+        type: boolean
+      description: |-
+        If provided as true, the customer_id is not required in the request. This is only available with X-Disable-Synchronous not set or set to false.
+        **Note:** This functionality is not available by default. In order to use it, please raise a Support request.
+      example: true
     PathCustomerID:
       in: path
       name: customer_id
