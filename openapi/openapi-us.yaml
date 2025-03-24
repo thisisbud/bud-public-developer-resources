@@ -12524,7 +12524,6 @@ components:
       properties:
         account_id:
           type: string
-          format: uuid
           description: The account identifier that the transaction belongs to
           example: 2f5b2055-6253-4cd0-b646-06788342a609
         start:
