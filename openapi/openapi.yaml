@@ -17660,11 +17660,6 @@ components:
       type: object
       nullable: true
       description: The raw consent as returned by the provider
-      required:
-        - ConsentId
-        - Permissions
-        - Status
-        - StatusUpdateDateTime
       properties:
         ConsentId:
           type: string
