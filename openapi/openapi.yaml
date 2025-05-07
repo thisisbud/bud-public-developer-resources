@@ -306,6 +306,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version: 2.15.24: 03/04/2024**
+    >- Add `subtask_details` object to __FPIIngestSucceededCallback__ and __FPIIngestFailedCallback__.
+
     **Version: 2.15.23: 20/02/2024**
     >- Add __Generate Spending Analysis URL__ endpoint.
 
@@ -18455,6 +18458,20 @@ components:
               description: The endpoint ID the operation was related to
               type: string
               example: v2_ingest_transactions_post
+            subtask_details:
+              description: Details of the individual subtasks (customers) of the ingestion
+              type: array
+              items:
+                type: object
+                required:
+                  - customer_id
+                properties:
+                  customer_id:
+                    type: string
+                    description: A unique identifier for a Customer, as registered on Bud's platform.
+                  customer_idempotent_identifier:
+                    type: string
+                    description: The `idempotent_identifier` provided when the customer given was created.
     FPIIngestFailedWebhookBody:
       title: FPI Ingestion Failed Webhook Payload
       type: object
@@ -18487,6 +18504,20 @@ components:
               description: The error outcome of the ingestion if it failed
               type: string
               example: data_mapping_error
+            subtask_details:
+              description: Details of the individual subtasks (customers) of the ingestion
+              type: array
+              items:
+                type: object
+                required:
+                  - customer_id
+                properties:
+                  customer_id:
+                    type: string
+                    description: A unique identifier for a Customer, as registered on Bud's platform.
+                  customer_idempotent_identifier:
+                    type: string
+                    description: The `idempotent_identifier` provided when the customer given was created.
     CustomerID:
       type: string
       format: uuid
@@ -27574,7 +27605,7 @@ components:
         example: late_income
         enum:
           - late_income
-          - regular_monthly_income_changed
+          - regular_income_changed
           - gambling_income
           - pension_income
     GamblingIncomeMinimumMonthlyThreshold:
@@ -27643,7 +27674,7 @@ components:
         example: late_income
         enum:
           - late_income
-          - regular_monthly_income_changed
+          - regular_income_changed
           - gambling_income
           - pension_income
     SpendingEnabledInsights:
