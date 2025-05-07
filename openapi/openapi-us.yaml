@@ -222,13 +222,20 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
-    **Version: 2.15.23: 20/02/2024**
+    **Version 2.17.7: 22/04/2025**
+    > - Added `account_id` filter to __Category Totals V2__ endpoint.
+    > - Added `account_id` filter to __Category Totals V2__ trends endpoint.
+
+    **Version: 2.15.24: 03/04/2025**
+    >- Add `subtask_details` object to __FPIIngestSucceededCallback__ and __FPIIngestFailedCallback__.
+
+    **Version: 2.15.23: 20/02/2025**
     >- Add __Generate Spending Analysis URL__ endpoint.
 
     **Version: 2.15.22: 19/02/2025**
     >- Updated list of possible tags in __Retrieve Transactions V2__ endpoint response.
 
-    **Version: 2.15.21: 30/01/2024**
+    **Version: 2.15.21: 30/01/2025**
     >- Add `country_code` field to __Ingest Transactions V2__ request.
 
     **Version: 2.15.20: 23/12/2024**
@@ -5558,6 +5565,7 @@ paths:
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CategoryTotalsQueryFromTimestamp'
         - $ref: '#/components/parameters/CategoryTotalsQueryToTimestamp'
+        - $ref: '#/components/parameters/QueryAccountID'
         - $ref: '#/components/parameters/QueryBudCategory'
         - $ref: '#/components/parameters/QueryCurrency'
         - in: query
@@ -5642,6 +5650,7 @@ paths:
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CategoryTotalsQueryFromTimestamp'
         - $ref: '#/components/parameters/CategoryTotalsQueryToTimestamp'
+        - $ref: '#/components/parameters/QueryAccountID'
         - $ref: '#/components/parameters/QueryCurrency'
         - $ref: '#/components/parameters/QueryBudCategory'
         - in: query
@@ -12334,6 +12343,20 @@ components:
               description: The endpoint ID the operation was related to
               type: string
               example: v2_ingest_transactions_post
+            subtask_details:
+              description: Details of the individual subtasks (customers) of the ingestion
+              type: array
+              items:
+                type: object
+                required:
+                  - customer_id
+                properties:
+                  customer_id:
+                    type: string
+                    description: A unique identifier for a Customer, as registered on Bud's platform.
+                  customer_idempotent_identifier:
+                    type: string
+                    description: The `idempotent_identifier` provided when the customer given was created.
     FPIIngestFailedWebhookBody:
       title: FPI Ingestion Failed Webhook Payload
       type: object
@@ -12366,6 +12389,20 @@ components:
               description: The error outcome of the ingestion if it failed
               type: string
               example: data_mapping_error
+            subtask_details:
+              description: Details of the individual subtasks (customers) of the ingestion
+              type: array
+              items:
+                type: object
+                required:
+                  - customer_id
+                properties:
+                  customer_id:
+                    type: string
+                    description: A unique identifier for a Customer, as registered on Bud's platform.
+                  customer_idempotent_identifier:
+                    type: string
+                    description: The `idempotent_identifier` provided when the customer given was created.
     CustomerID:
       type: string
       format: uuid
@@ -14144,7 +14181,7 @@ components:
           description: The current balance of the account
           $ref: '#/components/schemas/BalanceV3Amount'
         pending:
-          description: The balance of the account if all pending transactions have settled. This field is only present if the pending balance is different than the booked balance.
+          description: The balance of the account if all pending transactions have settled.
           $ref: '#/components/schemas/BalanceV3Amount'
     GetBalancesV3Response:
       title: Get Balances Response
@@ -18365,6 +18402,13 @@ components:
         Examples:
           - `2023-03-17T17:29:51Z`
           - `2023-03-17T17:29:51-08:00`
+    QueryAccountID:
+      in: query
+      name: account_id
+      schema:
+        type: string
+      required: false
+      description: The account ID to retrieve data for.
     QueryBudCategory:
       in: query
       name: category
@@ -18613,7 +18657,7 @@ components:
         example: late_income
         enum:
           - late_income
-          - regular_monthly_income_changed
+          - regular_income_changed
           - gambling_income
           - pension_income
     GamblingIncomeMinimumMonthlyThreshold:
@@ -18682,7 +18726,7 @@ components:
         example: late_income
         enum:
           - late_income
-          - regular_monthly_income_changed
+          - regular_income_changed
           - gambling_income
           - pension_income
     SpendingEnabledInsights:
