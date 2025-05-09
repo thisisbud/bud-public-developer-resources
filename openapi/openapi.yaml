@@ -314,7 +314,6 @@ info:
     >- Add `subtask_details` object to __FPIIngestSucceededCallback__ and __FPIIngestFailedCallback__.
 
     **Version: 2.15.23: 20/02/2025**
-
     >- Add __Generate Spending Analysis URL__ endpoint.
 
     **Version: 2.15.22: 20/02/2025**
@@ -17515,6 +17514,19 @@ components:
           description: The task identifier that the event relates to
           type: string
           example: e145c656-4a90-45db-a025-af7765482c8c
+        start_time:
+          type: string
+          description: Start timestamp for the task this event relates to
+        refresh_window:
+          type: object
+          description: The boundaries of the refresh task as requested from the provider.  If transactions were returned from the provider
+          properties:
+            from:
+              type: string
+              description: The from timestamp requested with the provider
+            to:
+              type: string
+              description: The to timestamp requested with the provider
     OBV2WebhookBody:
       title: OB V2 Webhook Payload
       type: object
@@ -17549,6 +17561,19 @@ components:
           enum:
             - Completed
             - Failed
+        start_time:
+          type: string
+          description: Start timestamp for the task this event relates to
+        refresh_window:
+          type: object
+          description: The boundaries of the refresh task as requested from the provider. If transactions were returned from the provider
+          properties:
+            from:
+              type: string
+              description: The from timestamp requested with the provider
+            to:
+              type: string
+              description: The to timestamp requested with the provider
         sub_tasks:
           description: An array of details about each individual refresh subtask
           type: array
@@ -17605,6 +17630,19 @@ components:
         event:
           type: string
           description: The task type for the event.
+        start_time:
+          type: string
+          description: Start timestamp for the task this event relates to
+        refresh_window:
+          type: object
+          description: The boundaries of the refresh task as requested from the provider. If transactions were returned from the provider
+          properties:
+            from:
+              type: string
+              description: The from timestamp requested with the provider
+            to:
+              type: string
+              description: The to timestamp requested with the provider
     SubTaskV2View:
       title: SubTask V2 View
       description: A task view.
