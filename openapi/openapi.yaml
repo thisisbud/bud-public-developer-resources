@@ -306,6 +306,11 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.17.8: 16/05/2025**
+    >- Extend `status` query parameter possible values in __Retrieve Financial Data__ endpoint.
+    >- Extend `status` possible values in __Retrieve Financial Data__ endpoint response.
+    >- Extend `frequency` possible values in __Retrieve Financial Data__ endpoint response.
+
     **Version 2.17.7: 22/04/2025**
     > - Added `account_id` filter to __Category Totals V2__ endpoint.
     > - Added `account_id` filter to __Category Totals V2__ trends endpoint.
@@ -6656,9 +6661,12 @@ paths:
             Use this parameter to filter the results returned on the `status` associated with each result. If this parameter is not provided then results of any `status` will be returned.
 
              Currently supported values include (but are not necessarily limited to):
-              - `active`
-              - `unknown`
+              - `active``
               - `inactive`
+              - `cancelled`
+              - `expired`
+              - `suspended`
+              - `unknown`
         - in: query
           name: type
           schema:
@@ -21224,9 +21232,12 @@ components:
             The status of the authorised payment.
 
             Currently supported values include (but are not necessarily limited to):
-            - active
-            - inactive
-            - unknown
+            - `active``
+            - `inactive`
+            - `cancelled`
+            - `expired`
+            - `suspended`
+            - `unknown`
         name:
           type: string
           description: |
@@ -21239,13 +21250,21 @@ components:
             The frequency of the authorised payment.
 
             Currently supported values include (but are not necessarily limited to):
+              - `intra_day`
               - `daily`
+              - `working_daily`
               - `weekly`
               - `biweekly`
+              - `four_weekly`
               - `monthly`
+              - `alternate_monthly`
+              - `two_monthly`
               - `quarterly`
+              - `four_monthly`
+              - `five_monthly`
               - `six_monthly`
               - `annually`
+              - `adhoc`
               - `unknown`
         details:
           type: array
