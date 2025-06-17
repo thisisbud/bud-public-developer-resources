@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "f4f3ed6d-b2a5-4ce4-a2e7-e2120e143d0c",
+		"_postman_id": "c1c412a0-2066-4747-adfe-023b040adeba",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "7397722"
+		"_exporter_id": "17522809"
 	},
 	"item": [
 		{
@@ -8430,6 +8430,434 @@
 							"response": []
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "Search API",
+			"item": [
+				{
+					"name": "Create Intelligent Search Widget URL",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proxy_url}}search/beta/url",
+							"host": [
+								"{{proxy_url}}search"
+							],
+							"path": [
+								"beta",
+								"url"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"search_id\", jsonData.data.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Timezone",
+								"value": "UTC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proxy_url}}search/beta/transactions",
+							"host": [
+								"{{proxy_url}}search"
+							],
+							"path": [
+								"beta",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "user_input",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "merchant_name",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "category_l1",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "category_l2",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "tag",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "account_id",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "credit_debit_indicator",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "amount_min",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "amount_max",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "to",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "page_token",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "page_size",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Transactions By Search ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Timezone",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proxy_url}}search/beta/transactions/{{search_id}}",
+							"host": [
+								"{{proxy_url}}search"
+							],
+							"path": [
+								"beta",
+								"transactions",
+								"{{search_id}}"
+							],
+							"query": [
+								{
+									"key": "page_token",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "page_size",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Insight By Search ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Timezone",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proxy_url}}search/beta/transactions/{{search_id}}/insight",
+							"host": [
+								"{{proxy_url}}search"
+							],
+							"path": [
+								"beta",
+								"transactions",
+								"{{search_id}}",
+								"insight"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Transactions for Search Insight by Search ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Timezone",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proxy_url}}search/beta/transactions/{{search_id}}/insight/transactions",
+							"host": [
+								"{{proxy_url}}search"
+							],
+							"path": [
+								"beta",
+								"transactions",
+								"{{search_id}}",
+								"insight",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "page_token",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "page_size",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
