@@ -222,6 +222,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.17.8: 12/06/2025**
+    >- Add `idempotent_identifier` filter to __Retrieve Customers V3__.
+
     **Version 2.17.7: 22/04/2025**
     > - Added `account_id` filter to __Category Totals V2__ endpoint.
     > - Added `account_id` filter to __Category Totals V2__ trends endpoint.
@@ -911,6 +914,12 @@ paths:
             type: string
           description: |
             The token required to fetch a specific page of results. Provided by the next_page_token field in the previous request.
+        - name: idempotent_identifier
+          in: query
+          schema:
+            type: string
+          description: |
+            Filter by the internal client identifier provided in the `client_metadata` object when creating the customer in __Create Customer V3__. Only one customer will be returned if one is found with the given identifier.
       responses:
         '200':
           description: Returns a list of customers.
