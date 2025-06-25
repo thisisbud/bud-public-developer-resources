@@ -222,6 +222,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.18.0: 25/06/2025**
+    >- Add `X-Customer-Idempotent-Identifier` header to all endpoints that support `X-Customer-Id` header.
+
     **Version 2.17.8: 12/06/2025**
     >- Add `idempotent_identifier` filter to __Retrieve Customers V3__.
 
@@ -1391,6 +1394,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       requestBody:
         required: true
         content:
@@ -1516,6 +1520,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/ConnectionTaskId'
       responses:
         '200':
@@ -1614,6 +1619,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - in: header
           name: X-Customer-Ip-Address
           schema:
@@ -1749,6 +1755,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/TaskId'
       responses:
         '200':
@@ -1869,6 +1876,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/CustomerSecret'
         - in: header
           name: X-Customer-Ip-Address
@@ -2086,6 +2094,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/TaskId'
       responses:
         '200':
@@ -2228,6 +2237,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/ConsentStatus'
       responses:
         '200':
@@ -2311,6 +2321,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       requestBody:
         required: true
         content:
@@ -2391,6 +2402,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/TaskId'
       responses:
         '200':
@@ -3305,6 +3317,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryCurrency'
         - $ref: '#/components/parameters/QueryProvider'
@@ -3461,6 +3474,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/PathAccountID'
       responses:
@@ -3571,6 +3585,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/QueryCurrencyUSD'
         - $ref: '#/components/parameters/QueryProvider'
         - in: query
@@ -3733,6 +3748,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/QueryFromBudDate'
         - $ref: '#/components/parameters/QueryToBudDate'
         - in: query
@@ -3881,6 +3897,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/QueryFromBudDate'
         - $ref: '#/components/parameters/QueryToBudDate'
         - $ref: '#/components/parameters/PathAccountID'
@@ -4001,6 +4018,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryFromBudDate'
         - $ref: '#/components/parameters/QueryToBudDate'
@@ -4132,6 +4150,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryFromBudDate'
         - $ref: '#/components/parameters/QueryToBudDate'
@@ -4247,6 +4266,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/PathAccountID'
       responses:
         '200':
@@ -4333,6 +4353,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - in: query
           name: date_from
           schema:
@@ -4609,6 +4630,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       requestBody:
         required: true
         content:
@@ -4669,6 +4691,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/CustomerSecret'
       requestBody:
         required: true
@@ -4942,6 +4965,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/MerchantCorrectionSearchQuery'
       responses:
         '200':
@@ -5027,6 +5051,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       requestBody:
         required: true
         content:
@@ -5087,6 +5112,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '200':
           description: OK
@@ -5154,6 +5180,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryExcludeSource'
         - $ref: '#/components/parameters/PathTransactionID'
@@ -5334,6 +5361,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryExcludeSource'
         - $ref: '#/components/parameters/PathTransactionID'
@@ -5574,6 +5602,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '201':
           $ref: '#/components/responses/GenerateIntelligentSearchURLResponse'
@@ -5606,6 +5635,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/HeaderTimezone'
         - $ref: '#/components/parameters/HeaderSearchTransactionsAccept'
         - $ref: '#/components/parameters/QueryUserInput'
@@ -5643,6 +5673,7 @@ paths:
         - $ref: '#/components/parameters/PathSearchId'
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/HeaderTimezone'
         - $ref: '#/components/parameters/HeaderSearchTransactionsAccept'
         - $ref: '#/components/parameters/QueryBudPageToken'
@@ -5670,6 +5701,7 @@ paths:
         - $ref: '#/components/parameters/PathSearchId'
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/HeaderTimezone'
       responses:
         '200':
@@ -5694,6 +5726,7 @@ paths:
         - $ref: '#/components/parameters/PathSearchId'
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/HeaderTimezone'
         - $ref: '#/components/parameters/HeaderSearchTransactionsAccept'
         - $ref: '#/components/parameters/QueryBudPageToken'
@@ -5722,6 +5755,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/CategoryTotalsQueryFromTimestamp'
         - $ref: '#/components/parameters/CategoryTotalsQueryToTimestamp'
         - $ref: '#/components/parameters/QueryAccountID'
@@ -5807,6 +5841,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/CategoryTotalsQueryFromTimestamp'
         - $ref: '#/components/parameters/CategoryTotalsQueryToTimestamp'
         - $ref: '#/components/parameters/QueryAccountID'
@@ -5894,6 +5929,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/CategoryTotalsQueryFromTimestamp'
         - $ref: '#/components/parameters/CategoryTotalsQueryToTimestamp'
@@ -5945,6 +5981,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - in: header
           name: X-From
           required: false
@@ -6471,6 +6508,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '200':
           description: The request was successfully processed
@@ -6564,6 +6602,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/FutureTransactionsMonthsProjection'
         - $ref: '#/components/parameters/FutureTransactionsChangePercentage'
       responses:
@@ -6636,6 +6675,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/SmartFinderFrom'
         - $ref: '#/components/parameters/SmartFinderTo'
       responses:
@@ -6726,6 +6766,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/SmartFinderFrom'
         - $ref: '#/components/parameters/SmartFinderTo'
       responses:
@@ -6780,6 +6821,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/SmartFinderFrom'
         - $ref: '#/components/parameters/SmartFinderTo'
       responses:
@@ -6841,6 +6883,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/SmartFinderFrom'
         - $ref: '#/components/parameters/SmartFinderTo'
       responses:
@@ -6906,6 +6949,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/SmartFinderFrom'
         - $ref: '#/components/parameters/SmartFinderTo'
       responses:
@@ -6983,6 +7027,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/QueryFromDate'
         - $ref: '#/components/parameters/QueryToDate'
       responses:
@@ -7064,6 +7109,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/From'
         - $ref: '#/components/parameters/To'
       responses:
@@ -7154,6 +7200,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       requestBody:
         required: true
         content:
@@ -7256,6 +7303,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/QueryBudAccountID'
         - $ref: '#/components/parameters/QueryDay'
       responses:
@@ -7354,6 +7402,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '204':
           description: No Content - The goals were removed successfully.
@@ -7409,6 +7458,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/PathGoalID'
       requestBody:
         required: true
@@ -7513,6 +7563,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/PathGoalID'
       responses:
         '204':
@@ -7566,6 +7617,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/PathGoalID'
       requestBody:
         required: true
@@ -7657,6 +7709,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/PathGoalID'
         - $ref: '#/components/parameters/parameters-QueryBudPageToken'
         - $ref: '#/components/parameters/parameters-QueryBudPageSize'
@@ -7773,6 +7826,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/PathGoalID'
         - $ref: '#/components/parameters/PathGoalActionID'
       requestBody:
@@ -7863,6 +7917,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/PathGoalID'
         - $ref: '#/components/parameters/PathGoalActionID'
       responses:
@@ -7912,6 +7967,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       requestBody:
         required: true
         content:
@@ -7998,6 +8054,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/QueryBudAccountID'
         - $ref: '#/components/parameters/QueryDay'
       responses:
@@ -8037,6 +8094,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '204':
           description: No Content - The budgets were removed successfully.
@@ -8071,6 +8129,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/PathSpendingBudgetID'
       requestBody:
         required: true
@@ -8149,6 +8208,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/PathSpendingBudgetID'
       responses:
         '204':
@@ -8186,6 +8246,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/PathSpendingBudgetID'
         - $ref: '#/components/parameters/QueryDay'
         - $ref: '#/components/parameters/parameters-QueryBudPageToken'
@@ -8263,6 +8324,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/parameters-From'
         - $ref: '#/components/parameters/parameters-To'
         - $ref: '#/components/parameters/BalancesEnabledInsights'
@@ -8314,6 +8376,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/parameters-From'
         - $ref: '#/components/parameters/parameters-To'
         - $ref: '#/components/parameters/BalancesInsightType'
@@ -8387,6 +8450,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/parameters-From'
         - $ref: '#/components/parameters/parameters-To'
         - $ref: '#/components/parameters/IncomeEnabledInsights'
@@ -8472,6 +8536,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/parameters-From'
         - $ref: '#/components/parameters/parameters-To'
         - $ref: '#/components/parameters/IncomeInsightType'
@@ -8585,6 +8650,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/parameters-From'
         - $ref: '#/components/parameters/parameters-To'
         - $ref: '#/components/parameters/SpendingEnabledInsights'
@@ -8666,6 +8732,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/parameters-From'
         - $ref: '#/components/parameters/parameters-To'
         - $ref: '#/components/parameters/SpendingInsightType'
@@ -8888,6 +8955,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/PathCustomInsightID'
       responses:
@@ -9128,6 +9196,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - in: header
           name: X-Now
           required: false
@@ -9152,6 +9221,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '200':
           description: OK
@@ -9207,6 +9277,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       requestBody:
         content:
           application/json:
@@ -9244,6 +9315,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '201':
           description: Successful response containing the Financial Calendar URL and metadata.
@@ -9274,6 +9346,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '201':
           description: Successful response containing Balances Over Time URL and metadata.
@@ -9304,6 +9377,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '201':
           description: Successful response containing the Recurring and Forecasted Transactions URL and metadata.
@@ -9333,6 +9407,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '201':
           description: Successful response containing Spending Analysis URL and metadata.
@@ -9375,6 +9450,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '200':
           description: OK
@@ -9416,6 +9492,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '200':
           description: OK
@@ -9467,6 +9544,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '200':
           description: OK
@@ -9518,6 +9596,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '200':
           description: OK
@@ -9569,6 +9648,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
       responses:
         '200':
           description: OK
@@ -18809,8 +18889,12 @@ components:
         type: string
         format: tz database identifier
       required: true
-      description: The tz database identifier for the user's timezone.
-      example: US/Pacific
+      description: The [tz database identifier](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) for the user's timezone.
+      examples:
+        Los Angeles, CA, USA:
+          value: US/Pacific
+        UK:
+          value: Europe/London
     QueryUserInput:
       name: user_input
       in: query
@@ -18954,6 +19038,13 @@ components:
       required: true
       description: A unique identifier for a Customer, as registered on Bud's platform.
       example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+    CustomerIdempotentIdentifier:
+      in: header
+      name: X-Customer-Idempotent-Identifier
+      schema:
+        type: string
+      description: |
+        Use the internal client identifier, provided in the `client_metadata` object when creating the customer in __Create Customer V3__, in place of an `X-Customer-Id` header.
     SignatureHeaderParameter:
       in: header
       name: X-Signature
