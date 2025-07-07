@@ -6154,9 +6154,22 @@ paths:
                     data:
                       categories:
                         - travel
+                        - banking
                       subcategories:
-                        - flights_and_airport_expenses
                         - holiday_and_travel_expenses
+                        - flights_and_airport_expenses
+                        - other_travel
+                        - account_fees_and_other_bank_charges
+                        - atm_fees
+                        - other_banking
+                        - cash_withdrawals
+                        - outgoing_checks
+                        - currency_exchange_and_fees
+                        - interest
+                        - nsf_and_overdraft_fees
+                        - refunds_and_reversals
+                        - overdraft_protection
+                        - unpaid_transactions
                     metadata:
                       model:
                         name: us-v3
@@ -6167,8 +6180,45 @@ paths:
                     data:
                       - name: travel
                         subcategories:
-                          - name: flights_and_airport_expenses
                           - name: holiday_and_travel_expenses
+                            labels:
+                              - travel
+                              - nonessential
+                          - name: flights_and_airport_expenses
+                            labels:
+                              - nonessential
+                          - name: other_travel
+                      - name: banking
+                        subcategories:
+                          - name: account_fees_and_other_bank_charges
+                            labels:
+                              - essential
+                          - name: atm_fees
+                            labels:
+                              - essential
+                          - name: other_banking
+                            labels:
+                              - nonessential
+                          - name: cash_withdrawals
+                            labels:
+                              - nonessential
+                          - name: outgoing_checks
+                          - name: currency_exchange_and_fees
+                            labels:
+                              - essential
+                          - name: interest
+                            labels:
+                              - essential
+                          - name: nsf_and_overdraft_fees
+                            labels:
+                              - essential
+                          - name: refunds_and_reversals
+                          - name: overdraft_protection
+                            labels:
+                              - nonessential
+                          - name: unpaid_transactions
+                            labels:
+                              - essential
                     metadata:
                       model:
                         name: us-v3
@@ -11700,13 +11750,10 @@ components:
       description: The result of the operation. Either success or various error codes.
       enum:
         - success
-        - account_closed
         - auth_denied
         - auth_expired
-        - auth_invalid
         - auth_used
         - awaiting_authorisation
-        - bad_request
         - connection_expired
         - connection_not_found
         - connection_permission
@@ -11714,7 +11761,6 @@ components:
         - connection_revoked
         - connection_status
         - consent_not_found
-        - enrichment_failed
         - extension_not_permitted
         - failed_body_decode
         - failed_validation
@@ -11728,13 +11774,11 @@ components:
         - provider_endpoint_unimplemented
         - provider_endpoint_unsupported
         - provider_failure
-        - provider_invalid
         - provider_maintenance
         - provider_marked_account_invalid
         - provider_not_found
         - provider_request_limit
         - provider_timeout
-        - request_validation
         - resource_not_found
         - task_not_found
     OBConnectWebhookBody:
@@ -19712,9 +19756,6 @@ components:
                         l2:
                           slug: coffee
                           confidence: '0.96'
-                        l3:
-                          slug: coffee_shops
-                          confidence: '0.96'
                       regularity:
                         frequency: biweekly
                         predicted_date_times:
@@ -19772,9 +19813,6 @@ components:
                           confidence: '0.98'
                         l2:
                           slug: coffee
-                          confidence: '0.97'
-                        l3:
-                          slug: coffee_shops
                           confidence: '0.97'
                       regularity:
                         frequency: biweekly
@@ -19975,9 +20013,6 @@ components:
                         l2:
                           slug: coffee
                           confidence: '0.96'
-                        l3:
-                          slug: coffee_shops
-                          confidence: '0.96'
                       regularity:
                         frequency: biweekly
                         predicted_date_times:
@@ -20035,9 +20070,6 @@ components:
                           confidence: '0.98'
                         l2:
                           slug: coffee
-                          confidence: '0.97'
-                        l3:
-                          slug: coffee_shops
                           confidence: '0.97'
                       regularity:
                         frequency: biweekly
