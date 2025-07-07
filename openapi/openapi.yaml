@@ -1975,7 +1975,7 @@ paths:
                       task_id: b55f5f00-8e40-4e9e-8c9e-a292a86eb40c
                       provider: Barclays
                       status: Failed
-                      result: auth_invalid
+                      result: auth_denied
         '400':
           description: The request contains an invalid payload.
           content:
@@ -2063,7 +2063,7 @@ paths:
                       task_id: b55f5f00-8e40-4e9e-8c9e-a292a86eb40c
                       provider: Barclays
                       status: Failed
-                      result: auth_invalid
+                      result: auth_denied
         '400':
           description: The request contains an invalid payload.
           content:
@@ -4843,10 +4843,17 @@ paths:
                     data:
                       categories:
                         - travel
+                        - banking
                       subcategories:
-                        - flights
-                        - insurance
+                        - holiday_and_travel_expenses
+                        - flights_and_airport_expenses
                         - other_travel
+                        - bank_fees_and_currency_exchange
+                        - other_banking
+                        - cash_withdrawals
+                        - refunds_and_reversals
+                        - overdraft_fees
+                        - unpaid_transactions
                     metadata:
                       model:
                         name: uk-v2
@@ -4857,14 +4864,34 @@ paths:
                     data:
                       - name: travel
                         subcategories:
-                          - name: flights
-                          - name: insurance
+                          - name: holiday_and_travel_expenses
+                            labels:
+                              - travel
+                          - name: flights_and_airport_expenses
                           - name: other_travel
-                      - name: travel
+                        labels:
+                          - nonessential
+                      - name: banking
                         subcategories:
-                          - name: flights
-                          - name: insurance
-                          - name: other_travel
+                          - name: bank_fees_and_currency_exchange
+                            labels:
+                              - essential
+                          - name: other_banking
+                            labels:
+                              - nonessential
+                          - name: cash_withdrawals
+                            labels:
+                              - nonessential
+                          - name: interest
+                            labels:
+                              - essential
+                          - name: refunds_and_reversals
+                          - name: overdraft_fees
+                            labels:
+                              - essential
+                          - name: unpaid_transactions
+                            labels:
+                              - essential
                     metadata:
                       model:
                         name: uk-v2
@@ -17592,13 +17619,10 @@ components:
       description: The result of the operation. Either success or various error codes.
       enum:
         - success
-        - account_closed
         - auth_denied
         - auth_expired
-        - auth_invalid
         - auth_used
         - awaiting_authorisation
-        - bad_request
         - connection_expired
         - connection_not_found
         - connection_permission
@@ -17606,7 +17630,6 @@ components:
         - connection_revoked
         - connection_status
         - consent_not_found
-        - enrichment_failed
         - extension_not_permitted
         - failed_body_decode
         - failed_validation
@@ -17620,13 +17643,11 @@ components:
         - provider_endpoint_unimplemented
         - provider_endpoint_unsupported
         - provider_failure
-        - provider_invalid
         - provider_maintenance
         - provider_marked_account_invalid
         - provider_not_found
         - provider_request_limit
         - provider_timeout
-        - request_validation
         - resource_not_found
         - task_not_found
     OBConnectWebhookBody:
@@ -17851,13 +17872,10 @@ components:
               type: string
               enum:
                 - success
-                - account_closed
                 - auth_denied
                 - auth_expired
-                - auth_invalid
                 - auth_used
                 - awaiting_authorisation
-                - bad_request
                 - connection_expired
                 - connection_not_found
                 - connection_permission
@@ -17865,7 +17883,6 @@ components:
                 - connection_revoked
                 - connection_status
                 - consent_not_found
-                - enrichment_failed
                 - extension_not_permitted
                 - failed_body_decode
                 - failed_validation
@@ -17879,13 +17896,11 @@ components:
                 - provider_endpoint_unimplemented
                 - provider_endpoint_unsupported
                 - provider_failure
-                - provider_invalid
                 - provider_maintenance
                 - provider_marked_account_invalid
                 - provider_not_found
                 - provider_request_limit
                 - provider_timeout
-                - request_validation
                 - resource_not_found
                 - task_not_found
     GetOBConnectData:
@@ -28714,9 +28729,6 @@ components:
                         l2:
                           slug: coffee
                           confidence: '0.96'
-                        l3:
-                          slug: coffee_shops
-                          confidence: '0.96'
                       regularity:
                         frequency: biweekly
                         predicted_date_times:
@@ -28774,9 +28786,6 @@ components:
                           confidence: '0.98'
                         l2:
                           slug: coffee
-                          confidence: '0.97'
-                        l3:
-                          slug: coffee_shops
                           confidence: '0.97'
                       regularity:
                         frequency: biweekly
@@ -28977,9 +28986,6 @@ components:
                         l2:
                           slug: coffee
                           confidence: '0.96'
-                        l3:
-                          slug: coffee_shops
-                          confidence: '0.96'
                       regularity:
                         frequency: biweekly
                         predicted_date_times:
@@ -29037,9 +29043,6 @@ components:
                           confidence: '0.98'
                         l2:
                           slug: coffee
-                          confidence: '0.97'
-                        l3:
-                          slug: coffee_shops
                           confidence: '0.97'
                       regularity:
                         frequency: biweekly
