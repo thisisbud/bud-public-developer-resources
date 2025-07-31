@@ -1975,7 +1975,7 @@ paths:
                       task_id: b55f5f00-8e40-4e9e-8c9e-a292a86eb40c
                       provider: Barclays
                       status: Failed
-                      result: auth_invalid
+                      result: auth_denied
         '400':
           description: The request contains an invalid payload.
           content:
@@ -2063,7 +2063,7 @@ paths:
                       task_id: b55f5f00-8e40-4e9e-8c9e-a292a86eb40c
                       provider: Barclays
                       status: Failed
-                      result: auth_invalid
+                      result: auth_denied
         '400':
           description: The request contains an invalid payload.
           content:
@@ -4843,10 +4843,17 @@ paths:
                     data:
                       categories:
                         - travel
+                        - banking
                       subcategories:
-                        - flights
-                        - insurance
+                        - holiday_and_travel_expenses
+                        - flights_and_airport_expenses
                         - other_travel
+                        - bank_fees_and_currency_exchange
+                        - other_banking
+                        - cash_withdrawals
+                        - refunds_and_reversals
+                        - overdraft_fees
+                        - unpaid_transactions
                     metadata:
                       model:
                         name: uk-v2
@@ -4857,14 +4864,34 @@ paths:
                     data:
                       - name: travel
                         subcategories:
-                          - name: flights
-                          - name: insurance
+                          - name: holiday_and_travel_expenses
+                            labels:
+                              - travel
+                          - name: flights_and_airport_expenses
                           - name: other_travel
-                      - name: travel
+                        labels:
+                          - nonessential
+                      - name: banking
                         subcategories:
-                          - name: flights
-                          - name: insurance
-                          - name: other_travel
+                          - name: bank_fees_and_currency_exchange
+                            labels:
+                              - essential
+                          - name: other_banking
+                            labels:
+                              - nonessential
+                          - name: cash_withdrawals
+                            labels:
+                              - nonessential
+                          - name: interest
+                            labels:
+                              - essential
+                          - name: refunds_and_reversals
+                          - name: overdraft_fees
+                            labels:
+                              - essential
+                          - name: unpaid_transactions
+                            labels:
+                              - essential
                     metadata:
                       model:
                         name: uk-v2
@@ -5643,6 +5670,7 @@ paths:
                           - name: David Smith
                             relationship: unknown
                         account_name: My Current Account
+                        suggested_name: My Current Account
                         account_type: current_account
                         usage_type: personal
                         provider: BankOfBud
@@ -5665,6 +5693,37 @@ paths:
                         credit_lines:
                           limit:
                             date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '1000.00'
+                              currency: GBP
+                      - account_id: 97282bfc-84a5-44f6-9a3e-399903f92f7a
+                        currency: GBP
+                        holders:
+                          - name: Sarah Jones
+                            relationship: unknown
+                        suggested_name: Current Account 0603
+                        account_type: current_account
+                        usage_type: personal
+                        provider: BankOfBud
+                        identifiers:
+                          uk_sort_code: '126433'
+                          uk_account_number: '21510603'
+                        balances:
+                          booked:
+                            date: '2023-01-11T00:00:00Z'
+                            amount:
+                              value: '2552.61'
+                              currency: GBP
+                            credit_debit_indicator: credit
+                          pending:
+                            date: '2023-01-11T00:00:00Z'
+                            amount:
+                              value: '2552.61'
+                              currency: GBP
+                            credit_debit_indicator: credit
+                        credit_lines:
+                          limit:
+                            date: '2023-01-11T00:00:00Z'
                             amount:
                               value: '1000.00'
                               currency: GBP
@@ -5751,7 +5810,7 @@ paths:
                       holders:
                         - name: David Smith
                           relationship: unknown
-                      account_name: My Current Account
+                      suggested_name: Current Account 0604
                       account_type: current_account
                       provider: BankOfBud
                       identifiers:
@@ -15767,6 +15826,11 @@ components:
         website:
           type: string
           description: URL supplying merchant website, if available.
+        tags:
+          type: array
+          items:
+            type: string
+          description: A list of tags describing the merchant
     Processor:
       title: Processor
       type: object
@@ -17592,13 +17656,10 @@ components:
       description: The result of the operation. Either success or various error codes.
       enum:
         - success
-        - account_closed
         - auth_denied
         - auth_expired
-        - auth_invalid
         - auth_used
         - awaiting_authorisation
-        - bad_request
         - connection_expired
         - connection_not_found
         - connection_permission
@@ -17606,7 +17667,6 @@ components:
         - connection_revoked
         - connection_status
         - consent_not_found
-        - enrichment_failed
         - extension_not_permitted
         - failed_body_decode
         - failed_validation
@@ -17620,13 +17680,11 @@ components:
         - provider_endpoint_unimplemented
         - provider_endpoint_unsupported
         - provider_failure
-        - provider_invalid
         - provider_maintenance
         - provider_marked_account_invalid
         - provider_not_found
         - provider_request_limit
         - provider_timeout
-        - request_validation
         - resource_not_found
         - task_not_found
     OBConnectWebhookBody:
@@ -17851,13 +17909,10 @@ components:
               type: string
               enum:
                 - success
-                - account_closed
                 - auth_denied
                 - auth_expired
-                - auth_invalid
                 - auth_used
                 - awaiting_authorisation
-                - bad_request
                 - connection_expired
                 - connection_not_found
                 - connection_permission
@@ -17865,7 +17920,6 @@ components:
                 - connection_revoked
                 - connection_status
                 - consent_not_found
-                - enrichment_failed
                 - extension_not_permitted
                 - failed_body_decode
                 - failed_validation
@@ -17879,13 +17933,11 @@ components:
                 - provider_endpoint_unimplemented
                 - provider_endpoint_unsupported
                 - provider_failure
-                - provider_invalid
                 - provider_maintenance
                 - provider_marked_account_invalid
                 - provider_not_found
                 - provider_request_limit
                 - provider_timeout
-                - request_validation
                 - resource_not_found
                 - task_not_found
     GetOBConnectData:
@@ -21154,6 +21206,7 @@ components:
       required:
         - account_id
         - currency
+        - suggested_name
       properties:
         account_id:
           type: string
@@ -21163,6 +21216,9 @@ components:
             Example: `sdb4eRMaad8XVEvdIoISOQ`
         currency:
           $ref: '#/components/schemas/BudCurrency'
+        suggested_name:
+          type: string
+          description: The name Bud suggests client apps show for the account.
         holders:
           type: array
           description: |
@@ -27319,13 +27375,9 @@ components:
         summary_type:
           type: string
           enum:
-            - daily
             - weekly
-            - biweekly
             - monthly
             - quarterly
-            - six_monthly
-            - annually
     GenerateCardSummaryURLResponse:
       type: object
       properties:
@@ -28714,9 +28766,6 @@ components:
                         l2:
                           slug: coffee
                           confidence: '0.96'
-                        l3:
-                          slug: coffee_shops
-                          confidence: '0.96'
                       regularity:
                         frequency: biweekly
                         predicted_date_times:
@@ -28774,9 +28823,6 @@ components:
                           confidence: '0.98'
                         l2:
                           slug: coffee
-                          confidence: '0.97'
-                        l3:
-                          slug: coffee_shops
                           confidence: '0.97'
                       regularity:
                         frequency: biweekly
@@ -28977,9 +29023,6 @@ components:
                         l2:
                           slug: coffee
                           confidence: '0.96'
-                        l3:
-                          slug: coffee_shops
-                          confidence: '0.96'
                       regularity:
                         frequency: biweekly
                         predicted_date_times:
@@ -29037,9 +29080,6 @@ components:
                           confidence: '0.98'
                         l2:
                           slug: coffee
-                          confidence: '0.97'
-                        l3:
-                          slug: coffee_shops
                           confidence: '0.97'
                       regularity:
                         frequency: biweekly
