@@ -2866,6 +2866,11 @@ paths:
                             tokens:
                               - value: youtube
                                 confidence: '0.92'
+                            tags:
+                              - online-streaming
+                              - technology
+                              - online
+                              - entertainment
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
                             slug: paypal
@@ -2908,6 +2913,16 @@ paths:
                             tokens:
                               - value: dunkin
                                 confidence: '1.00'
+                            tags:
+                              - drinks
+                              - chain
+                              - coffee
+                              - restaurant
+                              - fast-food
+                              - takeout
+                              - food
+                              - bakery
+                              - cafe
                           location:
                             address:
                               address_lines:
@@ -3386,6 +3401,7 @@ paths:
                           - name: Olivia Johnson
                             relationship: unknown
                         account_name: Plaid Checking
+                        suggested_name: Plaid Checking
                         account_type: current_account
                         usage_type: personal
                         provider: plaid
@@ -3408,6 +3424,36 @@ paths:
                         credit_lines:
                           limit:
                             date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '1000.00'
+                              currency: USD
+                      - account_id: 97282bfc-84a5-44f6-9a3e-399903f92f7a
+                        currency: USD
+                        holders:
+                          - name: Dave Jeffries
+                            relationship: unknown
+                        suggested_name: Checking Account 8990
+                        account_type: current_account
+                        usage_type: personal
+                        provider: capital one
+                        identifiers:
+                          us_account_number: '33818990'
+                        balances:
+                          booked:
+                            date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '2552.61'
+                              currency: USD
+                            credit_debit_indicator: credit
+                          pending:
+                            date: '2023-01-11T00:00:00Z'
+                            amount:
+                              value: '2552.61'
+                              currency: USD
+                            credit_debit_indicator: credit
+                        credit_lines:
+                          limit:
+                            date: '2023-01-11T00:00:00Z'
                             amount:
                               value: '1000.00'
                               currency: USD
@@ -3489,12 +3535,51 @@ paths:
                   value:
                     operation_id: financial_v3_accounts_account_id_get
                     data:
+                      account_id: 97282bfc-84a5-44f6-9a3e-399903f92f7a
+                      currency: USD
+                      holders:
+                        - name: Dave Jeffries
+                          relationship: unknown
+                      suggested_name: Checking Account 8990
+                      account_type: current_account
+                      usage_type: personal
+                      provider: capital one
+                      identifiers:
+                        us_account_number: '33818990'
+                      balances:
+                        booked:
+                          date: '2023-01-12T00:00:00Z'
+                          amount:
+                            value: '2552.61'
+                            currency: USD
+                          credit_debit_indicator: credit
+                        pending:
+                          date: '2023-01-11T00:00:00Z'
+                          amount:
+                            value: '2552.61'
+                            currency: USD
+                          credit_debit_indicator: credit
+                      credit_lines:
+                        limit:
+                          date: '2023-01-11T00:00:00Z'
+                          amount:
+                            value: '1000.00'
+                            currency: USD
+                    metadata:
+                      parameters:
+                        account_id: 97282bfc-84a5-44f6-9a3e-399903f92f7a
+                      results: 1
+                Plaid Account:
+                  value:
+                    operation_id: financial_v3_accounts_account_id_get
+                    data:
                       account_id: RxsYshVGded4JeilkXgWKdXA
                       currency: USD
                       holders:
                         - name: Olivia Johnson
                           relationship: unknown
                       account_name: My Current Account
+                      suggested_name: My Current Account
                       account_type: current_account
                       provider: plaid
                       identifiers:
@@ -6154,9 +6239,22 @@ paths:
                     data:
                       categories:
                         - travel
+                        - banking
                       subcategories:
-                        - flights_and_airport_expenses
                         - holiday_and_travel_expenses
+                        - flights_and_airport_expenses
+                        - other_travel
+                        - account_fees_and_other_bank_charges
+                        - atm_fees
+                        - other_banking
+                        - cash_withdrawals
+                        - outgoing_checks
+                        - currency_exchange_and_fees
+                        - interest
+                        - nsf_and_overdraft_fees
+                        - refunds_and_reversals
+                        - overdraft_protection
+                        - unpaid_transactions
                     metadata:
                       model:
                         name: us-v3
@@ -6167,8 +6265,45 @@ paths:
                     data:
                       - name: travel
                         subcategories:
-                          - name: flights_and_airport_expenses
                           - name: holiday_and_travel_expenses
+                            labels:
+                              - travel
+                              - nonessential
+                          - name: flights_and_airport_expenses
+                            labels:
+                              - nonessential
+                          - name: other_travel
+                      - name: banking
+                        subcategories:
+                          - name: account_fees_and_other_bank_charges
+                            labels:
+                              - essential
+                          - name: atm_fees
+                            labels:
+                              - essential
+                          - name: other_banking
+                            labels:
+                              - nonessential
+                          - name: cash_withdrawals
+                            labels:
+                              - nonessential
+                          - name: outgoing_checks
+                          - name: currency_exchange_and_fees
+                            labels:
+                              - essential
+                          - name: interest
+                            labels:
+                              - essential
+                          - name: nsf_and_overdraft_fees
+                            labels:
+                              - essential
+                          - name: refunds_and_reversals
+                          - name: overdraft_protection
+                            labels:
+                              - nonessential
+                          - name: unpaid_transactions
+                            labels:
+                              - essential
                     metadata:
                       model:
                         name: us-v3
@@ -10489,6 +10624,11 @@ components:
         website:
           type: string
           description: URL supplying merchant website, if available.
+        tags:
+          type: array
+          items:
+            type: string
+          description: A list of tags describing the merchant
     Processor:
       title: Processor
       type: object
@@ -11700,13 +11840,10 @@ components:
       description: The result of the operation. Either success or various error codes.
       enum:
         - success
-        - account_closed
         - auth_denied
         - auth_expired
-        - auth_invalid
         - auth_used
         - awaiting_authorisation
-        - bad_request
         - connection_expired
         - connection_not_found
         - connection_permission
@@ -11714,7 +11851,6 @@ components:
         - connection_revoked
         - connection_status
         - consent_not_found
-        - enrichment_failed
         - extension_not_permitted
         - failed_body_decode
         - failed_validation
@@ -11728,13 +11864,11 @@ components:
         - provider_endpoint_unimplemented
         - provider_endpoint_unsupported
         - provider_failure
-        - provider_invalid
         - provider_maintenance
         - provider_marked_account_invalid
         - provider_not_found
         - provider_request_limit
         - provider_timeout
-        - request_validation
         - resource_not_found
         - task_not_found
     OBConnectWebhookBody:
@@ -13355,6 +13489,11 @@ components:
         website:
           type: string
           description: URL supplying merchant website, if available.
+        tags:
+          type: array
+          items:
+            type: string
+          description: A list of tags describing the merchant
     schemas-Processor:
       title: Processor
       type: object
@@ -14021,6 +14160,7 @@ components:
       required:
         - account_id
         - currency
+        - suggested_name
       properties:
         account_id:
           type: string
@@ -14030,6 +14170,9 @@ components:
             Example: `sdb4eRMaad8XVEvdIoISOQ`
         currency:
           $ref: '#/components/schemas/BudCurrency'
+        suggested_name:
+          type: string
+          description: The name Bud suggests client apps show for the account.
         holders:
           type: array
           description: |
@@ -18558,13 +18701,9 @@ components:
         summary_type:
           type: string
           enum:
-            - daily
             - weekly
-            - biweekly
             - monthly
             - quarterly
-            - six_monthly
-            - annually
     GenerateCardSummaryURLResponse:
       type: object
       properties:
@@ -19712,9 +19851,6 @@ components:
                         l2:
                           slug: coffee
                           confidence: '0.96'
-                        l3:
-                          slug: coffee_shops
-                          confidence: '0.96'
                       regularity:
                         frequency: biweekly
                         predicted_date_times:
@@ -19772,9 +19908,6 @@ components:
                           confidence: '0.98'
                         l2:
                           slug: coffee
-                          confidence: '0.97'
-                        l3:
-                          slug: coffee_shops
                           confidence: '0.97'
                       regularity:
                         frequency: biweekly
@@ -19975,9 +20108,6 @@ components:
                         l2:
                           slug: coffee
                           confidence: '0.96'
-                        l3:
-                          slug: coffee_shops
-                          confidence: '0.96'
                       regularity:
                         frequency: biweekly
                         predicted_date_times:
@@ -20035,9 +20165,6 @@ components:
                           confidence: '0.98'
                         l2:
                           slug: coffee
-                          confidence: '0.97'
-                        l3:
-                          slug: coffee_shops
                           confidence: '0.97'
                       regularity:
                         frequency: biweekly
