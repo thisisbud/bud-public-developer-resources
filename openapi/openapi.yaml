@@ -1621,7 +1621,7 @@ paths:
               Show the initial screen as the account summary screen:
                 value:
                   redirect_url: https://my-agent-webapp.com/connected?my-parameter=xyz
-                  initial_screen": accounts_summary
+                  initial_screen: accounts_summary
               Enable an asynchronous connection:
                 value:
                   redirect_url: https://my-agent-webapp.com/connected?my-parameter=xyz
@@ -3387,8 +3387,7 @@ paths:
                               value: '200.00'
                               currency: GBP
                             type: Credit
-                        date: '2020-12-01'
-                        time: '00:00:00'
+                        date_time: '2020-12-01T00:00:00Z'
                         type: InterimBooked
               - customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
                 accounts:
@@ -3413,8 +3412,7 @@ paths:
                               value: '100.00'
                               currency: GBP
                             type: Credit
-                        date: '2020-12-01'
-                        time: '00:00:00'
+                        date_time: '2020-12-01T00:00:00Z'
                         type: InterimBooked
       responses:
         '202':
@@ -15450,6 +15448,12 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateFinancialCalendarURLRequest'
       responses:
         '201':
           description: Successful response containing Financial Calendar URL and metadata.
@@ -15481,6 +15485,12 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateBalancesOverTimeURLRequest'
       responses:
         '201':
           description: Successful response containing Balances Over Time URL and metadata.
@@ -15512,6 +15522,12 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateRecurringAndForecastedTransactionsURLRequest'
       responses:
         '201':
           description: Successful response containing Recurring and Forecasted Transactions URL and metadata.
@@ -15542,6 +15558,12 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateSpendingAnalysisURLRequest'
       responses:
         '201':
           description: Successful response containing Spending Analysis URL and metadata.
@@ -18551,6 +18573,17 @@ components:
           description: |
             Date and time when the consent was revoked. ISODateTime. This attribute in included in the response only if the status of the consent is `revoked`.
             When the consent is invalidated as part of a Bud refresh task, this date time represents the time when the consent was set to `revoked` by Bud during the refresh.
+        revoke_reason:
+          type: string
+          description: |
+            The reason that the consent was marked as revoked. This attribute in included in the response only if the status of the consent is `revoked`.
+          enum:
+            - provider_revoked
+            - bud_revoked
+            - single_use
+            - duplicate_accounts
+            - access_token_error
+            - consent_invalid
         status:
           type: string
           description: To describe the status of the consent. Note that the query parameter `status=all` must be provided to be shown consents that have a status of anything but `authorised`
@@ -18696,6 +18729,17 @@ components:
               type: string
               format: datetime
               example: '2023-10-02T14:05:55Z'
+            reason:
+              type: string
+              description: |
+                For the open_banking.consent.revoked event. The reason that the consent was marked as revoked.
+              enum:
+                - provider_revoked
+                - bud_revoked
+                - single_use
+                - duplicate_accounts
+                - access_token_error
+                - consent_invalid
     RevokeAccountAccessIntentTastStatusResponse:
       title: Revoke Account Access Intent Response
       type: object
@@ -18912,8 +18956,7 @@ components:
       description: Information surrounding a Customer's Account Balance
       required:
         - amount
-        - date
-        - time
+        - date_time
         - type
         - credit_debit_indicator
       properties:
@@ -18931,11 +18974,17 @@ components:
         date:
           type: string
           format: YYYY-MM-DD
+          deprecated: true
           description: The date associated with the balance of the given account
         time:
           type: string
           format: hh:mm:ss
+          deprecated: true
           description: The time associated with the balance of the given account
+        date_time:
+          type: string
+          format: date-time
+          description: RFC 3339 format string of the date time of the balance
         type:
           type: string
           description: |
@@ -27396,6 +27445,23 @@ components:
           properties:
             sufficient_data:
               type: boolean
+    BaseHeadingLevel:
+      type: integer
+      minimum: 1
+      maximum: 6
+    GlobalWidgetURLQueryParams:
+      type: object
+      properties:
+        base_heading_level:
+          $ref: '#/components/schemas/BaseHeadingLevel'
+    FinancialCalendarQueryParams:
+      allOf:
+        - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
+    GenerateFinancialCalendarURLRequest:
+      type: object
+      properties:
+        additional_query_params:
+          $ref: '#/components/schemas/FinancialCalendarQueryParams'
     GenerateFinancialCalendarURLResponse:
       type: object
       properties:
@@ -27414,6 +27480,14 @@ components:
           properties:
             sufficient_data:
               type: boolean
+    BalancesOverTimeQueryParams:
+      allOf:
+        - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
+    GenerateBalancesOverTimeURLRequest:
+      type: object
+      properties:
+        additional_query_params:
+          $ref: '#/components/schemas/BalancesOverTimeQueryParams'
     GenerateBalancesOverTimeURLResponse:
       type: object
       properties:
@@ -27432,6 +27506,14 @@ components:
           properties:
             sufficient_data:
               type: boolean
+    RecurringAndForecastedTransactionsQueryParams:
+      allOf:
+        - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
+    GenerateRecurringAndForecastedTransactionsURLRequest:
+      type: object
+      properties:
+        additional_query_params:
+          $ref: '#/components/schemas/RecurringAndForecastedTransactionsQueryParams'
     GenerateRecurringAndForecastedTransactionsURLResponse:
       type: object
       properties:
@@ -27450,6 +27532,14 @@ components:
           properties:
             sufficient_data:
               type: boolean
+    SpendingAnalysisQueryParams:
+      allOf:
+        - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
+    GenerateSpendingAnalysisURLRequest:
+      type: object
+      properties:
+        additional_query_params:
+          $ref: '#/components/schemas/SpendingAnalysisQueryParams'
     GenerateSpendingAnalysisURLResponse:
       type: object
       properties:
