@@ -222,6 +222,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.19.0: 12/08/2025**
+    >- Add support for use of `customer_idempotent_identifier` field in place of `customer_id` field in __Ingest Accounts__, __Ingest Transactions__, __Book Transactions__, and __Decline Transactions__. This allows for easier integration, and allows customers to automatically be created at the point of ingestion.
+
     **Version 2.18.0: 25/06/2025**
     >- Add `X-Customer-Idempotent-Identifier` header to all endpoints that support `X-Customer-Id` header.
 
@@ -2483,7 +2486,10 @@ paths:
         - $ref: '#/components/parameters/IngestAccountsContentType'
         - name: X-Disable-Synchronous
           in: header
-          description: If present and set to true, a task is created and a response is returned immediately
+          description: |
+            If present and set to true, a task is created and a response is returned immediately
+
+            Note: This flag cannot be set to `true` if a `customer_idempotent_identifier` is supplied instead of a `customer_id`.
           schema:
             type: boolean
             default: false
@@ -2497,8 +2503,8 @@ paths:
                 - $ref: '#/components/schemas/IngestPlaidAccountsRequest'
                 - $ref: '#/components/schemas/IngestFinicityAccountsRequest'
             examples:
-              bud-accounts-v1 Request:
-                summary: Bud Accounts V1 Example
+              bud-accounts-v1 Request (with Customer ID):
+                summary: Bud Accounts V1 (With Customer ID)
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
                     accounts:
@@ -2546,8 +2552,57 @@ paths:
                                 type: Credit
                             date_time: '2020-12-01T00:00:00-05:00'
                             type: InterimBooked
-              plaid-accounts-v1 Request:
-                summary: Plaid Accounts V1 Example
+              bud-accounts-v1 Request (With Customer Idempotent Identifier):
+                summary: Bud Accounts V1 (With Customer Idempotent Identifier)
+                value:
+                  - customer_idempotent_identifier: your_internal_id
+                    accounts:
+                      - provider: citi
+                        account_id: 99473c28-21cf-4a9a-b79e-fd643dd7a4bc
+                        currency: USD
+                        account_type: Personal
+                        account_sub_type: CurrentAccount
+                        account_identifiers:
+                          - type: us_account_number
+                            value: '98765432165444'
+                        balances:
+                          - amount:
+                              value: '7.00'
+                              currency: USD
+                            credit_debit_indicator: outgoing_debit
+                            credit_line:
+                              - included: true
+                                amount:
+                                  value: '200.00'
+                                  currency: USD
+                                type: Credit
+                            date_time: '2020-12-01T00:00:00Z'
+                            type: InterimBooked
+                  - customer_idempotent_identifier: your_internal_id
+                    accounts:
+                      - provider: chase
+                        account_id: bfd4ea71-58d7-4b24-8820-95029875cc9a
+                        currency: USD
+                        account_type: Personal
+                        account_sub_type: CurrentAccount
+                        account_identifiers:
+                          - type: us_account_number
+                            value: '12312312313200'
+                        balances:
+                          - amount:
+                              value: '70005.00'
+                              currency: USD
+                            credit_debit_indicator: incoming_credit
+                            credit_line:
+                              - included: true
+                                amount:
+                                  value: '100.00'
+                                  currency: USD
+                                type: Credit
+                            date_time: '2020-12-01T00:00:00Z'
+                            type: InterimBooked
+              plaid-accounts-v1 Request (with Customer ID):
+                summary: Plaid Accounts V1 (with Customer ID)
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
                     accounts:
@@ -2562,11 +2617,45 @@ paths:
                         official_name: Plaid Gold Standard 0% Interest Checking
                         type: depository
                         subtype: checking
-              finicity-accounts-v1 Request:
-                summary: Finicity V1 Accounts Request
+              plaid-accounts-v1 Request (with Customer Idempotent Identifier):
+                summary: Plaid Accounts V1 (with Customer Idempotent Identifier)
+                value:
+                  - customer_idempotent_identifier: your_internal_id
+                    accounts:
+                      - account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk
+                        balances:
+                          available: 100
+                          current: 120
+                          limit: 1200
+                          iso_currency_code: USD
+                          last_updated_datetime: '2022-07-13T15:30:00Z'
+                        name: Plaid Checking
+                        official_name: Plaid Gold Standard 0% Interest Checking
+                        type: depository
+                        subtype: checking
+              finicity-accounts-v1 Request (with Customer ID):
+                summary: Finicity V1 Accounts Request (with Customer ID)
                 description: A sample finicity v1 accounts ingest request
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                    accounts:
+                      - id: '1014136057'
+                        name: Super Checking
+                        balance: 7456
+                        type: checking
+                        status: active
+                        institutionId: '102224'
+                        balanceDate: 1588797048
+                        currency: USD
+                        detail:
+                          availableBalanceAmount: 5678.78
+                          creditAvailableAmount: 10200
+                          creditMaxAmount: 12000
+              finicity-accounts-v1 Request (with Customer Idempotent Identifier):
+                summary: Finicity V1 Accounts Request (with Customer Idempotent Identifier)
+                description: A sample finicity v1 accounts ingest request
+                value:
+                  - customer_idempotent_identifier: your_internal_id
                     accounts:
                       - id: '1014136057'
                         name: Super Checking
@@ -2718,8 +2807,8 @@ paths:
                 - $ref: '#/components/schemas/IngestPlaidTransactionsRequest'
                 - $ref: '#/components/schemas/IngestFinicityTransactionsRequest'
             examples:
-              bud-transaction-v3 Request:
-                summary: Bud Transaction V3 Example
+              bud-transaction-v3 Request (with Customer ID):
+                summary: Bud Transaction V3 (with Customer ID)
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
                     transactions:
@@ -2757,8 +2846,47 @@ paths:
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         start: '2022-10-10T23:00:00Z'
                         end: '2022-11-10T23:00:00Z'
-              plaid-transaction-v1 Request:
-                summary: Plaid Transaction V1 Example
+              bud-transaction-v3 Request (with Customer Idempotent Identifier):
+                summary: Bud Transaction V3 (with Customer Idempotent Identifier)
+                value:
+                  - customer_idempotent_identifier: your_internal_id
+                    transactions:
+                      - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                        transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                        description: The RSPCA, Southwater
+                        amount: '-10.98'
+                        date_time: '2022-10-10T23:00:00Z'
+                        currency: GBP
+                        status: pending
+                        provider: Citibank
+                        country_code: GB
+                        transaction_type:
+                          bud_code: DEB
+                          description: Debit card transaction
+                      - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                        transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
+                        description: The RSPCA, Southwater
+                        amount: '-10.98'
+                        date_time: '2022-11-10T23:00:00Z'
+                        currency: GBP
+                        provider: Citibank
+                        country_code: GB
+                        transaction_type:
+                          bud_code: DEB
+                          description: Debit card transaction
+                      - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                        transaction_id: d2ea249c-0d1b-4346-b88e-53ec8bc32083
+                        description: Trader Joe's
+                        amount: '-9.98'
+                        date_time: '2022-11-10T23:00:00Z'
+                        currency: USD
+                        provider: Citibank
+                    transaction_windows:
+                      - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                        start: '2022-10-10T23:00:00Z'
+                        end: '2022-11-10T23:00:00Z'
+              plaid-transaction-v1 Request (with Customer ID):
+                summary: Plaid Transaction V1 (with Customer ID)
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
                     transactions:
@@ -2786,10 +2914,66 @@ paths:
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         start: '2022-10-10T23:00:00Z'
                         end: '2022-11-10T23:00:00Z'
-              finicity-transaction-v1 Request:
-                summary: Finicity Transaction V1 Example
+              plaid-transaction-v1 Request (with Customer Idempotent Identifier):
+                summary: Plaid Transaction V1 (with Customer Idempotent Identifier)
+                value:
+                  - customer_idempotent_identifier: your_internal_id
+                    transactions:
+                      - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                        transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                        amount: 99.99
+                        date: '2020-01-31'
+                        datetime: '2020-06-17T11:00:00Z'
+                        payment_channel: in store
+                        name: Apple Store
+                        original_description: APPLE.COM/BILL
+                        iso_currency_code: USD
+                        pending: false
+                        category:
+                          - Shops
+                          - Computers and Electronics
+                        merchant_name: Apple
+                        location:
+                          address: 900 fancy street
+                          city: New York
+                          region: NY
+                          postal_code: '96858'
+                          country: US
+                    transaction_windows:
+                      - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                        start: '2022-10-10T23:00:00Z'
+                        end: '2022-11-10T23:00:00Z'
+              finicity-transaction-v1 Request (with Customer ID):
+                summary: Finicity Transaction V1 Example (with Customer ID)
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                    transactions:
+                      - accountId: 3009327691
+                        id: 100976507328
+                        amount: -99.99
+                        feeAmount: -0.99
+                        status: active
+                        description: youtube
+                        memo: GOOGLE*YOUTUBEPREMIUM GOOGLE*YOUTUBEPREM
+                        type: debit
+                        transactionDate: '1642521600'
+                        postedDate: '1642521600'
+                        effectiveDate: '1642521600'
+                        currencySymbol: USD
+                        categorization:
+                          normalizedPayeeName: Apple
+                          city: New York
+                          state: NY
+                          postal_code: '96858'
+                          country: USA
+                    transaction_windows:
+                      - account_id: '3009327691'
+                        start: '2022-10-10T23:00:00Z'
+                        end: '2022-11-10T23:00:00Z'
+              finicity-transaction-v1 Request (with Customer Idempotent Identifier):
+                summary: Finicity Transaction V1 Example (with Customer Idempotent Identifier)
+                value:
+                  - customer_idempotent_identifier: your_internal_id
                     transactions:
                       - accountId: 3009327691
                         id: 100976507328
@@ -2827,142 +3011,283 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IngestV2SyncResponse'
-              example:
-                operation_id: v2_ingest_transactions_post
-                data:
-                  - customer_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                    enriched_transactions:
-                      - transaction_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
-                        description: PAYPAL GOOGLE*YOUTUBEPREMIUM INTERNVJKK
-                        credit_debit_indicator: debit
-                        status: pending
-                        suggested_description: YouTube
-                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/1ee20c33-71c6-46d4-9374-f9f8cb5cc90e/v2/youtube.jpeg
-                        transaction_type:
-                          bud_code: DEB
-                          description: PayPal
-                        amount:
-                          value: '12.04'
-                          currency: USD
-                        date_time: 2023-11-08T23:00:00Z00:00
-                        tags:
-                          - online
-                        enrichments:
-                          categories:
-                            l1:
-                              slug: entertainment
-                              confidence: '0.99'
-                            l2:
-                              slug: media_subscriptions
-                              confidence: '0.98'
-                          merchant:
-                            id: 78f20914-afcd-46da-9c0c-27b51a8a7e7b
-                            slug: youtube
-                            display_name: YouTube
-                            logo: http://url/youtube.jpeg
-                            tokens:
-                              - value: youtube
-                                confidence: '0.92'
+              examples:
+                sync enrichment response (with Customer ID):
+                  summary: Synchronous Enrichment Response (with Customer ID)
+                  value:
+                    operation_id: v2_ingest_transactions_post
+                    data:
+                      - customer_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                        enriched_transactions:
+                          - transaction_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                            account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                            description: PAYPAL GOOGLE*YOUTUBEPREMIUM INTERNVJKK
+                            credit_debit_indicator: debit
+                            status: pending
+                            suggested_description: YouTube
+                            suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/1ee20c33-71c6-46d4-9374-f9f8cb5cc90e/v2/youtube.jpeg
+                            transaction_type:
+                              bud_code: DEB
+                              description: PayPal
+                            amount:
+                              value: '12.04'
+                              currency: USD
+                            date_time: 2023-11-08T23:00:00Z00:00
                             tags:
-                              - online-streaming
-                              - technology
                               - online
-                              - entertainment
-                          processor:
-                            id: 18f63293-0217-4520-bbf0-071dca7a9d04
-                            slug: paypal
-                            display_name: PayPal
-                            logo: http://url/paypal_logo.jpeg
-                            tokens:
-                              - value: paypal
-                                confidence: '0.96'
-                          transaction_types:
-                            - card
-                            - debit
-                      - transaction_id: 275fbbfe-209c-4329-a38b-b324aa386c56
-                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
-                        description: dunkin purchase 06/04 urbana oh
-                        credit_debit_indicator: debit
-                        status: booked
-                        suggested_description: Dunkin' Donuts
-                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ad5af5cd-b8ef-4d33-8e71-5875974bfd45/v1/dunkindonuts.jpeg
-                        transaction_type:
-                          bud_code: DEB
-                          description: Debit card transaction
-                        amount:
-                          value: '2.99'
-                          currency: USD
-                        date_time: '2023-11-10T11:48:05-05:00'
-                        merchant_category_code: '5814'
-                        enrichments:
-                          categories:
-                            l1:
-                              slug: food_and_drink
-                              confidence: '0.99'
-                            l2:
-                              slug: eating_out_and_takeaways
-                              confidence: '0.98'
-                          merchant:
-                            id: ba8ef908-b624-4116-8b26-571e48d1bf4c
-                            slug: dunkin
-                            display_name: Dunkin'
-                            logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ba8ef908-b624-4116-8b26-571e48d1bf4c/v3/dunkin.jpeg
-                            tokens:
-                              - value: dunkin
-                                confidence: '1.00'
+                            enrichments:
+                              categories:
+                                l1:
+                                  slug: entertainment
+                                  confidence: '0.99'
+                                l2:
+                                  slug: media_subscriptions
+                                  confidence: '0.98'
+                              merchant:
+                                id: 78f20914-afcd-46da-9c0c-27b51a8a7e7b
+                                slug: youtube
+                                display_name: YouTube
+                                logo: http://url/youtube.jpeg
+                                tokens:
+                                  - value: youtube
+                                    confidence: '0.92'
+                                tags:
+                                  - online-streaming
+                                  - technology
+                                  - online
+                                  - entertainment
+                              processor:
+                                id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                                slug: paypal
+                                display_name: PayPal
+                                logo: http://url/paypal_logo.jpeg
+                                tokens:
+                                  - value: paypal
+                                    confidence: '0.96'
+                              transaction_types:
+                                - card
+                                - debit
+                          - transaction_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                            account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                            description: dunkin purchase 06/04 urbana oh
+                            credit_debit_indicator: debit
+                            status: booked
+                            suggested_description: Dunkin' Donuts
+                            suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ad5af5cd-b8ef-4d33-8e71-5875974bfd45/v1/dunkindonuts.jpeg
+                            transaction_type:
+                              bud_code: DEB
+                              description: Debit card transaction
+                            amount:
+                              value: '2.99'
+                              currency: USD
+                            date_time: '2023-11-10T11:48:05-05:00'
+                            merchant_category_code: '5814'
+                            enrichments:
+                              categories:
+                                l1:
+                                  slug: food_and_drink
+                                  confidence: '0.99'
+                                l2:
+                                  slug: eating_out_and_takeaways
+                                  confidence: '0.98'
+                              merchant:
+                                id: ba8ef908-b624-4116-8b26-571e48d1bf4c
+                                slug: dunkin
+                                display_name: Dunkin'
+                                logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ba8ef908-b624-4116-8b26-571e48d1bf4c/v3/dunkin.jpeg
+                                tokens:
+                                  - value: dunkin
+                                    confidence: '1.00'
+                                tags:
+                                  - drinks
+                                  - chain
+                                  - coffee
+                                  - restaurant
+                                  - fast-food
+                                  - takeout
+                                  - food
+                                  - bakery
+                                  - cafe
+                              location:
+                                address:
+                                  address_lines:
+                                    - 1129 E US Highway 36
+                                    - Urbana
+                                    - OH
+                                    - '43078'
+                                  street_address: 1129 E US Highway 36
+                                  city: Urbana
+                                  region: OH
+                                  postal_code: '43078'
+                                  country: US
+                                geolocation:
+                                  latitude: 40.106604
+                                  longitude: -83.729653
+                                tokens:
+                                  - oh
+                                  - urbana
+                          - transaction_id: cfb6dd1f4c73e1fc36aac756e12644d7
+                            account_id: 37c633a71237b9a8282e09587109668e
+                            description: J BLOGGS RENT
+                            credit_debit_indicator: debit
+                            amount:
+                              value: '1350.00'
+                              currency: USD
+                            date_time: '2022-05-30T00:00:00Z'
+                            status: booked
+                            suggested_description: J BLOGGS RENT
+                            enrichments:
+                              categories:
+                                l1:
+                                  slug: mortgage_and_rent
+                                  confidence: '0.90'
+                                l2:
+                                  slug: rent
+                                  confidence: '0.90'
+                              names:
+                                - j bloggs
+                    metadata:
+                      task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                      next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                      next_url_delay: 500
+                sync enrichment response (with Customer Idempotent Identifier):
+                  summary: Synchronous Enrichment Response (with Customer Idempotent Identifier)
+                  value:
+                    operation_id: v2_ingest_transactions_post
+                    data:
+                      - customer_idempotent_identifier: your_internal_id
+                        enriched_transactions:
+                          - transaction_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                            account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                            description: PAYPAL GOOGLE*YOUTUBEPREMIUM INTERNVJKK
+                            credit_debit_indicator: debit
+                            status: pending
+                            suggested_description: YouTube
+                            suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/1ee20c33-71c6-46d4-9374-f9f8cb5cc90e/v2/youtube.jpeg
+                            transaction_type:
+                              bud_code: DEB
+                              description: PayPal
+                            amount:
+                              value: '12.04'
+                              currency: USD
+                            date_time: 2023-11-08T23:00:00Z00:00
                             tags:
-                              - drinks
-                              - chain
-                              - coffee
-                              - restaurant
-                              - fast-food
-                              - takeout
-                              - food
-                              - bakery
-                              - cafe
-                          location:
-                            address:
-                              address_lines:
-                                - 1129 E US Highway 36
-                                - Urbana
-                                - OH
-                                - '43078'
-                              street_address: 1129 E US Highway 36
-                              city: Urbana
-                              region: OH
-                              postal_code: '43078'
-                              country: US
-                            geolocation:
-                              latitude: 40.106604
-                              longitude: -83.729653
-                            tokens:
-                              - oh
-                              - urbana
-                      - transaction_id: cfb6dd1f4c73e1fc36aac756e12644d7
-                        account_id: 37c633a71237b9a8282e09587109668e
-                        description: J BLOGGS RENT
-                        credit_debit_indicator: debit
-                        amount:
-                          value: '1350.00'
-                          currency: USD
-                        date_time: '2022-05-30T00:00:00Z'
-                        status: booked
-                        suggested_description: J BLOGGS RENT
-                        enrichments:
-                          categories:
-                            l1:
-                              slug: mortgage_and_rent
-                              confidence: '0.90'
-                            l2:
-                              slug: rent
-                              confidence: '0.90'
-                          names:
-                            - j bloggs
-                metadata:
-                  task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url_delay: 500
+                              - online
+                            enrichments:
+                              categories:
+                                l1:
+                                  slug: entertainment
+                                  confidence: '0.99'
+                                l2:
+                                  slug: media_subscriptions
+                                  confidence: '0.98'
+                              merchant:
+                                id: 78f20914-afcd-46da-9c0c-27b51a8a7e7b
+                                slug: youtube
+                                display_name: YouTube
+                                logo: http://url/youtube.jpeg
+                                tokens:
+                                  - value: youtube
+                                    confidence: '0.92'
+                                tags:
+                                  - online-streaming
+                                  - technology
+                                  - online
+                                  - entertainment
+                              processor:
+                                id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                                slug: paypal
+                                display_name: PayPal
+                                logo: http://url/paypal_logo.jpeg
+                                tokens:
+                                  - value: paypal
+                                    confidence: '0.96'
+                              transaction_types:
+                                - card
+                                - debit
+                          - transaction_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                            account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                            description: dunkin purchase 06/04 urbana oh
+                            credit_debit_indicator: debit
+                            status: booked
+                            suggested_description: Dunkin' Donuts
+                            suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ad5af5cd-b8ef-4d33-8e71-5875974bfd45/v1/dunkindonuts.jpeg
+                            transaction_type:
+                              bud_code: DEB
+                              description: Debit card transaction
+                            amount:
+                              value: '2.99'
+                              currency: USD
+                            date_time: '2023-11-10T11:48:05-05:00'
+                            merchant_category_code: '5814'
+                            enrichments:
+                              categories:
+                                l1:
+                                  slug: food_and_drink
+                                  confidence: '0.99'
+                                l2:
+                                  slug: eating_out_and_takeaways
+                                  confidence: '0.98'
+                              merchant:
+                                id: ba8ef908-b624-4116-8b26-571e48d1bf4c
+                                slug: dunkin
+                                display_name: Dunkin'
+                                logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ba8ef908-b624-4116-8b26-571e48d1bf4c/v3/dunkin.jpeg
+                                tokens:
+                                  - value: dunkin
+                                    confidence: '1.00'
+                                tags:
+                                  - drinks
+                                  - chain
+                                  - coffee
+                                  - restaurant
+                                  - fast-food
+                                  - takeout
+                                  - food
+                                  - bakery
+                                  - cafe
+                              location:
+                                address:
+                                  address_lines:
+                                    - 1129 E US Highway 36
+                                    - Urbana
+                                    - OH
+                                    - '43078'
+                                  street_address: 1129 E US Highway 36
+                                  city: Urbana
+                                  region: OH
+                                  postal_code: '43078'
+                                  country: US
+                                geolocation:
+                                  latitude: 40.106604
+                                  longitude: -83.729653
+                                tokens:
+                                  - oh
+                                  - urbana
+                          - transaction_id: cfb6dd1f4c73e1fc36aac756e12644d7
+                            account_id: 37c633a71237b9a8282e09587109668e
+                            description: J BLOGGS RENT
+                            credit_debit_indicator: debit
+                            amount:
+                              value: '1350.00'
+                              currency: USD
+                            date_time: '2022-05-30T00:00:00Z'
+                            status: booked
+                            suggested_description: J BLOGGS RENT
+                            enrichments:
+                              categories:
+                                l1:
+                                  slug: mortgage_and_rent
+                                  confidence: '0.90'
+                                l2:
+                                  slug: rent
+                                  confidence: '0.90'
+                              names:
+                                - j bloggs
+                    metadata:
+                      task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                      next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                      next_url_delay: 500
         '202':
           description: A new Task has been created to ingest the given transactions. The generated `task_id` can be used to check the Task's status
           content:
@@ -3083,13 +3408,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TransactionSettlementV3Request'
-            example:
-              - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                transactions:
-                  - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
-                    date_time: '2022-10-11T23:00:00Z'
-                  - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
-                    date_time: '2022-11-11T23:00:00Z'
+            examples:
+              request_with_customer_id:
+                summary: Book transactions request (with Customer ID)
+                value:
+                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                    transactions:
+                      - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                        date_time: '2022-10-11T23:00:00Z'
+                      - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
+                        date_time: '2022-11-11T23:00:00Z'
+              request_with_customer_idempotent_identifier:
+                summary: Book transactions request (with Customer Idempotent Identifier)
+                value:
+                  - customer_idempotent_identifier: your_internal_id
+                    transactions:
+                      - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                        date_time: '2022-10-11T23:00:00Z'
+                      - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
+                        date_time: '2022-11-11T23:00:00Z'
       responses:
         '202':
           description: |
@@ -3171,13 +3508,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TransactionSettlementV3Request'
-            example:
-              - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                transactions:
-                  - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
-                    date_time: '2022-10-11T23:00:00Z'
-                  - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
-                    date_time: '2022-11-11T23:00:00Z'
+            examples:
+              request_with_customer_id:
+                summary: Decline transactions request (with Customer ID)
+                value:
+                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                    transactions:
+                      - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                        date_time: '2022-10-11T23:00:00Z'
+                      - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
+                        date_time: '2022-11-11T23:00:00Z'
+              request_with_customer_idempotent_identifier:
+                summary: Decline transactions request (with Customer Idempotent Identifier)
+                value:
+                  - customer_idempotent_identifier: your_internal_id
+                    transactions:
+                      - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                        date_time: '2022-10-11T23:00:00Z'
+                      - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
+                        date_time: '2022-11-11T23:00:00Z'
       responses:
         '202':
           description: |
@@ -3262,7 +3611,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/IngestStatusV3Response'
               examples:
-                Pending Task:
+                Pending Task (with Customer ID):
+                  summary: Pending Task (with Customer ID)
                   value:
                     operation_id: v3_ingest_status_get
                     data:
@@ -3273,7 +3623,8 @@ paths:
                       status: Pending
                       next_url: /ingestion/v3/tasks/3d592efc-493a-4548-8008-f738fd0877ab
                       next_url_delay: 500
-                Successful Task:
+                Successful Task (with Customer ID):
+                  summary: Successful Task (with Customer ID)
                   value:
                     operation_id: v3_ingest_status_get
                     data:
@@ -3287,11 +3638,53 @@ paths:
                       ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
                       ingest_route: v2_ingest_transactions_post
                       ingest_schema: application/bud-transaction-v3+json
-                Failed Task:
+                Failed Task (with Customer ID):
+                  summary: Failed Task (with Customer ID)
                   value:
                     operation_id: v3_ingest_status_get
                     data:
                       - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
+                        status: Failed
+                        result: data_mapping_error
+                        error:
+                          accounts[0].currency: 'unexpected currency code: GlkjlkjBP, expected ISO-4217 currency code'
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008
+                      status: Failed
+                      result: data_mapping_error
+                Pending Task (with Customer Idempotent Identifier):
+                  summary: Pending Task (with Customer Idempotent Identifier)
+                  value:
+                    operation_id: v3_ingest_status_get
+                    data:
+                      - customer_idempotent_identifier: your_internal_id
+                        status: Pending
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
+                      status: Pending
+                      next_url: /ingestion/v3/tasks/3d592efc-493a-4548-8008-f738fd0877ab
+                      next_url_delay: 500
+                Successful Task (with Customer Idempotent Identifier):
+                  summary: Successful Task (with Customer Idempotent Identifier)
+                  value:
+                    operation_id: v3_ingest_status_get
+                    data:
+                      - customer_idempotent_identifier: your_internal_id
+                        status: Completed
+                        result: success
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
+                      status: Completed
+                      result: success
+                      ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
+                      ingest_route: v2_ingest_transactions_post
+                      ingest_schema: application/bud-transaction-v3+json
+                Failed Task (with Customer Idempotent Identifier):
+                  summary: Failed Task (with Customer Idempotent Identifier)
+                  value:
+                    operation_id: v3_ingest_status_get
+                    data:
+                      - customer_idempotent_identifier: your_internal_id
                         status: Failed
                         result: data_mapping_error
                         error:
@@ -9948,15 +10341,12 @@ components:
     PlaidCustomerWithAccounts:
       title: Customer With Accounts
       type: object
+      oneOf:
+        - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerID'
+        - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerIdempotentIdentifier'
       required:
-        - customer_id
         - accounts
       properties:
-        customer_id:
-          type: string
-          format: uuid
-          description: Unique identifier for the Customer.
-          example: c3829683-b6b2-4988-a7f7-697a9fa201bc
         accounts:
           type: array
           description: List of accounts that belongs to the customer.
@@ -10097,12 +10487,12 @@ components:
     PlaidTransactions:
       title: Customer With Transactions
       type: object
+      oneOf:
+        - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerID'
+        - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerIdempotentIdentifier'
       required:
-        - customer_id
         - transactions
       properties:
-        customer_id:
-          $ref: '#/components/schemas/CustomerID'
         sync_enrichments:
           $ref: '#/components/schemas/SynchronousEnrichmentsList'
         transactions:
@@ -10211,15 +10601,12 @@ components:
     FinicityCustomerWithAccounts:
       title: Customer With Accounts
       type: object
+      oneOf:
+        - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerID'
+        - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerIdempotentIdentifier'
       required:
-        - customer_id
         - accounts
       properties:
-        customer_id:
-          type: string
-          format: uuid
-          description: Unique identifier for the Customer.
-          example: c3829683-b6b2-4988-a7f7-697a9fa201bc
         accounts:
           type: array
           description: List of accounts that belongs to the customer.
@@ -10313,12 +10700,12 @@ components:
     FinicityTransactions:
       title: Finicity Customer Transactions
       type: object
+      oneOf:
+        - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerID'
+        - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerIdempotentIdentifier'
       required:
-        - customer_id
         - transactions
       properties:
-        customer_id:
-          $ref: '#/components/schemas/CustomerID'
         sync_enrichments:
           $ref: '#/components/schemas/SynchronousEnrichmentsList'
         transactions:
@@ -12769,9 +13156,33 @@ components:
         errors:
           type: object
           description: Extra information on the validation errors
+    CustomerID:
+      type: string
+      format: uuid
+      description: A unique identifier for a Customer, as registered on Bud's platform.
+      example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
     CustomerSecret:
       type: string
       description: The Bud Customer secret used to encrypt customer data. This is required only if the customer secret is not already stored with Bud.
+    IngestFirstPartyDataWithCustomerID:
+      title: With Customer ID
+      properties:
+        customer_id:
+          $ref: '#/components/schemas/CustomerID'
+        customer_secret:
+          $ref: '#/components/schemas/CustomerSecret'
+      required:
+        - customer_id
+    IngestFirstPartyDataWithCustomerIdempotentIdentifier:
+      title: With Customer Idempotent Identifier
+      properties:
+        customer_idempotent_identifier:
+          type: string
+          description: |
+            An internal client identifier. If specified, a Bud customer will either be automatically created, or utilised to ingest the given data.
+            This identifier can then be used in place of `X-Customer-Id` across Bud's endpoints.
+      required:
+        - customer_idempotent_identifier
     IngestAccountDetails:
       title: Ingest Account Details
       type: object
@@ -13015,15 +13426,11 @@ components:
       description: A customer with a accounts data.
       type: object
       required:
-        - customer_id
         - accounts
+      oneOf:
+        - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerID'
+        - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerIdempotentIdentifier'
       properties:
-        customer_id:
-          type: string
-          format: uuid
-          description: A unique identifier for a Customer, as registered on Bud's platform.
-        customer_secret:
-          $ref: '#/components/schemas/CustomerSecret'
         accounts:
           type: array
           description: List of accounts that belongs to the customer.
@@ -13299,11 +13706,6 @@ components:
                   customer_idempotent_identifier:
                     type: string
                     description: The `idempotent_identifier` provided when the customer given was created.
-    CustomerID:
-      type: string
-      format: uuid
-      description: A unique identifier for a Customer, as registered on Bud's platform.
-      example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
     SynchronousEnrichmentsList:
       type: array
       description: |
@@ -13482,13 +13884,10 @@ components:
       type: array
       items:
         type: object
-        required:
-          - customer_id
+        oneOf:
+          - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerID'
+          - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerIdempotentIdentifier'
         properties:
-          customer_id:
-            $ref: '#/components/schemas/CustomerID'
-          customer_secret:
-            $ref: '#/components/schemas/CustomerSecret'
           sync_enrichments:
             $ref: '#/components/schemas/SynchronousEnrichmentsList'
           transactions:
@@ -13499,6 +13898,22 @@ components:
               $ref: '#/components/schemas/CustomerTransactionV3'
           transaction_windows:
             $ref: '#/components/schemas/TransactionWindowArray'
+    IngestResponseV3SubTaskWithCustomerID:
+      title: With Customer ID
+      properties:
+        customer_id:
+          $ref: '#/components/schemas/CustomerID'
+      required:
+        - customer_id
+    IngestResponseV3SubTaskWithCustomerIdempotentIdentifier:
+      title: With Customer Idempotent Identifier
+      properties:
+        customer_idempotent_identifier:
+          type: string
+          description: |
+            An internal client identifier. This identifier can then be used in place of `X-Customer-Id` across Bud's endpoints.
+      required:
+        - customer_idempotent_identifier
     schemas-Categories:
       title: Categories
       type: object
@@ -13717,14 +14132,14 @@ components:
           items:
             type: string
     IngestV2SyncResponseData:
-      type: object
       title: Enriched Customer Transactions
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/IngestResponseV3SubTaskWithCustomerID'
+        - $ref: '#/components/schemas/IngestResponseV3SubTaskWithCustomerIdempotentIdentifier'
       required:
-        - customer_id
         - enriched_transactions
       properties:
-        customer_id:
-          $ref: '#/components/schemas/CustomerID'
         enriched_transactions:
           type: array
           items:
@@ -13834,13 +14249,10 @@ components:
       type: array
       items:
         type: object
-        required:
-          - customer_id
+        oneOf:
+          - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerID'
+          - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerIdempotentIdentifier'
         properties:
-          customer_id:
-            $ref: '#/components/schemas/CustomerID'
-          customer_secret:
-            $ref: '#/components/schemas/CustomerSecret'
           transactions:
             type: array
             items:
@@ -13966,14 +14378,12 @@ components:
       title: Customer Ingest Task
       description: A single customer ingest task status
       type: object
+      oneOf:
+        - $ref: '#/components/schemas/IngestResponseV3SubTaskWithCustomerID'
+        - $ref: '#/components/schemas/IngestResponseV3SubTaskWithCustomerIdempotentIdentifier'
       required:
-        - customer_id
         - status
       properties:
-        customer_id:
-          type: string
-          format: uuid
-          description: A unique identifier for a Customer, as registered on Bud's platform.
         status:
           title: Ingest Response Status
           description: Ingest response status.

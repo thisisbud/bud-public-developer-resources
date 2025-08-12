@@ -306,6 +306,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.19.0: 12/08/2025**
+    >- Add support for use of `customer_idempotent_identifier` field in place of `customer_id` field in __Ingest Accounts__, __Ingest Transactions__, __Book Transactions__, and __Decline Transactions__. This allows for easier integration, and allows customers to automatically be created at the point of ingestion.
+
     **Version 2.18.0: 25/06/2025**
     >- Add `X-Customer-Idempotent-Identifier` header to all endpoints that support `X-Customer-Id` header.
 
@@ -3353,7 +3356,10 @@ paths:
         - $ref: '#/components/parameters/IngestAccountsContentType'
         - name: X-Disable-Synchronous
           in: header
-          description: If present and set to true, a task is created and a response is returned immediately
+          description: |
+            If present and set to true, a task is created and a response is returned immediately.
+
+            Note: This flag cannot be set to `true` if a `customer_idempotent_identifier` is supplied instead of a `customer_id`.
           schema:
             type: boolean
             default: false
@@ -3363,57 +3369,113 @@ paths:
           application/bud-accounts+json:
             schema:
               $ref: '#/components/schemas/IngestAccountsRequest'
-            example:
-              - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                accounts:
-                  - provider: Barclays
-                    account_id: 99473c28-21cf-4a9a-b79e-fd643dd7a4bc
-                    currency: GBP
-                    account_type: Personal
-                    account_sub_type: CurrentAccount
-                    account_identifiers:
-                      - type: uk_account_number
-                        value: '32165444'
-                      - type: uk_sort_code
-                        value: '987654'
-                    balances:
-                      - amount:
-                          value: '7.00'
-                          currency: GBP
-                        credit_debit_indicator: outgoing_debit
-                        credit_line:
-                          - included: true
-                            amount:
-                              value: '200.00'
+            examples:
+              ingest_request_with_customer_id:
+                summary: Ingest Accounts Request (With Customer ID)
+                value:
+                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                    accounts:
+                      - provider: Barclays
+                        account_id: 99473c28-21cf-4a9a-b79e-fd643dd7a4bc
+                        currency: GBP
+                        account_type: Personal
+                        account_sub_type: CurrentAccount
+                        account_identifiers:
+                          - type: uk_account_number
+                            value: '32165444'
+                          - type: uk_sort_code
+                            value: '987654'
+                        balances:
+                          - amount:
+                              value: '7.00'
                               currency: GBP
-                            type: Credit
-                        date_time: '2020-12-01T00:00:00Z'
-                        type: InterimBooked
-              - customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
-                accounts:
-                  - provider: Lloyds
-                    account_id: bfd4ea71-58d7-4b24-8820-95029875cc9a
-                    currency: GBP
-                    account_type: Personal
-                    account_sub_type: CurrentAccount
-                    account_identifiers:
-                      - type: uk_account_number
-                        value: '12312300'
-                      - type: uk_sort_code
-                        value: '123123'
-                    balances:
-                      - amount:
-                          value: '70005.00'
-                          currency: GBP
-                        credit_debit_indicator: incoming_credit
-                        credit_line:
-                          - included: true
-                            amount:
-                              value: '100.00'
+                            credit_debit_indicator: outgoing_debit
+                            credit_line:
+                              - included: true
+                                amount:
+                                  value: '200.00'
+                                  currency: GBP
+                                type: Credit
+                            date_time: '2020-12-01T00:00:00Z'
+                            type: InterimBooked
+                  - customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
+                    accounts:
+                      - provider: Lloyds
+                        account_id: bfd4ea71-58d7-4b24-8820-95029875cc9a
+                        currency: GBP
+                        account_type: Personal
+                        account_sub_type: CurrentAccount
+                        account_identifiers:
+                          - type: uk_account_number
+                            value: '12312300'
+                          - type: uk_sort_code
+                            value: '123123'
+                        balances:
+                          - amount:
+                              value: '70005.00'
                               currency: GBP
-                            type: Credit
-                        date_time: '2020-12-01T00:00:00Z'
-                        type: InterimBooked
+                            credit_debit_indicator: incoming_credit
+                            credit_line:
+                              - included: true
+                                amount:
+                                  value: '100.00'
+                                  currency: GBP
+                                type: Credit
+                            date_time: '2020-12-01T00:00:00Z'
+                            type: InterimBooked
+              ingest_request_with_customer_idempotent_identifier:
+                summary: Ingest Accounts Request (With Customer Idempotent Identifier)
+                value:
+                  - customer_idempotent_identifier: your_internal_id
+                    accounts:
+                      - provider: Barclays
+                        account_id: 99473c28-21cf-4a9a-b79e-fd643dd7a4bc
+                        currency: GBP
+                        account_type: Personal
+                        account_sub_type: CurrentAccount
+                        account_identifiers:
+                          - type: uk_account_number
+                            value: '32165444'
+                          - type: uk_sort_code
+                            value: '987654'
+                        balances:
+                          - amount:
+                              value: '7.00'
+                              currency: GBP
+                            credit_debit_indicator: outgoing_debit
+                            credit_line:
+                              - included: true
+                                amount:
+                                  value: '200.00'
+                                  currency: GBP
+                                type: Credit
+                            date_time: '2020-12-01T00:00:00Z'
+                            type: InterimBooked
+                  - customer_idempotent_identifier: your_internal_id
+                    accounts:
+                      - provider: Lloyds
+                        account_id: bfd4ea71-58d7-4b24-8820-95029875cc9a
+                        currency: GBP
+                        account_type: Personal
+                        account_sub_type: CurrentAccount
+                        account_identifiers:
+                          - type: uk_account_number
+                            value: '12312300'
+                          - type: uk_sort_code
+                            value: '123123'
+                        balances:
+                          - amount:
+                              value: '70005.00'
+                              currency: GBP
+                            credit_debit_indicator: incoming_credit
+                            credit_line:
+                              - included: true
+                                amount:
+                                  value: '100.00'
+                                  currency: GBP
+                                type: Credit
+                            date_time: '2020-12-01T00:00:00Z'
+                            type: InterimBooked
       responses:
         '202':
           description: A new Task has been created to ingest the given accounts. The generated `task_id` can be used to check the Task's status
@@ -3551,10 +3613,48 @@ paths:
             schema:
               $ref: '#/components/schemas/IngestTransactionsV3Request'
             examples:
-              bud-transaction-v3 Request:
+              bud-transaction-v3 Request (with Customer ID):
+                summary: Ingest Transactions Request (with Customer ID)
                 value:
                   - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                    customer_secret: 6075654df0e057e97535ab31b80561d7d9e8409606738c2633cdd6dab63e089a
+                    transactions:
+                      - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                        transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                        description: The RSPCA, Southwater
+                        amount: '-10.98'
+                        date_time: '2022-10-10T23:00:00Z'
+                        currency: GBP
+                        status: pending
+                        provider: Monzo
+                        transaction_type:
+                          bud_code: DEB
+                          description: Debit card transaction
+                      - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                        transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
+                        description: The RSPCA, Southwater
+                        amount: '-10.98'
+                        date_time: '2022-11-10T23:00:00Z'
+                        currency: GBP
+                        provider: Monzo
+                        transaction_type:
+                          bud_code: DEB
+                          description: Debit card transaction
+                      - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                        transaction_id: d2ea249c-0d1b-4346-b88e-53ec8bc32083
+                        description: Trader Joe's
+                        amount: '-9.98'
+                        date_time: '2022-11-10T23:00:00Z'
+                        currency: USD
+                        provider: Monzo
+                        country_code: US
+                    transaction_windows:
+                      - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
+                        start: '2022-10-10T23:00:00Z'
+                        end: '2022-11-10T23:00:00Z'
+              bud-transaction-v3 Request (with Customer Idempotent Identifier):
+                summary: Ingest Transactions Request (with Customer Idempotent Identifier)
+                value:
+                  - customer_idempotent_identifier: your_internal_id
                     transactions:
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
@@ -3604,131 +3704,261 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IngestV2SyncResponse'
-              example:
-                operation_id: v2_ingest_transactions_post
-                data:
-                  - customer_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                    enriched_transactions:
-                      - transaction_id: another_transaction_id
-                        account_id: another_account_id
-                        description: paypal* specialty coffee london GBR
-                        credit_debit_indicator: debit
-                        status: pending
-                        suggested_description: Specialty Coffee Supplier Ltd.
-                        suggested_logo: http://url/specialty_coffee_supplier_logo.jpeg
-                        transaction_type:
-                          bud_code: DEB
-                          description: PayPal
-                        amount:
-                          value: '10.99'
-                          currency: GBP
-                        date_time: '2022-05-28T10:00:00Z'
-                        tags:
-                          - online
-                        enrichments:
-                          categories:
-                            l1:
-                              slug: eating_out
-                              confidence: '0.99'
-                            l2:
-                              slug: cafes_and_eating_out
-                              confidence: '0.98'
-                          merchant:
-                            id: 01cc2d49-6144-46f1-9414-67c99b139a95
-                            slug: specialty_coffee
-                            display_name: Specialty Coffee Supplier Ltd.
-                            logo: http://url/specialty_coffee_supplier_logo.jpeg
-                            tokens:
-                              - value: speciality coffee
-                                confidence: '0.98'
-                          processor:
-                            id: 18f63293-0217-4520-bbf0-071dca7a9d04
-                            slug: paypal
-                            display_name: PayPal
-                            logo: http://url/paypal_logo.jpeg
-                            tokens:
-                              - value: paypal
-                                confidence: '0.92'
-                          transaction_types:
-                            - card
-                            - debit
-                      - transaction_id: a2294cebb45d2a6e0cfc70d270988d8c
-                        account_id: 37c633a71237b9a8282e09587109668e
-                        description: caffe nero 495 ladbroke london gbr
-                        credit_debit_indicator: debit
-                        status: booked
-                        suggested_description: Caffè Nero
-                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf/v2/caffnero.jpeg
-                        transaction_type:
-                          bud_code: DEB
-                          description: Debit card transaction
-                        amount:
-                          value: '3.29'
-                          currency: GBP
-                        date_time: '2022-05-26T10:00:00Z'
-                        merchant_category_code: '5814'
-                        enrichments:
-                          categories:
-                            l1:
-                              slug: food_and_drink
-                              confidence: '0.99'
-                            l2:
-                              slug: coffee
-                              confidence: '0.99'
-                          merchant:
-                            id: 4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf
-                            slug: caffnero
-                            display_name: Caffè Nero
-                            logo: https://assets.thisisbud.com/datasci-images/merchant_logos/4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf/v1/caffnero.jpeg
-                            tokens:
-                              - value: caffe nero
-                                confidence: '1.00'
-                          location:
-                            address:
-                              address_lines:
-                                - 120-122 Ladbroke Grove
-                                - London
-                                - Greater London
-                                - W10 5NE
-                              street_address: 120-122 Ladbroke Grove
-                              city: London
-                              region: Greater London
-                              postal_code: W10 5NE
-                              country: GB
-                            geolocation:
-                              longitude: 51.517301
-                              latitude: -0.209689
-                            tokens:
-                              - gbr
-                              - ladbroke
-                              - london
-                      - transaction_id: cfb6dd1f4c73e1fc36aac756e12644d7
-                        account_id: 37c633a71237b9a8282e09587109668e
-                        description: JOHN SMITH RENT SHARE
-                        credit_debit_indicator: debit
-                        amount:
-                          value: '375.00'
-                          currency: GBP
-                        date_time: '2022-05-30T00:00:00Z'
-                        status: booked
-                        suggested_description: JOHN SMITH RENT SHARE
-                        transaction_type:
-                          bud_code: BAT
-                          description: Bank Transfer
-                        enrichments:
-                          categories:
-                            l1:
-                              slug: mortgage_and_rent
-                              confidence: '0.98'
-                            l2:
-                              slug: rent
-                              confidence: '0.98'
-                          names:
-                            - john smith
-                metadata:
-                  task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
-                  next_url_delay: 500
+              examples:
+                sync enrichment response (with Customer ID):
+                  summary: Synchronous enrichment response (with Customer ID)
+                  value:
+                    operation_id: v2_ingest_transactions_post
+                    data:
+                      - customer_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                        enriched_transactions:
+                          - transaction_id: another_transaction_id
+                            account_id: another_account_id
+                            description: paypal* specialty coffee london GBR
+                            credit_debit_indicator: debit
+                            status: pending
+                            suggested_description: Specialty Coffee Supplier Ltd.
+                            suggested_logo: http://url/specialty_coffee_supplier_logo.jpeg
+                            transaction_type:
+                              bud_code: DEB
+                              description: PayPal
+                            amount:
+                              value: '10.99'
+                              currency: GBP
+                            date_time: '2022-05-28T10:00:00Z'
+                            tags:
+                              - online
+                            enrichments:
+                              categories:
+                                l1:
+                                  slug: eating_out
+                                  confidence: '0.99'
+                                l2:
+                                  slug: cafes_and_eating_out
+                                  confidence: '0.98'
+                              merchant:
+                                id: 01cc2d49-6144-46f1-9414-67c99b139a95
+                                slug: specialty_coffee
+                                display_name: Specialty Coffee Supplier Ltd.
+                                logo: http://url/specialty_coffee_supplier_logo.jpeg
+                                tokens:
+                                  - value: speciality coffee
+                                    confidence: '0.98'
+                              processor:
+                                id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                                slug: paypal
+                                display_name: PayPal
+                                logo: http://url/paypal_logo.jpeg
+                                tokens:
+                                  - value: paypal
+                                    confidence: '0.92'
+                              transaction_types:
+                                - card
+                                - debit
+                          - transaction_id: a2294cebb45d2a6e0cfc70d270988d8c
+                            account_id: 37c633a71237b9a8282e09587109668e
+                            description: caffe nero 495 ladbroke london gbr
+                            credit_debit_indicator: debit
+                            status: booked
+                            suggested_description: Caffè Nero
+                            suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf/v2/caffnero.jpeg
+                            transaction_type:
+                              bud_code: DEB
+                              description: Debit card transaction
+                            amount:
+                              value: '3.29'
+                              currency: GBP
+                            date_time: '2022-05-26T10:00:00Z'
+                            merchant_category_code: '5814'
+                            enrichments:
+                              categories:
+                                l1:
+                                  slug: food_and_drink
+                                  confidence: '0.99'
+                                l2:
+                                  slug: coffee
+                                  confidence: '0.99'
+                              merchant:
+                                id: 4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf
+                                slug: caffnero
+                                display_name: Caffè Nero
+                                logo: https://assets.thisisbud.com/datasci-images/merchant_logos/4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf/v1/caffnero.jpeg
+                                tokens:
+                                  - value: caffe nero
+                                    confidence: '1.00'
+                              location:
+                                address:
+                                  address_lines:
+                                    - 120-122 Ladbroke Grove
+                                    - London
+                                    - Greater London
+                                    - W10 5NE
+                                  street_address: 120-122 Ladbroke Grove
+                                  city: London
+                                  region: Greater London
+                                  postal_code: W10 5NE
+                                  country: GB
+                                geolocation:
+                                  longitude: 51.517301
+                                  latitude: -0.209689
+                                tokens:
+                                  - gbr
+                                  - ladbroke
+                                  - london
+                          - transaction_id: cfb6dd1f4c73e1fc36aac756e12644d7
+                            account_id: 37c633a71237b9a8282e09587109668e
+                            description: JOHN SMITH RENT SHARE
+                            credit_debit_indicator: debit
+                            amount:
+                              value: '375.00'
+                              currency: GBP
+                            date_time: '2022-05-30T00:00:00Z'
+                            status: booked
+                            suggested_description: JOHN SMITH RENT SHARE
+                            transaction_type:
+                              bud_code: BAT
+                              description: Bank Transfer
+                            enrichments:
+                              categories:
+                                l1:
+                                  slug: mortgage_and_rent
+                                  confidence: '0.98'
+                                l2:
+                                  slug: rent
+                                  confidence: '0.98'
+                              names:
+                                - john smith
+                    metadata:
+                      task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                      next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                      next_url_delay: 500
+                sync enrichment response (with Customer Idempotent Identifier):
+                  summary: Synchronous enrichment response (with Customer Idempotent Identifier)
+                  value:
+                    operation_id: v2_ingest_transactions_post
+                    data:
+                      - customer_idempotent_identifier: your_internal_id
+                        enriched_transactions:
+                          - transaction_id: another_transaction_id
+                            account_id: another_account_id
+                            description: paypal* specialty coffee london GBR
+                            credit_debit_indicator: debit
+                            status: pending
+                            suggested_description: Specialty Coffee Supplier Ltd.
+                            suggested_logo: http://url/specialty_coffee_supplier_logo.jpeg
+                            transaction_type:
+                              bud_code: DEB
+                              description: PayPal
+                            amount:
+                              value: '10.99'
+                              currency: GBP
+                            date_time: '2022-05-28T10:00:00Z'
+                            tags:
+                              - online
+                            enrichments:
+                              categories:
+                                l1:
+                                  slug: eating_out
+                                  confidence: '0.99'
+                                l2:
+                                  slug: cafes_and_eating_out
+                                  confidence: '0.98'
+                              merchant:
+                                id: 01cc2d49-6144-46f1-9414-67c99b139a95
+                                slug: specialty_coffee
+                                display_name: Specialty Coffee Supplier Ltd.
+                                logo: http://url/specialty_coffee_supplier_logo.jpeg
+                                tokens:
+                                  - value: speciality coffee
+                                    confidence: '0.98'
+                              processor:
+                                id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                                slug: paypal
+                                display_name: PayPal
+                                logo: http://url/paypal_logo.jpeg
+                                tokens:
+                                  - value: paypal
+                                    confidence: '0.92'
+                              transaction_types:
+                                - card
+                                - debit
+                          - transaction_id: a2294cebb45d2a6e0cfc70d270988d8c
+                            account_id: 37c633a71237b9a8282e09587109668e
+                            description: caffe nero 495 ladbroke london gbr
+                            credit_debit_indicator: debit
+                            status: booked
+                            suggested_description: Caffè Nero
+                            suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf/v2/caffnero.jpeg
+                            transaction_type:
+                              bud_code: DEB
+                              description: Debit card transaction
+                            amount:
+                              value: '3.29'
+                              currency: GBP
+                            date_time: '2022-05-26T10:00:00Z'
+                            merchant_category_code: '5814'
+                            enrichments:
+                              categories:
+                                l1:
+                                  slug: food_and_drink
+                                  confidence: '0.99'
+                                l2:
+                                  slug: coffee
+                                  confidence: '0.99'
+                              merchant:
+                                id: 4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf
+                                slug: caffnero
+                                display_name: Caffè Nero
+                                logo: https://assets.thisisbud.com/datasci-images/merchant_logos/4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf/v1/caffnero.jpeg
+                                tokens:
+                                  - value: caffe nero
+                                    confidence: '1.00'
+                              location:
+                                address:
+                                  address_lines:
+                                    - 120-122 Ladbroke Grove
+                                    - London
+                                    - Greater London
+                                    - W10 5NE
+                                  street_address: 120-122 Ladbroke Grove
+                                  city: London
+                                  region: Greater London
+                                  postal_code: W10 5NE
+                                  country: GB
+                                geolocation:
+                                  longitude: 51.517301
+                                  latitude: -0.209689
+                                tokens:
+                                  - gbr
+                                  - ladbroke
+                                  - london
+                          - transaction_id: cfb6dd1f4c73e1fc36aac756e12644d7
+                            account_id: 37c633a71237b9a8282e09587109668e
+                            description: JOHN SMITH RENT SHARE
+                            credit_debit_indicator: debit
+                            amount:
+                              value: '375.00'
+                              currency: GBP
+                            date_time: '2022-05-30T00:00:00Z'
+                            status: booked
+                            suggested_description: JOHN SMITH RENT SHARE
+                            transaction_type:
+                              bud_code: BAT
+                              description: Bank Transfer
+                            enrichments:
+                              categories:
+                                l1:
+                                  slug: mortgage_and_rent
+                                  confidence: '0.98'
+                                l2:
+                                  slug: rent
+                                  confidence: '0.98'
+                              names:
+                                - john smith
+                    metadata:
+                      task_id: 4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                      next_url: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
+                      next_url_delay: 500
         '202':
           description: A new Task has been created to ingest the given transactions. The generated `task_id` can be used to check the Task's status
           content:
@@ -3884,13 +4114,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TransactionSettlementV3Request'
-            example:
-              - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                transactions:
-                  - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
-                    date_time: '2022-10-11T23:00:00Z'
-                  - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
-                    date_time: '2022-11-11T23:00:00Z'
+            examples:
+              request_with_customer_id:
+                summary: Book transactions request (with Customer ID)
+                value:
+                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                    transactions:
+                      - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                        date_time: '2022-10-11T23:00:00Z'
+                      - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
+                        date_time: '2022-11-11T23:00:00Z'
+              request_with_customer_idempotent_identifier:
+                summary: Book transactions request (with Customer Idempotent Identifier)
+                value:
+                  - customer_idempotent_identifier: your_internal_id
+                    transactions:
+                      - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                        date_time: '2022-10-11T23:00:00Z'
+                      - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
+                        date_time: '2022-11-11T23:00:00Z'
       responses:
         '202':
           description: |
@@ -3972,13 +4214,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TransactionSettlementV3Request'
-            example:
-              - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
-                transactions:
-                  - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
-                    date_time: '2022-10-11T23:00:00Z'
-                  - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
-                    date_time: '2022-11-11T23:00:00Z'
+            examples:
+              request_with_customer_id:
+                summary: Decline transactions request (with Customer ID)
+                value:
+                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                    transactions:
+                      - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                        date_time: '2022-10-11T23:00:00Z'
+                      - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
+                        date_time: '2022-11-11T23:00:00Z'
+              request_with_customer_idempotent_identifier:
+                summary: Decline transactions request (with Customer Idempotent Identifier)
+                value:
+                  - customer_idempotent_identifier: your_internal_id
+                    transactions:
+                      - transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
+                        date_time: '2022-10-11T23:00:00Z'
+                      - transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
+                        date_time: '2022-11-11T23:00:00Z'
       responses:
         '202':
           description: |
@@ -4062,7 +4316,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/IngestStatusV3Response'
               examples:
-                Pending Task:
+                Pending Task (with Customer ID):
+                  summary: Pending Task (with Customer ID)
                   value:
                     operation_id: v3_ingest_status_get
                     data:
@@ -4073,7 +4328,8 @@ paths:
                       status: Pending
                       next_url: /ingestion/v3/tasks/3d592efc-493a-4548-8008-f738fd0877ab
                       next_url_delay: 500
-                Successful Task:
+                Successful Task (with Customer ID):
+                  summary: Successful Task (with Customer ID)
                   value:
                     operation_id: v3_ingest_status_get
                     data:
@@ -4087,11 +4343,53 @@ paths:
                       ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
                       ingest_route: v2_ingest_transactions_post
                       ingest_schema: application/bud-transaction-v3+json
-                Failed Task:
+                Failed Task (with Customer ID):
+                  summary: Failed Task (with Customer ID)
                   value:
                     operation_id: v3_ingest_status_get
                     data:
                       - customer_id: f89ae931-8cb3-4352-ac9e-4e4572fe5026
+                        status: Failed
+                        result: data_mapping_error
+                        error:
+                          accounts[0].currency: 'unexpected currency code: GlkjlkjBP, expected ISO-4217 currency code'
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008
+                      status: Failed
+                      result: data_mapping_error
+                Pending Task (with Customer Idempotent Identifier):
+                  summary: Pending Task (with Customer Idempotent Identifier)
+                  value:
+                    operation_id: v3_ingest_status_get
+                    data:
+                      - customer_idempotent_identifier: your_internal_id
+                        status: Pending
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
+                      status: Pending
+                      next_url: /ingestion/v3/tasks/3d592efc-493a-4548-8008-f738fd0877ab
+                      next_url_delay: 500
+                Successful Task (with Customer Idempotent Identifier):
+                  summary: Successful Task (with Customer Idempotent Identifier)
+                  value:
+                    operation_id: v3_ingest_status_get
+                    data:
+                      - customer_idempotent_identifier: your_internal_id
+                        status: Completed
+                        result: success
+                    metadata:
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
+                      status: Completed
+                      result: success
+                      ingest_request_id: 213be00c-60ce-9af5-95ab-d450a9ffc2ac
+                      ingest_route: v2_ingest_transactions_post
+                      ingest_schema: application/bud-transaction-v3+json
+                Failed Task (with Customer Idempotent Identifier):
+                  summary: Failed Task (with Customer Idempotent Identifier)
+                  value:
+                    operation_id: v3_ingest_status_get
+                    data:
+                      - customer_idempotent_identifier: your_internal_id
                         status: Failed
                         result: data_mapping_error
                         error:
@@ -18839,9 +19137,33 @@ components:
           $ref: '#/components/schemas/OperationId'
         data:
           $ref: '#/components/schemas/ConsentReconfirmation'
+    CustomerID:
+      type: string
+      format: uuid
+      description: A unique identifier for a Customer, as registered on Bud's platform.
+      example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
     CustomerSecret:
       type: string
       description: The Bud Customer secret used to encrypt customer data. This is required only if the customer secret is not already stored with Bud.
+    IngestFirstPartyDataWithCustomerID:
+      title: With Customer ID
+      properties:
+        customer_id:
+          $ref: '#/components/schemas/CustomerID'
+        customer_secret:
+          $ref: '#/components/schemas/CustomerSecret'
+      required:
+        - customer_id
+    IngestFirstPartyDataWithCustomerIdempotentIdentifier:
+      title: With Customer Idempotent Identifier
+      properties:
+        customer_idempotent_identifier:
+          type: string
+          description: |
+            An internal client identifier. If specified, a Bud customer will either be automatically created, or utilised to ingest the given data.
+            This identifier can then be used in place of `X-Customer-Id` across Bud's endpoints.
+      required:
+        - customer_idempotent_identifier
     IngestAccountDetails:
       title: Ingest Account Details
       type: object
@@ -19085,15 +19407,11 @@ components:
       description: A customer with a accounts data.
       type: object
       required:
-        - customer_id
         - accounts
+      oneOf:
+        - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerID'
+        - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerIdempotentIdentifier'
       properties:
-        customer_id:
-          type: string
-          format: uuid
-          description: A unique identifier for a Customer, as registered on Bud's platform.
-        customer_secret:
-          $ref: '#/components/schemas/CustomerSecret'
         accounts:
           type: array
           description: List of accounts that belongs to the customer.
@@ -19369,11 +19687,6 @@ components:
                   customer_idempotent_identifier:
                     type: string
                     description: The `idempotent_identifier` provided when the customer given was created.
-    CustomerID:
-      type: string
-      format: uuid
-      description: A unique identifier for a Customer, as registered on Bud's platform.
-      example: c3339af9-2426-44d4-9c4d-ddb8fd281e23
     SynchronousEnrichmentsList:
       type: array
       description: |
@@ -19552,13 +19865,10 @@ components:
       type: array
       items:
         type: object
-        required:
-          - customer_id
+        oneOf:
+          - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerID'
+          - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerIdempotentIdentifier'
         properties:
-          customer_id:
-            $ref: '#/components/schemas/CustomerID'
-          customer_secret:
-            $ref: '#/components/schemas/CustomerSecret'
           sync_enrichments:
             $ref: '#/components/schemas/SynchronousEnrichmentsList'
           transactions:
@@ -19569,6 +19879,22 @@ components:
               $ref: '#/components/schemas/CustomerTransactionV3'
           transaction_windows:
             $ref: '#/components/schemas/TransactionWindowArray'
+    IngestResponseV3SubTaskWithCustomerID:
+      title: With Customer ID
+      properties:
+        customer_id:
+          $ref: '#/components/schemas/CustomerID'
+      required:
+        - customer_id
+    IngestResponseV3SubTaskWithCustomerIdempotentIdentifier:
+      title: With Customer Idempotent Identifier
+      properties:
+        customer_idempotent_identifier:
+          type: string
+          description: |
+            An internal client identifier. This identifier can then be used in place of `X-Customer-Id` across Bud's endpoints.
+      required:
+        - customer_idempotent_identifier
     schemas-TransactionForSyncIngest:
       title: Transaction
       type: object
@@ -19644,14 +19970,14 @@ components:
           items:
             type: string
     IngestV2SyncResponseData:
-      type: object
       title: Enriched Customer Transactions
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/IngestResponseV3SubTaskWithCustomerID'
+        - $ref: '#/components/schemas/IngestResponseV3SubTaskWithCustomerIdempotentIdentifier'
       required:
-        - customer_id
         - enriched_transactions
       properties:
-        customer_id:
-          $ref: '#/components/schemas/CustomerID'
         enriched_transactions:
           type: array
           items:
@@ -19761,13 +20087,10 @@ components:
       type: array
       items:
         type: object
-        required:
-          - customer_id
+        oneOf:
+          - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerID'
+          - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerIdempotentIdentifier'
         properties:
-          customer_id:
-            $ref: '#/components/schemas/CustomerID'
-          customer_secret:
-            $ref: '#/components/schemas/CustomerSecret'
           transactions:
             type: array
             items:
@@ -19893,14 +20216,12 @@ components:
       title: Customer Ingest Task
       description: A single customer ingest task status
       type: object
+      oneOf:
+        - $ref: '#/components/schemas/IngestResponseV3SubTaskWithCustomerID'
+        - $ref: '#/components/schemas/IngestResponseV3SubTaskWithCustomerIdempotentIdentifier'
       required:
-        - customer_id
         - status
       properties:
-        customer_id:
-          type: string
-          format: uuid
-          description: A unique identifier for a Customer, as registered on Bud's platform.
         status:
           title: Ingest Response Status
           description: Ingest response status.
