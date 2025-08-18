@@ -306,6 +306,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.19.1: 18/08/2025**
+    >- Update the permissions value returned when listing consents
+
     **Version 2.19.0: 12/08/2025**
     >- Add support for use of `customer_idempotent_identifier` field in place of `customer_id` field in __Ingest Accounts__, __Ingest Transactions__, __Book Transactions__, and __Decline Transactions__. This allows for easier integration, and allows customers to automatically be created at the point of ingestion.
 
@@ -18904,7 +18907,7 @@ components:
               - ReadAccounts
               - ReadBalances
               - ReadDirectDebits
-              - ReadParty
+              - ReadParties
               - ReadTransactions
         raw_version:
           type: string
