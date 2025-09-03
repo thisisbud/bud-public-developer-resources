@@ -306,6 +306,13 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.19.3: 03/09/2025**
+    >- Add `updated_after` field to __Retrieve Transactions V2__ metadata.
+    >- Add `deleted` field to __Retrieve Transactions V2__ metadata.
+
+    **Version 2.19.2: 27/08/2025**
+    >- Add `us_account_number` identifier to __Retrieve Accounts V3__
+
     **Version 2.19.1: 18/08/2025**
     >- Update the permissions value returned when listing consents
 
@@ -6992,6 +6999,167 @@ paths:
                           - regular-transaction
                     metadata:
                       results: 2
+                      next_page_token: eyJvZmZzZXQiOjEwMH0
+                Updated After Response:
+                  value:
+                    operation_id: v2_transactions_get
+                    data:
+                      - transaction_id: fbdc28e82f0f137586a526a88ec4a6be
+                        account_id: 5bd9ecaf31fc2d5172fd89cb61b89fc6
+                        provider: BankOfBud
+                        description: tesco store 2613 on 28 may visa
+                        credit_debit_indicator: debit
+                        status: booked
+                        suggested_description: Tesco
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/17ac2742-8c93-4c11-a01f-17ad65b950ce/v2/tesco.jpeg
+                        transaction_type:
+                          bud_code: DEB
+                          description: Debit card transaction
+                        amount:
+                          value: '20.25'
+                          currency: GBP
+                        date_time: '2022-05-28T15:00:00Z'
+                        posted_date_time: '2022-05-29T00:00:00Z'
+                        merchant_category_code: '5411'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: food_and_drink
+                              confidence: '0.99'
+                            l2:
+                              slug: groceries
+                              confidence: '0.99'
+                          merchant:
+                            id: 17ac2742-8c93-4c11-a01f-17ad65b950ce
+                            slug: tesco
+                            display_name: Tesco
+                            logo: https://assets.thisisbud.com/datasci-images/merchant_logos/17ac2742-8c93-4c11-a01f-17ad65b950ce/v1/tesco.jpeg
+                            website: www.tesco.com
+                            tokens:
+                              - value: tesco store
+                                confidence: '1.00'
+                          processor:
+                            id: bd7125f7-1a1e-4aeb-a774-80f86ec989cc
+                            slug: visa
+                            display_name: Visa
+                            logo: https://assets.thisisbud.com/datasci-images/merchant_logos/bd7125f7-1a1e-4aeb-a774-80f86ec989cc/v1/visa.jpeg
+                            website: https://www.paypal.com
+                            tokens:
+                              - value: visa
+                                confidence: '1.00'
+                          location:
+                            address:
+                              address_lines:
+                                - 180 Shepherd's Bush Road
+                                - London
+                                - Greater London
+                                - W6 7NL
+                              street_address: 180 Shepherd's Bush Road
+                              city: London
+                              region: Greater London
+                              postal_code: W6 7NL
+                              country: GB
+                            geolocation:
+                              longitude: 51.497369
+                              latitude: -0.224128
+                          transaction_types:
+                            - card
+                            - debit
+                      - transaction_id: a2294cebb45d2a6e0cfc70d270988d8c
+                        account_id: 37c633a71237b9a8282e09587109668e
+                        provider: BankOfBud
+                        description: caffe nero 495 ladbroke london gbr
+                        credit_debit_indicator: debit
+                        status: booked
+                        suggested_description: Caffè Nero
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf/v2/caffnero.jpeg
+                        transaction_type:
+                          bud_code: DEB
+                          description: Debit card transaction
+                        amount:
+                          value: '3.29'
+                          currency: GBP
+                        date_time: '2022-05-26T10:00:00Z'
+                        posted_date_time: '2022-05-27T00:00:00Z'
+                        merchant_category_code: '5814'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: food_and_drink
+                              confidence: '0.99'
+                            l2:
+                              slug: coffee
+                              confidence: '0.99'
+                          merchant:
+                            id: 4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf
+                            slug: caffnero
+                            display_name: Caffè Nero
+                            logo: https://assets.thisisbud.com/datasci-images/merchant_logos/4d7a77bd-29a1-4b6a-b0b4-04389b5b36bf/v1/caffnero.jpeg
+                            website: www.caffenero.com/uk
+                            tokens:
+                              - value: caffe nero
+                                confidence: '1.00'
+                          location:
+                            address:
+                              address_lines:
+                                - 120-122 Ladbroke Grove
+                                - London
+                                - Greater London
+                                - W10 5NE
+                              street_address: 120-122 Ladbroke Grove
+                              city: London
+                              region: Greater London
+                              postal_code: W10 5NE
+                              country: GB
+                            geolocation:
+                              longitude: 51.517301
+                              latitude: -0.209689
+                            tokens:
+                              - gbr
+                              - ladbroke
+                              - london
+                      - transaction_id: cfb6dd1f4c73e1fc36aac756e12644d7
+                        account_id: 37c633a71237b9a8282e09587109668e
+                        provider: BankOfBud
+                        description: JOHN SMITH RENT SHARE
+                        credit_debit_indicator: debit
+                        status: booked
+                        suggested_description: JOHN SMITH RENT SHARE
+                        transaction_type:
+                          bud_code: BAT
+                          description: Bank Transfer
+                        amount:
+                          value: '375.00'
+                          currency: GBP
+                        date_time: '2022-05-30T00:00:00Z'
+                        posted_date_time: '2022-05-30T00:00:00Z'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: mortgage_and_rent
+                              confidence: '0.98'
+                            l2:
+                              slug: rent
+                              confidence: '0.98'
+                          regularity:
+                            frequency: monthly
+                            predicted_date_times:
+                              - '2022-06-30T00:00:00Z'
+                              - '2022-08-01T00:00:00Z'
+                              - '2022-08-30T00:00:00Z'
+                            group_label: 982cb10a156f53a082840ba72c3ee3291b95379a5c39a9d5972fd50731b169e3
+                          names:
+                            - john smith
+                        tags:
+                          - regular-transaction
+                    metadata:
+                      results: 2
+                      updated_after: '2022-05-29T00:00:00Z'
+                      deleted:
+                        - transaction_id: a8f6d57f-a95e-4925-9775-4c4d85911f4c
+                          at: '2022-06-01T12:59:00Z'
+                        - transaction_id: 4354e288-2f67-43d6-a1de-d6750e0d5f73
+                          at: '2022-06-02T13:12:00Z'
                       next_page_token: eyJvZmZzZXQiOjEwMH0
                 Single Transaction Without Enrichments:
                   value:
@@ -16291,6 +16459,25 @@ components:
             results:
               type: integer
               description: The number of results returned.
+            updated_after:
+              type: string
+              description: The timestamp used to filter results in the query parameter `updated_after`. Only transactions updated after this time are returned.
+            deleted:
+              type: array
+              description: |
+                The `deleted` field is only present when `updated_after` is supplied. It shows the transaction IDs that have been deleted from Bud's platform since the `updated_after` timestamp.
+              items:
+                type: object
+                required:
+                  - transaction_id
+                  - at
+                properties:
+                  transaction_id:
+                    type: string
+                    description: The ID of a transaction that has been deleted.
+                  at:
+                    type: string
+                    description: The timestamp when the transaction was deleted.
             next_page_token:
               type: string
               description: The token required to retrieve the next page of results. Will be omitted if no next page exists.
@@ -21664,6 +21851,12 @@ components:
           type: object
           description: These are wellknown fields which uniquely identify the account.
           properties:
+            us_account_number:
+              type: string
+              description: |
+                The account number associated with this account 
+
+                Example: `...3750`
             uk_sort_code:
               type: string
               description: |
