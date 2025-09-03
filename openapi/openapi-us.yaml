@@ -222,6 +222,13 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.19.3: 03/09/2025**
+    >- Add `updated_after` field to __Retrieve Transactions V2__ metadata.
+    >- Add `deleted` field to __Retrieve Transactions V2__ metadata.
+
+    **Version 2.19.2: 27/08/2025**
+    >- Add `us_account_number` identifier to __Retrieve Accounts V3__
+
     **Version 2.19.0: 12/08/2025**
     >- Add support for use of `customer_idempotent_identifier` field in place of `customer_id` field in __Ingest Accounts__, __Ingest Transactions__, __Book Transactions__, and __Decline Transactions__. This allows for easier integration, and allows customers to automatically be created at the point of ingestion.
 
@@ -5057,6 +5064,142 @@ paths:
                             - debit
                     metadata:
                       results: 2
+                      next_page_token: eyJvZmZzZXQiOjEwMH0
+                Updated After Response:
+                  value:
+                    operation_id: v2_transactions_get
+                    data:
+                      - transaction_id: '692529081002'
+                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                        provider: finicity
+                        description: NETFLIX
+                        credit_debit_indicator: credit
+                        status: booked
+                        suggested_description: Netflix
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/18410e6c-8c81-4ff7-817e-0e7367e811fc/v2/netflix.jpeg
+                        amount:
+                          value: '19.99'
+                          currency: USD
+                        date_time: '2023-08-01T12:02:48Z'
+                        posted_date_time: '2023-08-01T12:02:48Z'
+                        merchant_category_code: '5815'
+                        enrichments:
+                          merchant:
+                            id: 60bf3a60-c872-4f45-909d-c84b140fc6e1
+                            slug: netflix
+                            display_name: Netflix
+                            logo: https://url/netflix.jpeg
+                            tokens:
+                              - value: netflix
+                                confidence: '0.98'
+                            website: http://www.netflix.com
+                          processor:
+                            id: 18f63293-0217-4520-bbf0-071dca7a9d04
+                            slug: paypal
+                            display_name: PayPal
+                            logo: http://url/paypal_logo.jpeg
+                            tokens:
+                              - value: paypal
+                                confidence: '0.96'
+                            website: http://www.paypal.com
+                          categories:
+                            l1:
+                              slug: entertainment
+                              confidence: '0.86'
+                            l2:
+                              slug: media_subscriptions
+                              confidence: '0.86'
+                          regularity:
+                            frequency: monthly
+                            predicted_date_times:
+                              - '2022-09-01T12:02:48Z'
+                              - '2022-10-01T12:02:48Z'
+                              - '2022-11-01T12:02:48Z'
+                            group_label: 13ed070478ef62c3a7baa36c8d042a9d1cdc0fcbb2af93a795f2ad20ad6e9cb5-0
+                        tags:
+                          - online
+                          - regular-transaction
+                      - transaction_id: '692529081000'
+                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                        provider: finicity
+                        description: John Doe
+                        credit_debit_indicator: debit
+                        status: booked
+                        suggested_description: John Doe
+                        amount:
+                          value: '12.77'
+                          currency: USD
+                        date_time: '2023-07-05T12:02:48Z'
+                        posted_date_time: '2023-07-05T12:02:48Z'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: general
+                              confidence: '0.20'
+                            l2:
+                              slug: other_general
+                              confidence: '0.14'
+                          names:
+                            - john doe
+                      - transaction_id: '692529081052'
+                        account_id: 2f5b2055-6253-4cd0-b646-06788342a609
+                        provider: finicity
+                        description: dunkin purchase 06/04 urbana oh
+                        credit_debit_indicator: debit
+                        status: booked
+                        suggested_description: Dunkin' Donuts
+                        suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ad5af5cd-b8ef-4d33-8e71-5875974bfd45/v1/dunkindonuts.jpeg
+                        amount:
+                          value: '2.99'
+                          currency: USD
+                        date_time: '2023-11-10T11:48:05-05:00'
+                        posted_date_time: '2023-11-10T11:48:05-05:00'
+                        merchant_category_code: '5814'
+                        enrichments:
+                          categories:
+                            l1:
+                              slug: food_and_drink
+                              confidence: '0.99'
+                            l2:
+                              slug: eating_out_and_takeaways
+                              confidence: '0.98'
+                          merchant:
+                            id: ba8ef908-b624-4116-8b26-571e48d1bf4c
+                            slug: dunkin
+                            display_name: Dunkin'
+                            logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ba8ef908-b624-4116-8b26-571e48d1bf4c/v3/dunkin.jpeg
+                            tokens:
+                              - value: dunkin
+                                confidence: '1.00'
+                          location:
+                            address:
+                              address_lines:
+                                - 1129 E US Highway 36
+                                - Urbana
+                                - OH
+                                - '43078'
+                              street_address: 1129 E US Highway 36
+                              city: Urbana
+                              region: OH
+                              postal_code: '43078'
+                              country: US
+                            geolocation:
+                              latitude: 40.106604
+                              longitude: -83.729653
+                            tokens:
+                              - oh
+                              - urbana
+                          transaction_types:
+                            - card
+                            - debit
+                    metadata:
+                      results: 2
+                      updated_after: '2023-11-01T00:00:00Z'
+                      deleted:
+                        - transaction_id: a8f6d57f-a95e-4925-9775-4c4d85911f4c
+                          at: '2023-11-02T12:59:00Z'
+                        - transaction_id: 4354e288-2f67-43d6-a1de-d6750e0d5f73
+                          at: '2023-11-03T13:12:00Z'
                       next_page_token: eyJvZmZzZXQiOjEwMH0
                 Single Transaction Without Enrichments:
                   value:
@@ -10859,6 +11002,25 @@ components:
             results:
               type: integer
               description: The number of results returned.
+            updated_after:
+              type: string
+              description: The timestamp used to filter results in the query parameter `updated_after`. Only transactions updated after this time are returned.
+            deleted:
+              type: array
+              description: |
+                The `deleted` field is only present when `updated_after` is supplied. It shows the transaction IDs that have been deleted from Bud's platform since the `updated_after` timestamp.
+              items:
+                type: object
+                required:
+                  - transaction_id
+                  - at
+                properties:
+                  transaction_id:
+                    type: string
+                    description: The ID of a transaction that has been deleted.
+                  at:
+                    type: string
+                    description: The timestamp when the transaction was deleted.
             next_page_token:
               type: string
               description: The token required to retrieve the next page of results. Will be omitted if no next page exists.
@@ -14704,6 +14866,12 @@ components:
           type: object
           description: These are wellknown fields which uniquely identify the account.
           properties:
+            us_account_number:
+              type: string
+              description: |
+                The account number associated with this account 
+
+                Example: `...3750`
             uk_sort_code:
               type: string
               description: |
