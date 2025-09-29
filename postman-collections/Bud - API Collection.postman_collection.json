@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c1c412a0-2066-4747-adfe-023b040adeba",
+		"_postman_id": "72f48a6a-7275-4685-9c27-df0b5f0fe604",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "17522809"
@@ -8460,6 +8460,11 @@
 								"key": "X-Customer-Id",
 								"value": "{{customer_id}}",
 								"type": "text"
+							},
+							{
+								"key": "X-Timezone",
+								"value": "{{timezone}}",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -8854,6 +8859,54 @@
 									"value": null,
 									"disabled": true
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MCP (Model Context Protocol) API",
+			"item": [
+				{
+					"name": "Generate MCP URL",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Client-Id",
+								"value": "{{api_credentials_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Customer-Id",
+								"value": "{{customer_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Timezone",
+								"value": "{{timezone}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{proxy_url}}bud-api-mcp/url",
+							"host": [
+								"{{proxy_url}}bud-api-mcp"
+							],
+							"path": [
+								"url"
 							]
 						}
 					},
