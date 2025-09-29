@@ -222,6 +222,11 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.20.0: 24/09/2025**
+    >- Add __Close Accounts__ endpoint.
+    >- Add __Reopen Accounts__ endpoint.
+    >- Add `status` and `closed_at` fields to __Retrieve Accounts V3__.
+
     **Version 2.19.4: 03/09/2025**
     >- Add `posted_date_time` field to __Ingest Transactions__ request and sync response.
 
@@ -2779,6 +2784,144 @@ paths:
                 '500':
                   description: |
                     The request will be retried shortly. If it fails multiple times, we will stop attempting to deliver the notification for this single event.
+  /ingestion/v3/accounts/close:
+    post:
+      tags:
+        - Ingest First Party Data
+      summary: Close Accounts
+      description: |
+        Close one or more accounts for a given customer. This will set the account status to closed and set the `closed_at` field on the __Retrieve Accounts V3__ response.
+
+        If an account is already closed, then the request will be ignored, and the `closed_at` field will remain unchanged.
+
+        If a 400 response is returned, any accountIDs or customerIDs __not__ defailted in the error response will have been closed succesfully.
+      operationId: v3_ingest_accounts_close_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloseAccountsRequest'
+            examples:
+              With Customer Idempotent Identifier:
+                value:
+                  - customer_idempotent_identifier: your_internal_id
+                    account_ids:
+                      - 275fbbfe-209c-4329-a38b-b324aa386c56
+                    metadata:
+                      as_of: '2025-09-22T14:55:09.254Z'
+              With Customer ID:
+                value:
+                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                    account_ids:
+                      - 275fbbfe-209c-4329-a38b-b324aa386c56
+                    metadata:
+                      as_of: '2025-09-22T14:55:09.254Z'
+      responses:
+        '204':
+          description: All accounts have been closed successfully. Response has no body.
+        '400':
+          description: Bad Request that fails validations on headers and/or payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorWihoutErrRequired'
+              examples:
+                account_not_found_customer_idempotent_identifier:
+                  summary: Account(s) not found (with customer Idempotent Identifier)
+                  value:
+                    operation_id: v3_ingest_accounts_close_post
+                    code_id: failed_validation
+                    message: Accounts not found for one or more customers.
+                    errors:
+                      customer_idempotent_identifier:
+                        your_internal_id:
+                          - 275fbbfe-209c-4329-a38b-b324aa386c56
+                account_not_found_customer_id:
+                  summary: Account(s) not found (with customer ID)
+                  value:
+                    operation_id: v3_ingest_accounts_close_post
+                    code_id: failed_validation
+                    message: Accounts not found for one or more customers.
+                    errors:
+                      customer_ids:
+                        c3339af9-2426-44d4-9c4d-ddb8fd281e23:
+                          - 275fbbfe-209c-4329-a38b-b324aa386c56
+        '401':
+          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
+        5XX:
+          description: An unexpected error occurred on the server side
+  /ingestion/v3/accounts/reopen:
+    post:
+      tags:
+        - Ingest First Party Data
+      summary: Reopen Accounts
+      description: |
+        Reopen one or more accounts for a given customer. This will remove the account status and `closed_at` fields on the __Retrieve Accounts V3__ response.
+
+        If an account is already open, then the request will be ignored and the account is unchanged.
+
+        If a 400 response is returned, any accountIDs or customerIDs __not__ defailted in the error response will have been reopened succesfully.
+      operationId: v3_ingest_accounts_reopen_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReopenAccountsRequest'
+            examples:
+              With Customer Idempotent Identifier:
+                value:
+                  - customer_idempotent_identifier: your_internal_id
+                    account_ids:
+                      - 275fbbfe-209c-4329-a38b-b324aa386c56
+              With Customer ID:
+                value:
+                  - customer_id: c3339af9-2426-44d4-9c4d-ddb8fd281e23
+                    account_ids:
+                      - 275fbbfe-209c-4329-a38b-b324aa386c56
+      responses:
+        '204':
+          description: All accounts have been closed successfully. Response has no body.
+        '400':
+          description: Bad Request that fails validations on headers and/or payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorWihoutErrRequired'
+              examples:
+                account_not_found_customer_idempotent_identifier:
+                  summary: Account(s) not found (with customer Idempotent Identifier)
+                  value:
+                    operation_id: v3_ingest_accounts_reopen_post
+                    code_id: failed_validation
+                    message: Accounts not found for one or more customers.
+                    errors:
+                      customer_idempotent_identifier:
+                        your_internal_id:
+                          - 275fbbfe-209c-4329-a38b-b324aa386c56
+                account_not_found_customer_id:
+                  summary: Account(s) not found (with customer ID)
+                  value:
+                    operation_id: v3_ingest_accounts_reopen_post
+                    code_id: failed_validation
+                    message: Accounts not found for one or more customers.
+                    errors:
+                      customer_ids:
+                        c3339af9-2426-44d4-9c4d-ddb8fd281e23:
+                          - 275fbbfe-209c-4329-a38b-b324aa386c56
+        '401':
+          description: Unauthorized (BearerToken in 'Authorization' header fails the authentication)
+        5XX:
+          description: An unexpected error occurred on the server side
   /v2/ingest/transactions:
     post:
       tags:
@@ -3663,7 +3806,7 @@ paths:
                         error:
                           accounts[0].currency: 'unexpected currency code: GlkjlkjBP, expected ISO-4217 currency code'
                     metadata:
-                      task_id: 3d592efc-493a-4548-8008
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
                       status: Failed
                       result: data_mapping_error
                 Pending Task (with Customer Idempotent Identifier):
@@ -3704,7 +3847,7 @@ paths:
                         error:
                           accounts[0].currency: 'unexpected currency code: GlkjlkjBP, expected ISO-4217 currency code'
                     metadata:
-                      task_id: 3d592efc-493a-4548-8008
+                      task_id: 3d592efc-493a-4548-8008-f738fd0877ab
                       status: Failed
                       result: data_mapping_error
         '401':
@@ -3738,7 +3881,6 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryCurrency'
         - $ref: '#/components/parameters/QueryProvider'
         - in: query
@@ -3840,6 +3982,8 @@ paths:
                         suggested_name: Checking Account 8990
                         account_type: current_account
                         usage_type: personal
+                        status: closed
+                        closed_at: '2023-01-12T00:00:00Z'
                         provider: capital one
                         identifiers:
                           us_account_number: '33818990'
@@ -3866,7 +4010,7 @@ paths:
                       parameters:
                         currencies:
                           - USD
-                      results: 1
+                      results: 2
         '400':
           description: The request contains an invalid payload.
           content:
@@ -3881,16 +4025,6 @@ paths:
                     message: Invalid request payload.
                     errors:
                       X-Customer-Id: not present
-                CustomerID and CustomerSecret Not Sent:
-                  value:
-                    operation_id: financial_v3_accounts_get
-                    code_id: failed_validation
-                    message: Invalid request payload.
-                    errors:
-                      X-Customer-Id:
-                        - not present
-                      X-Customer-Secret:
-                        - not present
         '401':
           description: Unauthorised
           content:
@@ -3926,7 +4060,6 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/PathAccountID'
       responses:
         '200':
@@ -4027,16 +4160,6 @@ paths:
                     message: Invalid request payload.
                     errors:
                       X-Customer-Id: not present
-                CustomerID and CustomerSecret Not Sent:
-                  value:
-                    operation_id: financial_v3_accounts_account_id_get
-                    code_id: failed_validation
-                    message: Invalid request payload.
-                    errors:
-                      X-Customer-Id:
-                        - not present
-                      X-Customer-Secret:
-                        - not present
         '401':
           description: Unauthorised
           content:
@@ -4057,438 +4180,6 @@ paths:
                 operation_id: unknown
                 code_id: unknown
                 message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
-  /financial/v2/accounts:
-    get:
-      tags:
-        - Retrieve Financial Data
-      summary: Retrieve Accounts V2
-      deprecated: true
-      description: |
-        Retrieves a list of a customer's connected accounts. The result can be filtered using the parameters outlined below.
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of April 2025 - please complete your migration to the Retrieve Accounts V3 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-      operationId: financial_v2_accounts
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/QueryCurrencyUSD'
-        - $ref: '#/components/parameters/QueryProvider'
-        - in: query
-          name: account_type
-          schema:
-            type: string
-          example: current_account
-          description: |
-            Use this parameter to filter the results returned on the `account_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `account_type` will be returned.
-
-            Currently supported values include (but are not necessarily limited to):
-              - `charge_card`
-              - `credit_card`
-              - `current_account`
-              - `e_money`
-              - `investment`
-              - `loan`
-              - `mortgage`
-              - `other`
-              - `pre_paid_card`
-              - `savings`
-        - in: query
-          name: usage_type
-          schema:
-            type: string
-          example: personal
-          description: |
-            Use this parameter to filter the results returned on the `usage_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `usage_type` will be returned.
-
-            Currently supported values include (but are not necessarily limited to):
-              - `personal`
-              - `business`
-        - in: query
-          name: holder_relationship_type
-          schema:
-            type: string
-          example: joint
-          description: |
-            Use this parameter to filter the results returned on the `holder_relationship_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `holder_relationship_type` will be returned.
-
-            Currently supported values include (but are not necessarily limited to):
-              - `sole`
-              - `joint`
-              - `delegate`
-              - `unknown`
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/USListAccountsV2Response'
-              examples:
-                Account Data:
-                  value:
-                    operation_id: financial_v2_accounts
-                    data:
-                      - account_id: RxsYshVGded4JeilkXgWKdXA
-                        currency: USD
-                        holder:
-                          name: David Smith
-                          relationship: unknown
-                        account_name: Plaid Checking
-                        account_type: current_account
-                        usage_type: personal
-                        provider: plaid
-                        identifiers:
-                          plaid_account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk7
-                          plaid_official_name: Plaid Gold Standard 0% Interest Checking
-                        balances:
-                          - date: '2023-01-12T00:00:00Z'
-                            amount:
-                              value: '3552.61'
-                              currency: USD
-                            type: interim_cleared
-                            credit_debit_indicator: credit
-                          - date: '2023-01-12T00:00:00Z'
-                            amount:
-                              value: '3552.61'
-                              currency: USD
-                            type: interim_cleared
-                            credit_debit_indicator: credit
-                        credit_lines:
-                          - date: '2023-01-12T00:00:00Z'
-                            type: pre_agreed
-                            amount:
-                              value: '1000.00'
-                              currency: USD
-                    metadata:
-                      parameters:
-                        currencies:
-                          - USD
-                      result_count: 1
-        '400':
-          description: The request contains an invalid payload.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              examples:
-                CustomerID Not Sent:
-                  value:
-                    operation_id: financial_v2_accounts
-                    code_id: failed_validation
-                    message: Invalid request payload.
-                    errors:
-                      X-Customer-Id: not present
-        '401':
-          description: Unauthorised
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Unauthorised request
-        '500':
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
-  /financial/v2/balances:
-    get:
-      tags:
-        - Retrieve Financial Data
-      summary: Retrieve Balances Over Time
-      description: |
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of April 2025 - please complete your migration to the Retrieve Balances Over Time V3 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-
-        List the balances of each bank account for a customer across all ingestion sources. Ordered by balance date.
-
-        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` 
-        and `from` dates provided. It then checks all the transactions within this range, calculating the balance at 
-        the end of each day.
-
-        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the 
-        account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint
-        returns an empty list.
-
-        You can only request balances within transaction windows, therefore if you ingest transactions without a 
-        transaction window, you won't be able to request balance for that time range. However those transactions will be
-        used to calculate the balance as well.
-
-        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the 
-        data supplied from this service by including the transaction_window field upon account ingestion.
-
-        Results are limited to up to 5000 balance items across all accounts.
-      operationId: financial_v2_balances_get
-      deprecated: true
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/QueryFromBudDate'
-        - $ref: '#/components/parameters/QueryToBudDate'
-        - in: query
-          name: granularity
-          schema:
-            type: string
-          example: daily
-          description: |
-            Specifies in what interval the balance over time should be retrieved.
-
-            Currently supported values include (but are not necessarily limited to):
-              - `daily`
-              - `weekly`
-              - `biweekly`
-              - `monthly`
-              - `quarterly`
-              - `six_monthly`
-              - `annually`
-
-            Defaults to `weekly`.
-        - $ref: '#/components/parameters/QueryDateField'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetBalancesResponse'
-              example:
-                operation_id: financial_v2_balances_get
-                data:
-                  - account_id: 705e95fea8312d9a9b227b682033d55f
-                    balances:
-                      - date: '2022-11-15T23:59:59Z'
-                        booked:
-                          amount:
-                            value: '900.00'
-                            currency: USD
-                          type: interim_booked
-                          credit_debit_indicator: credit
-                        pending:
-                          amount:
-                            value: '850.00'
-                            currency: USD
-                          type: expected
-                          credit_debit_indicator: credit
-                      - date: '2022-11-14T23:59:59Z'
-                        booked:
-                          amount:
-                            value: '950.00'
-                            currency: USD
-                          type: interim_booked
-                          credit_debit_indicator: credit
-                        pending:
-                          amount:
-                            value: '900.00'
-                            currency: USD
-                          type: expected
-                          credit_debit_indicator: credit
-                  - account_id: 9df0b46c8ab58277abc432fee26067ad
-                    balances:
-                      - date: '2022-11-15T23:59:59Z'
-                        booked:
-                          amount:
-                            value: '500'
-                            currency: JPY
-                          type: interim_booked
-                          credit_debit_indicator: credit
-                metadata:
-                  accounts:
-                    5b271e24-9ea5-4d7e-b5da-64f01d32db22:
-                      balance_count: 2
-                      from: '2022-11-14T23:59:59Z'
-                      to: '2022-11-15T23:59:59Z'
-                      max_balance:
-                        value: '500.00'
-                        currency: JPY
-                      min_balance:
-                        value: '200.00'
-                        currency: USD
-                    b6e9ea3c-71f9-4572-983a-3e5e85470dad:
-                      balance_count: 1
-                      from: '2022-11-15T23:59:59Z'
-                      to: '2022-11-15T23:59:59Z'
-                      max_balance:
-                        value: '500.12'
-                        currency: USD
-                      min_balance:
-                        value: '0.00'
-                        currency: USD
-                  parameters:
-                    from: '2020-12-22T00:00:00Z'
-                    to: '2022-11-15T00:00:00Z'
-                    granularity: daily
-        '400':
-          description: The request contains an invalid payload.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-        '401':
-          description: An unauthenticated request was received.
-        '500':
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: financial_v2_balances_get
-                code_id: internal_error
-                message: Internal server error has occurred.
-  /financial/v2/accounts/{account_id}/balances:
-    get:
-      tags:
-        - Retrieve Financial Data
-      summary: Retrieve Balances Over Time By Account
-      description: |
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of April 2025 - please complete your migration to the Retrieve Balances Over Time By Account V3 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-
-        List the balances of a specific bank account for a customer across all ingestion sources. Ordered by balance 
-        date.
-
-        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` 
-        and `from` dates provided. It then checks all the transactions within this range, calculating the balance at 
-        the end of each day.
-
-        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the 
-        account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint
-        returns an empty list.
-
-        You can only request balances within transaction windows, therefore if you ingest transactions without a 
-        transaction window, you won't be able to request balance for that time range. However those transactions will be
-        used to calculate the balance as well.
-
-        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the 
-        data supplied from this service by including the transaction_window field upon account ingestion.
-
-        Results are limited to up to 5000 balance items.
-      operationId: financial_v2_accounts_balances_get
-      deprecated: true
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/QueryFromBudDate'
-        - $ref: '#/components/parameters/QueryToBudDate'
-        - $ref: '#/components/parameters/PathAccountID'
-        - in: query
-          name: granularity
-          schema:
-            type: string
-          example: daily
-          description: |
-            Specifies in what interval the balance over time should be retrieved.
-
-            Currently supported values include (but are not necessarily limited to):
-              - `daily`
-              - `weekly`
-              - `biweekly`
-              - `monthly`
-              - `quarterly`
-              - `six_monthly`
-              - `annually`
-
-            Defaults to `weekly`.
-        - $ref: '#/components/parameters/QueryDateField'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetBalancesForAccountIDResponse'
-              example:
-                operation_id: financial_v2_accounts_balances_get
-                data:
-                  - date: '2022-11-15T23:59:59Z'
-                    booked:
-                      amount:
-                        value: '900.00'
-                        currency: USD
-                      type: interim_booked
-                      credit_debit_indicator: credit
-                    pending:
-                      amount:
-                        value: '850.00'
-                        currency: USD
-                      type: expected
-                      credit_debit_indicator: credit
-                  - date: '2022-11-14T23:59:59Z'
-                    booked:
-                      amount:
-                        value: '950.00'
-                        currency: USD
-                      type: interim_booked
-                      credit_debit_indicator: credit
-                    pending:
-                      amount:
-                        value: '900.00'
-                        currency: USD
-                      type: expected
-                      credit_debit_indicator: credit
-                metadata:
-                  accounts:
-                    balance_count: 2
-                    from: '2022-11-14T23:59:59Z'
-                    to: '2022-11-15T23:59:59Z'
-                    max_balance:
-                      value: '500.12'
-                      currency: USD
-                    min_balance:
-                      value: '0.00'
-                      currency: USD
-                  parameters:
-                    from: '2020-12-22T00:00:00Z'
-                    to: '2022-11-15T00:00:00Z'
-                    granularity: daily
-        '400':
-          description: The request contains an invalid payload.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-        '401':
-          description: An unauthenticated request was received.
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestNotFoundResponse'
-              example:
-                operation_id: financial_v2_accounts_balances_get
-                code_id: account_not_found
-                message: The specified account could not be found. Please check the account identifier is correct. The account might be closed or suspended.
-        '500':
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: financial_v2_accounts_balances_get
-                code_id: internal_error
-                message: Internal server error has occurred.
   /financial/v3/balances:
     get:
       tags:
@@ -4509,7 +4200,6 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryFromBudDate'
         - $ref: '#/components/parameters/QueryToBudDate'
         - in: query
@@ -4546,23 +4236,23 @@ paths:
                         booked:
                           amount:
                             value: '900.00'
-                            currency: GBP
+                            currency: USD
                           credit_debit_indicator: credit
                         pending:
                           amount:
                             value: '850.00'
-                            currency: GBP
+                            currency: USD
                           credit_debit_indicator: credit
                       - date: '2022-11-14T23:59:59Z'
                         booked:
                           amount:
                             value: '950.00'
-                            currency: GBP
+                            currency: USD
                           credit_debit_indicator: credit
                         pending:
                           amount:
                             value: '900.00'
-                            currency: GBP
+                            currency: USD
                           credit_debit_indicator: credit
                   - account_id: 9df0b46c8ab58277abc432fee26067ad
                     balances:
@@ -4570,12 +4260,12 @@ paths:
                         booked:
                           amount:
                             value: '500'
-                            currency: JPY
+                            currency: USD
                           credit_debit_indicator: credit
                         pending:
                           amount:
                             value: '500'
-                            currency: JPY
+                            currency: USD
                           credit_debit_indicator: credit
                 metadata:
                   accounts:
@@ -4585,20 +4275,20 @@ paths:
                       to: '2022-11-15T23:59:59Z'
                       max_balance:
                         value: '500.00'
-                        currency: JPY
+                        currency: USD
                       min_balance:
                         value: '200.00'
-                        currency: GBP
+                        currency: USD
                     b6e9ea3c-71f9-4572-983a-3e5e85470dad:
                       balance_count: 1
                       from: '2022-11-15T23:59:59Z'
                       to: '2022-11-15T23:59:59Z'
                       max_balance:
                         value: '500.12'
-                        currency: GBP
+                        currency: USD
                       min_balance:
                         value: '0.00'
-                        currency: GBP
+                        currency: USD
                   parameters:
                     from: '2020-12-22T00:00:00Z'
                     to: '2022-11-15T00:00:00Z'
@@ -4641,7 +4331,6 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryFromBudDate'
         - $ref: '#/components/parameters/QueryToBudDate'
         - $ref: '#/components/parameters/PathAccountID'
@@ -4677,23 +4366,23 @@ paths:
                     booked:
                       amount:
                         value: '900.00'
-                        currency: GBP
+                        currency: USD
                       credit_debit_indicator: credit
                     pending:
                       amount:
                         value: '850.00'
-                        currency: GBP
+                        currency: USD
                       credit_debit_indicator: credit
                   - date: '2022-11-14T23:59:59Z'
                     booked:
                       amount:
                         value: '950.00'
-                        currency: GBP
+                        currency: USD
                       credit_debit_indicator: credit
                     pending:
                       amount:
                         value: '900.00'
-                        currency: GBP
+                        currency: USD
                       credit_debit_indicator: credit
                 metadata:
                   accounts:
@@ -4702,10 +4391,10 @@ paths:
                     to: '2022-11-15T23:59:59Z'
                     max_balance:
                       value: '500.12'
-                      currency: GBP
+                      currency: USD
                     min_balance:
                       value: '0.00'
-                      currency: GBP
+                      currency: USD
                   parameters:
                     from: '2020-12-22T00:00:00Z'
                     to: '2022-11-15T00:00:00Z'
@@ -4738,98 +4427,6 @@ paths:
                 operation_id: financial_v3_accounts_balances_get
                 code_id: internal_error
                 message: Internal server error has occurred.
-  /financial/v2/accounts/{account_id}:
-    get:
-      tags:
-        - Retrieve Financial Data
-      summary: Retrieve Account By ID V2
-      deprecated: true
-      description: |
-        Retrieves a customer's connected account by its ID.
-
-        > ❗️ Deprecation:
-        >
-        > Support will cease for this endpoint on the 1st of April 2025 - please complete your migration to the Retrieve Accounts V3 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
-      operationId: financial_v2_accounts_account_id
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/PathAccountID'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RetrieveAccountByIDV2Response'
-              examples:
-                Single Holder Personal Account:
-                  value:
-                    operation_id: financial_v2_accounts_account_id
-                    data:
-                      account_id: RxsYshVGded4JeilkXgWKdXA
-                      currency: USD
-                      holder:
-                        name: David Smith
-                        relationship: unknown
-                      account_name: Plaid Checking
-                      account_type: current_account
-                      provider: plaid
-                      identifiers:
-                        plaid_account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk7
-                        plaid_official_name: Plaid Gold Standard 0% Interest Checking
-                      balance:
-                        date: '2023-01-12T00:00:00Z'
-                        booked:
-                          amount:
-                            value: '3552.61'
-                            currency: USD
-                          credit_debit_indicator: debit
-                        credit_limit:
-                          value: '1000.00'
-                          currency: USD
-                    metadata:
-                      parameters:
-                        currencies:
-                          - USD
-                      result_count: 1
-        '400':
-          description: The request contains an invalid payload.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              examples:
-                CustomerID Not Sent:
-                  value:
-                    operation_id: financial_v2_accounts_account_id
-                    code_id: failed_validation
-                    message: Invalid request payload.
-                    errors:
-                      X-Customer-Id: not present
-        '401':
-          description: Unauthorised
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Unauthorised request
-        '500':
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
   /financial/v2/transactions:
     get:
       tags:
@@ -5239,6 +4836,572 @@ paths:
           description: The request uses an unexpected HTTP method.
         5XX:
           description: An unexpected error occurred on the server side.
+  /financial/v2/accounts:
+    get:
+      tags:
+        - Retrieve Financial Data
+      summary: Retrieve Accounts V2
+      deprecated: true
+      description: |
+        Retrieves a list of a customer's connected accounts. The result can be filtered using the parameters outlined below.
+
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of April 2025 - please complete your migration to the Retrieve Accounts V3 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
+      operationId: financial_v2_accounts
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/QueryCurrencyUSD'
+        - $ref: '#/components/parameters/QueryProvider'
+        - in: query
+          name: account_type
+          schema:
+            type: string
+          example: current_account
+          description: |
+            Use this parameter to filter the results returned on the `account_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `account_type` will be returned.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `charge_card`
+              - `credit_card`
+              - `current_account`
+              - `e_money`
+              - `investment`
+              - `loan`
+              - `mortgage`
+              - `other`
+              - `pre_paid_card`
+              - `savings`
+        - in: query
+          name: usage_type
+          schema:
+            type: string
+          example: personal
+          description: |
+            Use this parameter to filter the results returned on the `usage_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `usage_type` will be returned.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `personal`
+              - `business`
+        - in: query
+          name: holder_relationship_type
+          schema:
+            type: string
+          example: joint
+          description: |
+            Use this parameter to filter the results returned on the `holder_relationship_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `holder_relationship_type` will be returned.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `sole`
+              - `joint`
+              - `delegate`
+              - `unknown`
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/USListAccountsV2Response'
+              examples:
+                Account Data:
+                  value:
+                    operation_id: financial_v2_accounts
+                    data:
+                      - account_id: RxsYshVGded4JeilkXgWKdXA
+                        currency: USD
+                        holder:
+                          name: David Smith
+                          relationship: unknown
+                        account_name: Plaid Checking
+                        account_type: current_account
+                        usage_type: personal
+                        provider: plaid
+                        identifiers:
+                          plaid_account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk7
+                          plaid_official_name: Plaid Gold Standard 0% Interest Checking
+                        balances:
+                          - date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '3552.61'
+                              currency: USD
+                            type: interim_cleared
+                            credit_debit_indicator: credit
+                          - date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '3552.61'
+                              currency: USD
+                            type: interim_cleared
+                            credit_debit_indicator: credit
+                        credit_lines:
+                          - date: '2023-01-12T00:00:00Z'
+                            type: pre_agreed
+                            amount:
+                              value: '1000.00'
+                              currency: USD
+                    metadata:
+                      parameters:
+                        currencies:
+                          - USD
+                      result_count: 1
+                Closed Account Data:
+                  value:
+                    operation_id: financial_v2_accounts
+                    data:
+                      - account_id: RxsYshVGded4JeilkXgWKdXA
+                        currency: USD
+                        holder:
+                          name: David Smith
+                          relationship: unknown
+                        account_name: Plaid Checking
+                        account_type: current_account
+                        usage_type: personal
+                        status: closed
+                        closed_at: '2023-10-01T12:00:00Z'
+                        provider: plaid
+                        identifiers:
+                          plaid_account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk7
+                          plaid_official_name: Plaid Gold Standard 0% Interest Checking
+                        balances:
+                          - date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '3552.61'
+                              currency: USD
+                            type: interim_cleared
+                            credit_debit_indicator: credit
+                          - date: '2023-01-12T00:00:00Z'
+                            amount:
+                              value: '3552.61'
+                              currency: USD
+                            type: interim_cleared
+                            credit_debit_indicator: credit
+                        credit_lines:
+                          - date: '2023-01-12T00:00:00Z'
+                            type: pre_agreed
+                            amount:
+                              value: '1000.00'
+                              currency: USD
+                    metadata:
+                      parameters:
+                        currencies:
+                          - USD
+                      result_count: 1
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                CustomerID Not Sent:
+                  value:
+                    operation_id: financial_v2_accounts
+                    code_id: failed_validation
+                    message: Invalid request payload.
+                    errors:
+                      X-Customer-Id: not present
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Unauthorised request
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
+  /financial/v2/accounts/{account_id}:
+    get:
+      tags:
+        - Retrieve Financial Data
+      summary: Retrieve Account By ID V2
+      deprecated: true
+      description: |
+        Retrieves a customer's connected account by its ID.
+
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of April 2025 - please complete your migration to the Retrieve Accounts V3 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
+      operationId: financial_v2_accounts_account_id
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/PathAccountID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveAccountByIDV2Response'
+              examples:
+                Single Holder Personal Account:
+                  value:
+                    operation_id: financial_v2_accounts_account_id
+                    data:
+                      account_id: RxsYshVGded4JeilkXgWKdXA
+                      currency: USD
+                      holder:
+                        name: David Smith
+                        relationship: unknown
+                      account_name: Plaid Checking
+                      account_type: current_account
+                      provider: plaid
+                      identifiers:
+                        plaid_account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk7
+                        plaid_official_name: Plaid Gold Standard 0% Interest Checking
+                      balance:
+                        date: '2023-01-12T00:00:00Z'
+                        booked:
+                          amount:
+                            value: '3552.61'
+                            currency: USD
+                          credit_debit_indicator: debit
+                        credit_limit:
+                          value: '1000.00'
+                          currency: USD
+                    metadata:
+                      parameters:
+                        currencies:
+                          - USD
+                      result_count: 1
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                CustomerID Not Sent:
+                  value:
+                    operation_id: financial_v2_accounts_account_id
+                    code_id: failed_validation
+                    message: Invalid request payload.
+                    errors:
+                      X-Customer-Id: not present
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Unauthorised request
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
+  /financial/v2/balances:
+    get:
+      tags:
+        - Retrieve Financial Data
+      summary: Retrieve Balances Over Time
+      description: |
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of April 2025 - please complete your migration to the Retrieve Balances Over Time V3 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
+
+        List the balances of each bank account for a customer across all ingestion sources. Ordered by balance date.
+
+        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` 
+        and `from` dates provided. It then checks all the transactions within this range, calculating the balance at 
+        the end of each day.
+
+        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the 
+        account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint
+        returns an empty list.
+
+        You can only request balances within transaction windows, therefore if you ingest transactions without a 
+        transaction window, you won't be able to request balance for that time range. However those transactions will be
+        used to calculate the balance as well.
+
+        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the 
+        data supplied from this service by including the transaction_window field upon account ingestion.
+
+        Results are limited to up to 5000 balance items across all accounts.
+      operationId: financial_v2_balances_get
+      deprecated: true
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/QueryFromBudDate'
+        - $ref: '#/components/parameters/QueryToBudDate'
+        - in: query
+          name: granularity
+          schema:
+            type: string
+          example: daily
+          description: |
+            Specifies in what interval the balance over time should be retrieved.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `daily`
+              - `weekly`
+              - `biweekly`
+              - `monthly`
+              - `quarterly`
+              - `six_monthly`
+              - `annually`
+
+            Defaults to `weekly`.
+        - $ref: '#/components/parameters/QueryDateField'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBalancesResponse'
+              example:
+                operation_id: financial_v2_balances_get
+                data:
+                  - account_id: 705e95fea8312d9a9b227b682033d55f
+                    balances:
+                      - date: '2022-11-15T23:59:59Z'
+                        booked:
+                          amount:
+                            value: '900.00'
+                            currency: USD
+                          type: interim_booked
+                          credit_debit_indicator: credit
+                        pending:
+                          amount:
+                            value: '850.00'
+                            currency: USD
+                          type: expected
+                          credit_debit_indicator: credit
+                      - date: '2022-11-14T23:59:59Z'
+                        booked:
+                          amount:
+                            value: '950.00'
+                            currency: USD
+                          type: interim_booked
+                          credit_debit_indicator: credit
+                        pending:
+                          amount:
+                            value: '900.00'
+                            currency: USD
+                          type: expected
+                          credit_debit_indicator: credit
+                  - account_id: 9df0b46c8ab58277abc432fee26067ad
+                    balances:
+                      - date: '2022-11-15T23:59:59Z'
+                        booked:
+                          amount:
+                            value: '500'
+                            currency: USD
+                          type: interim_booked
+                          credit_debit_indicator: credit
+                metadata:
+                  accounts:
+                    5b271e24-9ea5-4d7e-b5da-64f01d32db22:
+                      balance_count: 2
+                      from: '2022-11-14T23:59:59Z'
+                      to: '2022-11-15T23:59:59Z'
+                      max_balance:
+                        value: '500.00'
+                        currency: USD
+                      min_balance:
+                        value: '200.00'
+                        currency: USD
+                    b6e9ea3c-71f9-4572-983a-3e5e85470dad:
+                      balance_count: 1
+                      from: '2022-11-15T23:59:59Z'
+                      to: '2022-11-15T23:59:59Z'
+                      max_balance:
+                        value: '500.12'
+                        currency: USD
+                      min_balance:
+                        value: '0.00'
+                        currency: USD
+                  parameters:
+                    from: '2020-12-22T00:00:00Z'
+                    to: '2022-11-15T00:00:00Z'
+                    granularity: daily
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: An unauthenticated request was received.
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: financial_v2_balances_get
+                code_id: internal_error
+                message: Internal server error has occurred.
+  /financial/v2/accounts/{account_id}/balances:
+    get:
+      tags:
+        - Retrieve Financial Data
+      summary: Retrieve Balances Over Time By Account
+      description: |
+        > ❗️ Deprecation:
+        >
+        > Support will cease for this endpoint on the 1st of April 2025 - please complete your migration to the Retrieve Balances Over Time By Account V3 endpoint by that point in time. For further details, contact your Bud account manager or email help@thisisbud.com.
+
+        List the balances of a specific bank account for a customer across all ingestion sources. Ordered by balance 
+        date.
+
+        It calculates the balance for each date, by iterating from the date the account was last refreshed to the `to` 
+        and `from` dates provided. It then checks all the transactions within this range, calculating the balance at 
+        the end of each day.
+
+        This endpoint limits the date from which it gets balances by the oldest `transaction_window` on the 
+        account. If `transaction_windows` are not present, it is not possible to calculate balances and the endpoint
+        returns an empty list.
+
+        You can only request balances within transaction windows, therefore if you ingest transactions without a 
+        transaction window, you won't be able to request balance for that time range. However those transactions will be
+        used to calculate the balance as well.
+
+        For users ingesting data via the `Ingest Accounts` endpoint, you can increase the range and accuracy of the 
+        data supplied from this service by including the transaction_window field upon account ingestion.
+
+        Results are limited to up to 5000 balance items.
+      operationId: financial_v2_accounts_balances_get
+      deprecated: true
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/QueryFromBudDate'
+        - $ref: '#/components/parameters/QueryToBudDate'
+        - $ref: '#/components/parameters/PathAccountID'
+        - in: query
+          name: granularity
+          schema:
+            type: string
+          example: daily
+          description: |
+            Specifies in what interval the balance over time should be retrieved.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `daily`
+              - `weekly`
+              - `biweekly`
+              - `monthly`
+              - `quarterly`
+              - `six_monthly`
+              - `annually`
+
+            Defaults to `weekly`.
+        - $ref: '#/components/parameters/QueryDateField'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBalancesForAccountIDResponse'
+              example:
+                operation_id: financial_v2_accounts_balances_get
+                data:
+                  - date: '2022-11-15T23:59:59Z'
+                    booked:
+                      amount:
+                        value: '900.00'
+                        currency: USD
+                      type: interim_booked
+                      credit_debit_indicator: credit
+                    pending:
+                      amount:
+                        value: '850.00'
+                        currency: USD
+                      type: expected
+                      credit_debit_indicator: credit
+                  - date: '2022-11-14T23:59:59Z'
+                    booked:
+                      amount:
+                        value: '950.00'
+                        currency: USD
+                      type: interim_booked
+                      credit_debit_indicator: credit
+                    pending:
+                      amount:
+                        value: '900.00'
+                        currency: USD
+                      type: expected
+                      credit_debit_indicator: credit
+                metadata:
+                  accounts:
+                    balance_count: 2
+                    from: '2022-11-14T23:59:59Z'
+                    to: '2022-11-15T23:59:59Z'
+                    max_balance:
+                      value: '500.12'
+                      currency: USD
+                    min_balance:
+                      value: '0.00'
+                      currency: USD
+                  parameters:
+                    from: '2020-12-22T00:00:00Z'
+                    to: '2022-11-15T00:00:00Z'
+                    granularity: daily
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: An unauthenticated request was received.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestNotFoundResponse'
+              example:
+                operation_id: financial_v2_accounts_balances_get
+                code_id: account_not_found
+                message: The specified account could not be found. Please check the account identifier is correct. The account might be closed or suspended.
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: financial_v2_accounts_balances_get
+                code_id: internal_error
+                message: Internal server error has occurred.
   /corrections/v2/categories:
     post:
       tags:
@@ -5318,7 +5481,6 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/CustomerSecret'
       requestBody:
         required: true
         content:
@@ -5366,7 +5528,7 @@ paths:
                         suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/9f967c91-7cf5-46a4-bc0b-92541a4ea7da/v1/pactcoffee.jpeg
                         amount:
                           value: '10.99'
-                          currency: GBP
+                          currency: USD
                         date_time: '2022-05-28T10:00:00Z'
                         posted_date_time: '2022-05-29T00:00:00Z'
                         merchant_category_code: '5814'
@@ -5442,7 +5604,7 @@ paths:
                         suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/9f967c91-7cf5-46a4-bc0b-92541a4ea7da/v1/pactcoffee.jpeg
                         amount:
                           value: '10.99'
-                          currency: GBP
+                          currency: USD
                         date_time: '2022-05-28T10:00:00Z'
                         posted_date_time: '2022-05-29T00:00:00Z'
                         merchant_category_code: '5814'
@@ -5508,7 +5670,7 @@ paths:
                         suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/17ac2742-8c93-4c11-a01f-17ad65b950ce/v2/tesco.jpeg
                         amount:
                           value: '50.23'
-                          currency: GBP
+                          currency: USD
                         date_time: '2022-05-26T10:00:00Z'
                         posted_date_time: '2022-05-27T00:00:00Z'
                         merchant_category_code: '5411'
@@ -5807,7 +5969,6 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryExcludeSource'
         - $ref: '#/components/parameters/PathTransactionID'
       responses:
@@ -5988,7 +6149,6 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/CustomerSecret'
         - $ref: '#/components/parameters/QueryExcludeSource'
         - $ref: '#/components/parameters/PathTransactionID'
       responses:
@@ -11553,9 +11713,8 @@ components:
                 - merchants
               properties:
                 url:
-                  description: A link to the transactions used in calculating the insight.
+                  description: A path to the transactions used in calculating the insight.
                   type: string
-                  format: url
                 results:
                   description: The number of transactions used in calculating the insight
                   type: integer
@@ -11680,7 +11839,6 @@ components:
           $ref: '#/components/schemas/TransactionFilter'
         url:
           type: string
-          format: url
     InsightMatchedTransactionSearch:
       title: Insight Search Term
       description: A search term which has been detected in the insight text. This can be exposed as an interaction for the customer using the links & text positions provided.
@@ -11694,7 +11852,6 @@ components:
           $ref: '#/components/schemas/TransactionFilter'
         url:
           type: string
-          format: url
         text_positions:
           type: array
           description: All byte positions of the search term in the insight text (assuming utf-16 string encoding).
@@ -13633,8 +13790,7 @@ components:
           description: Can be used with the transaction status endpoint to retrieve the status of the full enriched process
         next_url:
           type: string
-          format: url
-          description: The URL to call to obtain the current status of the task.
+          description: The path to call to obtain the current status of the task.
           example: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
         next_url_delay:
           type: number
@@ -13875,6 +14031,57 @@ components:
                   customer_idempotent_identifier:
                     type: string
                     description: The `idempotent_identifier` provided when the customer given was created.
+    CloseAccountsRequest:
+      title: Close Accounts Request
+      type: array
+      items:
+        type: object
+        oneOf:
+          - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerID'
+          - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerIdempotentIdentifier'
+        properties:
+          account_ids:
+            type: array
+            items:
+              type: string
+          metadata:
+            type: object
+            properties:
+              as_of:
+                type: string
+                example: '2025-09-24T14:55:09Z'
+                description: The datetime that the accounts closed in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339). If not provided, the current datetime will be used.
+    BadRequestErrorWihoutErrRequired:
+      type: object
+      title: JSON Decoding Error
+      required:
+        - operation_id
+        - code_id
+        - message
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+        message:
+          type: string
+          description: High level description of what has failed
+        errors:
+          type: object
+          description: Contains more details on the decoding error
+    ReopenAccountsRequest:
+      title: Reopen Accounts Request
+      type: array
+      items:
+        type: object
+        oneOf:
+          - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerID'
+          - $ref: '#/components/schemas/IngestFirstPartyDataWithCustomerIdempotentIdentifier'
+        properties:
+          account_ids:
+            type: array
+            items:
+              type: string
     SynchronousEnrichmentsList:
       type: array
       description: |
@@ -14335,8 +14542,7 @@ components:
           description: Can be used with the transaction status endpoint to retrieve the status of the full enriched process
         next_url:
           type: string
-          format: url
-          description: The URL to call to obtain the current status of the task.
+          description: The path to call to obtain the current status of the task.
           example: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
         next_url_delay:
           type: number
@@ -14472,31 +14678,12 @@ components:
                 This can be used to check the status and errors of the task using the __Retrieve Ingestion Task Status V3__ endpoint. 
             next_url:
               type: string
-              format: url
-              description: The URL to call to obtain the current status of the task.
+              description: The path to call to obtain the current status of the task.
               example: /v2/ingest/status/4cef424c-1d7f-4cab-8be2-aee7e1774a00
             next_url_delay:
               type: number
               description: The time in milliseconds that the client should wait before trying to retrieve the current status of the task.
               example: 500
-    BadRequestErrorWihoutErrRequired:
-      type: object
-      title: JSON Decoding Error
-      required:
-        - operation_id
-        - code_id
-        - message
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        code_id:
-          type: string
-        message:
-          type: string
-          description: High level description of what has failed
-        errors:
-          type: object
-          description: Contains more details on the decoding error
     TransactionSettlementV3WebookBody:
       title: Transaction Settlement Webhook Payload
       type: object
@@ -14869,6 +15056,19 @@ components:
               - `business`
 
             Not present if empty.
+        status:
+          type: string
+          description: |
+            The status of the account. If this field is not present, then the account is considered open.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `closed`
+        closed_at:
+          type: string
+          description: |
+            The datetime the account was closed in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+            If the account is not closed, this field will not be present.
         provider:
           type: string
           description: |
@@ -15145,6 +15345,195 @@ components:
             results:
               type: integer
               description: The number of accounts returned in the results
+    BalanceV3Amount:
+      title: Balance amount
+      description: A representation of both the amount and the credit/debit indicator
+      required:
+        - amount
+        - credit_debit_indicator
+      properties:
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        credit_debit_indicator:
+          type: string
+          description: Indication as to whether the balance is in credit or debit
+          enum:
+            - credit
+            - debit
+    BalanceOverTimeV3DataPoint:
+      title: Balance Over Time Data-Point
+      description: A single record of the balance at the end of the given date.
+      type: object
+      required:
+        - date
+        - booked
+        - pending
+      properties:
+        date:
+          type: string
+          description: |
+            The date of the given balance in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+            Examples:
+              - `2023-03-17T23:59:59Z`
+              - `2023-03-17T23:59:59-08:00`
+        booked:
+          description: The current balance of the account
+          $ref: '#/components/schemas/BalanceV3Amount'
+        pending:
+          description: The balance of the account if all pending transactions have settled.
+          $ref: '#/components/schemas/BalanceV3Amount'
+    BudDateRangeMetadata:
+      title: Metadata
+      type: object
+      required:
+        - from
+        - to
+      properties:
+        from:
+          type: string
+          description: |
+            The date from when results were retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+            This is either populated with the default value used when retrieving the results, or the user specified parameter.
+
+            Examples:
+              - `2023-01-17T17:29:51Z`
+              - `2023-01-17T17:29:51-08:00`
+        to:
+          type: string
+          description: |
+            The date up to when results were retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+            This is either populated with the default value used when retrieving the results, or the user specified parameter.
+
+            Examples:
+              - `2023-03-17T17:29:51Z`
+              - `2023-03-17T17:29:51-08:00`
+    GetBalancesV3Response:
+      title: Get Balances Response
+      type: object
+      required:
+        - operation_id
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - balances
+            properties:
+              account_id:
+                type: string
+                description: Identifier of the accounts from which the balances have been calculated
+              balances:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BalanceOverTimeV3DataPoint'
+        metadata:
+          type: object
+          properties:
+            accounts:
+              description: This is a hashmap representing account_ids and metadata about the results returned from the balances endpoint
+              additionalProperties:
+                description: Hashmap of an account_id returned from the balances endpoint
+                allOf:
+                  - $ref: '#/components/schemas/BudDateRangeMetadata'
+                  - type: object
+                    properties:
+                      balance_count:
+                        type: number
+                        description: The number of balances returned for the account
+                  - type: object
+                    properties:
+                      min_balance:
+                        description: The minimum balance in the returned period
+                        $ref: '#/components/schemas/BudAmount'
+                  - type: object
+                    properties:
+                      max_balance:
+                        description: The maximum balance in the returned period
+                        $ref: '#/components/schemas/BudAmount'
+            parameters:
+              title: The parameters used to calculated balances
+              allOf:
+                - $ref: '#/components/schemas/BudDateRangeMetadata'
+                - type: object
+                  properties:
+                    granularity:
+                      type: string
+                      description: |
+                        The granularity that the balances have been retrieved for.
+
+                        Currently supported values include (but are not necessarily limited to):
+                          - `daily`
+                          - `weekly`
+                          - `biweekly`
+                          - `monthly`
+                          - `quarterly`
+                          - `six_monthly`
+                          - `annually`
+    GetBalancesForAccountIDV3Response:
+      title: Get Balances For Account ID Response
+      type: object
+      required:
+        - operation_id
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BalanceOverTimeV3DataPoint'
+        metadata:
+          type: object
+          properties:
+            accounts:
+              description: Metadata about the response for the given account_id
+              allOf:
+                - $ref: '#/components/schemas/BudDateRangeMetadata'
+                - type: object
+                  properties:
+                    balance_count:
+                      type: number
+                      description: The number of balances returned for the account
+                - type: object
+                  properties:
+                    min_balance:
+                      description: The minimum balance in the returned period
+                      $ref: '#/components/schemas/BudAmount'
+                - type: object
+                  properties:
+                    max_balance:
+                      description: The maximum balance in the returned period
+                      $ref: '#/components/schemas/BudAmount'
+            parameters:
+              allOf:
+                - $ref: '#/components/schemas/BudDateRangeMetadata'
+                - type: object
+                  properties:
+                    granularity:
+                      type: string
+                      description: The granularity that the balances have been retrieved for.
+                    account_id:
+                      type: string
+                      description: The account ID the balances have been retrieved for.
+    BadRequestNotFoundResponse:
+      title: Bad Request Not Found Response
+      type: object
+      required:
+        - operation_id
+        - code_id
+        - message
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+          description: A descriptive enough string that is linked to the reason for the error.
+        message:
+          type: string
+          description: An actual user friendly error message.
     USAccountV2:
       title: Account
       type: object
@@ -15242,6 +15631,19 @@ components:
             Currently supported values include (but are not necessarily limited to):
               - `personal`
               - `business`
+        status:
+          type: string
+          description: |
+            The status of the account. If this field is not present, then the account is considered open.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `closed`
+        closed_at:
+          type: string
+          description: |
+            The datetime the account was closed in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+            If the account is not closed, this field will not be present.
         provider:
           type: string
           description: |
@@ -15435,362 +15837,6 @@ components:
             result_count:
               type: number
               description: The number of accounts returned in the results
-    BalanceAmount:
-      title: Balance amount
-      description: A representation of both the amount and the credit/debit indicator
-      required:
-        - amount
-        - type
-        - credit_debit_indicator
-      properties:
-        amount:
-          $ref: '#/components/schemas/BudAmount'
-        type:
-          type: string
-          description: |
-            The type for the given balance.
-
-            Currently supported values include (but are not necessarily limited to):
-              - `closing_available`
-              - `closing_booked`
-              - `closing_cleared`
-              - `expected`
-              - `forward_available`
-              - `information`
-              - `interim_available`
-              - `interim_booked`
-              - `interim_cleared`
-              - `opening_available`
-              - `opening_booked`
-              - `opening_cleared`
-              - `previously_closed_booked`
-        credit_debit_indicator:
-          type: string
-          description: Indication as to whether the balance is in credit or debit
-          enum:
-            - credit
-            - debit
-    BalanceOverTimeDataPoint:
-      title: Balance Over Time Data-Point
-      description: A single record of the balance at the end of the given date.
-      type: object
-      required:
-        - date
-        - booked
-      properties:
-        date:
-          type: string
-          description: |
-            The date of the given balance in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
-
-            Examples:
-              - `2023-03-17T23:59:59Z`
-              - `2023-03-17T23:59:59-08:00`
-        booked:
-          description: The current balance of the account
-          $ref: '#/components/schemas/BalanceAmount'
-        pending:
-          description: The balance of the account if all pending transactions have settled. This field is only present if the pending balance is different than the booked balance.
-          $ref: '#/components/schemas/BalanceAmount'
-    BudDateRangeMetadata:
-      title: Metadata
-      type: object
-      required:
-        - from
-        - to
-      properties:
-        from:
-          type: string
-          description: |
-            The date from when results were retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
-            This is either populated with the default value used when retrieving the results, or the user specified parameter.
-
-            Examples:
-              - `2023-01-17T17:29:51Z`
-              - `2023-01-17T17:29:51-08:00`
-        to:
-          type: string
-          description: |
-            The date up to when results were retrieved in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
-            This is either populated with the default value used when retrieving the results, or the user specified parameter.
-
-            Examples:
-              - `2023-03-17T17:29:51Z`
-              - `2023-03-17T17:29:51-08:00`
-    GetBalancesResponse:
-      title: Get Balances Response
-      type: object
-      required:
-        - operation_id
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: array
-          items:
-            type: object
-            required:
-              - balances
-            properties:
-              account_id:
-                type: string
-                description: Identifier of the accounts from which the balances have been calculated
-              balances:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BalanceOverTimeDataPoint'
-        metadata:
-          type: object
-          properties:
-            accounts:
-              description: This is a hashmap representing account_ids and metadata about the results returned from the balances endpoint
-              additionalProperties:
-                description: Hashmap of an account_id returned from the balances endpoint
-                allOf:
-                  - $ref: '#/components/schemas/BudDateRangeMetadata'
-                  - type: object
-                    properties:
-                      balance_count:
-                        type: number
-                        description: The number of balances returned for the account
-                  - type: object
-                    properties:
-                      min_balance:
-                        description: The minimum balance in the returned period
-                        $ref: '#/components/schemas/BudAmount'
-                  - type: object
-                    properties:
-                      max_balance:
-                        description: The maximum balance in the returned period
-                        $ref: '#/components/schemas/BudAmount'
-            parameters:
-              title: The parameters used to calculated balances
-              allOf:
-                - $ref: '#/components/schemas/BudDateRangeMetadata'
-                - type: object
-                  properties:
-                    granularity:
-                      type: string
-                      description: |
-                        The granularity that the balances have been retrieved for.
-
-                        Currently supported values include (but are not necessarily limited to):
-                          - `daily`
-                          - `weekly`
-                          - `biweekly`
-                          - `monthly`
-                          - `quarterly`
-                          - `six_monthly`
-                          - `annually`
-    GetBalancesForAccountIDResponse:
-      title: Get Balances For Account ID Response
-      type: object
-      required:
-        - operation_id
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/BalanceOverTimeDataPoint'
-        metadata:
-          type: object
-          properties:
-            accounts:
-              description: Metadata about the response for the given account_id
-              allOf:
-                - $ref: '#/components/schemas/BudDateRangeMetadata'
-                - type: object
-                  properties:
-                    balance_count:
-                      type: number
-                      description: The number of balances returned for the account
-                - type: object
-                  properties:
-                    min_balance:
-                      description: The minimum balance in the returned period
-                      $ref: '#/components/schemas/BudAmount'
-                - type: object
-                  properties:
-                    max_balance:
-                      description: The maximum balance in the returned period
-                      $ref: '#/components/schemas/BudAmount'
-            parameters:
-              allOf:
-                - $ref: '#/components/schemas/BudDateRangeMetadata'
-                - type: object
-                  properties:
-                    granularity:
-                      type: string
-                      description: The granularity that the balances have been retrieved for.
-                    account_id:
-                      type: string
-                      description: The account ID the balances have been retrieved for.
-    BadRequestNotFoundResponse:
-      title: Bad Request Not Found Response
-      type: object
-      required:
-        - operation_id
-        - code_id
-        - message
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        code_id:
-          type: string
-          description: A descriptive enough string that is linked to the reason for the error.
-        message:
-          type: string
-          description: An actual user friendly error message.
-    BalanceV3Amount:
-      title: Balance amount
-      description: A representation of both the amount and the credit/debit indicator
-      required:
-        - amount
-        - credit_debit_indicator
-      properties:
-        amount:
-          $ref: '#/components/schemas/BudAmount'
-        credit_debit_indicator:
-          type: string
-          description: Indication as to whether the balance is in credit or debit
-          enum:
-            - credit
-            - debit
-    BalanceOverTimeV3DataPoint:
-      title: Balance Over Time Data-Point
-      description: A single record of the balance at the end of the given date.
-      type: object
-      required:
-        - date
-        - booked
-        - pending
-      properties:
-        date:
-          type: string
-          description: |
-            The date of the given balance in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
-
-            Examples:
-              - `2023-03-17T23:59:59Z`
-              - `2023-03-17T23:59:59-08:00`
-        booked:
-          description: The current balance of the account
-          $ref: '#/components/schemas/BalanceV3Amount'
-        pending:
-          description: The balance of the account if all pending transactions have settled.
-          $ref: '#/components/schemas/BalanceV3Amount'
-    GetBalancesV3Response:
-      title: Get Balances Response
-      type: object
-      required:
-        - operation_id
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: array
-          items:
-            type: object
-            required:
-              - balances
-            properties:
-              account_id:
-                type: string
-                description: Identifier of the accounts from which the balances have been calculated
-              balances:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BalanceOverTimeV3DataPoint'
-        metadata:
-          type: object
-          properties:
-            accounts:
-              description: This is a hashmap representing account_ids and metadata about the results returned from the balances endpoint
-              additionalProperties:
-                description: Hashmap of an account_id returned from the balances endpoint
-                allOf:
-                  - $ref: '#/components/schemas/BudDateRangeMetadata'
-                  - type: object
-                    properties:
-                      balance_count:
-                        type: number
-                        description: The number of balances returned for the account
-                  - type: object
-                    properties:
-                      min_balance:
-                        description: The minimum balance in the returned period
-                        $ref: '#/components/schemas/BudAmount'
-                  - type: object
-                    properties:
-                      max_balance:
-                        description: The maximum balance in the returned period
-                        $ref: '#/components/schemas/BudAmount'
-            parameters:
-              title: The parameters used to calculated balances
-              allOf:
-                - $ref: '#/components/schemas/BudDateRangeMetadata'
-                - type: object
-                  properties:
-                    granularity:
-                      type: string
-                      description: |
-                        The granularity that the balances have been retrieved for.
-
-                        Currently supported values include (but are not necessarily limited to):
-                          - `daily`
-                          - `weekly`
-                          - `biweekly`
-                          - `monthly`
-                          - `quarterly`
-                          - `six_monthly`
-                          - `annually`
-    GetBalancesForAccountIDV3Response:
-      title: Get Balances For Account ID Response
-      type: object
-      required:
-        - operation_id
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/BalanceOverTimeV3DataPoint'
-        metadata:
-          type: object
-          properties:
-            accounts:
-              description: Metadata about the response for the given account_id
-              allOf:
-                - $ref: '#/components/schemas/BudDateRangeMetadata'
-                - type: object
-                  properties:
-                    balance_count:
-                      type: number
-                      description: The number of balances returned for the account
-                - type: object
-                  properties:
-                    min_balance:
-                      description: The minimum balance in the returned period
-                      $ref: '#/components/schemas/BudAmount'
-                - type: object
-                  properties:
-                    max_balance:
-                      description: The maximum balance in the returned period
-                      $ref: '#/components/schemas/BudAmount'
-            parameters:
-              allOf:
-                - $ref: '#/components/schemas/BudDateRangeMetadata'
-                - type: object
-                  properties:
-                    granularity:
-                      type: string
-                      description: The granularity that the balances have been retrieved for.
-                    account_id:
-                      type: string
-                      description: The account ID the balances have been retrieved for.
     AccountV2:
       title: Account
       type: object
@@ -15888,6 +15934,19 @@ components:
             Currently supported values include (but are not necessarily limited to):
               - `personal`
               - `business`
+        status:
+          type: string
+          description: |
+            The status of the account. If this field is not present, then the account is considered open.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `closed`
+        closed_at:
+          type: string
+          description: |
+            The datetime the account was closed in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+            If the account is not closed, this field will not be present.
         provider:
           type: string
           description: |
@@ -16043,6 +16102,173 @@ components:
           $ref: '#/components/schemas/AccountV2'
         metadata:
           type: object
+    BalanceAmount:
+      title: Balance amount
+      description: A representation of both the amount and the credit/debit indicator
+      required:
+        - amount
+        - type
+        - credit_debit_indicator
+      properties:
+        amount:
+          $ref: '#/components/schemas/BudAmount'
+        type:
+          type: string
+          description: |
+            The type for the given balance.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `closing_available`
+              - `closing_booked`
+              - `closing_cleared`
+              - `expected`
+              - `forward_available`
+              - `information`
+              - `interim_available`
+              - `interim_booked`
+              - `interim_cleared`
+              - `opening_available`
+              - `opening_booked`
+              - `opening_cleared`
+              - `previously_closed_booked`
+        credit_debit_indicator:
+          type: string
+          description: Indication as to whether the balance is in credit or debit
+          enum:
+            - credit
+            - debit
+    BalanceOverTimeDataPoint:
+      title: Balance Over Time Data-Point
+      description: A single record of the balance at the end of the given date.
+      type: object
+      required:
+        - date
+        - booked
+      properties:
+        date:
+          type: string
+          description: |
+            The date of the given balance in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+            Examples:
+              - `2023-03-17T23:59:59Z`
+              - `2023-03-17T23:59:59-08:00`
+        booked:
+          description: The current balance of the account
+          $ref: '#/components/schemas/BalanceAmount'
+        pending:
+          description: The balance of the account if all pending transactions have settled. This field is only present if the pending balance is different than the booked balance.
+          $ref: '#/components/schemas/BalanceAmount'
+    GetBalancesResponse:
+      title: Get Balances Response
+      type: object
+      required:
+        - operation_id
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - balances
+            properties:
+              account_id:
+                type: string
+                description: Identifier of the accounts from which the balances have been calculated
+              balances:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BalanceOverTimeDataPoint'
+        metadata:
+          type: object
+          properties:
+            accounts:
+              description: This is a hashmap representing account_ids and metadata about the results returned from the balances endpoint
+              additionalProperties:
+                description: Hashmap of an account_id returned from the balances endpoint
+                allOf:
+                  - $ref: '#/components/schemas/BudDateRangeMetadata'
+                  - type: object
+                    properties:
+                      balance_count:
+                        type: number
+                        description: The number of balances returned for the account
+                  - type: object
+                    properties:
+                      min_balance:
+                        description: The minimum balance in the returned period
+                        $ref: '#/components/schemas/BudAmount'
+                  - type: object
+                    properties:
+                      max_balance:
+                        description: The maximum balance in the returned period
+                        $ref: '#/components/schemas/BudAmount'
+            parameters:
+              title: The parameters used to calculated balances
+              allOf:
+                - $ref: '#/components/schemas/BudDateRangeMetadata'
+                - type: object
+                  properties:
+                    granularity:
+                      type: string
+                      description: |
+                        The granularity that the balances have been retrieved for.
+
+                        Currently supported values include (but are not necessarily limited to):
+                          - `daily`
+                          - `weekly`
+                          - `biweekly`
+                          - `monthly`
+                          - `quarterly`
+                          - `six_monthly`
+                          - `annually`
+    GetBalancesForAccountIDResponse:
+      title: Get Balances For Account ID Response
+      type: object
+      required:
+        - operation_id
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BalanceOverTimeDataPoint'
+        metadata:
+          type: object
+          properties:
+            accounts:
+              description: Metadata about the response for the given account_id
+              allOf:
+                - $ref: '#/components/schemas/BudDateRangeMetadata'
+                - type: object
+                  properties:
+                    balance_count:
+                      type: number
+                      description: The number of balances returned for the account
+                - type: object
+                  properties:
+                    min_balance:
+                      description: The minimum balance in the returned period
+                      $ref: '#/components/schemas/BudAmount'
+                - type: object
+                  properties:
+                    max_balance:
+                      description: The maximum balance in the returned period
+                      $ref: '#/components/schemas/BudAmount'
+            parameters:
+              allOf:
+                - $ref: '#/components/schemas/BudDateRangeMetadata'
+                - type: object
+                  properties:
+                    granularity:
+                      type: string
+                      description: The granularity that the balances have been retrieved for.
+                    account_id:
+                      type: string
+                      description: The account ID the balances have been retrieved for.
     CustomerCategoryCorrectionPayload:
       title: Customer Category Correction
       type: object
@@ -18987,6 +19213,23 @@ components:
           description: The total expenses for the period, in every currency that had an insight trigger within the period.
           items:
             $ref: '#/components/schemas/BudAmount'
+    IncomeInsightOption:
+      title: Insight Option
+      type: object
+      description: An option used to configure the returned insights.
+      required:
+        - insight_type
+        - option
+        - value
+      properties:
+        insight_type:
+          type: string
+          description: The insight this option is applied to
+        option:
+          type: string
+          description: The name of the option
+        value:
+          description: The value of the option
     IncomeInsightsResponse:
       title: Income Insights Response
       description: Income insights response, providing identified income insights for this customer.
@@ -19030,7 +19273,7 @@ components:
             options:
               type: array
               items:
-                $ref: '#/components/schemas/InsightOption'
+                $ref: '#/components/schemas/IncomeInsightOption'
     GamblingIncomeInsightDetails:
       title: Gambling Income Insight Details
       description: Details for a 'gambling income' insight
@@ -19969,13 +20212,6 @@ components:
         type: string
       required: true
       description: The account ID to retrieve data for.
-    QueryCurrencyUSD:
-      in: query
-      name: currency
-      schema:
-        type: string
-      example: USD
-      description: Use this parameter to filter the results returned on the `currency` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `currency` will be returned.
     QueryFromBudDate:
       in: query
       name: from
@@ -20014,6 +20250,13 @@ components:
           - `posted_date_time`
 
         Defaults to `date_time`.
+    QueryCurrencyUSD:
+      in: query
+      name: currency
+      schema:
+        type: string
+      example: USD
+      description: Use this parameter to filter the results returned on the `currency` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `currency` will be returned.
     MerchantCorrectionSearchQuery:
       in: path
       name: merchant_query
