@@ -306,6 +306,17 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.21.2: 30/09/2025**
+    >- Add `running_balance` field to __Ingest Transactions__ request and sync response.
+    >- Add `running_balance` field to __Retrieve Transactions V2__ response.
+    >- Add `holders` field to __Ingest Accounts__ request.
+
+    **Version 2.21.1: 29/09/2025**
+    >- Add `consent_details` to the refresh.v2.* webhooks.
+
+    **Version 2.21.0: 25/09/2025**
+    >- Add __Generate MCP URL__ endpoint.
+
     **Version 2.20.0: 24/09/2025**
     >- Add __Close Accounts__ endpoint.
     >- Add __Reopen Accounts__ endpoint.
@@ -16405,6 +16416,18 @@ components:
         merchant_category_code:
           type: string
           description: Merchant category code conforming to ISO 18245, related to the type of services or goods the merchant provides for the transaction.
+        running_balance:
+          description: The running balance for the account that the transaction takes place against
+          title: Standard Bud Amount
+          type: object
+          required:
+            - value
+            - currency
+          properties:
+            value:
+              $ref: '#/components/schemas/BudMonetaryValue'
+            currency:
+              $ref: '#/components/schemas/BudCurrency'
         tags:
           type: array
           description: |
@@ -18989,6 +19012,16 @@ components:
             to:
               type: string
               description: The to timestamp requested with the provider
+        consent_details:
+          type: object
+          description: Details of the consent used as part of this refresh task
+          properties:
+            id:
+              type: string
+              description: The id of the consent that was updated as part of this task
+            expiration_date:
+              type: string
+              description: The expiration date of the consent
     OBV2WebhookBody:
       title: OB V2 Webhook Payload
       type: object
@@ -19105,6 +19138,16 @@ components:
             to:
               type: string
               description: The to timestamp requested with the provider
+        consent_details:
+          type: object
+          description: Details of the consent used as part of this refresh task
+          properties:
+            id:
+              type: string
+              description: The id of the consent that was updated as part of this task
+            expiration_date:
+              type: string
+              description: The expiration date of the consent
     SubTaskV2View:
       title: SubTask V2 View
       description: A task view.
@@ -19787,6 +19830,27 @@ components:
           description: The balances associated with the account
           items:
             $ref: '#/components/schemas/IngestAccountBalance'
+        holders:
+          type: array
+          description: The account holders details associated with the account
+          items:
+            title: Account_Holder
+            type: object
+            properties:
+              name:
+                type: string
+                description: |
+                  The name of the given account holder.
+                  Example: `John Smith`
+              relationship:
+                type: string
+                description: |
+                  The relationship that the individual holder has with the account.
+                  Currently supported values include (but are not necessarily limited to):
+                    - `sole`
+                    - `joint`
+                    - `delegate`
+                    - `unknown`
     IngestCustomerWithAccounts:
       title: Ingest Customer With Accounts
       description: A customer with a accounts data.
@@ -20264,6 +20328,14 @@ components:
             The value is also used to populate the `country` field in location enrichment data. However, it is converted to a 2-letter ISO 3166-1 alpha-2 code when displayed.
         transaction_type:
           $ref: '#/components/schemas/BudTransactionType'
+        running_balance:
+          type: string
+          description: |
+            The balance of the account associated with the transaction after this transaction is made. The value is formatted with the number of decimal places for the respective currency.
+
+            A positive amount is a credit balance and a negative a debit balance.
+
+            Example: `"10.98"` or `"-10.98"`
         client_attributes:
           $ref: '#/components/schemas/BudClientAttributes'
     TransactionWindow:
