@@ -6330,13 +6330,14 @@
 									]
 								},
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/summary-url",
+									"raw": "{{proxy_url}}widget/v1/summary/url",
 									"host": [
-										"{{proxy_url}}insights"
+										"{{proxy_url}}widget"
 									],
 									"path": [
 										"v1",
-										"summary-url"
+										"summary",
+										"url"
 									]
 								}
 							},
@@ -6368,9 +6369,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/financial-calendar/url",
+									"raw": "{{proxy_url}}widget/v1/financial-calendar/url",
 									"host": [
-										"{{proxy_url}}insights"
+										"{{proxy_url}}widget"
 									],
 									"path": [
 										"v1",
@@ -6407,9 +6408,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/balances-over-time/url",
+									"raw": "{{proxy_url}}widget/v1/balances-over-time/url",
 									"host": [
-										"{{proxy_url}}insights"
+										"{{proxy_url}}widget"
 									],
 									"path": [
 										"v1",
@@ -6446,9 +6447,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/recurring-and-forecasted-transactions/url",
+									"raw": "{{proxy_url}}widget/v1/recurring-and-forecasted-transactions/url",
 									"host": [
-										"{{proxy_url}}insights"
+										"{{proxy_url}}widget"
 									],
 									"path": [
 										"v1",
@@ -6485,9 +6486,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{proxy_url}}insights/v1/spending-analysis/url",
+									"raw": "{{proxy_url}}widget/v1/spending-analysis/url",
 									"host": [
-										"{{proxy_url}}insights"
+										"{{proxy_url}}widget"
 									],
 									"path": [
 										"v1",
@@ -8477,12 +8478,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{proxy_url}}search/beta/url",
+							"raw": "{{proxy_url}}widget/v1/intelligent-search/url",
 							"host": [
-								"{{proxy_url}}search"
+								"{{proxy_url}}widget"
 							],
 							"path": [
-								"beta",
+								"v1",
+								"intelligent-search",
 								"url"
 							]
 						}
@@ -8546,12 +8548,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{proxy_url}}search/beta/transactions",
+							"raw": "{{proxy_url}}search/v1/transactions",
 							"host": [
 								"{{proxy_url}}search"
 							],
 							"path": [
-								"beta",
+								"v1",
 								"transactions"
 							],
 							"query": [
@@ -8686,12 +8688,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{proxy_url}}search/beta/transactions/{{search_id}}",
+							"raw": "{{proxy_url}}search/v1/transactions/{{search_id}}",
 							"host": [
 								"{{proxy_url}}search"
 							],
 							"path": [
-								"beta",
+								"v1",
 								"transactions",
 								"{{search_id}}"
 							],
@@ -8767,12 +8769,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{proxy_url}}search/beta/transactions/{{search_id}}/insight",
+							"raw": "{{proxy_url}}search/v1/transactions/{{search_id}}/insight",
 							"host": [
 								"{{proxy_url}}search"
 							],
 							"path": [
-								"beta",
+								"v1",
 								"transactions",
 								"{{search_id}}",
 								"insight"
@@ -8837,12 +8839,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{proxy_url}}search/beta/transactions/{{search_id}}/insight/transactions",
+							"raw": "{{proxy_url}}search/v1/transactions/{{search_id}}/insight/transactions",
 							"host": [
 								"{{proxy_url}}search"
 							],
 							"path": [
-								"beta",
+								"v1",
 								"transactions",
 								"{{search_id}}",
 								"insight",
