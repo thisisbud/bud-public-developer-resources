@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "72f48a6a-7275-4685-9c27-df0b5f0fe604",
+		"_postman_id": "b8e2c4e7-cf91-4e72-96d9-4934be62ef4c",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "17522809"
+		"_exporter_id": "24883107",
+		"_collection_link": "https://universal-trinity-148702.postman.co/workspace/Bud~0fd583a1-9fcd-47d6-8327-0a1540f028ee/collection/24883107-b8e2c4e7-cf91-4e72-96d9-4934be62ef4c?action=share&source=collection_link&creator=24883107"
 	},
 	"item": [
 		{
@@ -1803,6 +1804,94 @@
 									"path": [
 										"ingest",
 										"accounts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Close Accounts V3",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"account_ids\": [\n      \"{{account_id}}\"\n    ],\n    \"metadata\": {\n      \"as_of\": \"2025-09-22T14:55:09.254Z\"\n    }\n  }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}ingestion/v3/accounts/close",
+									"host": [
+										"{{proxy_url}}ingestion"
+									],
+									"path": [
+										"v3",
+										"accounts",
+										"close"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reopen Accounts V3",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"customer_id\": \"{{customer_id}}\",\n    \"account_ids\": [\n      \"{{account_id}}\"\n    ]\n  }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proxy_url}}ingestion/v3/accounts/reopen",
+									"host": [
+										"{{proxy_url}}ingestion"
+									],
+									"path": [
+										"v3",
+										"accounts",
+										"reopen"
 									]
 								}
 							},
