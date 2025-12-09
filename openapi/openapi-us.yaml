@@ -10143,6 +10143,9 @@ paths:
                   url: https://widgets.thisisbud.com/summary/953ea9c1-faee-4daf-9790-4cfd649f66f7?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
                 metadata:
                   sufficient_data: true
+                  number_of_insights: 5
+                  summary_to: '2023-05-16T17:30:00Z'
+                  summary_from: '2023-05-09T17:30:00Z'
         '400':
           description: Not supported summary type was requested
         '401':
@@ -19691,6 +19694,12 @@ components:
           properties:
             sufficient_data:
               type: boolean
+            number_of_insights:
+              type: integer
+            summary_to:
+              $ref: '#/components/schemas/DateTimeISO8601'
+            summary_from:
+              $ref: '#/components/schemas/DateTimeISO8601'
     BaseHeadingLevel:
       type: integer
       minimum: 1
