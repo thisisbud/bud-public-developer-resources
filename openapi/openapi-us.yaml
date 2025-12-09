@@ -222,6 +222,46 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.24.0: 02/12/2025**
+    >- Add __Retrieve Account Transaction Dates__ endpoint.
+
+    **Version 2.23.2: 25/11/2025**
+    >- Add __Generate Accounts URL__ endpoint.
+    >- Added `credit_transactions_count` and `debit_transactions_count` fields to __Merchant Totals V2__ response.
+
+    **Version 2.23.1: 07/11/2025**
+    >- Add `provider_display_name` and `provider_logo` fields to __Retrieve Accounts v3__ and __Retrieve Accounts V3 By ID__ response.
+
+    **Version 2.23.0: 06/11/2025**
+    >- Update endpoint url for __Generate Card Summary URL__ endpoint
+    >- Update endpoint url for __Generate Financial Calendar URL__ endpoint
+    >- Update endpoint url for __Generate Balances Over Time URL__ endpoint
+    >- Update endpoint url for __Generate Recurring and Forecasted Transactions URL__ endpoint
+    >- Update endpoint url for __Generate Spending Analysis URL__ endpoint
+    >- Update endpoint url for __Generate Intelligent Search Widget URL__ endpoint
+
+    **Version 2.22.0: 04/11/2025**
+    >- Add __Remove Account Data V2__ endpoint.
+
+    **Version 2.21.6: 04/11/2025**
+    >- Update account_type filter values on __Retrive Accounts V3__ request.
+
+    **Version 2.21.5: 24/10/2025**
+    >- Add `counterparty` field to __Ingest Transactions__ request and sync response.
+    >- Add `suggested_description` field to __Ingest Transactions__ request.
+    >- Add `opening_date_time` field to __Ingest Accounts__ request.
+    >- Expanded enum for `account_type` field on __Ingest Accounts__ request
+    >- Add `counterparty` field to __Retrieve Transactions V2__ response.
+    >- Add `opening_date_time` field to __Retrieve Accounts V3__ response.
+    >- Add `opening_date_time` field to __Retrieve Accounts V3 By ID__ response.
+    >- Add `account_category` field to __Retrieve Accounts V3__ response.
+    >- Add `account_category` field to __Retrieve Accounts V3 By ID__ response.
+    >- Expand enum for `account_type` field on __Retrieve Accounts V3__ response.
+    >- Expand enum for `account_type` field on __Retrieve Accounts V3 By ID__ response.
+
+    **Version 2.21.4: 21/10/2025**
+    >- Add new fields to `metadata` to __Generate Card Summary URL__ request and sync response.
+
     **Version 2.21.2: 30/09/2025**
     >- Add `running_balance` field to __Ingest Transactions__ request and sync response.
     >- Add `running_balance` field to __Retrieve Transactions V2__ response.
@@ -548,6 +588,10 @@ tags:
     x-displayName: Retrieve Financial Data
     description: |
       Retrieve a customer's financial data from a range of sources.
+  - name: Manage Financial Data
+    x-displayName: Manage Financial Data
+    description: |
+      Manipulate Transactions held on the Bud platform by removing data, submitting corrections, or adding tags through different rulesets.
   - name: Correct Financial Data
     x-displayName: Correct Financial Data
     description: |
@@ -2538,7 +2582,7 @@ paths:
                         account_id: 99473c28-21cf-4a9a-b79e-fd643dd7a4bc
                         currency: USD
                         account_type: Personal
-                        account_sub_type: CurrentAccount
+                        account_sub_type: CheckingAccount
                         account_identifiers:
                           - type: us_account_number
                             value: '98765432165444'
@@ -2555,13 +2599,14 @@ paths:
                                 type: Credit
                             date_time: '2020-12-01T00:00:00-07:00'
                             type: InterimBooked
+                        opening_date_time: '2019-11-01T00:00:00-07:00'
                   - customer_id: 85db4cdf-5f79-4f4e-8388-f9a52da598a2
                     accounts:
                       - provider: chase
                         account_id: bfd4ea71-58d7-4b24-8820-95029875cc9a
                         currency: USD
                         account_type: Personal
-                        account_sub_type: CurrentAccount
+                        account_sub_type: CheckingAccount
                         account_identifiers:
                           - type: us_account_number
                             value: '12312312313200'
@@ -2587,7 +2632,7 @@ paths:
                         account_id: 99473c28-21cf-4a9a-b79e-fd643dd7a4bc
                         currency: USD
                         account_type: Personal
-                        account_sub_type: CurrentAccount
+                        account_sub_type: CheckingAccount
                         account_identifiers:
                           - type: us_account_number
                             value: '98765432165444'
@@ -2610,7 +2655,7 @@ paths:
                         account_id: bfd4ea71-58d7-4b24-8820-95029875cc9a
                         currency: USD
                         account_type: Personal
-                        account_sub_type: CurrentAccount
+                        account_sub_type: CheckingAccount
                         account_identifiers:
                           - type: us_account_number
                             value: '12312312313200'
@@ -2978,22 +3023,26 @@ paths:
                     transactions:
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         transaction_id: cb49a806-c8f1-47e6-9c1d-5172defe97eb
-                        description: The RSPCA, Southwater
+                        description: John Doe
                         amount: '-10.98'
                         date_time: '2022-10-10T23:00:00Z'
-                        currency: GBP
+                        currency: USD
                         status: pending
                         provider: Citibank
                         country_code: GB
                         transaction_type:
                           bud_code: DEB
                           description: Debit card transaction
+                        suggested_description: John Doe
+                        counterparty:
+                          name: John Doe
+                          identifier: '12345612345678'
                       - account_id: 275fbbfe-209c-4329-a38b-b324aa386c56
                         transaction_id: e0f1c489-a4f0-4820-84d1-a86ecb4199b7
-                        description: The RSPCA, Southwater
+                        description: Walmart
                         amount: '-10.98'
                         date_time: '2022-11-10T23:00:00Z'
-                        currency: GBP
+                        currency: USD
                         provider: Citibank
                         country_code: GB
                         transaction_type:
@@ -3902,16 +3951,37 @@ paths:
           description: |
             Use this parameter to filter the results returned on the `account_type` associated with each result. Multiple values are accepted. If this parameter is not provided then results of any `account_type` will be returned.
             Currently supported values include (but are not necessarily limited to):
+              - `auto_loan`
+              - `boat_loan`
+              - `brokerage`
+              - `business_loan`
+              - `certificate_of_deposit`
               - `charge_card`
+              - `checking_account`
               - `credit_card`
               - `current_account`
+              - `disability_insurance`
               - `e_money`
+              - `health_insurance`
+              - `home_equity_loan`
               - `investment`
+              - `ira`
+              - `liability_insurance`
+              - `life_insurance`
+              - `line_of_credit`
               - `loan`
+              - `money_market`
               - `mortgage`
               - `other`
+              - `personal_loan`
               - `pre_paid_card`
+              - `property_insurance`
+              - `roth`
+              - `rv_loan`
               - `savings`
+              - `student_loan`
+              - `travel_insurance`
+              - `vehicle_insurance`
         - in: query
           name: usage_type
           schema:
@@ -3960,9 +4030,11 @@ paths:
                             relationship: unknown
                         account_name: Plaid Checking
                         suggested_name: Plaid Checking
-                        account_type: current_account
+                        account_type: checking_account
                         usage_type: personal
+                        account_category: depository
                         provider: plaid
+                        opening_date_time: '2019-01-10T00:00:00-07:00'
                         identifiers:
                           plaid_account_id: 6PdjjRP6LmugpBy5NgQvUqpRXMWxzktg3rwrk7
                           plaid_official_name: Plaid Gold Standard 0% Interest Checking
@@ -3991,11 +4063,14 @@ paths:
                           - name: Dave Jeffries
                             relationship: unknown
                         suggested_name: Checking Account 8990
-                        account_type: current_account
+                        account_type: checking_account
                         usage_type: personal
+                        account_category: depository
                         status: closed
                         closed_at: '2023-01-12T00:00:00Z'
                         provider: capital one
+                        provider_display_name: Capital One
+                        provider_logo: https://assets.thisisbud.com/merchants/capital_one.png
                         identifiers:
                           us_account_number: '33818990'
                         balances:
@@ -4090,9 +4165,10 @@ paths:
                         - name: Dave Jeffries
                           relationship: unknown
                       suggested_name: Checking Account 8990
-                      account_type: current_account
+                      account_type: checking_account
                       usage_type: personal
                       provider: capital one
+                      opening_date_time: '2019-01-10T00:00:00-07:00'
                       identifiers:
                         us_account_number: '33818990'
                       balances:
@@ -4167,6 +4243,76 @@ paths:
                 CustomerID Not Sent:
                   value:
                     operation_id: financial_v3_accounts_account_id_get
+                    code_id: failed_validation
+                    message: Invalid request payload.
+                    errors:
+                      X-Customer-Id: not present
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Unauthorised request
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
+  /financial/v3/accounts/transaction-dates:
+    get:
+      tags:
+        - Retrieve Financial Data
+      summary: Retrieve Account Transaction Dates
+      description: |
+        Retrieves a summary listing the first and last transaction per customer's accounts.
+      operationId: financial_v3_accounts_transaction_dates_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAccountTransactionDatesV3Response'
+              examples:
+                Account:
+                  value:
+                    operation_id: financial_v3_accounts_transaction_dates_get
+                    data:
+                      - account_id: 1da3ba98-07f7-469e-b7e7-3a7cfcf19b82
+                        first_transaction_date: '2024-12-08T02:59:00Z'
+                        last_transaction_date: '2025-12-02T02:00:00Z'
+                      - account_id: 6aa9a396-75ca-48da-9dba-5f4094cb3a83
+                        first_transaction_date: '2024-12-01T02:00:00Z'
+                        last_transaction_date: '2025-12-01T02:00:00Z'
+                    metadata:
+                      results: 2
+                      first_transaction_date: '2024-12-01T02:00:00Z'
+                      last_transaction_date: '2025-12-02T02:00:00Z'
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                CustomerID Not Sent:
+                  value:
+                    operation_id: financial_v3_accounts_get
                     code_id: failed_validation
                     message: Invalid request payload.
                     errors:
@@ -5107,6 +5253,75 @@ paths:
                     message: Invalid request payload.
                     errors:
                       X-Customer-Id: not present
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Unauthorised request
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
+    delete:
+      tags:
+        - Manage Financial Data
+      summary: Remove Account Data V2
+      description: |
+        Delete all data (including transactions and balances) related to the specified account.
+      operationId: v2_account_delete
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - in: path
+          name: account_id
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the account to be deleted.
+      responses:
+        '204':
+          description: |
+            No Content - The account data has been successfully deleted.
+
+            Note: This response is also given if the account did not exist.
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                CustomerID Not Sent:
+                  value:
+                    operation_id: v2_account_delete
+                    code_id: failed_validation
+                    message: Invalid request payload.
+                    errors:
+                      X-Customer-Id: not present
+                CustomerID and CustomerSecret Not Sent:
+                  value:
+                    operation_id: v2_account_delete
+                    code_id: failed_validation
+                    message: Invalid request payload.
+                    errors:
+                      X-Customer-Id:
+                        - not present
+                      X-Customer-Secret:
+                        - not present
         '401':
           description: Unauthorised
           content:
@@ -6387,26 +6602,6 @@ paths:
                 errors: {}
         5XX:
           description: An unexpected error occurred on the server side
-  /search/beta/url:
-    post:
-      tags:
-        - Transaction Search
-      summary: Create Intelligent Search Frontend Widget URL
-      operationId: insights_v1_intelligent_search_url_post
-      description: Generates a URL to a frontend to allow searching a customers transactions. For more information about Frontend Widgets, refer to our [guide](https://docs.thisisbud.com/docs/frontend-widgets-1).
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-      responses:
-        '201':
-          $ref: '#/components/responses/GenerateIntelligentSearchURLResponse'
-        '401':
-          description: An unauthenticated request was received.
-        5XX:
-          description: An unexpected error occurred on the server side
   /search/beta/transactions:
     get:
       tags:
@@ -6826,6 +7021,8 @@ paths:
                       value: '12.21'
                       currency: USD
                     transaction_count: 8
+                    credit_transaction_count: 1
+                    debit_transaction_count: 7
                   - merchant:
                       id: target
                       logo: https://thisisbud.com/merchants/target.png
@@ -6837,6 +7034,8 @@ paths:
                       value: '6.56'
                       currency: USD
                     transaction_count: 10
+                    credit_transaction_count: 1
+                    debit_transaction_count: 9
                 metadata:
                   from: '2018-01-01'
                   to: '2018-01-17'
@@ -10111,7 +10310,7 @@ paths:
                     custom_insight_id: 19ebab24-9c73-4802-b5d2-c401f3558d8d
                     link: insights/v1/custom/detail/19ebab24-9c73-4802-b5d2-c401f3558d8d
                     created_at: '2021-08-11T14:00:00Z'
-  /insights/v1/summary-url:
+  /widget/v1/summary/url:
     post:
       tags:
         - Frontend Widgets
@@ -10143,13 +10342,16 @@ paths:
                   url: https://widgets.thisisbud.com/summary/953ea9c1-faee-4daf-9790-4cfd649f66f7?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
                 metadata:
                   sufficient_data: true
+                  number_of_insights: 5
+                  summary_to: '2023-05-16T17:30:00Z'
+                  summary_from: '2023-05-09T17:30:00Z'
         '400':
           description: Not supported summary type was requested
         '401':
           description: Customer doesn't exist
         5XX:
           description: An unexpected error occurred on the server side
-  /insights/v1/financial-calendar/url:
+  /widget/v1/financial-calendar/url:
     post:
       tags:
         - Frontend Widgets
@@ -10171,7 +10373,7 @@ paths:
               $ref: '#/components/schemas/GenerateFinancialCalendarURLRequest'
       responses:
         '201':
-          description: Successful response containing the Financial Calendar URL and metadata.
+          description: Successful response containing Financial Calendar URL and metadata.
           content:
             application/json:
               schema:
@@ -10186,7 +10388,7 @@ paths:
           description: Bad Request
         5XX:
           description: An unexpected error occurred on the server side
-  /insights/v1/balances-over-time/url:
+  /widget/v1/balances-over-time/url:
     post:
       tags:
         - Frontend Widgets
@@ -10223,7 +10425,7 @@ paths:
           description: Bad Request
         5XX:
           description: An unexpected error occurred on the server side
-  /insights/v1/recurring-and-forecasted-transactions/url:
+  /widget/v1/recurring-and-forecasted-transactions/url:
     post:
       tags:
         - Frontend Widgets
@@ -10245,7 +10447,7 @@ paths:
               $ref: '#/components/schemas/GenerateRecurringAndForecastedTransactionsURLRequest'
       responses:
         '201':
-          description: Successful response containing the Recurring and Forecasted Transactions URL and metadata.
+          description: Successful response containing Recurring and Forecasted Transactions URL and metadata.
           content:
             application/json:
               schema:
@@ -10260,7 +10462,7 @@ paths:
           description: Bad Request
         5XX:
           description: An unexpected error occurred on the server side
-  /insights/v1/spending-analysis/url:
+  /widget/v1/spending-analysis/url:
     post:
       tags:
         - Frontend Widgets
@@ -10290,6 +10492,89 @@ paths:
                 operation_id: insights_v1_spending_analysis_url_post
                 data:
                   url: https://widgets.thisisbud.com/spending-analysis?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+                metadata:
+                  sufficient_data: true
+        '400':
+          description: Bad Request
+        5XX:
+          description: An unexpected error occurred on the server side
+  /widget/v1/intelligent-search/url:
+    post:
+      tags:
+        - Frontend Widgets
+      summary: Generate Intelligent Search Widget URL
+      operationId: insights_v1_intelligent_search_url_post
+      description: Generates a URL to a frontend to allow searching a customers transactions.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      responses:
+        '201':
+          description: Successful response containing the Intelligent Search URL and metadata.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  operation_id:
+                    type: string
+                    enum:
+                      - insights_v1_intelligent_search_url_post
+                  data:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        format: uri
+                  metadata:
+                    type: object
+                    properties:
+                      sufficient_data:
+                        type: boolean
+              example:
+                operation_id: insights_v1_intelligent_search_url_post
+                data:
+                  url: https://widgets.thisisbud.com/intelligent-search/953ea9c1-faee-4daf-9790-4cfd649f66f7?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+                metadata:
+                  sufficient_data: true
+        '401':
+          description: An unauthenticated request was received.
+        5XX:
+          description: An unexpected error occurred on the server side
+  /widget/v1/accounts/url:
+    post:
+      tags:
+        - Frontend Widgets
+      summary: Generate Accounts URL
+      description: Generates a URL to access the customer's account.
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: insights_v1_accounts_url_post
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateAccountsURLRequest'
+      responses:
+        '201':
+          description: Successful response containing accounts URL and metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateAccountsURLResponse'
+              example:
+                operation_id: insights_v1_accounts_url_post
+                data:
+                  url: https://widgets.thisisbud.com/accounts?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
                 metadata:
                   sufficient_data: true
         '400':
@@ -11277,6 +11562,16 @@ components:
               $ref: '#/components/schemas/BudMonetaryValue'
             currency:
               $ref: '#/components/schemas/BudCurrency'
+        counterparty:
+          type: object
+          description: An object containing details of the counterparty in this transaction
+          properties:
+            name:
+              type: string
+              description: The name of the counterparty involved in this transaction.
+            identifier:
+              type: string
+              description: An identifier for the account of the other party
         tags:
           type: array
           description: |
@@ -13438,7 +13733,7 @@ components:
             updated_at:
               description: The date time that the event occurred
               type: string
-              format: datetime
+              format: date-time
               example: '2023-10-02T14:05:55Z'
             reason:
               type: string
@@ -13760,17 +14055,37 @@ components:
           type: string
           description: The sub type of the account
           enum:
+            - AutoLoan
+            - BoatLoan
+            - Brokerage
+            - BusinessLoan
+            - CertificateOfDeposit
             - ChargeCard
             - CheckingAccount
             - CreditCard
             - CurrentAccount
+            - DisabilityInsurance
             - EMoney
+            - HealthInsurance
+            - HomeEquityLoan
             - Investment
+            - Ira
+            - LiabilityInsurance
+            - LifeInsurance
+            - LineOfCredit
             - Loan
+            - MoneyMarket
             - Mortgage
-            - PrePaidCard
-            - Savings
             - Other
+            - PersonalLoan
+            - PrePaidCard
+            - PropertyInsurance
+            - Roth
+            - RvLoan
+            - Savings
+            - StudentLoan
+            - TravelInsurance
+            - VehicleInsurance
         holder_name:
           type: string
           description: The name of the account holder
@@ -13790,6 +14105,11 @@ components:
           description: The balances associated with the account
           items:
             $ref: '#/components/schemas/IngestAccountBalance'
+        opening_date_time:
+          type: string
+          format: date-time
+          description: The opening date time of the account in RFC3339 format.
+          example: '2022-11-12T15:30:00Z'
         holders:
           type: array
           description: The account holders details associated with the account
@@ -14232,12 +14552,12 @@ components:
           example: 2f5b2055-6253-4cd0-b646-06788342a609
         date_time:
           type: string
-          format: datetime
+          format: date-time
           description: The date detailing when the transaction occurred, compliant with RFC3339
           example: '2022-11-10T23:00:00Z'
         posted_date_time:
           type: string
-          format: datetime
+          format: date-time
           description: The date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becomes available, for debits this is the date that the asset ceased to be available.
           example: '2022-11-12T15:30:00Z'
         status:
@@ -14298,6 +14618,19 @@ components:
             Example: `"10.98"` or `"-10.98"`
         client_attributes:
           $ref: '#/components/schemas/BudClientAttributes'
+        suggested_description:
+          type: string
+          description: String providing details on the transaction itself as a customer would expect to see the transaction in other locations.
+        counterparty:
+          type: object
+          description: An object containing details of the counterparty in this transaction
+          properties:
+            name:
+              type: string
+              description: The name of the counterparty involved in this transaction.
+            identifier:
+              type: string
+              description: An identifier for the account of the other party
     TransactionWindow:
       type: object
       title: Transaction Window
@@ -14316,12 +14649,12 @@ components:
           example: 2f5b2055-6253-4cd0-b646-06788342a609
         start:
           type: string
-          format: datetime
+          format: date-time
           description: The date detailing the start of the transaction window, compliant with RFC3339
           example: '2022-05-10T23:00:00Z'
         end:
           type: string
-          format: datetime
+          format: date-time
           description: The date detailing the end of the transaction window, compliant with RFC3339
           example: '2022-10-10T23:00:00Z'
     TransactionWindowArray:
@@ -15106,16 +15439,37 @@ components:
             The type of account.
 
             Currently supported values include (but are not necessarily limited to):
+              - `auto_loan`
+              - `boat_loan`
+              - `brokerage`
+              - `business_loan`
+              - `certificate_of_deposit`
               - `charge_card`
+              - `checking_account`
               - `credit_card`
               - `current_account`
+              - `disability_insurance`
               - `e_money`
+              - `health_insurance`
+              - `home_equity_loan`
               - `investment`
+              - `ira`
+              - `liability_insurance`
+              - `life_insurance`
+              - `line_of_credit`
               - `loan`
+              - `money_market`
               - `mortgage`
               - `other`
+              - `personal_loan`
               - `pre_paid_card`
+              - `property_insurance`
+              - `roth`
+              - `rv_loan`
               - `savings`
+              - `student_loan`
+              - `travel_insurance`
+              - `vehicle_insurance`
 
             Not present if empty.
         usage_type:
@@ -15135,8 +15489,13 @@ components:
 
             Currently supported values include (but are not necessarily limited to):
               - `closed`
+        opening_date_time:
+          type: string
+          format: date-time
+          description: The datetime the account was opened in the format [RFC 3339]
         closed_at:
           type: string
+          format: date-time
           description: |
             The datetime the account was closed in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
 
@@ -15149,6 +15508,30 @@ components:
             Example: `Nationwide`
 
             Not present if empty.
+        provider_display_name:
+          type: string
+          description: |
+            The display name for the account's provider.
+
+            Not present if empty.
+        provider_logo:
+          type: string
+          description: |
+            A link to an image for the accounts provider's logo.
+
+            Not present if empty.
+        account_category:
+          type: string
+          description: |
+            The account category that the account type is a part of
+
+            Currently supported values include (but are not necessarily limited to):
+              - `credit`
+              - `depository`
+              - `insurance`
+              - `investment`
+              - `loan`
+              - `other`
         identifiers:
           type: object
           description: These are wellknown fields which uniquely identify the account.
@@ -15417,6 +15800,60 @@ components:
             results:
               type: integer
               description: The number of accounts returned in the results
+    TransactionDatesV3:
+      title: Account Transaction Date
+      type: object
+      required:
+        - account_id
+        - first_transaction_date
+        - last_transaction_date
+      properties:
+        account_id:
+          type: string
+          description: |
+            A unique id associated with the account.
+
+            Example: `sdb4eRMaad8XVEvdIoISOQ`
+        first_transaction_date:
+          type: string
+          format: date-time
+          description: The date of the first transaction that bud has stored for this account.
+        last_transaction_date:
+          type: string
+          format: date-time
+          description: The date of the last transaction that bud has stored for this account.
+    ListAccountTransactionDatesV3Response:
+      title: Retrieve Transaction Dates Response
+      type: object
+      required:
+        - operation_id
+        - data
+        - metadata
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - financial_v3_accounts_transaction_dates_get
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionDatesV3'
+        metadata:
+          type: object
+          required:
+            - results
+          properties:
+            results:
+              type: number
+              description: The number of accounts returned in the results
+            first_transaction_date:
+              type: string
+              format: date-time
+              description: The first transaction date across all accounts returned in the results
+            last_transaction_date:
+              type: string
+              format: date-time
+              description: The last transaction date across all accounts returned in the results
     BalanceV3Amount:
       title: Balance amount
       description: A representation of both the amount and the credit/debit indicator
@@ -16695,6 +17132,16 @@ components:
               $ref: '#/components/schemas/BudMonetaryValue'
             currency:
               $ref: '#/components/schemas/BudCurrency'
+        counterparty:
+          type: object
+          description: An object containing details of the counterparty in this transaction
+          properties:
+            name:
+              type: string
+              description: The name of the counterparty involved in this transaction.
+            identifier:
+              type: string
+              description: An identifier for the account of the other party
         tags:
           type: array
           description: |
@@ -16929,6 +17376,8 @@ components:
         - total_debit
         - total_credit
         - transaction_count
+        - credit_transaction_count
+        - debit_transaction_count
       properties:
         merchant:
           $ref: '#/components/schemas/components_schemas-Merchant'
@@ -16946,6 +17395,14 @@ components:
           type: number
           title: Transaction Count
           description: Total number of transactions identified with the named merchant
+        credit_transaction_count:
+          type: number
+          title: Credit Transaction Count
+          description: Total number of credit transactions identified with the named merchant
+        debit_transaction_count:
+          type: number
+          title: Debit Transaction Count
+          description: Total number of debit transactions identified with the named merchant
     LegacyBudDateRangeMetadata:
       title: Metadata
       type: object
@@ -19691,6 +20148,12 @@ components:
           properties:
             sufficient_data:
               type: boolean
+            number_of_insights:
+              type: integer
+            summary_to:
+              $ref: '#/components/schemas/DateTimeISO8601'
+            summary_from:
+              $ref: '#/components/schemas/DateTimeISO8601'
     BaseHeadingLevel:
       type: integer
       minimum: 1
@@ -19793,6 +20256,29 @@ components:
           type: string
           enum:
             - insights_v1_spending_analysis_url_post
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+        metadata:
+          type: object
+          properties:
+            sufficient_data:
+              type: boolean
+    GenerateAccountsURLRequest:
+      type: object
+      properties:
+        additional_query_params:
+          $ref: '#/components/schemas/SpendingAnalysisQueryParams'
+    GenerateAccountsURLResponse:
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_accounts_url_post
         data:
           type: object
           properties:
@@ -20781,34 +21267,6 @@ components:
         type: string
         format: uuid
   responses:
-    GenerateIntelligentSearchURLResponse:
-      description: Successful response containing the Intelligent Search URL and metadata.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              operation_id:
-                type: string
-                enum:
-                  - insights_v1_intelligent_search_url_post
-              data:
-                type: object
-                properties:
-                  url:
-                    type: string
-                    format: uri
-              metadata:
-                type: object
-                properties:
-                  sufficient_data:
-                    type: boolean
-          example:
-            operation_id: insights_v1_intelligent_search_url_post
-            data:
-              url: https://widgets.thisisbud.com/intelligent-search/953ea9c1-faee-4daf-9790-4cfd649f66f7?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
-            metadata:
-              sufficient_data: true
     SearchTransactionsResponse:
       description: OK
       headers:
@@ -21250,6 +21708,7 @@ x-tagGroups:
   - name: ''
     tags:
       - Retrieve Financial Data
+      - Manage Financial Data
       - Correct Financial Data
       - Financial Data API
   - name: ''
