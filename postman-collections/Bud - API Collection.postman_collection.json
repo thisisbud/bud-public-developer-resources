@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "b8e2c4e7-cf91-4e72-96d9-4934be62ef4c",
+		"_postman_id": "6a71c360-3ad3-4074-9c0c-239be7750d9c",
 		"name": "Bud - API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "24883107",
-		"_collection_link": "https://universal-trinity-148702.postman.co/workspace/Bud~0fd583a1-9fcd-47d6-8327-0a1540f028ee/collection/24883107-b8e2c4e7-cf91-4e72-96d9-4934be62ef4c?action=share&source=collection_link&creator=24883107"
+		"_exporter_id": "30390585"
 	},
 	"item": [
 		{
@@ -2274,160 +2273,6 @@
 					"name": "Retrieve Financial Data",
 					"item": [
 						{
-							"name": "Retrieve Accounts V2",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"",
-											"tests[\"Response has data\"] = jsonData.data;",
-											"var firstElement = jsonData.data[0]",
-											"",
-											"pm.environment.set(\"bank_account_id\", firstElement.account_id);",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "text"
-									},
-									{
-										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "default"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "{{proxy_url}}financial/v2/accounts",
-									"host": [
-										"{{proxy_url}}financial"
-									],
-									"path": [
-										"v2",
-										"accounts"
-									],
-									"query": [
-										{
-											"key": "currency",
-											"value": null,
-											"description": "Use this parameter to filter the results returned on the currency associated with each result. Multiple values are accepted. If this parameter is not provided then results of any currency will be returned.",
-											"disabled": true
-										},
-										{
-											"key": "provider",
-											"value": null,
-											"description": "Use this parameter to filter the results returned on the provider associated with each result. Multiple values are accepted. If this parameter is not provided then results of any provider will be returned",
-											"disabled": true
-										},
-										{
-											"key": "account_type",
-											"value": null,
-											"description": "Use this parameter to filter the results returned on the account_type associated with each result. Multiple values are accepted. If this parameter is not provided then results of any account_type will be returned.",
-											"disabled": true
-										},
-										{
-											"key": "usage_type",
-											"value": null,
-											"description": "Use this parameter to filter the results returned on the usage_type associated with each result. Multiple values are accepted. If this parameter is not provided then results of any usage_type will be returned.",
-											"disabled": true
-										},
-										{
-											"key": "holder_relationship_type",
-											"value": null,
-											"description": "Use this parameter to filter the results returned on the holder_relationship_type associated with each result. Multiple values are accepted. If this parameter is not provided then results of any holder_relationship_type will be returned.",
-											"disabled": true
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Retrieve Account By ID V2",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "text"
-									},
-									{
-										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "default"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "{{proxy_url}}financial/v2/accounts/{{bank_account_id}}",
-									"host": [
-										"{{proxy_url}}financial"
-									],
-									"path": [
-										"v2",
-										"accounts",
-										"{{bank_account_id}}"
-									]
-								},
-								"description": "Retrieves a customer's connected account by its ID."
-							},
-							"response": []
-						},
-						{
 							"name": "Retrieve Accounts V3",
 							"event": [
 								{
@@ -2584,138 +2429,6 @@
 									]
 								},
 								"description": "Retrieves a customer's connected account by its ID."
-							},
-							"response": []
-						},
-						{
-							"name": "Retrieve Balances over time",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "default"
-									},
-									{
-										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "default"
-									},
-									{
-										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "default"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "{{proxy_url}}financial/v2/balances",
-									"host": [
-										"{{proxy_url}}financial"
-									],
-									"path": [
-										"v2",
-										"balances"
-									],
-									"query": [
-										{
-											"key": "from",
-											"value": "2022-11-25",
-											"disabled": true
-										},
-										{
-											"key": "to",
-											"value": "2023-02-01",
-											"disabled": true
-										},
-										{
-											"key": "granularity",
-											"value": "annually",
-											"disabled": true
-										}
-									]
-								},
-								"description": "List the balances of each bank account for a customer accross all ingestion sources. Ordered by balance date.\n\nIt calculates the balance for each date, by iterating from the date the account was last refreshed to the to and from dates provided. It then checks all the transactions within this range, calculating the balance at the end of each day.\n\nThis endpoint limits the date from which it gets balances from either by the oldest transaction_window on the account if they are present, or by the oldest transaction within the requested date range available.\n\nFor users ingesting data via the Ingest Accounts endpoint, you can increase the range and accuracy of the data supplied from this service by including the transaction_window field upon acccount ingestion."
-							},
-							"response": []
-						},
-						{
-							"name": "Retrieve Balances over time by account",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{auth_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "default"
-									},
-									{
-										"key": "X-Client-Id",
-										"value": "{{api_credentials_id}}",
-										"type": "default"
-									},
-									{
-										"key": "X-Customer-Id",
-										"value": "{{customer_id}}",
-										"type": "default"
-									}
-								],
-								"url": {
-									"raw": "{{proxy_url}}financial/v2/accounts/{{bank_account_id}}/balances",
-									"host": [
-										"{{proxy_url}}financial"
-									],
-									"path": [
-										"v2",
-										"accounts",
-										"{{bank_account_id}}",
-										"balances"
-									],
-									"query": [
-										{
-											"key": "from",
-											"value": "2021-11-25",
-											"disabled": true
-										},
-										{
-											"key": "to",
-											"value": "2023-02-01",
-											"disabled": true
-										},
-										{
-											"key": "granularity",
-											"value": "annually",
-											"disabled": true
-										}
-									]
-								}
 							},
 							"response": []
 						},
@@ -3006,6 +2719,352 @@
 									"path": [
 										"v2",
 										"authorised-payments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Account Transaction Dates",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}financial/v3/accounts/transaction-dates",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v3",
+										"accounts",
+										"transaction-dates"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Accounts V2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"Response has data\"] = jsonData.data;",
+											"var firstElement = jsonData.data[0]",
+											"",
+											"pm.environment.set(\"bank_account_id\", firstElement.account_id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}financial/v2/accounts",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v2",
+										"accounts"
+									],
+									"query": [
+										{
+											"key": "currency",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the currency associated with each result. Multiple values are accepted. If this parameter is not provided then results of any currency will be returned.",
+											"disabled": true
+										},
+										{
+											"key": "provider",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the provider associated with each result. Multiple values are accepted. If this parameter is not provided then results of any provider will be returned",
+											"disabled": true
+										},
+										{
+											"key": "account_type",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the account_type associated with each result. Multiple values are accepted. If this parameter is not provided then results of any account_type will be returned.",
+											"disabled": true
+										},
+										{
+											"key": "usage_type",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the usage_type associated with each result. Multiple values are accepted. If this parameter is not provided then results of any usage_type will be returned.",
+											"disabled": true
+										},
+										{
+											"key": "holder_relationship_type",
+											"value": null,
+											"description": "Use this parameter to filter the results returned on the holder_relationship_type associated with each result. Multiple values are accepted. If this parameter is not provided then results of any holder_relationship_type will be returned.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Account By ID V2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}financial/v2/accounts/{{bank_account_id}}",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v2",
+										"accounts",
+										"{{bank_account_id}}"
+									]
+								},
+								"description": "Retrieves a customer's connected account by its ID."
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Balances over time",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{proxy_url}}financial/v2/balances",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v2",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2022-11-25",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "2023-02-01",
+											"disabled": true
+										},
+										{
+											"key": "granularity",
+											"value": "annually",
+											"disabled": true
+										}
+									]
+								},
+								"description": "List the balances of each bank account for a customer accross all ingestion sources. Ordered by balance date.\n\nIt calculates the balance for each date, by iterating from the date the account was last refreshed to the to and from dates provided. It then checks all the transactions within this range, calculating the balance at the end of each day.\n\nThis endpoint limits the date from which it gets balances from either by the oldest transaction_window on the account if they are present, or by the oldest transaction within the requested date range available.\n\nFor users ingesting data via the Ingest Accounts endpoint, you can increase the range and accuracy of the data supplied from this service by including the transaction_window field upon acccount ingestion."
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Balances over time by account",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "default"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}financial/v2/accounts/{{bank_account_id}}/balances",
+									"host": [
+										"{{proxy_url}}financial"
+									],
+									"path": [
+										"v2",
+										"accounts",
+										"{{bank_account_id}}",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "2021-11-25",
+											"disabled": true
+										},
+										{
+											"key": "to",
+											"value": "2023-02-01",
+											"disabled": true
+										},
+										{
+											"key": "granularity",
+											"value": "annually",
+											"disabled": true
+										}
 									]
 								}
 							},
