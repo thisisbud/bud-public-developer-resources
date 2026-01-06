@@ -16480,29 +16480,19 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateIntelligentSearchURLRequest'
       responses:
         '201':
-          description: Successful response containing the Intelligent Search URL and metadata.
+          description: Successful response containing Intelligent Search URL and metadata.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  operation_id:
-                    type: string
-                    enum:
-                      - insights_v1_intelligent_search_url_post
-                  data:
-                    type: object
-                    properties:
-                      url:
-                        type: string
-                        format: uri
-                  metadata:
-                    type: object
-                    properties:
-                      sufficient_data:
-                        type: boolean
+                $ref: '#/components/schemas/GenerateIntelligentSearchURLResponse'
               example:
                 operation_id: insights_v1_intelligent_search_url_post
                 data:
@@ -23581,7 +23571,7 @@ components:
         suggested_url:
           type: string
           description: A suggested URL for the merchant, to help bud identify it and expand our merchant database.
-          example: http://www.example.com
+          example: https://www.example.com
         online_or_billing_only:
           type: boolean
           description: This is used to indicate if the custom merchant being created is an exclusively online or billing merchant.
@@ -28772,11 +28762,19 @@ components:
       type: integer
       minimum: 1
       maximum: 6
+    ColorMode:
+      type: string
+      enum:
+        - system
+        - light
+        - dark
     GlobalWidgetURLQueryParams:
       type: object
       properties:
         base_heading_level:
           $ref: '#/components/schemas/BaseHeadingLevel'
+        color_mode:
+          $ref: '#/components/schemas/ColorMode'
     FinancialCalendarQueryParams:
       allOf:
         - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
@@ -28870,6 +28868,32 @@ components:
           type: string
           enum:
             - insights_v1_spending_analysis_url_post
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+        metadata:
+          type: object
+          properties:
+            sufficient_data:
+              type: boolean
+    IntelligentSearchQueryParams:
+      allOf:
+        - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
+    GenerateIntelligentSearchURLRequest:
+      type: object
+      properties:
+        additional_query_params:
+          $ref: '#/components/schemas/IntelligentSearchQueryParams'
+    GenerateIntelligentSearchURLResponse:
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_intelligent_search_url_post
         data:
           type: object
           properties:
