@@ -299,12 +299,23 @@ info:
     | 28/08/2024           | Deprecated **Retrieve Balances Over Time** in favour of **Retrieve Balances Over Time V3** (Three month deprecation Notice)                                                                                                                                                                                                                                                                                                                |
     | 04/09/2024           | Deprecated **Retrieve Account V2** in favour of **Retrieve Account V3** (Six month deprecation notice)                                                                                                                                                                                                                                                                                                                                     |
     | 04/09/2024           | Deprecated **Retrieve Account By ID V2** in favour of **Retrieve Account By ID V3** (Six month deprecation notice)
-
     | 02/10/2024           | Deprecated **Retrieve Affordability Transactions** in favour of **Retrieve Affordability Transactions V2** (Three month deprecation Notice)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
+
+    **Version 2.26.0: 19/01/2026**
+    >- Add __Generate Spending Budgets URL__ endpoint.
+
+    **Version 2.25.2: 12/01/2026**
+    >- Mark `posted_date_time` field as deprecated on __Retrieve Transactions V2__ endpoint.
+
+    **Version 2.25.1: 08/01/2026**
+    > - Added `exclude_category` parameter to __Category Totals V2__ endpoint.
+
+    **Version 2.25.0: 07/01/2026**
+    >- Add hcst as valid tag being returned from __Retrieve Transactions V2__ endpoint.
 
     **Version 2.24.1: 06/01/2026**
     >- Remove `posted_date_time` from __Ingest Transactions__ endpoint request and response.
@@ -5440,6 +5451,7 @@ paths:
         - $ref: '#/components/parameters/CategoryTotalsQueryFromTimestamp'
         - $ref: '#/components/parameters/CategoryTotalsQueryToTimestamp'
         - $ref: '#/components/parameters/QueryBudCategory'
+        - $ref: '#/components/parameters/QueryExcludeBudCategory'
         - $ref: '#/components/parameters/QueryCurrency'
         - $ref: '#/components/parameters/QueryAccountID'
         - in: query
@@ -5529,6 +5541,7 @@ paths:
         - $ref: '#/components/parameters/QueryAccountID'
         - $ref: '#/components/parameters/QueryCurrency'
         - $ref: '#/components/parameters/QueryBudCategory'
+        - $ref: '#/components/parameters/QueryExcludeBudCategory'
         - in: query
           name: include_l2
           schema:
@@ -16466,6 +16479,42 @@ paths:
           description: Bad Request
         5XX:
           description: An unexpected error occurred on the server side
+  /widget/v1/spending-budgets/url:
+    post:
+      tags:
+        - Frontend Widgets
+      security:
+        - OAuth2: []
+      operationId: insights_v1_spending_budgets_url_post
+      summary: Generate Spending Budgets URL
+      description: Generates a URL to access the customer's spending budgets.
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateSpendingBudgetsURLRequest'
+      responses:
+        '201':
+          description: Successful response containing Spending Budgets URL and metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateSpendingBudgetsURLResponse'
+              example:
+                operation_id: insights_v1_spending_budgets_url_post
+                data:
+                  url: https://widgets.thisisbud.com/spending-budgets?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+                metadata:
+                  sufficient_data: true
+        '400':
+          description: Bad Request
+        5XX:
+          description: An unexpected error occurred on the server side
   /widget/v1/intelligent-search/url:
     post:
       tags:
@@ -16691,6 +16740,7 @@ components:
           type: string
           description: Date that the transaction occured compliant with RFC3339.
         posted_date_time:
+          deprecated: true
           type: string
           description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becomes available, for debits this is the date that the asset ceased to be available
         enrichments:
@@ -16732,6 +16782,7 @@ components:
             | `benefit`               | A government/non-profit benefit transaction               |
             | `debt-collection`       | A transaction associated with a known debt-collector      |
             | `loan`                  | A transaction associated with a loan                      |
+            | `hcst`                  | A transaction associated with a high cost short term loan |
             | `income`                | A transaction associated with income                      |
             | `pending`               | A transaction which has not been booked                   |
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
@@ -17059,6 +17110,7 @@ components:
             | `benefit`               | A government/non-profit benefit transaction               |
             | `debt-collection`       | A transaction associated with a known debt-collector      |
             | `loan`                  | A transaction associated with a loan                      |
+            | `hcst`                  | A transaction associated with a high cost short term loan |
             | `income`                | A transaction associated with income                      |
             | `pending`               | A transaction which has not been booked                   |
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
@@ -20796,6 +20848,7 @@ components:
             | `benefit`               | A government/non-profit benefit transaction               |
             | `debt-collection`       | A transaction associated with a known debt-collector      |
             | `loan`                  | A transaction associated with a loan                      |
+            | `hcst`                  | A transaction associated with a high cost short term loan |
             | `income`                | A transaction associated with income                      |
             | `pending`               | A transaction which has not been booked                   |
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
@@ -26133,6 +26186,7 @@ components:
             | `benefit`               | A government/non-profit benefit transaction               |
             | `debt-collection`       | A transaction associated with a known debt-collector      |
             | `loan`                  | A transaction associated with a loan                      |
+            | `hcst`                  | A transaction associated with a high cost short term loan |
             | `income`                | A transaction associated with income                      |
             | `pending`               | A transaction which has not been booked                   |
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
@@ -28867,6 +28921,32 @@ components:
           properties:
             sufficient_data:
               type: boolean
+    SpendingBudgetsQueryParams:
+      allOf:
+        - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
+    GenerateSpendingBudgetsURLRequest:
+      type: object
+      properties:
+        additional_query_params:
+          $ref: '#/components/schemas/SpendingBudgetsQueryParams'
+    GenerateSpendingBudgetsURLResponse:
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_spending_budgets_url_post
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+        metadata:
+          type: object
+          properties:
+            sufficient_data:
+              type: boolean
     IntelligentSearchQueryParams:
       allOf:
         - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
@@ -29472,6 +29552,21 @@ components:
         Examples:
           - `shopping` - Filters the result set to only include data where the l1 category is `shopping`.
           - `shopping.groceries` - Filters the result set to only include data where the l1 category is `shopping` and the l2 category is `groceries`.
+    QueryExcludeBudCategory:
+      in: query
+      name: exclude_category
+      schema:
+        type: string
+      example: shopping
+      description: |
+        Use this parameter to filter the results on l1 categories to exclude.
+        Accepts multiple values, or values separated by comma.
+
+        To specify l2 categories to exclude, use the following format: `l1.l2`.
+
+        Examples:
+          - `shopping` - Filters the result set to exclude data where the l1 category is `shopping`.
+          - `shopping.groceries` - Filters the result set to only exclude data where the l1 category is `shopping` and the l2 category is `groceries`.
     QueryCurrency:
       in: query
       name: currency
