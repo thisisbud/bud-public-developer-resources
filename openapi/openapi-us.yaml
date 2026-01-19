@@ -222,6 +222,13 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 2.25.0: 07/01/2026**
+    >- Add hcst as valid tag being returned from __Retrieve Transactions V2__ endpoint.
+
+    **Version 2.24.2: 02/12/2025**
+    >- Set `X-Customer-Ip-Address` header as mandatory on __Initiate Refresh__ endpoint.
+    >- Set `X-Customer-Ip-Address` header as mandatory on __Initiate Refresh V2__ endpoint.
+
     **Version 2.24.1: 06/01/2026**
     >- Remove `posted_date_time` from __Ingest Transactions__ endpoint request and response.
 
@@ -1700,7 +1707,7 @@ paths:
           name: X-Customer-Ip-Address
           schema:
             type: string
-          required: false
+          required: true
           description: |
             The IP address of the personal device the customer is initiating the refresh from.
             This header should _only_ be supplied if the customer has initiated the refresh from a personal device, and never if the refresh has been initated from an automated process such as a script.
@@ -1958,7 +1965,7 @@ paths:
           name: X-Customer-Ip-Address
           schema:
             type: string
-          required: false
+          required: true
           description: |
             The IP address of the personal device the customer is initiating the refresh from.
             This header should _only_ be supplied if the customer has initiated the refresh from a personal device, and never if the refresh has been initated from an automated process such as a script.
@@ -11573,6 +11580,7 @@ components:
             | `benefit`               | A government/non-profit benefit transaction               |
             | `debt-collection`       | A transaction associated with a known debt-collector      |
             | `loan`                  | A transaction associated with a loan                      |
+            | `hcst`                  | A transaction associated with a high cost short term loan |
             | `income`                | A transaction associated with income                      |
             | `pending`               | A transaction which has not been booked                   |
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
@@ -14894,6 +14902,7 @@ components:
             | `benefit`               | A government/non-profit benefit transaction               |
             | `debt-collection`       | A transaction associated with a known debt-collector      |
             | `loan`                  | A transaction associated with a loan                      |
+            | `hcst`                  | A transaction associated with a high cost short term loan |
             | `income`                | A transaction associated with income                      |
             | `pending`               | A transaction which has not been booked                   |
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
@@ -17135,6 +17144,7 @@ components:
             | `benefit`               | A government/non-profit benefit transaction               |
             | `debt-collection`       | A transaction associated with a known debt-collector      |
             | `loan`                  | A transaction associated with a loan                      |
+            | `hcst`                  | A transaction associated with a high cost short term loan |
             | `income`                | A transaction associated with income                      |
             | `pending`               | A transaction which has not been booked                   |
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
@@ -19539,6 +19549,7 @@ components:
             | `benefit`               | A government/non-profit benefit transaction               |
             | `debt-collection`       | A transaction associated with a known debt-collector      |
             | `loan`                  | A transaction associated with a loan                      |
+            | `hcst`                  | A transaction associated with a high cost short term loan |
             | `income`                | A transaction associated with income                      |
             | `pending`               | A transaction which has not been booked                   |
             | `regular-transaction`   | A transaction predicted to occur with a regular frequency |
