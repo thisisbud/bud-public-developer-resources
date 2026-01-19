@@ -6658,6 +6658,45 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Generate Spending Budgets URL",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "undefined",
+											"type": "any"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Client-Id",
+										"value": "{{api_credentials_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Customer-Id",
+										"value": "{{customer_id}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{proxy_url}}widget/v1/spending-budgets/url",
+									"host": [
+										"{{proxy_url}}widget"
+									],
+									"path": [
+										"v1",
+										"spending-budgets",
+										"url"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
