@@ -4348,6 +4348,12 @@
 											"disabled": true
 										},
 										{
+											"key": "exclude_category",
+											"value": "bills.utilities,general",
+											"description": "If set, will filter result to exclude the l1 categories specified, comma seperated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be excluded from the total for the l1 category.",
+											"disabled": true
+										},
+										{
 											"key": "currency",
 											"value": "GBP,EUR",
 											"description": "List of currency codes to include, if not set will default to include all",
@@ -4431,6 +4437,12 @@
 											"key": "category",
 											"value": "bills.utilities,general",
 											"description": "If set, will filter result to include only the l1 categories specified, comma seperated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be aggregated in the total for the l1 category. Defaults to include all.",
+											"disabled": true
+										},
+										{
+											"key": "exclude_category",
+											"value": "bills.utilities,general",
+											"description": "If set, will filter result to exclude the l1 categories specified, comma seperated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be excluded from the total for the l1 category.",
 											"disabled": true
 										},
 										{
