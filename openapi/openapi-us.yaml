@@ -204,23 +204,57 @@ info:
 
     Bud will continue to support deprecations for a period of **three months** after they are first announced.
 
-    | Date of Announcement | Deprecation Details                                                                                               |
-    |:---------------------|:------------------------------------------------------------------------------------------------------------------|
-    | 05/09/2022           | Deprecated **Retrieve Merchant Totals V1** in favour of new **Retrieve Merchant Totals V2** endpoint              |
-    | 10/02/2023           | Deprecated **Retrieve Enriched Transactions V1** in favour of new **Retrieve Enriched Transactions V2** endpoint  |
-    | 15/01/2024           | Deprecated **Remove Customer** in favour of **Remove Customer V3**                                                |
-    | 25/01/2024           | Deprecated **Retrieve Ingestion Task Status V2** in favour of **Retrieve Ingestion Task Status V3**               |
-    | 21/05/2024           | Deprecated **Initiate Refresh** in favour of **Initiate Refresh V2** (Six month deprecation Notice)               |
-    | 21/05/2024           | Deprecated **Retrieve Refresh Status** in favour of **Retrieve Refresh Status V2** (Six month deprecation Notice) |
-    | 27/08/2024           | Deprecated **Retrieve Affordability Transactions** in favour of **Retrieve Affordability Transactions V2**        |
-    | 28/08/2024           | Deprecated **Retrieve Balances Over Time** in favour of **Retrieve Balances Over Time V3**                        |
-    | 04/09/2024           | Deprecated **Retrieve Account V2** in favour of **Retrieve Account V3**                                           |
-    | 04/09/2024           | Deprecated **Retrieve Account By ID V2** in favour of **Retrieve Account By ID V3**                               |
-    | 02/10/2024           | Deprecated **Retrieve Affordability Transactions** in favour of **Retrieve Affordability Transactions V2**        |
+    | Date of Announcement | Deprecation Details                                                                                                                |
+    |:---------------------|:-----------------------------------------------------------------------------------------------------------------------------------|
+    | 05/09/2022           | Deprecated **Retrieve Merchant Totals V1** in favour of new **Retrieve Merchant Totals V2** endpoint                               |
+    | 10/02/2023           | Deprecated **Retrieve Enriched Transactions V1** in favour of new **Retrieve Enriched Transactions V2** endpoint                   |
+    | 15/01/2024           | Deprecated **Remove Customer** in favour of **Remove Customer V3**                                                                 |
+    | 25/01/2024           | Deprecated **Retrieve Ingestion Task Status V2** in favour of **Retrieve Ingestion Task Status V3**                                |
+    | 21/05/2024           | Deprecated **Initiate Refresh** in favour of **Initiate Refresh V2** (Six month deprecation Notice)                                |
+    | 21/05/2024           | Deprecated **Retrieve Refresh Status** in favour of **Retrieve Refresh Status V2** (Six month deprecation Notice)                  |
+    | 27/08/2024           | Deprecated **Retrieve Affordability Transactions** in favour of **Retrieve Affordability Transactions V2**                         |
+    | 28/08/2024           | Deprecated **Retrieve Balances Over Time** in favour of **Retrieve Balances Over Time V3**                                         |
+    | 04/09/2024           | Deprecated **Retrieve Account V2** in favour of **Retrieve Account V3**                                                            |
+    | 04/09/2024           | Deprecated **Retrieve Account By ID V2** in favour of **Retrieve Account By ID V3**                                                |
+    | 02/10/2024           | Deprecated **Retrieve Affordability Transactions** in favour of **Retrieve Affordability Transactions V2**                         |
+    | 27/01/2026           | Deprecated `posted_date_time` field on __Retrieve Transations V2__ in favour of `value_date_time` on __Retrieve Transactions V2__  |
+    | 27/01/2026           | Deprecated `date-field` parameter on __Retrieve Balances Over Time V3__                                                            |
+    | 27/01/2026           | Deprecated `date-field` parameter on __Retrieve Balances Over Time By Account V3__                                                 |
 
     ## Changelog
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
+
+    **Version 4.3.0: 23/04/2026**
+    >- Add __Generate Savings Goals URL__ endpoint.
+
+    **Version 4.2.0: 21/04/2026**
+    >- Remove deprecated __Savings Goals V1__ endpoints.
+
+    **Version 4.1.0: 20/04/2026**
+    >- Add __Create Savings Goal V2__ endpoint.
+    >- Add __Retrieve Savings Goals V2__ endpoint.
+    >- Add __Retrieve Savings Goal V2__ endpoint.
+    >- Add __Update Savings Goal V2__ endpoint.
+    >- Add __Remove Savings Goal V2__ endpoint.
+
+
+    **Version 4.0.1: 02/03/2026**
+    >- Extend description of __Ingest Transactions__.
+
+    **Version 4.0.0: 09/02/2026**
+    >- Add __Remove Customer By Idempotent Identifier V3__ endpoint.
+
+    **Version 3.0.0: 09/02/2026**
+    >- Remove __Create Spending Budget__ `account_id` request body parameter
+    >- Add `account_id` filtering parameter to __Retrieve Spending Budgets__ endpoint.
+    >- Add `account_id` filtering parameter to __Retrieve Spending Budget Transactions__ endpoint.
+
+    **Version 2.26.2: 26/01/2026**
+    >- Add `value_date_time` field on __Retrieve Transactions V2__ endpoint.
+    >- Add `value_date_time` field on __Ingest Transactions__ endpoint request and response.
+    >- Mark `date-field` parameter as deprecated on __Retrieve Balances Over Time V3__ endpoint.
+    >- Mark `date-field` parameter as deprecated on __Retrieve Balances Over Time By Account V3__ endpoint.
 
     **Version 2.26.0: 19/01/2026**
     >- Add __Generate Spending Budgets URL__ endpoint.
@@ -671,12 +705,12 @@ tags:
       Endpoints related to managing savings goals and spending budgets.
     x-displayName: Goals API
     x-traitTag: true
-  - name: Savings Goals
-    x-displayName: Savings Goals
-    description: Savings goals management API.
   - name: Spending Budgets
     x-displayName: Spending Budgets
     description: Spending budgets management API.
+  - name: Savings Goals V2
+    x-displayName: Savings Goals V2
+    description: Savings goals management API V2.
   - name: Insights API
     description: |
       These endpoints handle the retrieval of actionable insights for a customer. An actionable insight is an indicator of
@@ -1166,6 +1200,46 @@ paths:
           description: The request uses an unexpected HTTP method.
         5XX:
           description: An unexpected error occurred on the server side.
+  /platform/v3/customers/idempotent-identifier/{customer_idempotent_identifier}:
+    delete:
+      security:
+        - OAuth2: []
+      tags:
+        - Manage Customers
+      summary: Remove Customer By Idempotent Identifier V3
+      description: This endpoint is used to delete an existing Customer. Calling this endpoint initiates deleting all data relating to a customer returning a task id that can be used to check the status of the delete task.
+      operationId: platform_v3_customers_idempotent_identifier_delete
+      parameters:
+        - in: path
+          name: customer_idempotent_identifier
+          schema:
+            type: string
+          required: true
+          description: The internal client identifier, provided in the client_metadata object when creating the customer in Create Customer V3.
+        - $ref: '#/components/parameters/ClientId'
+      responses:
+        '202':
+          description: The request was successfully accepted for processing and details of the task was returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDeleteV3Response'
+              example:
+                operation_id: platform_v3_customers_idempotent_identifier_delete
+                data:
+                  task_id: e74efdd2-bd44-42b0-9562-106286664966
+                metadata:
+                  status: Pending
+                  next_url: /v3/customers/45cecf3f-8436-4b57-8953-cfdfbd2620d4/e74efdd2-bd44-42b0-9562-106286664966
+                  next_url_delay: 50
+        '401':
+          description: An unauthenticated request was received.
+        '404':
+          description: The resource was not found.
+        '405':
+          description: The request uses an unexpected HTTP method.
+        5XX:
+          description: An unexpected error occurred on the server side.
   /platform/v3/customers/{customer_id}/{task_id}:
     get:
       security:
@@ -1328,6 +1402,8 @@ paths:
                   locale: en-US
                   models:
                     categorisation: us-v3
+        '400':
+          description: Request recieved was invalid.
         '401':
           description: An unauthenticated request was received.
         '404':
@@ -3015,6 +3091,12 @@ paths:
 
         The detailed location enrichment response is an additional addon, otherwise only tokens are returned 
         (read more about this in the location [guide](https://docs-us.thisisbud.com/docs/locations).
+
+        > 📘 Note:
+        >
+        > The enrichment values returned in the synchronous response of this endpoint may differ from those returned when fetching the ingested data from __Retrieve Enriched Transactions V2__.
+        >
+        > The synchronous response provides an initial enrichment based solely on the submitted transaction data. During asynchronous ingestion, the data is re-enriched using the customer's existing transaction history and additional enrichment services, producing a more accurate and comprehensive result.
       operationId: v2_ingest_transactions_post
       security:
         - OAuth2: []
@@ -4630,7 +4712,9 @@ paths:
           schema:
             type: integer
           example: 100
-          description: Maximum number of results to be returned. Defaults to 100, maximum is 200
+          description: |
+            Maximum number of results to be returned. Defaults to 100, maximum is 200. 
+            Note: When using the `exclude_tags` filter, the response may contain more transactions than the specified  `page_size` to ensure complete filtering. Always use the presence of `next_page_token` to determine if  additional pages are available.
         - in: query
           name: page_token
           schema:
@@ -4678,7 +4762,9 @@ paths:
               type: string
           example:
             - benefit
-          description: Tags for which associated transactions should not be returned. See response body example for an exhaustive list of possible tags.
+          description: |
+            Tags for which associated transactions should not be returned. See response body example for an exhaustive  list of possible tags.
+            When this filter is applied, the response may include more transactions than the `page_size` to ensure  accurate filtering. Always use the presence of `next_page_token` to determine if  additional pages are available.
         - in: query
           name: updated_after
           schema:
@@ -4727,7 +4813,7 @@ paths:
                           value: '19.99'
                           currency: USD
                         date_time: '2023-08-01T12:02:48Z'
-                        posted_date_time: '2023-08-01T12:02:48Z'
+                        value_date_time: '2023-08-01T12:02:48Z'
                         merchant_category_code: '5815'
                         enrichments:
                           merchant:
@@ -4776,7 +4862,7 @@ paths:
                           value: '12.77'
                           currency: USD
                         date_time: '2023-07-05T12:02:48Z'
-                        posted_date_time: '2023-07-05T12:02:48Z'
+                        value_date_time: '2023-07-05T12:02:48Z'
                         enrichments:
                           categories:
                             l1:
@@ -4799,7 +4885,7 @@ paths:
                           value: '2.99'
                           currency: USD
                         date_time: '2023-11-10T11:48:05-05:00'
-                        posted_date_time: '2023-11-10T11:48:05-05:00'
+                        value_date_time: '2023-11-10T11:48:05-05:00'
                         merchant_category_code: '5814'
                         enrichments:
                           categories:
@@ -4857,7 +4943,7 @@ paths:
                           value: '19.99'
                           currency: USD
                         date_time: '2023-08-01T12:02:48Z'
-                        posted_date_time: '2023-08-01T12:02:48Z'
+                        value_date_time: '2023-08-01T12:02:48Z'
                         merchant_category_code: '5815'
                         enrichments:
                           merchant:
@@ -4906,7 +4992,7 @@ paths:
                           value: '12.77'
                           currency: USD
                         date_time: '2023-07-05T12:02:48Z'
-                        posted_date_time: '2023-07-05T12:02:48Z'
+                        value_date_time: '2023-07-05T12:02:48Z'
                         enrichments:
                           categories:
                             l1:
@@ -4929,7 +5015,7 @@ paths:
                           value: '2.99'
                           currency: USD
                         date_time: '2023-11-10T11:48:05-05:00'
-                        posted_date_time: '2023-11-10T11:48:05-05:00'
+                        value_date_time: '2023-11-10T11:48:05-05:00'
                         merchant_category_code: '5814'
                         enrichments:
                           categories:
@@ -4992,7 +5078,7 @@ paths:
                           value: '10.99'
                           currency: USD
                         date_time: '2022-01-02T15:00:00Z'
-                        posted_date_time: '2022-01-02T15:00:00Z'
+                        value_date_time: '2022-01-02T15:00:00Z'
                     metadata:
                       results: 1
                       next_page_token: eyJvZmZzZXQiOjEwMH0
@@ -5771,7 +5857,7 @@ paths:
                           value: '10.99'
                           currency: USD
                         date_time: '2022-05-28T10:00:00Z'
-                        posted_date_time: '2022-05-29T00:00:00Z'
+                        value_date_time: '2022-05-29T00:00:00Z'
                         merchant_category_code: '5814'
                         enrichments:
                           categories:
@@ -5847,7 +5933,7 @@ paths:
                           value: '10.99'
                           currency: USD
                         date_time: '2022-05-28T10:00:00Z'
-                        posted_date_time: '2022-05-29T00:00:00Z'
+                        value_date_time: '2022-05-29T00:00:00Z'
                         merchant_category_code: '5814'
                         enrichments:
                           categories:
@@ -5913,7 +5999,7 @@ paths:
                           value: '50.23'
                           currency: USD
                         date_time: '2022-05-26T10:00:00Z'
-                        posted_date_time: '2022-05-27T00:00:00Z'
+                        value_date_time: '2022-05-27T00:00:00Z'
                         merchant_category_code: '5411'
                         enrichments:
                           categories:
@@ -6236,7 +6322,7 @@ paths:
                           value: '19.99'
                           currency: USD
                         date_time: '2023-08-01T12:02:48Z'
-                        posted_date_time: '2023-08-01T12:02:48Z'
+                        value_date_time: '2023-08-01T12:02:48Z'
                         merchant_category_code: '5815'
                         enrichments:
                           merchant:
@@ -6286,7 +6372,7 @@ paths:
                           value: '6.04'
                           currency: USD
                         date_time: 2023-11-10T23:00:00Z00:00
-                        posted_date_time: 2023-11-10T23:00:00Z00:00
+                        value_date_time: 2023-11-10T23:00:00Z00:00
                         merchant_category_code: '5815'
                         enrichments:
                           categories:
@@ -6319,7 +6405,7 @@ paths:
                           value: '6.04'
                           currency: USD
                         date_time: 2023-11-10T23:00:00Z00:00
-                        posted_date_time: 2023-11-10T23:00:00Z00:00
+                        value_date_time: 2023-11-10T23:00:00Z00:00
                         merchant_category_code: '5815'
                         enrichments:
                           categories:
@@ -6416,7 +6502,7 @@ paths:
                           value: '19.99'
                           currency: USD
                         date_time: '2023-08-01T12:02:48Z'
-                        posted_date_time: '2023-08-01T12:02:48Z'
+                        value_date_time: '2023-08-01T12:02:48Z'
                         merchant_category_code: '5815'
                         enrichments:
                           merchant:
@@ -6466,7 +6552,7 @@ paths:
                           value: '6.04'
                           currency: USD
                         date_time: 2023-11-10T23:00:00Z00:00
-                        posted_date_time: 2023-11-10T23:00:00Z00:00
+                        value_date_time: 2023-11-10T23:00:00Z00:00
                         merchant_category_code: '5815'
                         enrichments:
                           categories:
@@ -6499,7 +6585,7 @@ paths:
                           value: '6.04'
                           currency: USD
                         date_time: 2023-11-10T23:00:00Z00:00
-                        posted_date_time: 2023-11-10T23:00:00Z00:00
+                        value_date_time: 2023-11-10T23:00:00Z00:00
                         merchant_category_code: '5815'
                         enrichments:
                           categories:
@@ -8242,781 +8328,6 @@ paths:
           description: An unexpected HTTP method was used
         5XX:
           description: An unexpected error occurred on the server side
-  /goals/v1/savings:
-    post:
-      tags:
-        - Savings Goals
-      summary: Create Savings Goal
-      description: |
-        Create a savings goal for the given account id.
-
-        Of the fields `target_amount`, `target_datetime` and `recurrent_amount`, only two are required. If two are supplied then the third parameter will be calculated in the response.
-
-        For example:
-          If the date the goal is created is `2023-01-01T00:00:00Z`, if a savings goal is created with the `target_amount` of `$110`, and the `target_datetime` is `2023-12-01T00:00:00Z`, then the recurrent amount will be `$10`.
-
-        When performing this calculation, it is assumed that a customer is not going to deposit their first savings payment within the month of creating the goal.
-        If this is the desired behaviour however, all three parameters can be supplied and the endpoint will accept this.
-      operationId: goals_v1_savings_post
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateSavingsGoalRequest'
-            example:
-              account_id: RxsYshVGded4JeilkXgWKdXA
-              name: Car Savings
-              target_amount:
-                value: '3000.00'
-                currency: USD
-              target_datetime: '2023-12-30T00:00:00Z'
-      responses:
-        '201':
-          description: Created - The goal was created successfully.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateSavingsGoalResponse'
-              example:
-                operation_id: goals_v1_savings_post
-                data:
-                  id: f46d76c4-56d3-11ee-ac69-d6df71eb5902
-                  account_id: RxsYshVGded4JeilkXgWKdXA
-                  name: Car Savings
-                  target_amount:
-                    currency: USD
-                    value: '3000.00'
-                  recurrent_amount:
-                    currency: USD
-                    value: '750.00'
-                  target_datetime: '2023-12-30T00:00:00Z'
-                  saved_amount:
-                    currency: USD
-                    value: '0.00'
-                  created_at: '2023-09-19T10:04:43Z'
-        '400':
-          description: The request contains an invalid payload.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              examples:
-                Customer ID Missing:
-                  value:
-                    operation_id: goals_v1_savings_post
-                    code_id: failed_validation
-                    message: unable to validate request
-                    errors:
-                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
-                Invalid Goal:
-                  value:
-                    operation_id: goals_v1_savings_post
-                    code_id: failed_validation
-                    message: Invalid request payload.
-                    errors:
-                      targets: amount saved at target date will be less than the target amount
-        '401':
-          description: Unauthorized - The request was not authorised.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Unauthorised request
-        '404':
-          description: Not Found - The account ID provided was not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Route or resource not found
-                errors: {}
-        '500':
-          description: Internal Server Error - An unexpected error occurred.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
-    get:
-      tags:
-        - Savings Goals
-      summary: Retrieve Savings Goals
-      description: |
-        Retrieve all savings goals. The results from this endpoint can be filtered by the `account_id` query parameter.
-        The response from this endpoint includes the `saved_amount` field which is the sum of the goal actions associated with the goal.
-      operationId: goals_v1_savings_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/QueryBudAccountID'
-        - $ref: '#/components/parameters/QueryDay'
-      responses:
-        '200':
-          description: OK - The goals were retrieved successfully.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RetrieveSavingsGoalsResponse'
-              examples:
-                Goals Returned for Account ID:
-                  value:
-                    operation_id: goals_v1_savings_get
-                    data:
-                      - id: f46d76c4-56d3-11ee-ac69-d6df71eb5902
-                        account_id: RxsYshVGded4JeilkXgWKdXA
-                        name: Car Savings
-                        target_amount:
-                          currency: USD
-                          value: '3000.00'
-                        recurrent_amount:
-                          currency: USD
-                          value: '750.00'
-                        target_datetime: '2023-12-30T00:00:00Z'
-                        saved_amount:
-                          currency: USD
-                          value: '0.00'
-                        created_at: '2023-09-19T10:04:43Z'
-                      - id: 265a4aed-348d-4ff1-802e-2d08d7cace77
-                        account_id: RxsYshVGded4JeilkXgWKdXA
-                        name: Vacation Savings
-                        target_amount:
-                          currency: USD
-                          value: '1000.00'
-                        recurrent_amount:
-                          currency: USD
-                          value: '100.00'
-                        target_datetime: '2023-07-30T00:00:00Z'
-                        saved_amount:
-                          currency: USD
-                          value: '0.00'
-                        created_at: '2023-09-19T10:04:43Z'
-                    metadata:
-                      results: 2
-                      account_id: RxsYshVGded4JeilkXgWKdXA
-                No Goals Exist:
-                  value:
-                    operation_id: goals_v1_savings_get
-                    data: []
-                    metadata:
-                      results: 0
-                      account_id: ''
-        '400':
-          description: The request contains an invalid payload.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              examples:
-                Customer ID Missing:
-                  value:
-                    operation_id: goals_v1_savings_post
-                    code_id: failed_validation
-                    message: unable to validate request
-                    errors:
-                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
-        '401':
-          description: Unauthorized - The request was not authorised.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Unauthorised request
-        '500':
-          description: Internal Server Error - An unexpected error occurred.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
-    delete:
-      tags:
-        - Savings Goals
-      summary: Remove All Savings Goals
-      description: |
-        Remove all savings goals for the given customer.
-      operationId: goals_v1_savings_delete_all
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-      responses:
-        '204':
-          description: No Content - The goals were removed successfully.
-        '401':
-          description: Unauthorized - The request was not authorised.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Unauthorised request
-        '404':
-          description: Not Found - The customer has no goals to be deleted.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Route or resource not found
-                errors: {}
-        '500':
-          description: Internal Server Error - An unexpected error occurred.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
-  /goals/v1/savings/{goal_id}:
-    patch:
-      tags:
-        - Savings Goals
-      summary: Update Savings Goal
-      description: |
-        Update a savings goal with a given `goal_id`. 
-
-        Of the fields `target_amount`, `target_datetime` and `recurrent_amount`, none are required. However if one is supplied, then a second must also be given. If two are supplied then the third parameter will be re-calculated in the response.
-
-        For example:
-          If the date the goal is created is `2023-01-01T00:00:00Z`, if a savings goal is updated with the `target_amount` of `$110`, and the `target_datetime` is `2023-12-01T00:00:00Z`, then the recurrent amount will be `$10`.
-
-        When performing this calculation, it is assumed that a customer is not going to deposit their first recurrent amount within the month of creating the goal.
-        If this is the desired behaviour however, all three parameters can be supplied and the endpoint will accept it.
-      operationId: goals_v1_savings_patch
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/PathGoalID'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateSavingsGoalRequest'
-            examples:
-              Name Updated:
-                value:
-                  name: Mortgage Deposit Savings
-              Target Date and Recurrent Amount Updated:
-                value:
-                  recurrent_amount:
-                    value: '50.00'
-                  target_datetime: '2024-12-30T00:00:00Z'
-      responses:
-        '200':
-          description: OK - The goal was updated successfully.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UpdateSavingsGoalResponse'
-              example:
-                operation_id: goals_v1_savings_patch
-                data:
-                  id: 19d1def3-5860-11ee-9342-3e1d60bc76f9
-                  account_id: RxsYshVGded4JeilkXgWKdXA
-                  name: Mortgage Deposit Savings
-                  target_amount:
-                    currency: USD
-                    value: '750.00'
-                  recurrent_amount:
-                    currency: USD
-                    value: '50.00'
-                  target_datetime: '2024-12-30T00:00:00Z'
-                  saved_amount:
-                    currency: USD
-                    value: '0.00'
-                  created_at: '2023-09-21T09:20:26Z'
-        '400':
-          description: The request contains an invalid payload.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              examples:
-                Customer ID Missing:
-                  value:
-                    operation_id: goals_v1_savings_post
-                    code_id: failed_validation
-                    message: unable to validate request
-                    errors:
-                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
-                Currency Changed:
-                  value:
-                    operation_id: goals_v1_savings_patch
-                    code_id: failed_validation
-                    message: Invalid request payload.
-                    errors:
-                      recurrent_amount.currency: cannot be updated
-        '401':
-          description: Unauthorized - The request was not authorised.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Unauthorised request
-        '404':
-          description: Not Found - The goal ID could not be found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Route or resource not found
-                errors: {}
-        '500':
-          description: Internal Server Error - An unexpected error occurred.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
-    delete:
-      tags:
-        - Savings Goals
-      summary: Remove Savings Goal
-      description: |
-        Remove a savings goal with a given `goal_id`.
-      operationId: goals_v1_savings_delete
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/PathGoalID'
-      responses:
-        '204':
-          description: No Content - The goal was removed successfully.
-        '401':
-          description: Unauthorized - The request was not authorised.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Unauthorised request
-        '404':
-          description: Not Found - The goal ID could not be found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Route or resource not found
-                errors: {}
-        '500':
-          description: Internal Server Error - An unexpected error occurred.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
-  /goals/v1/savings/{goal_id}/actions:
-    post:
-      tags:
-        - Savings Goals
-      summary: Create Savings Goal Action
-      description: |
-        Creates a savings goal action for the given `goal_id`.
-
-        Savings goal actions represent the transfer of the savings payment into the associated account. 
-
-        When a goal action is created, we validate that the associated account has a balance that reflects this addition. 
-        If the balance is not sufficient, the goal action will not be created.
-      operationId: goals_v1_savings_actions_post
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/PathGoalID'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateSavingsGoalActionRequest'
-      responses:
-        '201':
-          description: Created - The goal action was created successfully.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateSavingsGoalActionResponse'
-              example:
-                operation_id: goals_v1_savings_actions_post
-                data:
-                  id: 23267253-5860-11ee-99e5-9ed0600d2630
-                  amount:
-                    currency: USD
-                    value: '10.00'
-                  credit_debit_indicator: credit
-                  created_at: '2023-09-21T09:20:42Z'
-                metadata:
-                  goal_id: 19d1def3-5860-11ee-9342-3e1d60bc76f9
-        '400':
-          description: The request contains an invalid payload.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              examples:
-                Customer ID Missing:
-                  value:
-                    operation_id: goals_v1_savings_actions_post
-                    code_id: failed_validation
-                    message: unable to validate request
-                    errors:
-                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
-                Invalid Amount Value:
-                  value:
-                    operation_id: goals_v1_savings_actions_post
-                    code_id: failed_validation
-                    message: Invalid request payload.
-                    errors:
-                      amount.value: negative value
-        '401':
-          description: Unauthorized - The request was not authorised.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Unauthorised request
-        '404':
-          description: Not Found - The goal ID could not be found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Route or resource not found
-                errors: {}
-        '500':
-          description: Internal Server Error - An unexpected error occurred.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
-    get:
-      tags:
-        - Savings Goals
-      summary: Retrieve Savings Goal Actions
-      description: |
-        Retrieve all savings goal actions for the given `goal_id`. The results of this endpoint are paginated with a default page size of `100` and a maximum of `200`. 
-        The page size is configurable by the `page_size` query parameter.
-        The next page of results can be retrieved using the `page_token` query parameter.
-      operationId: goals_v1_savings_actions_get
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/PathGoalID'
-        - $ref: '#/components/parameters/parameters-QueryBudPageToken'
-        - $ref: '#/components/parameters/parameters-QueryBudPageSize'
-      responses:
-        '200':
-          description: OK - The goal actions were retrieved successfully.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RetrieveSavingsGoalActionsResponse'
-              examples:
-                Goal Actions Returned:
-                  value:
-                    operation_id: goals_v1_savings_actions_get
-                    data:
-                      - id: 23267253-5860-11ee-99e5-9ed0600d2630
-                        amount:
-                          currency: USD
-                          value: '10.00'
-                        credit_debit_indicator: credit
-                        created_at: '2023-09-21T09:20:42Z'
-                      - id: 23267253-5860-11ee-99e5-9ed0600d2630
-                        amount:
-                          currency: USD
-                          value: '10.00'
-                        credit_debit_indicator: credit
-                        created_at: '2023-09-21T09:20:42Z'
-                    metadata:
-                      results: 2
-                      page_token: b21055a9a9f46fc794a2e6855c65abd7e317181039fc6930daabac5822911d14a84895ecd947e2b5abdcb22e4fcc2c594e1f661dc63e34b9ba88760724047990896f7581a0786c2605dce19c6a9d80d1044f963b74fea0a929c0a4465a6e67378a74dce38ec5e26ae4cc804b62fd666d5df4cf2e7f524bd99e5523bc5d471768065c036dc0c73122705b280817fbbd7d9aa31f271d72cd3877d999dcb9a5b1c0be0c05
-                      page_size: 100
-                      goal_id: 19d1def3-5860-11ee-9342-3e1d60bc76f9
-                No Goal Actions Exist:
-                  value:
-                    operation_id: goals_v1_savings_actions_get
-                    data: []
-                    metadata:
-                      results: 0
-                      page_token: 2
-                      page_size: 2
-                      goal_id: 19d1def3-5860-11ee-9342-3e1d60bc76f9
-        '400':
-          description: The request contains an invalid payload.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              examples:
-                Customer ID Missing:
-                  value:
-                    operation_id: goals_v1_savings_actions_get
-                    code_id: failed_validation
-                    message: unable to validate request
-                    errors:
-                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
-                Bad Page Token:
-                  value:
-                    operation_id: goals_v1_savings_actions_get
-                    code_id: failed_validation
-                    message: Invalid request payload.
-                    errors:
-                      page_token: Invalid page token.
-                Page Size Too Large:
-                  value:
-                    operation_id: goals_v1_savings_actions_get
-                    code_id: failed_validation
-                    message: Invalid request payload.
-                    errors:
-                      page_size: Page size must be between 1 and 200.
-        '401':
-          description: Unauthorized - The request was not authorised.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Unauthorised request
-        '404':
-          description: Not Found - The goal ID could not be found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Route or resource not found
-                errors: {}
-        '500':
-          description: Internal Server Error - An unexpected error occurred.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
-  /goals/v1/savings/{goal_id}/actions/{goal_action_id}:
-    patch:
-      tags:
-        - Savings Goals
-      summary: Update Savings Goal Action
-      description: |
-        Update a savings goal action with a given `goal_id` and `goal_action_id`. 
-
-        When a goal action is updated, we validate that the associated account has a balance that reflects this amendment. 
-        If the balance is not sufficient, the goal action will not be updated.
-      operationId: goals_v1_savings_actions_patch
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/PathGoalID'
-        - $ref: '#/components/parameters/PathGoalActionID'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateSavingsGoalActionRequest'
-      responses:
-        '200':
-          description: OK - The goal was updated successfully.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UpdateSavingsGoalActionResponse'
-              example:
-                operation_id: goals_v1_savings_actions_patch
-                data:
-                  id: 23267253-5860-11ee-99e5-9ed0600d2630
-                  amount:
-                    currency: USD
-                    value: '10.00'
-                  credit_debit_indicator: credit
-                  created_at: '2023-09-21T09:20:42Z'
-                metadata:
-                  goal_id: 19d1def3-5860-11ee-9342-3e1d60bc76f9
-        '400':
-          description: The request contains an invalid payload.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              examples:
-                Customer ID Missing:
-                  value:
-                    operation_id: goals_v1_savings_actions_patch
-                    code_id: failed_validation
-                    message: unable to validate request
-                    errors:
-                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
-                Invalid Amount Value:
-                  value:
-                    operation_id: goals_v1_savings_actions_patch
-                    code_id: failed_validation
-                    message: Invalid request payload.
-                    errors:
-                      amount.value: Saved amount exceeds balance of the account.
-        '401':
-          description: Unauthorized - The request was not authorised.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Unauthorised request
-        '404':
-          description: Not Found - The goal ID or Goal Action ID could not be found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Route or resource not found
-                errors: {}
-        '500':
-          description: Internal Server Error - An unexpected error occurred.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
-    delete:
-      tags:
-        - Savings Goals
-      summary: Remove Savings Goal Action
-      description: |
-        Remove a savings goal action with a given `goal_id` and `goal_action_id`.
-      operationId: goals_v1_savings_actions_delete
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/PathGoalID'
-        - $ref: '#/components/parameters/PathGoalActionID'
-      responses:
-        '204':
-          description: No Content - The goal action was removed successfully.
-        '401':
-          description: Unauthorized - The request was not authorised.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Unauthorised request
-        '404':
-          description: Not Found - The customer has no goal action with that ID to be deleted.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: Route or resource not found
-                errors: {}
-        '500':
-          description: Internal Server Error - An unexpected error occurred.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-              example:
-                operation_id: unknown
-                code_id: unknown
-                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
   /goals/v1/spending-budgets:
     post:
       tags:
@@ -9111,6 +8422,10 @@ paths:
       summary: Retrieve Spending Budgets
       description: |
         Retrieve all spending budgets.
+
+        Accounts IDs can be supplied as part of the URL query to return budgets with values filtered to the accounts IDs supplied. These budgets'
+        spent amounts will only consider transactions associated with the specified accounts.
+        If no account IDs are specified, the returned budgets will have a value combined from transactions across all of the customer's accounts.
       operationId: goals_v1_spending_budgets_get
       security:
         - OAuth2: []
@@ -9303,6 +8618,9 @@ paths:
         Retrieve all of the transactions associated with a spending budget. The results of this endpoint are paginated with a default page size of `100` and a maximum of `200`. 
         The page size is configurable by the `page_size` query parameter.
         The next page of results can be retrieved using the `page_token` query parameter.
+
+        Account IDs can be supplied as part of the URL query to filter transactions to those only associated with the specified accounts.
+        If no account IDs are specified, we will return transactions associated with all of the customer's accounts, relevant to the spending budget.
       operationId: goals_v1_spending_budget_transactions_get
       security:
         - OAuth2: []
@@ -9314,6 +8632,7 @@ paths:
         - $ref: '#/components/parameters/QueryDay'
         - $ref: '#/components/parameters/parameters-QueryBudPageToken'
         - $ref: '#/components/parameters/parameters-QueryBudPageSize'
+        - $ref: '#/components/parameters/QueryBudAccountID'
       responses:
         '200':
           description: OK - The spending budget transactions were retrieved successfully
@@ -9347,6 +8666,7 @@ paths:
                         slug: uber
                         display_name: Uber
                         logo: https://url/uber_logo.jpeg
+                    suggested_description: Uber
                 metadata:
                   results: 1
                   page_token: b21055a9a9f46fc794a2e6855c65abd7e317181039fc6930daabac5822911d14a84895ecd947e2b5abdcb22e4fcc2c594e1f661dc63e34b9ba88760724047990896f7581a0786c2605dce19c6a9d80d1044f963b74fea0a929c0a4465a6e67378a74dce38ec5e26ae4cc804b62fd666d5df4cf2e7f524bd99e5523bc5d471768065c036dc0c73122705b280817fbbd7d9aa31f271d72cd3877d999dcb9a5b1c0be0c05
@@ -9370,6 +8690,452 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServerErrorResponse'
+  /goals/v2/savings/goal:
+    post:
+      tags:
+        - Savings Goals V2
+      summary: Create Savings Goal V2
+      description: |
+        Create a savings goal for the given account.
+
+        The `allocation_ratio` defines the proportion of the account balance that is considered allocated to this goal. For example, an `allocation_ratio` of `0.2` means that 20% of the account balance is treated as the goal balance.
+
+        The `goal_balance` returned in the response is calculated as the current account balance multiplied by the `allocation_ratio`.
+      operationId: goals_v2_savings_goal_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSavingsGoalV2Request'
+            example:
+              account_id: RxsYshVGded4JeilkXgWKdXA
+              name: Car Savings
+              target_amount:
+                value: '3000.00'
+                currency: USD
+              target_datetime: '2025-12-30T00:00:00Z'
+              allocation_ratio: 0.2
+      responses:
+        '200':
+          description: OK - The goal was created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSavingsGoalV2Response'
+              example:
+                operation_id: goals_v2_savings_goal_post
+                data:
+                  id: f46d76c4-56d3-11ee-ac69-d6df71eb5902
+                  account_id: RxsYshVGded4JeilkXgWKdXA
+                  name: Car Savings
+                  target_amount:
+                    currency: USD
+                    value: '3000.00'
+                  target_datetime: '2025-12-30T00:00:00Z'
+                  allocation_ratio: 0.2
+                  goal_balance:
+                    currency: USD
+                    value: '500.00'
+                  created_at: '2024-01-15T10:04:43Z'
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                Customer ID Missing:
+                  value:
+                    operation_id: goals_v2_savings_goal_post
+                    code_id: failed_validation
+                    message: unable to validate request
+                    errors:
+                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
+                Invalid Allocation Ratio:
+                  value:
+                    operation_id: goals_v2_savings_goal_post
+                    code_id: failed_validation
+                    message: Invalid request payload.
+                    errors:
+                      allocation_ratio:
+                        - must be greater than 0 and at most 1
+        '401':
+          description: Unauthorized - The request was not authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Unauthorised request
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
+  /goals/v2/savings/goals:
+    get:
+      tags:
+        - Savings Goals V2
+      summary: Retrieve Savings Goals V2
+      description: |
+        Retrieve all savings goals for the customer. The results can be filtered by the `account_id` query parameter.
+
+        The `goal_balance` for each goal is calculated as the current account balance multiplied by the `allocation_ratio`.
+      operationId: goals_v2_savings_goals_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/QueryBudAccountID'
+      responses:
+        '200':
+          description: OK - The goals were retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveSavingsGoalsV2Response'
+              examples:
+                Goals Returned:
+                  value:
+                    operation_id: goals_v2_savings_goals_get
+                    data:
+                      - id: f46d76c4-56d3-11ee-ac69-d6df71eb5902
+                        account_id: RxsYshVGded4JeilkXgWKdXA
+                        name: Car Savings
+                        target_amount:
+                          currency: USD
+                          value: '3000.00'
+                        target_datetime: '2025-12-30T00:00:00Z'
+                        allocation_ratio: 0.2
+                        goal_balance:
+                          currency: USD
+                          value: '500.00'
+                        created_at: '2024-01-15T10:04:43Z'
+                      - id: 265a4aed-348d-4ff1-802e-2d08d7cace77
+                        account_id: RxsYshVGded4JeilkXgWKdXA
+                        name: Holiday Savings
+                        target_amount:
+                          currency: USD
+                          value: '1000.00'
+                        allocation_ratio: 0.1
+                        goal_balance:
+                          currency: USD
+                          value: '250.00'
+                        created_at: '2024-01-15T10:04:43Z'
+                No Goals Exist:
+                  value:
+                    operation_id: goals_v2_savings_goals_get
+                    data: []
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                Customer ID Missing:
+                  value:
+                    operation_id: goals_v2_savings_goals_get
+                    code_id: failed_validation
+                    message: unable to validate request
+                    errors:
+                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
+        '401':
+          description: Unauthorized - The request was not authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Unauthorised request
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
+  /goals/v2/savings/goals/{savings_goal_id}:
+    get:
+      tags:
+        - Savings Goals V2
+      summary: Retrieve Savings Goal V2
+      description: |
+        Retrieve a savings goal by its `savings_goal_id`.
+
+        The `goal_balance` is calculated as the current account balance multiplied by the `allocation_ratio`.
+      operationId: goals_v2_savings_goal_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/PathSavingsGoalIDV2'
+      responses:
+        '200':
+          description: OK - The goal was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveSavingsGoalV2Response'
+              example:
+                operation_id: goals_v2_savings_goal_get
+                data:
+                  id: f46d76c4-56d3-11ee-ac69-d6df71eb5902
+                  account_id: RxsYshVGded4JeilkXgWKdXA
+                  name: Car Savings
+                  target_amount:
+                    currency: USD
+                    value: '3000.00'
+                  target_datetime: '2025-12-30T00:00:00Z'
+                  allocation_ratio: 0.2
+                  goal_balance:
+                    currency: USD
+                    value: '500.00'
+                  created_at: '2024-01-15T10:04:43Z'
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                Customer ID Missing:
+                  value:
+                    operation_id: goals_v2_savings_goal_get
+                    code_id: failed_validation
+                    message: unable to validate request
+                    errors:
+                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
+                Invalid Goal ID:
+                  value:
+                    operation_id: goals_v2_savings_goal_get
+                    code_id: failed_validation
+                    message: Invalid request payload.
+                    errors:
+                      savings_goal_id:
+                        - invalid UUID format
+        '401':
+          description: Unauthorized - The request was not authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Unauthorised request
+        '404':
+          description: Not Found - The savings goal ID could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Route or resource not found
+                errors: {}
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
+    patch:
+      tags:
+        - Savings Goals V2
+      summary: Update Savings Goal V2
+      description: |
+        Update a savings goal with the given `savings_goal_id`. All fields are optional.
+
+        The `goal_balance` returned in the response is recalculated as the current account balance multiplied by the updated `allocation_ratio`.
+      operationId: goals_v2_savings_goal_patch
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/PathSavingsGoalIDV2'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSavingsGoalV2Request'
+            examples:
+              Name Updated:
+                value:
+                  name: Mortgage Deposit Savings
+              Allocation Ratio and Target Date Updated:
+                value:
+                  allocation_ratio: 0.25
+                  target_datetime: '2026-06-30T00:00:00Z'
+      responses:
+        '200':
+          description: OK - The goal was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateSavingsGoalV2Response'
+              example:
+                operation_id: goals_v2_savings_goal_patch
+                data:
+                  id: f46d76c4-56d3-11ee-ac69-d6df71eb5902
+                  account_id: RxsYshVGded4JeilkXgWKdXA
+                  name: Mortgage Deposit Savings
+                  target_amount:
+                    currency: USD
+                    value: '3000.00'
+                  target_datetime: '2026-06-30T00:00:00Z'
+                  allocation_ratio: 0.25
+                  goal_balance:
+                    currency: USD
+                    value: '625.00'
+                  created_at: '2024-01-15T10:04:43Z'
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                Customer ID Missing:
+                  value:
+                    operation_id: goals_v2_savings_goal_patch
+                    code_id: failed_validation
+                    message: unable to validate request
+                    errors:
+                      X-Customer-ID: 'parameter "X-Customer-ID" in header has an error: value is required but missing'
+                Invalid Allocation Ratio:
+                  value:
+                    operation_id: goals_v2_savings_goal_patch
+                    code_id: failed_validation
+                    message: Invalid request payload.
+                    errors:
+                      allocation_ratio:
+                        - must be greater than 0 and at most 1
+        '401':
+          description: Unauthorized - The request was not authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Unauthorised request
+        '404':
+          description: Not Found - The savings goal ID could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Route or resource not found
+                errors: {}
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
+    delete:
+      tags:
+        - Savings Goals V2
+      summary: Remove Savings Goal V2
+      description: |
+        Remove a savings goal with the given `savings_goal_id`.
+      operationId: goals_v2_savings_goal_delete
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/PathSavingsGoalIDV2'
+      responses:
+        '204':
+          description: No Content - The goal was removed successfully.
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              examples:
+                Invalid Goal ID:
+                  value:
+                    operation_id: goals_v2_savings_goal_delete
+                    code_id: failed_validation
+                    message: Invalid request payload.
+                    errors:
+                      savings_goal_id:
+                        - invalid UUID format
+        '401':
+          description: Unauthorized - The request was not authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Unauthorised request
+        '404':
+          description: Not Found - The savings goal ID could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Route or resource not found
+                errors: {}
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
   /insights/v1/actionable/balances:
     get:
       tags:
@@ -10062,6 +9828,7 @@ paths:
                       currency: USD
                     date_time: '2022-05-28T10:00:00Z'
                     posted_date_time: '2022-05-29T00:00:00Z'
+                    value_date_time: '2022-05-29T00:00:00Z'
                     enrichments:
                       categories:
                         l1:
@@ -10128,6 +9895,7 @@ paths:
                       currency: USD
                     date_time: '2022-05-26T10:00:00Z'
                     posted_date_time: '2022-05-27T00:00:00Z'
+                    value_date_time: '2022-05-27T00:00:00Z'
                     enrichments:
                       categories:
                         l1:
@@ -10545,6 +10313,42 @@ paths:
                 operation_id: insights_v1_spending_budgets_url_post
                 data:
                   url: https://widgets.thisisbud.com/spending-budgets?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+                metadata:
+                  sufficient_data: true
+        '400':
+          description: Bad Request
+        5XX:
+          description: An unexpected error occurred on the server side
+  /widget/v1/savings-goals/url:
+    post:
+      tags:
+        - Frontend Widgets
+      security:
+        - OAuth2: []
+      operationId: insights_v1_savings_goals_url_post
+      summary: Generate Savings Goals URL
+      description: Generates a URL to access the customer's savings goals.
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateSavingsGoalsURLRequest'
+      responses:
+        '201':
+          description: Successful response containing Savings Goals URL and metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateSavingsGoalsURLResponse'
+              example:
+                operation_id: insights_v1_savings_goals_url_post
+                data:
+                  url: https://widgets.thisisbud.com/savings-goals?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
                 metadata:
                   sufficient_data: true
         '400':
@@ -11589,6 +11393,9 @@ components:
           deprecated: true
           type: string
           description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becomes available, for debits this is the date that the asset ceased to be available
+        value_date_time:
+          type: string
+          description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becomes available, for debits this is the date that the asset ceased to be available
         enrichments:
           $ref: '#/components/schemas/Enrichments'
         merchant_category_code:
@@ -11647,6 +11454,10 @@ components:
         An optional map of key-value string pairs that allows clients to attach arbitrary metadata to the transaction.
         This field can be used to store any relevant information specific to the client's needs.
         These attributes can be added using the [Ingest Transactions](#operation/v2_ingest_transactions_post) endpoint.
+      properties:
+        key:
+          type: string
+          description: An arbitrary key-value pair for the client attribute.
     Enrichments:
       title: Enrichments
       type: object
@@ -14568,6 +14379,10 @@ components:
         An optional map of key-value string pairs that allows clients to attach arbitrary metadata to the transaction.
         This field can be used to store any relevant information specific to the client's needs.
         It accepts a maximum of 16 key-value pairs. With a maximum key length of 64 characters and a maximum value length of 256 characters.
+      properties:
+        key:
+          type: string
+          description: An arbitrary key-value pair for the client attribute.
       example:
         fraud_score: '0.8'
         overdraft_used: 'true'
@@ -14599,6 +14414,11 @@ components:
           type: string
           format: date-time
           description: The date detailing when the transaction occurred, compliant with RFC3339
+          example: '2022-11-10T23:00:00Z'
+        value_date_time:
+          type: string
+          format: date-time
+          description: The date detailing when the assets assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becomes available, for debits this is the date that the asset ceased to be available
           example: '2022-11-10T23:00:00Z'
         status:
           type: string
@@ -14932,6 +14752,9 @@ components:
         date_time:
           type: string
           description: Date of the transaction compliant with RFC3339.
+        value_date_time:
+          type: string
+          description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becomes available, for debits this is the date that the asset ceased to be available
         enrichments:
           $ref: '#/components/schemas/SyncEnrichments'
         merchant_category_code:
@@ -17095,6 +16918,10 @@ components:
         An optional map of key-value string pairs that allows clients to attach arbitrary metadata to the transaction.
         This field can be used to store any relevant information specific to the client's needs, such as:
         These attributes can be added using the [Ingest Transactions](#operation/v2_ingest_transactions_post) endpoint.
+      properties:
+        key:
+          type: string
+          description: An arbitrary key-value pair for the client attribute.
     schemas-Transaction:
       title: Transaction
       type: object
@@ -17152,6 +16979,9 @@ components:
           description: Date that the transaction occured compliant with RFC3339.
         posted_date_time:
           deprecated: true
+          type: string
+          description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becomes available, for debits this is the date that the asset ceased to be available
+        value_date_time:
           type: string
           description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becomes available, for debits this is the date that the asset ceased to be available
         enrichments:
@@ -18414,490 +18244,6 @@ components:
             $ref: '#/components/schemas/Subscription'
         metadata:
           $ref: '#/components/schemas/TransactionsResultsMetadata'
-    SavingsGoal:
-      title: Savings Goal
-      required:
-        - id
-        - name
-        - account_id
-        - target_amount
-        - target_datetime
-        - recurrent_amount
-        - saved_amount
-        - created_at
-      properties:
-        id:
-          title: ID
-          type: string
-          description: |
-            The ID of the savings goal.
-
-            Example: "81a68821-dca6-4771-80d4-002c7fce412e"
-        name:
-          title: Name
-          type: string
-          description: |
-            The name of the savings goal.
-
-            Example: `Holiday`
-          example: Holiday
-        account_id:
-          title: Account ID
-          type: string
-          description: |
-            The account id of the account the savings goal is associated with.
-
-            Example: `RxsYshVGded4JeilkXgWKdXA`
-          example: RxsYshVGded4JeilkXgWKdXA
-        target_amount:
-          title: Target Amount
-          type: object
-          description: |
-            The target amount of money to be saved to defining the savings goal.
-          required:
-            - value
-            - currency
-          properties:
-            value:
-              $ref: '#/components/schemas/BudMonetaryValue'
-            currency:
-              $ref: '#/components/schemas/BudCurrency'
-        target_datetime:
-          title: Target Datetime
-          type: string
-          description: |
-            The Target Datetime, in the format [RFC-3339](https://www.rfc-editor.org/rfc/rfc3339) to reach the savings goal.
-
-            Examples:
-              - `2023-01-17T17:29:51Z`
-              - `2023-01-17T17:29:51-08:00`
-        recurrent_amount:
-          title: Recurrent Amount
-          type: object
-          description: |
-            The amount of money to be saved each month to reach the savings goal.
-          required:
-            - value
-            - currency
-          properties:
-            value:
-              $ref: '#/components/schemas/BudMonetaryValue'
-            currency:
-              $ref: '#/components/schemas/BudCurrency'
-        saved_amount:
-          title: Saved Amount
-          type: object
-          description: |
-            The amount of money that has been saved towards the savings goal. This is calculated by summing the amount of all savings goal actions associated with the savings goal.
-          required:
-            - value
-            - currency
-          properties:
-            value:
-              $ref: '#/components/schemas/BudMonetaryValue'
-            currency:
-              $ref: '#/components/schemas/BudCurrency'
-        created_at:
-          title: Created At
-          type: string
-          description: |
-            The date and time the savings goal was created in the format [RFC-3339](https://www.rfc-editor.org/rfc/rfc3339).
-
-            Examples:
-              - `2023-01-17T17:29:51Z`
-              - `2023-01-17T17:29:51-08:00`
-    BudResultsMetadata:
-      title: Metadata
-      type: object
-      required:
-        - results
-      properties:
-        results:
-          type: integer
-          description: |
-            The number of results returned in the response.
-
-            Example: 1
-          example: 1
-    RetrieveSavingsGoalsResponse:
-      title: Retrieve Savings Goals Response
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          title: Operation ID
-          type: string
-          enum:
-            - goals_v1_savings_get
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SavingsGoal'
-        metadata:
-          allOf:
-            - $ref: '#/components/schemas/BudResultsMetadata'
-            - type: object
-              properties:
-                account_id:
-                  type: string
-                  description: |
-                    The account ID used to filter the results. This will be unset if no account_id was supplied in the request.
-
-                    Example: `RxsYshVGded4JeilkXgWKdXA`
-                  example: RxsYshVGded4JeilkXgWKdXA
-    CreateSavingsGoalRequest:
-      title: Create Savings Goal Request
-      required:
-        - name
-        - account_id
-      properties:
-        name:
-          title: Name
-          type: string
-          description: |
-            The name of the savings goal.
-
-            Example: `Holiday`
-          example: Holiday
-        account_id:
-          title: Account ID
-          type: string
-          description: |
-            The account id of the account the savings goal is associated with.
-
-            Example: `RxsYshVGded4JeilkXgWKdXA`
-          example: RxsYshVGded4JeilkXgWKdXA
-        target_amount:
-          title: Target Amount
-          type: object
-          description: |
-            The target amount of money to be saved to defining the savings goal.
-
-            This field is optional, however if it is not supplied, then `target_datetime` and `recurrent_amount` must be supplied.
-
-            If `target_amount`, `target_datetime` and `recurrent_amount` are all supplied, they will be validated to ensure the goal is achievable under these conditions.
-          required:
-            - value
-            - currency
-          properties:
-            value:
-              $ref: '#/components/schemas/BudMonetaryValue'
-            currency:
-              $ref: '#/components/schemas/BudCurrency'
-        target_datetime:
-          title: Target Datetime
-          type: string
-          description: |
-            The Target Datetime, in the format [RFC-3339](https://www.rfc-editor.org/rfc/rfc3339) to reach the savings goal. 
-
-            This field is optional, however if it is not supplied, then `target_amount` and `recurrent_amount` must be supplied.
-
-            If `target_amount`, `target_datetime` and `recurrent_amount` are all supplied, they will be validated to ensure the goal is achievable under these conditions.
-
-            Examples:
-              - `2023-01-17T17:29:51Z`
-              - `2023-01-17T17:29:51-08:00`
-        recurrent_amount:
-          title: Recurrent Amount
-          type: object
-          description: |
-            The amount of money to be saved each month to reach the savings goal.
-
-            This field is optional, however if it is not supplied, then `target_amount` and `target_datetime` must be supplied.
-
-            If `target_amount`, `target_datetime` and `recurrent_amount` are all supplied, they will be validated to ensure the goal is achievable under these conditions.
-          required:
-            - value
-            - currency
-          properties:
-            value:
-              $ref: '#/components/schemas/BudMonetaryValue'
-            currency:
-              $ref: '#/components/schemas/BudCurrency'
-    CreateSavingsGoalResponse:
-      title: Create Savings Goal Response
-      required:
-        - operation_id
-        - data
-      properties:
-        operation_id:
-          title: Operation ID
-          type: string
-          enum:
-            - goals_v1_savings_post
-        data:
-          $ref: '#/components/schemas/SavingsGoal'
-    UpdateSavingsGoalRequest:
-      title: Update Savings Goal Request
-      properties:
-        name:
-          title: Name
-          type: string
-          description: |
-            The name of the savings goal.
-
-            Example: `Holiday`
-          example: Holiday
-        target_amount:
-          title: Target Amount
-          type: object
-          description: |
-            The target amount of money to be saved to defining the savings goal. 
-
-            If this is supplied, then `target_datetime` and/or `recurrent_amount` must also be supplied.
-            If `target_amount`, `target_datetime` and `recurrent_amount` are all supplied, they will be validated to ensure the goal is achievable under these conditions.
-
-            The `currency` field is optional as it will default to the existing currency of the goal; however, if it is supplied then it must be the same as the existing currency of the goal.
-          required:
-            - value
-          properties:
-            value:
-              $ref: '#/components/schemas/BudMonetaryValue'
-            currency:
-              $ref: '#/components/schemas/BudCurrency'
-        target_datetime:
-          title: Target Datetime
-          type: string
-          description: |
-            The Target Datetime, in the format [RFC-3339](https://www.rfc-editor.org/rfc/rfc3339) to reach the savings goal. 
-
-            If this is supplied, then `target_amount` and/or `recurrent_amount` must also be supplied.
-            If `target_amount`, `target_datetime` and `recurrent_amount` are all supplied, they will be validated to ensure the goal is achievable under these conditions.
-
-            Examples:
-              - `2023-01-17T17:29:51Z`
-              - `2023-01-17T17:29:51-08:00`
-        recurrent_amount:
-          title: Recurrent Amount
-          type: object
-          description: |
-            The amount of money to be saved each month to reach the savings goal.
-
-            If this is supplied, then `target_amount` and/or `target_datetime` must also be supplied.
-            If `target_amount`, `target_datetime` and `recurrent_amount` are all supplied, they will be validated to ensure the goal is achievable under these conditions.
-
-            The `currency` field is optional as it will default to the existing currency of the goal; however, if it is supplied then it must be the same as the existing currency of the goal.
-          required:
-            - value
-          properties:
-            value:
-              $ref: '#/components/schemas/BudMonetaryValue'
-            currency:
-              $ref: '#/components/schemas/BudCurrency'
-    UpdateSavingsGoalResponse:
-      title: Update Savings Goal Response
-      required:
-        - operation_id
-        - data
-      properties:
-        operation_id:
-          title: Operation ID
-          type: string
-          enum:
-            - goals_v1_savings_patch
-        data:
-          $ref: '#/components/schemas/SavingsGoal'
-    SavingsGoalAction:
-      title: Savings Goal Action
-      required:
-        - id
-        - amount
-        - credit_debit_indicator
-        - created_at
-      properties:
-        id:
-          title: ID
-          type: string
-          description: |
-            The ID of the savings goal action.
-
-            Example: "81a68821-dca6-4771-80d4-002c7fce412e"
-        amount:
-          title: Amount
-          type: object
-          description: |
-            The amount of money saved towards the savings goal.
-          required:
-            - value
-            - currency
-          properties:
-            value:
-              $ref: '#/components/schemas/BudMonetaryValue'
-            currency:
-              $ref: '#/components/schemas/BudCurrency'
-        credit_debit_indicator:
-          title: Credit Debit Indicator
-          type: string
-          enum:
-            - credit
-            - debit
-          description: |
-            The credit/debit indicator of the amount. This indicates whether the amount has been added to or subtracted from the savings goal.
-
-            Example: `credit`
-          example: credit
-        created_at:
-          title: Created At
-          type: string
-          description: |
-            The date and time the savings goal action was created in the format [RFC-3339](https://www.rfc-editor.org/rfc/rfc3339).
-
-            Examples:
-              - `2023-01-17T17:29:51Z`
-              - `2023-01-17T17:29:51-08:00`
-    BudNextPageTokenMetadata:
-      title: Next Page Token
-      type: object
-      properties:
-        next_page_token:
-          type: string
-          description: |
-            The token to use to fetch the next page of results. This is only set if there are more results to fetch.
-      example:
-        next_page_token: b21055a9a9f46fc794a2e6855c65abd7e317181039fc6930daabac5822911d14a84895ecd947e2b5abdcb22e4fcc2c594e1f661dc63e34b9ba88760724047990896f7581a0786c2605dce19c6a9d80d1044f963b74fea0a929c0a4465a6e67378a74dce38ec5e26ae4cc804b62fd666d5df4cf2e7f524bd99e5523bc5d471768065c036dc0c73122705b280817fbbd7d9aa31f271d72cd3877d999dcb9a5b1c0be0c05
-    RetrieveSavingsGoalActionsResponse:
-      title: Retrieve Savings Goal Actions Response
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          title: Operation ID
-          type: string
-          enum:
-            - goals_v1_savings_actions_get
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SavingsGoalAction'
-        metadata:
-          allOf:
-            - $ref: '#/components/schemas/BudResultsMetadata'
-            - type: object
-              properties:
-                goal_id:
-                  title: Goal ID
-                  type: string
-                  description: |
-                    The ID of the savings goal the actions were retrieved for.
-
-                    Example: "81a68821-dca6-4771-80d4-002c7fce412e"
-                  example: 81a68821-dca6-4771-80d4-002c7fce412e
-            - $ref: '#/components/schemas/BudNextPageTokenMetadata'
-    CreateSavingsGoalActionRequest:
-      title: Create Savings Goal Action Request
-      required:
-        - amount
-        - credit_debit_indicator
-      properties:
-        amount:
-          title: Amount
-          type: object
-          description: |
-            The amount of money being saved towards the savings goal.
-          required:
-            - value
-            - currency
-          properties:
-            value:
-              $ref: '#/components/schemas/BudMonetaryValue'
-            currency:
-              $ref: '#/components/schemas/BudCurrency'
-        credit_debit_indicator:
-          title: Credit Debit Indicator
-          type: string
-          enum:
-            - credit
-            - debit
-          description: |
-            The credit/debit indicator of the amount. This indicates whether the amount is has been added to or subtracted from the savings goal.
-
-            Example: `credit`
-          example: credit
-    CreateSavingsGoalActionResponse:
-      title: Create Savings Goal Action Response
-      required:
-        - operation_id
-        - data
-        - metadata
-      properties:
-        operation_id:
-          title: Operation ID
-          type: string
-          enum:
-            - goals_v1_savings_actions_post
-        data:
-          $ref: '#/components/schemas/SavingsGoalAction'
-        metadata:
-          title: Metadata
-          type: object
-          required:
-            - goal_id
-          properties:
-            goal_id:
-              title: Goal ID
-              type: string
-              description: |
-                The ID of the savings goal the action was created for.
-
-                Example: "81a68821-dca6-4771-80d4-002c7fce412e"
-    UpdateSavingsGoalActionRequest:
-      title: Update Savings Goal Action Request
-      properties:
-        amount:
-          title: Amount
-          type: object
-          description: |
-            The amount of money being saved towards the savings goal.
-
-            The `currency` field is optional as it will default to the existing currency of the goal action; however, if it is supplied then it must be the same as the existing currency of the goal action.
-          required:
-            - value
-            - currency
-          properties:
-            value:
-              $ref: '#/components/schemas/BudMonetaryValue'
-            currency:
-              $ref: '#/components/schemas/BudCurrency'
-        credit_debit_indicator:
-          title: Credit Debit Indicator
-          type: string
-          enum:
-            - credit
-            - debit
-          description: |
-            The credit/debit indicator of the amount. This indicates whether the amount has been added to or subtracted from the savings goal.
-
-            Example: `credit`
-          example: credit
-    UpdateSavingsGoalActionResponse:
-      title: Update Savings Goal Action Response
-      required:
-        - operation_id
-        - data
-      properties:
-        operation_id:
-          title: Operation ID
-          type: string
-          enum:
-            - goals_v1_savings_actions_patch
-        data:
-          $ref: '#/components/schemas/SavingsGoalAction'
-        metadata:
-          title: Metadata
-          type: object
-          properties:
-            goal_id:
-              title: Goal ID
-              type: string
-              description: |
-                The ID of the savings goal the actions were retrieved for.
-
-                Example: "81a68821-dca6-4771-80d4-002c7fce412e"
-              example: 81a68821-dca6-4771-80d4-002c7fce412e
     BaseSpendingBudget:
       title: Spending Budget
       type: object
@@ -18957,16 +18303,6 @@ components:
                 The day of which the budget period starts. Not required if a budget is `one-off`.
 
                 Must be between 1 and 28 for `monthly` budgets.
-        account_id:
-          title: Account ID
-          type: string
-          description: |
-            The account id of the account the spending budget is associated with. 
-
-            Only transactions from this account will be included in budget calculations.
-
-            Example: `RxsYshVGded4JeilkXgWKdXA`
-          example: RxsYshVGded4JeilkXgWKdXA
         include:
           title: Include
           type: object
@@ -19091,6 +18427,19 @@ components:
                   type: string
                   description: |
                     Link to follow to get transactions included in the budget.
+    BudResultsMetadata:
+      title: Metadata
+      type: object
+      required:
+        - results
+      properties:
+        results:
+          type: integer
+          description: |
+            The number of results returned in the response.
+
+            Example: 1
+          example: 1
     RetrieveSpendingBudgetsResponse:
       title: Retrieve Spending Budgets Response
       type: object
@@ -19113,14 +18462,17 @@ components:
             - $ref: '#/components/schemas/BudResultsMetadata'
             - type: object
               properties:
-                account_id:
-                  title: Account ID
-                  type: string
+                account_ids:
+                  title: Account IDs
+                  type: array
                   description: |
-                    The ID of the account used for filtering in the request.
+                    An array of account IDs used for filtering in the request.
+                  items:
+                    type: string
+                    description: |
+                      An account ID used for filtering in the request.
 
-                    Example: "RxsYshVGded4JeilkXgWKdXA"
-                  example: RxsYshVGded4JeilkXgWKdXA
+                      Example: `RxsYshVGded4JeilkXgWKdXA`
     CreateSpendingBudgetRequest:
       title: Create Spending Budget Request
       allOf:
@@ -19193,16 +18545,6 @@ components:
                 The day of which the budget period starts. Not required if a budget is `one-off`.
 
                 Must be between 1 and 28 for `monthly` budgets.
-        account_id:
-          title: Account ID
-          type: string
-          description: |
-            The account id of the account the spending budget is associated with. 
-
-            Only transactions from this account will be included in budget calculations.
-
-            Example: `RxsYshVGded4JeilkXgWKdXA`
-          example: RxsYshVGded4JeilkXgWKdXA
         include:
           title: Include
           type: object
@@ -19282,7 +18624,7 @@ components:
       title: Merchant
       type: object
       description: |
-        Merchant enrichment associated with a Transaction, as generated using a combination of Bud's artificial 
+        Merchant enrichment associated with a Transaction, as generated using a combination of Bud's artificial
         intelligence models and database of known merchants.
       required:
         - id
@@ -19320,6 +18662,7 @@ components:
         - description
         - amount
         - credit_debit_indicator
+        - suggested_description
         - status
         - date_time
       properties:
@@ -19354,6 +18697,13 @@ components:
           description: Date of the transaction compliant with RFC3339.
         enrichments:
           $ref: '#/components/schemas/goals-components_schemas-Enrichments'
+        suggested_description:
+          description: The description Bud suggests client apps show for a given transaction.
+          type: string
+        suggested_logo:
+          description: The logo Bud suggests client apps show for a given transaction.
+          type: string
+          format: uri
     BudPageSizeMetadata:
       title: Page Size
       type: integer
@@ -19362,6 +18712,16 @@ components:
 
         Example: `100`
       example: 100
+    BudNextPageTokenMetadata:
+      title: Next Page Token
+      type: object
+      properties:
+        next_page_token:
+          type: string
+          description: |
+            The token to use to fetch the next page of results. This is only set if there are more results to fetch.
+      example:
+        next_page_token: b21055a9a9f46fc794a2e6855c65abd7e317181039fc6930daabac5822911d14a84895ecd947e2b5abdcb22e4fcc2c594e1f661dc63e34b9ba88760724047990896f7581a0786c2605dce19c6a9d80d1044f963b74fea0a929c0a4465a6e67378a74dce38ec5e26ae4cc804b62fd666d5df4cf2e7f524bd99e5523bc5d471768065c036dc0c73122705b280817fbbd7d9aa31f271d72cd3877d999dcb9a5b1c0be0c05
     RetrieveSpendingBudgetTransactionsResponse:
       title: Retrieve Spending Budget Transactions Response
       type: object
@@ -19395,6 +18755,257 @@ components:
                 page_size:
                   $ref: '#/components/schemas/BudPageSizeMetadata'
             - $ref: '#/components/schemas/BudNextPageTokenMetadata'
+    CreateSavingsGoalV2Request:
+      title: Create Savings Goal V2 Request
+      required:
+        - account_id
+        - name
+        - target_amount
+        - allocation_ratio
+      properties:
+        account_id:
+          title: Account ID
+          type: string
+          description: |
+            The account ID the savings goal is associated with.
+
+            Example: `RxsYshVGded4JeilkXgWKdXA`
+          example: RxsYshVGded4JeilkXgWKdXA
+        name:
+          title: Name
+          type: string
+          description: |
+            The name of the savings goal.
+
+            Example: `Holiday`
+          example: Holiday
+        target_amount:
+          title: Target Amount
+          type: object
+          description: |
+            The target amount of money to be saved for this goal.
+          required:
+            - value
+            - currency
+          properties:
+            value:
+              $ref: '#/components/schemas/BudMonetaryValue'
+            currency:
+              $ref: '#/components/schemas/BudCurrency'
+        target_datetime:
+          title: Target Datetime
+          type: string
+          description: |
+            The optional target date by which the savings goal should be reached, in the format [RFC-3339](https://www.rfc-editor.org/rfc/rfc3339). Must be a future date.
+
+            Examples:
+              - `2025-12-31T00:00:00Z`
+              - `2025-12-31T00:00:00+01:00`
+        allocation_ratio:
+          title: Allocation Ratio
+          type: number
+          format: float
+          description: |
+            The proportion of the account balance to allocate to this savings goal. Must be greater than `0` and at most `1`.
+
+            Example: `0.2`
+          example: 0.2
+    SavingsGoalV2:
+      title: Savings Goal V2
+      required:
+        - id
+        - account_id
+        - name
+        - target_amount
+        - allocation_ratio
+        - goal_balance
+        - created_at
+      properties:
+        id:
+          title: ID
+          type: string
+          format: uuid
+          description: |
+            The ID of the savings goal.
+
+            Example: `81a68821-dca6-4771-80d4-002c7fce412e`
+          example: 81a68821-dca6-4771-80d4-002c7fce412e
+        account_id:
+          title: Account ID
+          type: string
+          description: |
+            The account ID the savings goal is associated with.
+
+            Example: `RxsYshVGded4JeilkXgWKdXA`
+          example: RxsYshVGded4JeilkXgWKdXA
+        name:
+          title: Name
+          type: string
+          description: |
+            The name of the savings goal.
+
+            Example: `Holiday`
+          example: Holiday
+        target_amount:
+          title: Target Amount
+          type: object
+          description: |
+            The target amount of money to be saved for this goal.
+          required:
+            - value
+            - currency
+          properties:
+            value:
+              $ref: '#/components/schemas/BudMonetaryValue'
+            currency:
+              $ref: '#/components/schemas/BudCurrency'
+        target_datetime:
+          title: Target Datetime
+          type: string
+          description: |
+            The optional target date by which the savings goal should be reached, in the format [RFC-3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+            Examples:
+              - `2025-12-31T00:00:00Z`
+              - `2025-12-31T00:00:00+01:00`
+        allocation_ratio:
+          title: Allocation Ratio
+          type: number
+          format: float
+          description: |
+            The proportion of the account balance allocated to this savings goal. Must be greater than `0` and at most `1`.
+
+            For example, a value of `0.2` means 20% of the account balance is considered allocated to this goal.
+
+            Example: `0.2`
+          example: 0.2
+        goal_balance:
+          title: Goal Balance
+          type: object
+          description: |
+            The current balance allocated to this savings goal, calculated as the account balance multiplied by the `allocation_ratio`.
+          required:
+            - value
+            - currency
+          properties:
+            value:
+              $ref: '#/components/schemas/BudMonetaryValue'
+            currency:
+              $ref: '#/components/schemas/BudCurrency'
+        created_at:
+          title: Created At
+          type: string
+          description: |
+            The date and time the savings goal was created in the format [RFC-3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+            Examples:
+              - `2023-01-17T17:29:51Z`
+              - `2023-01-17T17:29:51-08:00`
+    CreateSavingsGoalV2Response:
+      title: Create Savings Goal V2 Response
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          title: Operation ID
+          type: string
+          enum:
+            - goals_v2_savings_goal_post
+        data:
+          $ref: '#/components/schemas/SavingsGoalV2'
+    RetrieveSavingsGoalsV2Response:
+      title: Retrieve Savings Goals V2 Response
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          title: Operation ID
+          type: string
+          enum:
+            - goals_v2_savings_goals_get
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SavingsGoalV2'
+    RetrieveSavingsGoalV2Response:
+      title: Retrieve Savings Goal V2 Response
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          title: Operation ID
+          type: string
+          enum:
+            - goals_v2_savings_goal_get
+        data:
+          $ref: '#/components/schemas/SavingsGoalV2'
+    UpdateSavingsGoalV2Request:
+      title: Update Savings Goal V2 Request
+      properties:
+        account_id:
+          title: Account ID
+          type: string
+          description: |
+            The account ID the savings goal is associated with.
+
+            Example: `RxsYshVGded4JeilkXgWKdXA`
+          example: RxsYshVGded4JeilkXgWKdXA
+        name:
+          title: Name
+          type: string
+          description: |
+            The name of the savings goal.
+
+            Example: `Holiday`
+          example: Holiday
+        target_amount:
+          title: Target Amount
+          type: object
+          description: |
+            The target amount of money to be saved for this goal.
+          required:
+            - value
+            - currency
+          properties:
+            value:
+              $ref: '#/components/schemas/BudMonetaryValue'
+            currency:
+              $ref: '#/components/schemas/BudCurrency'
+        target_datetime:
+          title: Target Datetime
+          type: string
+          nullable: true
+          description: |
+            The target date by which the savings goal should be reached, in the format [RFC-3339](https://www.rfc-editor.org/rfc/rfc3339). Must be a future date. Set to `null` to remove the target date.
+
+            Examples:
+              - `2025-12-31T00:00:00Z`
+              - `2025-12-31T00:00:00+01:00`
+        allocation_ratio:
+          title: Allocation Ratio
+          type: number
+          format: float
+          description: |
+            The proportion of the account balance to allocate to this savings goal. Must be greater than `0` and at most `1`.
+
+            Example: `0.25`
+          example: 0.25
+    UpdateSavingsGoalV2Response:
+      title: Update Savings Goal V2 Response
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          title: Operation ID
+          type: string
+          enum:
+            - goals_v2_savings_goal_patch
+        data:
+          $ref: '#/components/schemas/SavingsGoalV2'
     DateTimeISO8601:
       title: Date/Time (ISO 8601)
       type: string
@@ -19574,7 +19185,12 @@ components:
           description: Date that the transaction occured compliant with RFC3339.
         posted_date_time:
           type: string
+          deprecated: true
           description: Date the assets involved in the transaction transferred compliant with RFC3339. For credits this is the date that the asset becomes available, for debits this is the date that the asset ceased to be available
+        value_date_time:
+          nullable: true
+          type: string
+          description: Date and time at which assets become available to the account owner in case of a credit entry, or cease to be available to the account owner in case of a debit transaction entry. ISODateTime. Null if this field is not applicable.
         suggested_description:
           type: string
           description: The description Bud suggests client apps show for a given transaction.
@@ -20342,6 +19958,32 @@ components:
           properties:
             sufficient_data:
               type: boolean
+    SavingsGoalsQueryParams:
+      allOf:
+        - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
+    GenerateSavingsGoalsURLRequest:
+      type: object
+      properties:
+        additional_query_params:
+          $ref: '#/components/schemas/SavingsGoalsQueryParams'
+    GenerateSavingsGoalsURLResponse:
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_savings_goals_url_post
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+        metadata:
+          type: object
+          properties:
+            sufficient_data:
+              type: boolean
     IntelligentSearchQueryParams:
       allOf:
         - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
@@ -20910,6 +20552,7 @@ components:
     QueryDateField:
       in: query
       name: date-field
+      deprecated: true
       schema:
         type: string
       example: date_time
@@ -21130,14 +20773,14 @@ components:
         Examples:
           - `2023-01-17T17:29:51Z`
           - `2023-01-17T17:29:51-08:00`
-    PathGoalID:
-      name: goal_id
+    PathSpendingBudgetID:
+      name: budget_id
       in: path
       schema:
         type: string
       required: true
       description: |
-        The ID of the savings goal.
+        The ID of the spending budget.
 
         Example: `81a68821-dca6-4771-80d4-002c7fce412e`
       example: 81a68821-dca6-4771-80d4-002c7fce412e
@@ -21155,25 +20798,15 @@ components:
         type: integer
       example: 200
       description: Use this parameter to set the maximum number of results to be returned. This defaults to 100, and has a maximum of 200.
-    PathGoalActionID:
-      name: goal_action_id
+    PathSavingsGoalIDV2:
+      name: savings_goal_id
       in: path
       schema:
         type: string
+        format: uuid
       required: true
       description: |
-        The ID of the savings goal action.
-
-        Example: `884d3e01-757c-4963-8e97-c1be109bbbcc`
-      example: 884d3e01-757c-4963-8e97-c1be109bbbcc
-    PathSpendingBudgetID:
-      name: budget_id
-      in: path
-      schema:
-        type: string
-      required: true
-      description: |
-        The ID of the spending budget.
+        The ID of the savings goal.
 
         Example: `81a68821-dca6-4771-80d4-002c7fce412e`
       example: 81a68821-dca6-4771-80d4-002c7fce412e
@@ -21415,6 +21048,7 @@ components:
                       currency: USD
                     date_time: '2025-03-02T00:00:00Z'
                     posted_date_time: '2025-03-02T00:00:00Z'
+                    value_date_time: '2025-03-02T00:00:00Z'
                     status: booked
                     suggested_description: Dunkin'
                     suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ba8ef908-b624-4116-8b26-571e48d1bf4c/v3/dunkin.jpeg
@@ -21473,6 +21107,7 @@ components:
                       currency: USD
                     date_time: '2025-02-28T00:00:00Z'
                     posted_date_time: '2025-02-28T00:00:00Z'
+                    value_date_time: '2025-02-28T00:00:00Z'
                     status: booked
                     suggested_description: Dunkin'
                     suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ba8ef908-b624-4116-8b26-571e48d1bf4c/v3/dunkin.jpeg
@@ -21672,6 +21307,7 @@ components:
                       currency: USD
                     date_time: '2025-03-02T00:00:00Z'
                     posted_date_time: '2025-03-02T00:00:00Z'
+                    value_date_time: '2025-03-02T00:00:00Z'
                     status: booked
                     suggested_description: Dunkin'
                     suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ba8ef908-b624-4116-8b26-571e48d1bf4c/v3/dunkin.jpeg
@@ -21730,6 +21366,7 @@ components:
                       currency: USD
                     date_time: '2025-02-28T00:00:00Z'
                     posted_date_time: '2025-02-28T00:00:00Z'
+                    value_date_time: '2025-02-28T00:00:00Z'
                     status: booked
                     suggested_description: Dunkin'
                     suggested_logo: https://assets.thisisbud.com/datasci-images/merchant_logos/ba8ef908-b624-4116-8b26-571e48d1bf4c/v3/dunkin.jpeg
@@ -21847,8 +21484,8 @@ x-tagGroups:
       - Smart Finders API
   - name: ''
     tags:
-      - Savings Goals
       - Spending Budgets
+      - Savings Goals V2
       - Goals API
   - name: ''
     tags:
