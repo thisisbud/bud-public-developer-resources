@@ -3140,111 +3140,17 @@
 					"name": "Goals",
 					"item": [
 						{
-							"name": "Savings",
+							"name": "Savings V2",
 							"item": [
 								{
-									"name": "Edit Savings Goal",
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{auth_token}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "PATCH",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "X-Client-Id",
-												"value": "{{api_credentials_id}}"
-											},
-											{
-												"key": "X-Customer-Id",
-												"value": "{{customer_id}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n\t\"name\": \"Holiday Savings\",\n\t\"target_amount\": {\n\t\t\"value\": \"6000.00\",\n\t\t\"currency\": \"GBP\"\n\t},\n\t\"recurrent_amount\": {\n\t\t\"value\": \"1000.00\",\n\t\t\"currency\": \"GBP\"\n\t},\n\t\"target_datetime\": \"2024-12-23T00:00:00Z\"\n}"
-										},
-										"url": {
-											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}",
-											"host": [
-												"{{proxy_url}}goals"
-											],
-											"path": [
-												"v1",
-												"savings",
-												"{{savings_goal_id}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Edit savings goal action",
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{auth_token}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "PATCH",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "X-Client-Id",
-												"value": "{{api_credentials_id}}"
-											},
-											{
-												"key": "X-Customer-Id",
-												"value": "{{customer_id}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n\t\"amount\": {\n\t\t\"value\": \"50.00\"\n\t}\n}"
-										},
-										"url": {
-											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}/actions/{{savings_goal_action_id}}",
-											"host": [
-												"{{proxy_url}}goals"
-											],
-											"path": [
-												"v1",
-												"savings",
-												"{{savings_goal_id}}",
-												"actions",
-												"{{savings_goal_action_id}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Create savings goal",
+									"name": "Create Savings Goal",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
 													"var jsonData = JSON.parse(responseBody);",
-													"pm.environment.set(\"savings_goal_id\", jsonData.data.id);"
+													"pm.environment.set(\"savings_goal_v2_id\", jsonData.data.id);"
 												],
 												"type": "text/javascript"
 											}
@@ -3278,75 +3184,17 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"account_id\": \"{{account_id}}\",\n\t\"name\": \"Car Savings\",\n\t\"target_amount\": {\n\t\t\"value\": \"3000.00\",\n\t\t\"currency\": \"GBP\"\n\t},\n\t\"target_datetime\": \"2023-12-23T00:00:00Z\"\n}"
+											"raw": "{\n\t\"account_id\": \"{{account_id}}\",\n\t\"name\": \"Car Savings\",\n\t\"target_amount\": {\n\t\t\"value\": \"3000.00\",\n\t\t\"currency\": \"GBP\"\n\t},\n\t\"target_datetime\": \"2026-12-31T00:00:00Z\",\n\t\"allocation_ratio\": 0.2\n}"
 										},
 										"url": {
-											"raw": "{{proxy_url}}goals/v1/savings",
+											"raw": "{{proxy_url}}goals/v2/savings/goals",
 											"host": [
 												"{{proxy_url}}goals"
 											],
 											"path": [
-												"v1",
-												"savings"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Create savings goal action",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = JSON.parse(responseBody);",
-													"pm.environment.set(\"savings_goal_action_id\", jsonData.data.id);"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{auth_token}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "X-Client-Id",
-												"value": "{{api_credentials_id}}"
-											},
-											{
-												"key": "X-Customer-Id",
-												"value": "{{customer_id}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n\t\"amount\": {\n\t\t\"value\": \"10.00\",\n\t\t\"currency\": \"GBP\"\n\t},\n\t\"credit_debit_indicator\": \"credit\"\n}"
-										},
-										"url": {
-											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}/actions",
-											"host": [
-												"{{proxy_url}}goals"
-											],
-											"path": [
-												"v1",
+												"v2",
 												"savings",
-												"{{savings_goal_id}}",
-												"actions"
+												"goals"
 											]
 										}
 									},
@@ -3377,20 +3225,28 @@
 											}
 										],
 										"url": {
-											"raw": "{{proxy_url}}goals/v1/savings",
+											"raw": "{{proxy_url}}goals/v2/savings/goals",
 											"host": [
 												"{{proxy_url}}goals"
 											],
 											"path": [
-												"v1",
-												"savings"
+												"v2",
+												"savings",
+												"goals"
+											],
+											"query": [
+												{
+													"key": "account_id",
+													"value": null,
+													"disabled": true
+												}
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Fetch Savings Goal Actions",
+									"name": "Fetch Savings Goal",
 									"request": {
 										"auth": {
 											"type": "bearer",
@@ -3414,15 +3270,62 @@
 											}
 										],
 										"url": {
-											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}/actions",
+											"raw": "{{proxy_url}}goals/v2/savings/goals/{{savings_goal_v2_id}}",
 											"host": [
 												"{{proxy_url}}goals"
 											],
 											"path": [
-												"v1",
+												"v2",
 												"savings",
-												"{{savings_goal_id}}",
-												"actions"
+												"goals",
+												"{{savings_goal_v2_id}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Edit Savings Goal",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "X-Client-Id",
+												"value": "{{api_credentials_id}}"
+											},
+											{
+												"key": "X-Customer-Id",
+												"value": "{{customer_id}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"name\": \"Holiday Savings\",\n\t\"allocation_ratio\": 0.25,\n\t\"target_datetime\": \"2027-06-30T00:00:00Z\"\n}"
+										},
+										"url": {
+											"raw": "{{proxy_url}}goals/v2/savings/goals/{{savings_goal_v2_id}}",
+											"host": [
+												"{{proxy_url}}goals"
+											],
+											"path": [
+												"v2",
+												"savings",
+												"goals",
+												"{{savings_goal_v2_id}}"
 											]
 										}
 									},
@@ -3453,91 +3356,15 @@
 											}
 										],
 										"url": {
-											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}",
+											"raw": "{{proxy_url}}goals/v2/savings/goals/{{savings_goal_v2_id}}",
 											"host": [
 												"{{proxy_url}}goals"
 											],
 											"path": [
-												"v1",
+												"v2",
 												"savings",
-												"{{savings_goal_id}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Delete Savings Goal Action",
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{auth_token}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "X-Client-Id",
-												"value": "{{api_credentials_id}}"
-											},
-											{
-												"key": "X-Customer-Id",
-												"value": "{{customer_id}}"
-											}
-										],
-										"url": {
-											"raw": "{{proxy_url}}goals/v1/savings/{{savings_goal_id}}/actions/{{savings_goal_action_id}}",
-											"host": [
-												"{{proxy_url}}goals"
-											],
-											"path": [
-												"v1",
-												"savings",
-												"{{savings_goal_id}}",
-												"actions",
-												"{{savings_goal_action_id}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Delete All Goals",
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{auth_token}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "X-Client-Id",
-												"value": "{{api_credentials_id}}"
-											},
-											{
-												"key": "X-Customer-Id",
-												"value": "{{customer_id}}"
-											}
-										],
-										"url": {
-											"raw": "{{proxy_url}}goals/v1/savings",
-											"host": [
-												"{{proxy_url}}goals"
-											],
-											"path": [
-												"v1",
-												"savings"
+												"goals",
+												"{{savings_goal_v2_id}}"
 											]
 										}
 									},
