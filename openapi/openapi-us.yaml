@@ -1388,6 +1388,8 @@ paths:
                   locale: en-US
                   models:
                     categorisation: us-v3
+        '400':
+          description: Request recieved was invalid.
         '401':
           description: An unauthenticated request was received.
         '404':
