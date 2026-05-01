@@ -4639,7 +4639,9 @@ paths:
           schema:
             type: integer
           example: 100
-          description: Maximum number of results to be returned. Defaults to 100, maximum is 200
+          description: |
+            Maximum number of results to be returned. Defaults to 100, maximum is 200. 
+            Note: When using the `exclude_tags` filter, the response may contain more transactions than the specified  `page_size` to ensure complete filtering. Always use the presence of `next_page_token` to determine if  additional pages are available.
         - in: query
           name: page_token
           schema:
@@ -4687,7 +4689,9 @@ paths:
               type: string
           example:
             - benefit
-          description: Tags for which associated transactions should not be returned. See response body example for an exhaustive list of possible tags.
+          description: |
+            Tags for which associated transactions should not be returned. See response body example for an exhaustive  list of possible tags.
+            When this filter is applied, the response may include more transactions than the `page_size` to ensure  accurate filtering. Always use the presence of `next_page_token` to determine if  additional pages are available.
         - in: query
           name: updated_after
           schema:
