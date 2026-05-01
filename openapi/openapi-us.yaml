@@ -225,6 +225,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 4.0.1: 02/03/2026**
+    >- Extend description of __Ingest Transactions__.
+
     **Version 4.0.0: 09/02/2026**
     >- Add __Remove Customer By Idempotent Identifier V3__ endpoint.
 
@@ -3072,6 +3075,12 @@ paths:
 
         The detailed location enrichment response is an additional addon, otherwise only tokens are returned 
         (read more about this in the location [guide](https://docs-us.thisisbud.com/docs/locations).
+
+        > 📘 Note:
+        >
+        > The enrichment values returned in the synchronous response of this endpoint may differ from those returned when fetching the ingested data from __Retrieve Enriched Transactions V2__.
+        >
+        > The synchronous response provides an initial enrichment based solely on the submitted transaction data. During asynchronous ingestion, the data is re-enriched using the customer's existing transaction history and additional enrichment services, producing a more accurate and comprehensive result.
       operationId: v2_ingest_transactions_post
       security:
         - OAuth2: []
