@@ -11647,6 +11647,10 @@ components:
         An optional map of key-value string pairs that allows clients to attach arbitrary metadata to the transaction.
         This field can be used to store any relevant information specific to the client's needs.
         These attributes can be added using the [Ingest Transactions](#operation/v2_ingest_transactions_post) endpoint.
+      properties:
+        key:
+          type: string
+          description: An arbitrary key-value pair for the client attribute.
     Enrichments:
       title: Enrichments
       type: object
@@ -14568,6 +14572,10 @@ components:
         An optional map of key-value string pairs that allows clients to attach arbitrary metadata to the transaction.
         This field can be used to store any relevant information specific to the client's needs.
         It accepts a maximum of 16 key-value pairs. With a maximum key length of 64 characters and a maximum value length of 256 characters.
+      properties:
+        key:
+          type: string
+          description: An arbitrary key-value pair for the client attribute.
       example:
         fraud_score: '0.8'
         overdraft_used: 'true'
@@ -17095,6 +17103,10 @@ components:
         An optional map of key-value string pairs that allows clients to attach arbitrary metadata to the transaction.
         This field can be used to store any relevant information specific to the client's needs, such as:
         These attributes can be added using the [Ingest Transactions](#operation/v2_ingest_transactions_post) endpoint.
+      properties:
+        key:
+          type: string
+          description: An arbitrary key-value pair for the client attribute.
     schemas-Transaction:
       title: Transaction
       type: object
