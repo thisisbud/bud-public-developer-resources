@@ -225,6 +225,14 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 4.0.0: 09/02/2026**
+    >- Add __Remove Customer By Idempotent Identifier V3__ endpoint.
+
+    **Version 3.0.0: 09/02/2026**
+    >- Remove __Create Spending Budget__ `account_id` request body parameter
+    >- Add `account_id` filtering parameter to __Retrieve Spending Budgets__ endpoint.
+    >- Add `account_id` filtering parameter to __Retrieve Spending Budget Transactions__ endpoint.
+
     **Version 2.26.2: 26/01/2026**
     >- Add `value_date_time` field on __Retrieve Transactions V2__ endpoint.
     >- Add `value_date_time` field on __Ingest Transactions__ endpoint request and response.
@@ -1161,6 +1169,46 @@ paths:
                 $ref: '#/components/schemas/CustomerDeleteV3Response'
               example:
                 operation_id: platform_v3_customers_delete
+                data:
+                  task_id: e74efdd2-bd44-42b0-9562-106286664966
+                metadata:
+                  status: Pending
+                  next_url: /v3/customers/45cecf3f-8436-4b57-8953-cfdfbd2620d4/e74efdd2-bd44-42b0-9562-106286664966
+                  next_url_delay: 50
+        '401':
+          description: An unauthenticated request was received.
+        '404':
+          description: The resource was not found.
+        '405':
+          description: The request uses an unexpected HTTP method.
+        5XX:
+          description: An unexpected error occurred on the server side.
+  /platform/v3/customers/idempotent-identifier/{customer_idempotent_identifier}:
+    delete:
+      security:
+        - OAuth2: []
+      tags:
+        - Manage Customers
+      summary: Remove Customer By Idempotent Identifier V3
+      description: This endpoint is used to delete an existing Customer. Calling this endpoint initiates deleting all data relating to a customer returning a task id that can be used to check the status of the delete task.
+      operationId: platform_v3_customers_idempotent_identifier_delete
+      parameters:
+        - in: path
+          name: customer_idempotent_identifier
+          schema:
+            type: string
+          required: true
+          description: The internal client identifier, provided in the client_metadata object when creating the customer in Create Customer V3.
+        - $ref: '#/components/parameters/ClientId'
+      responses:
+        '202':
+          description: The request was successfully accepted for processing and details of the task was returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDeleteV3Response'
+              example:
+                operation_id: platform_v3_customers_idempotent_identifier_delete
                 data:
                   task_id: e74efdd2-bd44-42b0-9562-106286664966
                 metadata:
@@ -9124,6 +9172,10 @@ paths:
       summary: Retrieve Spending Budgets
       description: |
         Retrieve all spending budgets.
+
+        Accounts IDs can be supplied as part of the URL query to return budgets with values filtered to the accounts IDs supplied. These budgets'
+        spent amounts will only consider transactions associated with the specified accounts.
+        If no account IDs are specified, the returned budgets will have a value combined from transactions across all of the customer's accounts.
       operationId: goals_v1_spending_budgets_get
       security:
         - OAuth2: []
@@ -9316,6 +9368,9 @@ paths:
         Retrieve all of the transactions associated with a spending budget. The results of this endpoint are paginated with a default page size of `100` and a maximum of `200`. 
         The page size is configurable by the `page_size` query parameter.
         The next page of results can be retrieved using the `page_token` query parameter.
+
+        Account IDs can be supplied as part of the URL query to filter transactions to those only associated with the specified accounts.
+        If no account IDs are specified, we will return transactions associated with all of the customer's accounts, relevant to the spending budget.
       operationId: goals_v1_spending_budget_transactions_get
       security:
         - OAuth2: []
@@ -9327,6 +9382,7 @@ paths:
         - $ref: '#/components/parameters/QueryDay'
         - $ref: '#/components/parameters/parameters-QueryBudPageToken'
         - $ref: '#/components/parameters/parameters-QueryBudPageSize'
+        - $ref: '#/components/parameters/QueryBudAccountID'
       responses:
         '200':
           description: OK - The spending budget transactions were retrieved successfully
@@ -9360,6 +9416,7 @@ paths:
                         slug: uber
                         display_name: Uber
                         logo: https://url/uber_logo.jpeg
+                    suggested_description: Uber
                 metadata:
                   results: 1
                   page_token: b21055a9a9f46fc794a2e6855c65abd7e317181039fc6930daabac5822911d14a84895ecd947e2b5abdcb22e4fcc2c594e1f661dc63e34b9ba88760724047990896f7581a0786c2605dce19c6a9d80d1044f963b74fea0a929c0a4465a6e67378a74dce38ec5e26ae4cc804b62fd666d5df4cf2e7f524bd99e5523bc5d471768065c036dc0c73122705b280817fbbd7d9aa31f271d72cd3877d999dcb9a5b1c0be0c05
@@ -18998,16 +19055,6 @@ components:
                 The day of which the budget period starts. Not required if a budget is `one-off`.
 
                 Must be between 1 and 28 for `monthly` budgets.
-        account_id:
-          title: Account ID
-          type: string
-          description: |
-            The account id of the account the spending budget is associated with. 
-
-            Only transactions from this account will be included in budget calculations.
-
-            Example: `RxsYshVGded4JeilkXgWKdXA`
-          example: RxsYshVGded4JeilkXgWKdXA
         include:
           title: Include
           type: object
@@ -19154,14 +19201,17 @@ components:
             - $ref: '#/components/schemas/BudResultsMetadata'
             - type: object
               properties:
-                account_id:
-                  title: Account ID
-                  type: string
+                account_ids:
+                  title: Account IDs
+                  type: array
                   description: |
-                    The ID of the account used for filtering in the request.
+                    An array of account IDs used for filtering in the request.
+                  items:
+                    type: string
+                    description: |
+                      An account ID used for filtering in the request.
 
-                    Example: "RxsYshVGded4JeilkXgWKdXA"
-                  example: RxsYshVGded4JeilkXgWKdXA
+                      Example: `RxsYshVGded4JeilkXgWKdXA`
     CreateSpendingBudgetRequest:
       title: Create Spending Budget Request
       allOf:
@@ -19234,16 +19284,6 @@ components:
                 The day of which the budget period starts. Not required if a budget is `one-off`.
 
                 Must be between 1 and 28 for `monthly` budgets.
-        account_id:
-          title: Account ID
-          type: string
-          description: |
-            The account id of the account the spending budget is associated with. 
-
-            Only transactions from this account will be included in budget calculations.
-
-            Example: `RxsYshVGded4JeilkXgWKdXA`
-          example: RxsYshVGded4JeilkXgWKdXA
         include:
           title: Include
           type: object
@@ -19361,6 +19401,7 @@ components:
         - description
         - amount
         - credit_debit_indicator
+        - suggested_description
         - status
         - date_time
       properties:
@@ -19395,6 +19436,13 @@ components:
           description: Date of the transaction compliant with RFC3339.
         enrichments:
           $ref: '#/components/schemas/goals-components_schemas-Enrichments'
+        suggested_description:
+          description: The description Bud suggests client apps show for a given transaction.
+          type: string
+        suggested_logo:
+          description: The logo Bud suggests client apps show for a given transaction.
+          type: string
+          format: uri
     BudPageSizeMetadata:
       title: Page Size
       type: integer
