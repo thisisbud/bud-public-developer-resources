@@ -225,6 +225,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 4.4.0: 30/04/2026**
+    >- Add `pan` as a valid account identifier type in __Ingest Accounts__.
+
     **Version 4.3.0: 23/04/2026**
     >- Add __Generate Savings Goals URL__ endpoint.
 
@@ -237,7 +240,6 @@ info:
     >- Add __Retrieve Savings Goal V2__ endpoint.
     >- Add __Update Savings Goal V2__ endpoint.
     >- Add __Remove Savings Goal V2__ endpoint.
-
 
     **Version 4.0.1: 02/03/2026**
     >- Extend description of __Ingest Transactions__.
@@ -13739,6 +13741,7 @@ components:
             - uk_account_number
             - iban
             - us_account_number
+            - pan
         value:
           type: string
           description: The identifier associated with the account
