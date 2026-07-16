@@ -308,6 +308,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 5.1.0: 24/06/2026**
+    >- Add `running_balance_credit_debit_indicator` field to __Ingest Transactions__ request and sync response.
+    >- Add `running_balance_credit_debit_indicator` field to __Retrieve Transactions V2__ response.
     **Version 5.0.0: 08/05/2026**
     >- Add __Create Transaction Label__, __Retrieve Transaction Labels__, __Rename Transaction Label__, and __Delete Transaction Label__ endpoints under __Manage Transaction Labels__.
     >- Add __Assign Transaction Label__ and __Unassign Transaction Label__ endpoints under __Manage Financial Data__.
@@ -1609,7 +1612,6 @@ paths:
                       display_name: first direct
                       maintenance_window:
                         start: 2019-08-07T11:48:00+0000
-                        end: null
                       maintenance_status: active
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1617,7 +1619,6 @@ paths:
                       mobile_only: false
                     - provider: halifax
                       display_name: Halifax
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1625,7 +1626,6 @@ paths:
                       mobile_only: false
                     - provider: hbos
                       display_name: Bank of Scotland
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1633,7 +1633,6 @@ paths:
                       mobile_only: false
                     - provider: hsbc
                       display_name: HSBC
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1641,7 +1640,6 @@ paths:
                       mobile_only: false
                     - provider: lloyds
                       display_name: Lloyds
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1649,7 +1647,6 @@ paths:
                       mobile_only: false
                     - provider: mns
                       display_name: Marks & Spencer
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1657,7 +1654,6 @@ paths:
                       mobile_only: false
                     - provider: nationwide
                       display_name: Nationwide
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1665,7 +1661,6 @@ paths:
                       mobile_only: false
                     - provider: natwest
                       display_name: Natwest
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1673,7 +1668,6 @@ paths:
                       mobile_only: false
                     - provider: rbs
                       display_name: Royal Bank of Scotland
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1681,13 +1675,11 @@ paths:
                       mobile_only: false
                     - provider: santander
                       display_name: Santander
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - GBR
                       mobile_only: false
-                  metadata: null
         '400':
           description: Bad Request that fails validations on headers & payload
         '401':
@@ -3111,8 +3103,6 @@ paths:
                         raw_format: obie
                         raw:
                           ConsentId: 87ccf4c3-62b1-49c1-9a49-26919f954deb
-                          TransactionFromDateTime: null
-                          StatusUpdateDateTime: null
                           Status: AwaitingAuthorisation
                           Permissions:
                             - ReadAccountsDetail
@@ -3142,7 +3132,6 @@ paths:
                           - ReadTransactions
                         raw_version: v1.1
                         raw_format: amex
-                        raw: null
                         account_ids:
                           - bb98k51y-564t-8560-c99d-232b977gef68
                         last_synced_at: '2021-06-16T09:13:41.32Z'
@@ -3174,8 +3163,6 @@ paths:
                         raw_format: obie
                         raw:
                           ConsentId: 87ccf4c3-62b1-49c1-9a49-26919f954deb
-                          TransactionFromDateTime: null
-                          StatusUpdateDateTime: null
                           Status: AwaitingAuthorisation
                           Permissions:
                             - ReadAccountsDetail
@@ -3203,7 +3190,6 @@ paths:
                           - ReadTransactions
                         raw_version: v1.1
                         raw_format: amex
-                        raw: null
                         last_synced_at: '2021-06-16T09:13:41.32Z'
                     metadata:
                       results: 2
@@ -8480,7 +8466,7 @@ paths:
                     operation_id: corrections_v2_merchants_post
                     code_id: failed_validation
                     message: invalid transaction in request
-                    errors: null
+                    errors: {}
         '401':
           description: Unauthorised request
         '405':
@@ -8552,7 +8538,7 @@ paths:
                     operation_id: corrections_v2_merchant_search_get
                     code_id: failed_validation
                     message: invalid search query size
-                    errors: null
+                    errors: {}
         '401':
           description: Unauthorised request
         '405':
@@ -8570,7 +8556,7 @@ paths:
                     operation_id: unknown
                     code_id: unknown
                     message: Too many requests
-                    errors: null
+                    errors: {}
         5XX:
           description: An unexpected error occurred on the server side
   /corrections/v2/custom-merchants:
@@ -13985,7 +13971,7 @@ paths:
                             history:
                               - datetime: '2020-02-02T12:29:35.028944815Z'
                                 status: Available
-                        required_action: null
+                        required_action: confirm_single_payment
                         errors:
                           - code: FAILED_FUNDS_CONFIRMATION
                             description: The call to the provider to confirm funds returned an error
@@ -14072,7 +14058,7 @@ paths:
                             history:
                               - datetime: '2020-02-02T12:29:35.028944815Z'
                                 status: Available
-                        required_action: null
+                        required_action: confirm_single_payment
                         errors:
                           - code: FAILED_FUNDS_CONFIRMATION
                             description: The call to the provider to confirm funds returned an error
@@ -14316,7 +14302,7 @@ paths:
                           history:
                             - datetime: '2020-02-02T12:29:35.028944815Z'
                               status: Available
-                      required_action: null
+                      required_action: confirm_single_payment
                       errors:
                         - code: FAILED_FUNDS_CONFIRMATION
                           description: The call to the provider to confirm funds returned an error
@@ -14399,7 +14385,7 @@ paths:
                           history:
                             - datetime: '2020-02-02T12:29:35.028944815Z'
                               status: Available
-                      required_action: null
+                      required_action: confirm_single_payment
                       errors:
                         - code: FAILED_FUNDS_CONFIRMATION
                           description: The call to the provider to confirm funds returned an error
@@ -14569,7 +14555,7 @@ paths:
                     first_payment_date: '2020-02-02T12:29:33.428944815Z'
                     last_payment_date: '2021-02-02T12:29:33.428944815Z'
                     frequency: monthly
-                    required_action: null
+                    required_action: confirm_standing_order
                 metadata:
                   total_results: 1000000
                   results: 10
@@ -14716,7 +14702,7 @@ paths:
                   first_payment_date: '2020-02-02T12:29:33.428944815Z'
                   last_payment_date: '2021-02-02T12:29:33.428944815Z'
                   frequency: monthly
-                  required_action: null
+                  required_action: confirm_standing_order
                 metadata: {}
         '401':
           description: Unauthorised request
@@ -15022,7 +15008,7 @@ paths:
                       description: The call to the provider to confirm funds returned an error
                   created_at: '2020-02-02T12:29:33.428944815Z'
                   requested_execution_date: '2020-02-02T12:29:33.428944815Z'
-                  required_action: null
+                  required_action: confirm_scheduled_payment
         '401':
           description: Unauthorised request
         '404':
@@ -16789,6 +16775,12 @@ components:
               $ref: '#/components/schemas/BudMonetaryValue'
             currency:
               $ref: '#/components/schemas/BudCurrency'
+        running_balance_credit_debit_indicator:
+          type: string
+          description: Credit/Debit Indicator for the running balance field
+          enum:
+            - credit
+            - debit
         counterparty:
           type: object
           description: An object containing details of the counterparty in this transaction
@@ -27217,7 +27209,6 @@ components:
           type: string
           enum:
             - confirm_single_payment
-            - null
           nullable: true
           description: |
             This field will indicate that there is an action required to be taken by the client in order to complete the payment.
@@ -27522,7 +27513,6 @@ components:
             | confirm_standing_order | If present, this value indicates that client has yet to confirm the standing order once the customer has successfully authorised the payment with the provider. This confirmation can be accomplished using the Confirm Standing Order API Endpoint. Please note this step will only be relevant for clients using Bud as a Technical Service Provider (TSP) |
           enum:
             - confirm_standing_order
-            - null
     ListStandingOrderResponse:
       title: List Standing Order Response
       type: object
@@ -27747,7 +27737,6 @@ components:
             | confirm_scheduled_payment | If present, this value indicates that client has yet to confirm the Scheduled Payment once the customer has successfully authorised the payment with the provider. This confirmation can be accomplished using the Confirm Scheduled Payment API Endpoint. Please note this step will only be relevant for clients using Bud as a Technical Service Provider (TSP) |
           enum:
             - confirm_scheduled_payment
-            - null
     ListScheduledPaymentResponse:
       title: List Scheduled Payment Response
       type: object
