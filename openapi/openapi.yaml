@@ -308,6 +308,8 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 4.4.1: 07/05/2026**
+    >- Add `created_at` field to __Retrieve Balances Actionable Insights__, __Retrieve Income Actionable Insights__, and __Retrieve Spending Actionable Insights__ responses.
     **Version 4.4.0: 30/04/2026**
     >- Add `pan` as a valid account identifier type in __Ingest Accounts__.
 
@@ -3801,7 +3803,7 @@ paths:
                       - 275fbbfe-209c-4329-a38b-b324aa386c56
       responses:
         '204':
-          description: All accounts have been closed successfully. Response has no body.
+          description: All accounts have been reopened successfully. Response has no body.
         '400':
           description: Bad Request that fails validations on headers and/or payload
           content:
@@ -6700,8 +6702,8 @@ paths:
                               postal_code: W6 7NL
                               country: GB
                             geolocation:
-                              longitude: 51.497369
-                              latitude: -0.224128
+                              longitude: -0.224128
+                              latitude: 51.497369
                           transaction_types:
                             - card
                             - debit
@@ -6752,8 +6754,8 @@ paths:
                               postal_code: W10 5NE
                               country: GB
                             geolocation:
-                              longitude: 51.517301
-                              latitude: -0.209689
+                              longitude: -0.209689
+                              latitude: 51.517301
                             tokens:
                               - gbr
                               - ladbroke
@@ -6855,8 +6857,8 @@ paths:
                               postal_code: W6 7NL
                               country: GB
                             geolocation:
-                              longitude: 51.497369
-                              latitude: -0.224128
+                              longitude: -0.224128
+                              latitude: 51.497369
                           transaction_types:
                             - card
                             - debit
@@ -6907,8 +6909,8 @@ paths:
                               postal_code: W10 5NE
                               country: GB
                             geolocation:
-                              longitude: 51.517301
-                              latitude: -0.209689
+                              longitude: -0.209689
+                              latitude: 51.517301
                             tokens:
                               - gbr
                               - ladbroke
@@ -8047,8 +8049,8 @@ paths:
                               postal_code: W6 7NL
                               country: United Kingdom
                             geolocation:
-                              longitude: 51.497678
-                              latitude: -0.223766
+                              longitude: -0.223766
+                              latitude: 51.497678
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
                             slug: paypal
@@ -8123,8 +8125,8 @@ paths:
                               postal_code: W6 7NL
                               country: United Kingdom
                             geolocation:
-                              longitude: 51.497678
-                              latitude: -0.223766
+                              longitude: -0.223766
+                              latitude: 51.497678
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
                             slug: paypal
@@ -8188,8 +8190,8 @@ paths:
                               postal_code: W6 7NL
                               country: United Kingdom
                             geolocation:
-                              longitude: 51.497678
-                              latitude: -0.223766
+                              longitude: -0.223766
+                              latitude: 51.497678
                           transaction_types:
                             - card
                             - debit
@@ -8298,7 +8300,7 @@ paths:
         '405':
           description: An unexpected HTTP method was used
         '429':
-          description: An unexpected HTTP method was used
+          description: Too many requests
           content:
             application/json:
               schema:
@@ -8515,8 +8517,8 @@ paths:
                               postal_code: W6 7NL
                               country: United Kingdom
                             geolocation:
-                              longitude: 51.497678
-                              latitude: -0.223766
+                              longitude: -0.223766
+                              latitude: 51.497678
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
                             slug: paypal
@@ -8583,8 +8585,8 @@ paths:
                               postal_code: W6 7NL
                               country: United Kingdom
                             geolocation:
-                              longitude: 51.497678
-                              latitude: -0.223766
+                              longitude: -0.223766
+                              latitude: 51.497678
                           transaction_types:
                             - card
                             - debit
@@ -8638,8 +8640,8 @@ paths:
                               postal_code: W6 7NL
                               country: United Kingdom
                             geolocation:
-                              longitude: 51.497678
-                              latitude: -0.223766
+                              longitude: -0.223766
+                              latitude: 51.497678
                           transaction_types:
                             - card
                             - debit
@@ -8759,8 +8761,8 @@ paths:
                               postal_code: W6 7NL
                               country: United Kingdom
                             geolocation:
-                              longitude: 51.497678
-                              latitude: -0.223766
+                              longitude: -0.223766
+                              latitude: 51.497678
                           processor:
                             id: 18f63293-0217-4520-bbf0-071dca7a9d04
                             slug: paypal
@@ -8827,8 +8829,8 @@ paths:
                               postal_code: W6 7NL
                               country: United Kingdom
                             geolocation:
-                              longitude: 51.497678
-                              latitude: -0.223766
+                              longitude: -0.223766
+                              latitude: 51.497678
                           transaction_types:
                             - card
                             - debit
@@ -8882,8 +8884,8 @@ paths:
                               postal_code: W6 7NL
                               country: United Kingdom
                             geolocation:
-                              longitude: 51.497678
-                              latitude: -0.223766
+                              longitude: -0.223766
+                              latitude: 51.497678
                           transaction_types:
                             - card
                             - debit
@@ -15085,6 +15087,7 @@ paths:
                   insights:
                     - id: in_overdraft_8789764a-df2f-4589-b550-00bcd0e9cb2c
                       type: in_overdraft
+                      created_at: '2026-05-07T11:00:59Z'
                       account_id: 8789764a-df2f-4589-b550-00bcd0e9cb2c
                       balance:
                         value: '100.00'
@@ -15220,6 +15223,7 @@ paths:
                   insights:
                     - id: late_income_8789764a-df2f-4589-b550-00bcd0e9cb2c
                       type: late_income
+                      created_at: '2026-05-07T11:00:59Z'
                       transactions:
                         - transaction_id: a_transaction_id
                           account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
@@ -15419,6 +15423,7 @@ paths:
                   insights:
                     - id: late_payment_8789764a-df2f-4589-b550-00bcd0e9cb2c
                       type: late_payment
+                      created_at: '2026-05-07T11:00:59Z'
                       transactions:
                         - transaction_id: a_transaction_id
                           account_id: ee7a2d6a-2baa-461a-aca2-844e88a3f3e7
@@ -27698,6 +27703,7 @@ components:
       required:
         - id
         - type
+        - created_at
         - _links
       properties:
         id:
@@ -27707,6 +27713,9 @@ components:
           type: string
           description: The type of insight triggered. Specifies the meaning of the insight, and the format of the additional_info object.
           example: gambling_threshold
+        created_at:
+          $ref: '#/components/schemas/schemas-DateTimeISO8601'
+          description: The date and time at which this insight was created, in ISO 8601 format.
         _links:
           $ref: '#/components/schemas/InsightLinks'
     AmountWithCDI:
@@ -28571,11 +28580,14 @@ components:
           properties:
             sufficient_data:
               type: boolean
+    AccountsQueryParams:
+      allOf:
+        - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
     GenerateAccountsURLRequest:
       type: object
       properties:
         additional_query_params:
-          $ref: '#/components/schemas/SpendingAnalysisQueryParams'
+          $ref: '#/components/schemas/AccountsQueryParams'
     GenerateAccountsURLResponse:
       type: object
       properties:
