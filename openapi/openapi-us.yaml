@@ -225,6 +225,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 5.1.2: 16/07/2026**
+    >- Add `last_updated_at` field to __Retrieve Balances Over Time V3__, __Retrieve Balances Over Time By Account V3__, __Retrieve Balances Over Time__, and __Retrieve Balances Over Time By Account__ responses.
+
     **Version 5.1.1: 24/06/2026**
     >- Add additional value to `account_category` field to  __Retrieve Accounts V3__ response.
 
@@ -4543,6 +4546,7 @@ paths:
                       min_balance:
                         value: '200.00'
                         currency: USD
+                      last_updated_at: '2022-11-15T09:12:04Z'
                     b6e9ea3c-71f9-4572-983a-3e5e85470dad:
                       balance_count: 1
                       from: '2022-11-15T23:59:59Z'
@@ -4553,6 +4557,7 @@ paths:
                       min_balance:
                         value: '0.00'
                         currency: USD
+                      last_updated_at: '2022-11-15T14:47:31Z'
                   parameters:
                     from: '2020-12-22T00:00:00Z'
                     to: '2022-11-15T00:00:00Z'
@@ -4659,6 +4664,7 @@ paths:
                     min_balance:
                       value: '0.00'
                       currency: USD
+                    last_updated_at: '2022-11-15T09:12:04Z'
                   parameters:
                     from: '2020-12-22T00:00:00Z'
                     to: '2022-11-15T00:00:00Z'
@@ -5817,6 +5823,7 @@ paths:
                       min_balance:
                         value: '200.00'
                         currency: USD
+                      last_updated_at: '2022-11-15T09:12:04Z'
                     b6e9ea3c-71f9-4572-983a-3e5e85470dad:
                       balance_count: 1
                       from: '2022-11-15T23:59:59Z'
@@ -5827,6 +5834,7 @@ paths:
                       min_balance:
                         value: '0.00'
                         currency: USD
+                      last_updated_at: '2022-11-15T14:47:31Z'
                   parameters:
                     from: '2020-12-22T00:00:00Z'
                     to: '2022-11-15T00:00:00Z'
@@ -5955,6 +5963,7 @@ paths:
                     min_balance:
                       value: '0.00'
                       currency: USD
+                    last_updated_at: '2022-11-15T09:12:04Z'
                   parameters:
                     from: '2020-12-22T00:00:00Z'
                     to: '2022-11-15T00:00:00Z'
@@ -16200,6 +16209,18 @@ components:
                       max_balance:
                         description: The maximum balance in the returned period
                         $ref: '#/components/schemas/BudAmount'
+                  - type: object
+                    properties:
+                      last_updated_at:
+                        type: string
+                        format: date-time
+                        description: |
+                          The date and time the account's balance data was last updated, taken as the newer of the
+                          account's balance date and the calculation date of the newest transaction used in the
+                          balances-over-time calculation, in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+                          Examples:
+                            - `2023-03-17T23:59:59Z`
             parameters:
               title: The parameters used to calculated balances
               allOf:
@@ -16253,6 +16274,18 @@ components:
                     max_balance:
                       description: The maximum balance in the returned period
                       $ref: '#/components/schemas/BudAmount'
+                - type: object
+                  properties:
+                    last_updated_at:
+                      type: string
+                      format: date-time
+                      description: |
+                        The date and time the account's balance data was last updated, taken as the newer of the
+                        account's balance date and the calculation date of the newest transaction used in the
+                        balances-over-time calculation, in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+                        Examples:
+                          - `2023-03-17T23:59:59Z`
             parameters:
               allOf:
                 - $ref: '#/components/schemas/BudDateRangeMetadata'
@@ -16951,6 +16984,18 @@ components:
                       max_balance:
                         description: The maximum balance in the returned period
                         $ref: '#/components/schemas/BudAmount'
+                  - type: object
+                    properties:
+                      last_updated_at:
+                        type: string
+                        format: date-time
+                        description: |
+                          The date and time the account's balance data was last updated, taken as the newer of the
+                          account's balance date and the calculation date of the newest transaction used in the
+                          balances-over-time calculation, in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+                          Examples:
+                            - `2023-03-17T23:59:59Z`
             parameters:
               title: The parameters used to calculated balances
               allOf:
@@ -17004,6 +17049,18 @@ components:
                     max_balance:
                       description: The maximum balance in the returned period
                       $ref: '#/components/schemas/BudAmount'
+                - type: object
+                  properties:
+                    last_updated_at:
+                      type: string
+                      format: date-time
+                      description: |
+                        The date and time the account's balance data was last updated, taken as the newer of the
+                        account's balance date and the calculation date of the newest transaction used in the
+                        balances-over-time calculation, in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
+
+                        Examples:
+                          - `2023-03-17T23:59:59Z`
             parameters:
               allOf:
                 - $ref: '#/components/schemas/BudDateRangeMetadata'
