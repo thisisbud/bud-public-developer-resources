@@ -310,6 +310,7 @@ info:
 
     **Version 4.4.1: 07/05/2026**
     >- Add `created_at` field to __Retrieve Balances Actionable Insights__, __Retrieve Income Actionable Insights__, and __Retrieve Spending Actionable Insights__ responses.
+
     **Version 4.4.0: 30/04/2026**
     >- Add `pan` as a valid account identifier type in __Ingest Accounts__.
 
