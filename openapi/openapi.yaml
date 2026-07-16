@@ -310,7 +310,10 @@ info:
 
     **Version 5.1.1: 24/06/2026**
     >- Add additional value to `account_category` field to  __Retrieve Accounts V3__ response.
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
     **Version 5.1.0: 24/06/2026**
     >- Add `running_balance_credit_debit_indicator` field to __Ingest Transactions__ request and sync response.
     >- Add `running_balance_credit_debit_indicator` field to __Retrieve Transactions V2__ response.
