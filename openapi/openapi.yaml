@@ -311,12 +311,10 @@ info:
     **Version 5.1.0: 24/06/2026**
     >- Add `running_balance_credit_debit_indicator` field to __Ingest Transactions__ request and sync response.
     >- Add `running_balance_credit_debit_indicator` field to __Retrieve Transactions V2__ response.
-
     **Version 5.0.0: 08/05/2026**
     >- Add __Create Transaction Label__, __Retrieve Transaction Labels__, __Rename Transaction Label__, and __Delete Transaction Label__ endpoints under __Manage Transaction Labels__.
     >- Add __Assign Transaction Label__ and __Unassign Transaction Label__ endpoints under __Manage Financial Data__.
     >- Add `include_label_ids` query parameter and `labels` response field to __Retrieve Transactions V2__.
-
     **Version 4.4.1: 07/05/2026**
     >- Add `created_at` field to __Retrieve Balances Actionable Insights__, __Retrieve Income Actionable Insights__, and __Retrieve Spending Actionable Insights__ responses.
 
