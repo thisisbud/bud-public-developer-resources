@@ -225,6 +225,10 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 5.1.0: 24/06/2026**
+    >- Add `running_balance_credit_debit_indicator` field to __Ingest Transactions__ request and sync response.
+    >- Add `running_balance_credit_debit_indicator` field to __Retrieve Transactions V2__ response.
+
     **Version 5.0.0: 08/05/2026**
     >- Add __Create Transaction Label__, __Retrieve Transaction Labels__, __Rename Transaction Label__, and __Delete Transaction Label__ endpoints under __Manage Transaction Labels__.
     >- Add __Assign Transaction Label__ and __Unassign Transaction Label__ endpoints under __Manage Financial Data__.
@@ -1476,7 +1480,6 @@ paths:
                       mobile_only: false
                     - provider: chase
                       display_name: Chase
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1484,7 +1487,6 @@ paths:
                       mobile_only: false
                     - provider: bankofamerica
                       display_name: Bank of America
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1492,7 +1494,6 @@ paths:
                       mobile_only: false
                     - provider: capitalone
                       display_name: Capital One
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1500,7 +1501,6 @@ paths:
                       mobile_only: false
                     - provider: wellsfargo
                       display_name: Wells Fargo
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1508,7 +1508,6 @@ paths:
                       mobile_only: false
                     - provider: pnc
                       display_name: PNC Bank
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1516,7 +1515,6 @@ paths:
                       mobile_only: false
                     - provider: fidelity
                       display_name: Fidelity
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1524,7 +1522,6 @@ paths:
                       mobile_only: false
                     - provider: td
                       display_name: TD Bank
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1532,7 +1529,6 @@ paths:
                       mobile_only: false
                     - provider: usbank
                       display_name: US Bank
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1540,13 +1536,11 @@ paths:
                       mobile_only: false
                     - provider: transamerica
                       display_name: Transamerica
-                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
                         - USA
                       mobile_only: false
-                  metadata: null
         '400':
           description: The request contains an invalid payload.
         '401':
@@ -2450,7 +2444,6 @@ paths:
                       - ReadTransactions
                     raw_version: v1.0
                     raw_format: akoya
-                    raw: null
                     account_ids:
                       - aa86f72c-476a-3355-b54c-614a815fae40
                     last_synced_at: '2021-06-15T11:01:30.07Z'
@@ -2473,7 +2466,6 @@ paths:
                       - ReadTransactions
                     raw_version: v1.0
                     raw_format: akoya
-                    raw: null
                     account_ids:
                       - bb98k51y-564t-8560-c99d-232b977gef68
                     last_synced_at: '2021-06-16T09:13:41.32Z'
@@ -6323,7 +6315,7 @@ paths:
                     operation_id: corrections_v2_merchants_post
                     code_id: failed_validation
                     message: invalid transaction in request
-                    errors: null
+                    errors: {}
         '401':
           description: Unauthorised request
         '405':
@@ -6395,7 +6387,7 @@ paths:
                     operation_id: corrections_v2_merchant_search_get
                     code_id: failed_validation
                     message: invalid search query size
-                    errors: null
+                    errors: {}
         '401':
           description: Unauthorised request
         '405':
@@ -6413,7 +6405,7 @@ paths:
                     operation_id: unknown
                     code_id: unknown
                     message: Too many requests
-                    errors: null
+                    errors: {}
         5XX:
           description: An unexpected error occurred on the server side
   /corrections/v2/custom-merchants:
@@ -11679,6 +11671,12 @@ components:
               $ref: '#/components/schemas/BudMonetaryValue'
             currency:
               $ref: '#/components/schemas/BudCurrency'
+        running_balance_credit_debit_indicator:
+          type: string
+          description: Credit/Debit Indicator for the running balance field
+          enum:
+            - credit
+            - debit
         counterparty:
           type: object
           description: An object containing details of the counterparty in this transaction
@@ -17375,6 +17373,12 @@ components:
               $ref: '#/components/schemas/BudMonetaryValue'
             currency:
               $ref: '#/components/schemas/BudCurrency'
+        running_balance_credit_debit_indicator:
+          type: string
+          description: Credit/Debit Indicator for the running balance field
+          enum:
+            - credit
+            - debit
         counterparty:
           type: object
           description: An object containing details of the counterparty in this transaction
