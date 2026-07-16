@@ -225,6 +225,11 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 5.0.0: 08/05/2026**
+    >- Add __Create Transaction Label__, __Retrieve Transaction Labels__, __Rename Transaction Label__, and __Delete Transaction Label__ endpoints under __Manage Transaction Labels__.
+    >- Add __Assign Transaction Label__ and __Unassign Transaction Label__ endpoints under __Manage Financial Data__.
+    >- Add `include_label_ids` query parameter and `labels` response field to __Retrieve Enriched Transactions V2__.
+
     **Version 4.4.1: 07/05/2026**
     >- Add `created_at` field to __Retrieve Balances Actionable Insights__, __Retrieve Income Actionable Insights__, and __Retrieve Spending Actionable Insights__ responses.
 
@@ -650,6 +655,11 @@ tags:
     x-displayName: Manage Financial Data
     description: |
       Manipulate Transactions held on the Bud platform by removing data, submitting corrections, or adding tags through different rulesets.
+  - name: Manage Transaction Labels
+    x-displayName: Manage Transaction Labels
+    description: |
+      Create, list, rename, and delete customer-authored labels that can be attached to transactions.
+      Labels are customer-defined strings used to group transactions in ways that are meaningful to the customer (for example a trip, work expenses, or a renovation project). They are distinct from `tags`, which are produced by Bud's enrichment pipeline. Labels are scoped to the authenticated customer and can be applied to transactions via the __Assign Transaction Label__ and __Unassign Transaction Label__ endpoints under __Manage Financial Data__.
   - name: Correct Financial Data
     x-displayName: Correct Financial Data
     description: |
@@ -4768,8 +4778,20 @@ paths:
           example:
             - benefit
           description: |
-            Tags for which associated transactions should not be returned. See response body example for an exhaustive  list of possible tags.
-            When this filter is applied, the response may include more transactions than the `page_size` to ensure  accurate filtering. Always use the presence of `next_page_token` to determine if  additional pages are available.
+            Tags for which associated transactions should not be returned. See response body example for an exhaustive list of possible tags.
+            When this filter is applied, the response may include more transactions than the `page_size` to ensure accurate filtering. Always use the presence of `next_page_token` to determine if additional pages are available.
+        - in: query
+          name: include_label_ids
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+          example:
+            - 1f10e6de-0f5f-4d8c-987a-9635a9d1b8c6
+          description: |
+            Customer-defined `label_id` values to filter on. Only transactions that have all of the supplied `label_id` values attached are returned. Repeat the parameter to supply multiple values.
+            Labels are managed via the __Manage Transaction Labels__ endpoints.
         - in: query
           name: updated_after
           schema:
@@ -4856,6 +4878,9 @@ paths:
                         tags:
                           - online
                           - regular-transaction
+                        labels:
+                          - id: 1f10e6de-0f5f-4d8c-987a-9635a9d1b8c6
+                            name: Subscriptions
                       - transaction_id: '692529081000'
                         account_id: 2f5b2055-6253-4cd0-b646-06788342a609
                         provider: finicity
@@ -4986,6 +5011,9 @@ paths:
                         tags:
                           - online
                           - regular-transaction
+                        labels:
+                          - id: 1f10e6de-0f5f-4d8c-987a-9635a9d1b8c6
+                            name: Subscriptions
                       - transaction_id: '692529081000'
                         account_id: 2f5b2055-6253-4cd0-b646-06788342a609
                         provider: finicity
@@ -5097,6 +5125,236 @@ paths:
           description: An unauthenticated request was received.
         '405':
           description: The request uses an unexpected HTTP method.
+        5XX:
+          description: An unexpected error occurred on the server side.
+  /financial/v2/transactions/{transaction_id}/labels:
+    post:
+      tags:
+        - Manage Financial Data
+      summary: Assign Transaction Label
+      description: |
+        Attach a customer-defined label to a transaction. The label must already exist for the customer (create one with __Create Transaction Label__).
+      operationId: v2_transaction_labels_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/PathTransactionID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignTransactionLabelRequest'
+            example:
+              label_id: 1f10e6de-0f5f-4d8c-987a-9635a9d1b8c6
+      responses:
+        '204':
+          description: The label was attached to the transaction.
+        '400':
+          description: The request contains an invalid payload.
+        '401':
+          description: An unauthenticated request was received.
+        5XX:
+          description: An unexpected error occurred on the server side.
+  /financial/v2/transactions/{transaction_id}/labels/{label_id}:
+    delete:
+      tags:
+        - Manage Financial Data
+      summary: Unassign Transaction Label
+      description: |
+        Remove a customer-defined label from a transaction. The label itself is not deleted; use __Delete Transaction Label__ to remove the label entirely.
+      operationId: v2_transaction_labels_delete
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/PathTransactionID'
+        - in: path
+          name: label_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Identifier of the label to remove from the transaction.
+      responses:
+        '204':
+          description: The label was removed from the transaction.
+        '400':
+          description: The request contains an invalid payload.
+        '401':
+          description: An unauthenticated request was received.
+        5XX:
+          description: An unexpected error occurred on the server side.
+  /financial/v2/transactions/labels:
+    post:
+      tags:
+        - Manage Transaction Labels
+      summary: Create Transaction Label
+      description: |
+        Create a new transaction label for the authenticated customer. Label names are case-insensitively unique per customer; an attempt to create a label with a name that already exists returns `409`.
+      operationId: financial_v2_labels_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/CustomerSecret'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLabelRequest'
+            example:
+              name: Trip to Lisbon
+      responses:
+        '201':
+          description: The label was created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelResponse'
+              example:
+                operation_id: financial_v2_labels_post
+                data:
+                  id: 1f10e6de-0f5f-4d8c-987a-9635a9d1b8c6
+                  name: Trip to Lisbon
+                  created_at: '2026-04-29T12:00:00Z'
+                  updated_at: '2026-04-29T12:00:00Z'
+        '400':
+          description: The request contains an invalid payload. The `name` must be non-empty and no more than 50 characters.
+        '401':
+          description: An unauthenticated request was received.
+        '409':
+          description: A label with the same name already exists for the authenticated customer.
+        5XX:
+          description: An unexpected error occurred on the server side.
+    get:
+      tags:
+        - Manage Transaction Labels
+      summary: Retrieve Transaction Labels
+      description: |
+        List all transaction labels owned by the authenticated customer.
+      operationId: financial_v2_labels_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/CustomerSecret'
+      responses:
+        '200':
+          description: The request was successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListLabelsResponse'
+              example:
+                operation_id: financial_v2_labels_get
+                data:
+                  - id: 1f10e6de-0f5f-4d8c-987a-9635a9d1b8c6
+                    name: Trip to Lisbon
+                    created_at: '2026-04-29T12:00:00Z'
+                    updated_at: '2026-04-29T12:00:00Z'
+                  - id: 5fd8ed6e-289b-42ce-b729-9835b4e550b5
+                    name: Work expenses
+                    created_at: '2026-04-29T12:00:00Z'
+                    updated_at: '2026-04-29T12:30:00Z'
+        '401':
+          description: An unauthenticated request was received.
+        5XX:
+          description: An unexpected error occurred on the server side.
+  /financial/v2/transactions/labels/{label_id}:
+    patch:
+      tags:
+        - Manage Transaction Labels
+      summary: Rename Transaction Label
+      description: |
+        Rename an existing transaction label owned by the authenticated customer. Label names are case-insensitively unique per customer; an attempt to rename to a name that already exists returns `409`.
+      operationId: financial_v2_labels_patch
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - in: path
+          name: label_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Identifier of the label to rename.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenameLabelRequest'
+            example:
+              name: Home renovation
+      responses:
+        '200':
+          description: The label was renamed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelResponse'
+              example:
+                operation_id: financial_v2_labels_patch
+                data:
+                  id: 1f10e6de-0f5f-4d8c-987a-9635a9d1b8c6
+                  name: Home renovation
+                  created_at: '2026-04-29T12:00:00Z'
+                  updated_at: '2026-04-29T13:15:00Z'
+        '400':
+          description: The request contains an invalid payload. The `name` must be non-empty and no more than 50 characters.
+        '401':
+          description: An unauthenticated request was received.
+        '404':
+          description: The label was not found for the authenticated customer.
+        '409':
+          description: A label with the same name already exists for the authenticated customer.
+        5XX:
+          description: An unexpected error occurred on the server side.
+    delete:
+      tags:
+        - Manage Transaction Labels
+      summary: Delete Transaction Label
+      description: |
+        Delete an existing transaction label owned by the authenticated customer. The label is removed from any transactions it was attached to.
+      operationId: financial_v2_labels_delete
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - in: path
+          name: label_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Identifier of the label to delete.
+      responses:
+        '204':
+          description: The label was deleted successfully.
+        '401':
+          description: An unauthenticated request was received.
+        '404':
+          description: The label was not found for the authenticated customer.
         5XX:
           description: An unexpected error occurred on the server side.
   /financial/v2/accounts:
@@ -11455,6 +11713,12 @@ components:
             type: string
         client_attributes:
           $ref: '#/components/schemas/ClientAttributes'
+        labels:
+          type: array
+          description: |
+            Customer-defined labels currently attached to this transaction. Managed via the __Manage Transaction Labels__ endpoints, and attached/removed via the __Assign Transaction Label__ and __Unassign Transaction Label__ endpoints.
+          items:
+            $ref: '#/components/schemas/TransactionLabel'
     ClientAttributes:
       title: Client Attributes
       type: object
@@ -11751,6 +12015,107 @@ components:
               description: Value of transactions id list in the request
               items:
                 type: string
+    TransactionLabel:
+      title: Transaction Label
+      type: object
+      description: A customer-defined label attached to a transaction.
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the label.
+        name:
+          type: string
+          description: Display name of the label.
+    Label:
+      title: Label
+      type: object
+      description: A customer-defined transaction label.
+      required:
+        - id
+        - name
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the label.
+        name:
+          type: string
+          description: Display name of the label.
+        created_at:
+          type: string
+          format: date-time
+          description: RFC3339 timestamp at which the label was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: RFC3339 timestamp at which the label was last updated.
+    CreateLabelRequest:
+      title: Create Label Request
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Display name for the new label. Must be non-empty and no more than 50 characters.
+    RenameLabelRequest:
+      title: Rename Label Request
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: New display name for the label. Must be non-empty and no more than 50 characters.
+    AssignTransactionLabelRequest:
+      title: Attach Transaction Label Request
+      type: object
+      required:
+        - label_id
+      properties:
+        label_id:
+          type: string
+          format: uuid
+          description: Identifier of the label to attach. The label must already exist for the authenticated customer.
+    LabelResponse:
+      title: Label Response
+      type: object
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - financial_v2_labels_post
+            - financial_v2_labels_patch
+        data:
+          $ref: '#/components/schemas/Label'
+    ListLabelsResponse:
+      title: Retrieve Labels Response
+      type: object
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - financial_v2_labels_get
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
     SearchTransactionsResponseBody:
       title: Search Transactions Response
       type: object
@@ -17044,6 +17409,12 @@ components:
             type: string
         client_attributes:
           $ref: '#/components/schemas/schemas-ClientAttributes'
+        labels:
+          type: array
+          description: |
+            Customer-defined labels currently attached to this transaction. Managed via the __Manage Transaction Labels__ endpoints, and attached/removed via the __Assign Transaction Label__ and __Unassign Transaction Label__ endpoints.
+          items:
+            $ref: '#/components/schemas/TransactionLabel'
     TotalAmountWithTrxCount:
       type: object
       title: Amount with transaction count
@@ -20580,6 +20951,14 @@ components:
           - `posted_date_time`
 
         Defaults to `date_time`.
+    PathTransactionID:
+      in: path
+      name: transaction_id
+      schema:
+        type: string
+        format: uuid
+      required: true
+      description: A transaction identifier
     QueryCurrencyUSD:
       in: query
       name: currency
@@ -20602,14 +20981,6 @@ components:
         type: boolean
       required: false
       description: Toggle whether the endpoint returns the transaction used as part of the request
-    PathTransactionID:
-      in: path
-      name: transaction_id
-      schema:
-        type: string
-        format: uuid
-      required: true
-      description: A transaction identifier
     CategoryTotalsQueryFromTimestamp:
       in: query
       name: from
@@ -21478,6 +21849,7 @@ x-tagGroups:
     tags:
       - Retrieve Financial Data
       - Manage Financial Data
+      - Manage Transaction Labels
       - Correct Financial Data
       - Financial Data API
   - name: ''
