@@ -225,6 +225,13 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 5.2.1: 20/07/2026**
+    >- Correct the __Retrieve OB Providers__ response example to include the required `maintenance_window` field (set to `null`) for providers not currently in maintenance.
+
+    **Version 5.2.0: 10/07/2026**
+    >- Add __Correct Transaction Regularity__, __Mark Transaction Regularity As Finished__, __Correct Transaction Similarity Grouping__, __Retrieve Correction Rule__, and __Delete Correction Rule__ endpoints under __Correct Financial Data__.
+    >- Add `corrections` field to the transaction `Enrichments` response object.
+
     **Version 5.1.2: 16/07/2026**
     >- Add `last_updated_at` field to __Retrieve Balances Over Time V3__, __Retrieve Balances Over Time By Account V3__, __Retrieve Balances Over Time__, and __Retrieve Balances Over Time By Account__ responses.
 
@@ -1486,6 +1493,7 @@ paths:
                       mobile_only: false
                     - provider: chase
                       display_name: Chase
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1493,6 +1501,7 @@ paths:
                       mobile_only: false
                     - provider: bankofamerica
                       display_name: Bank of America
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1500,6 +1509,7 @@ paths:
                       mobile_only: false
                     - provider: capitalone
                       display_name: Capital One
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1507,6 +1517,7 @@ paths:
                       mobile_only: false
                     - provider: wellsfargo
                       display_name: Wells Fargo
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1514,6 +1525,7 @@ paths:
                       mobile_only: false
                     - provider: pnc
                       display_name: PNC Bank
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1521,6 +1533,7 @@ paths:
                       mobile_only: false
                     - provider: fidelity
                       display_name: Fidelity
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1528,6 +1541,7 @@ paths:
                       mobile_only: false
                     - provider: td
                       display_name: TD Bank
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1535,6 +1549,7 @@ paths:
                       mobile_only: false
                     - provider: usbank
                       display_name: US Bank
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1542,6 +1557,7 @@ paths:
                       mobile_only: false
                     - provider: transamerica
                       display_name: Transamerica
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -4876,6 +4892,9 @@ paths:
                               - '2022-10-01T12:02:48Z'
                               - '2022-11-01T12:02:48Z'
                             group_label: 13ed070478ef62c3a7baa36c8d042a9d1cdc0fcbb2af93a795f2ad20ad6e9cb5-0
+                          corrections:
+                            applied_rule_ids:
+                              - f7b27dc2-fd30-4dd4-9f50-1d1713733811
                         tags:
                           - online
                           - regular-transaction
@@ -5009,6 +5028,9 @@ paths:
                               - '2022-10-01T12:02:48Z'
                               - '2022-11-01T12:02:48Z'
                             group_label: 13ed070478ef62c3a7baa36c8d042a9d1cdc0fcbb2af93a795f2ad20ad6e9cb5-0
+                          corrections:
+                            applied_rule_ids:
+                              - f7b27dc2-fd30-4dd4-9f50-1d1713733811
                         tags:
                           - online
                           - regular-transaction
@@ -6171,6 +6193,9 @@ paths:
                               - '2022-07-28T15:00:00Z'
                               - '2022-08-28T15:00:00Z'
                             group_label: a_group_id
+                          corrections:
+                            applied_rule_ids:
+                              - f7b27dc2-fd30-4dd4-9f50-1d1713733811
                           transaction_types:
                             - card
                             - debit
@@ -6247,6 +6272,9 @@ paths:
                               - '2022-07-28T15:00:00Z'
                               - '2022-08-28T15:00:00Z'
                             group_label: a_group_id
+                          corrections:
+                            applied_rule_ids:
+                              - f7b27dc2-fd30-4dd4-9f50-1d1713733811
                           transaction_types:
                             - card
                             - debit
@@ -6624,6 +6652,9 @@ paths:
                               - '2022-10-01T12:02:48Z'
                               - '2022-11-01T12:02:48Z'
                             group_label: 13ed070478ef62c3a7baa36c8d042a9d1cdc0fcbb2af93a795f2ad20ad6e9cb5-0
+                          corrections:
+                            applied_rule_ids:
+                              - f7b27dc2-fd30-4dd4-9f50-1d1713733811
                         tags:
                           - online
                           - regular-transaction
@@ -6804,6 +6835,9 @@ paths:
                               - '2022-10-01T12:02:48Z'
                               - '2022-11-01T12:02:48Z'
                             group_label: 13ed070478ef62c3a7baa36c8d042a9d1cdc0fcbb2af93a795f2ad20ad6e9cb5-0
+                          corrections:
+                            applied_rule_ids:
+                              - f7b27dc2-fd30-4dd4-9f50-1d1713733811
                         tags:
                           - online
                           - regular-transaction
@@ -6968,6 +7002,320 @@ paths:
                 code_id: unknown
                 message: Route or resource not found
                 errors: {}
+        5XX:
+          description: An unexpected error occurred on the server side
+  /corrections/v3/regularity:
+    post:
+      tags:
+        - Correct Financial Data
+      summary: Correct Transaction Regularity
+      description: |
+        Correct, or remove, the regularity frequency of a transaction, and optionally all similar transactions.
+
+        A frequency value of `"unknown"` removes the regularity of a transaction, and optionally all similar transactions.
+
+        The correction is stored as a rule and re-applied on every re-enrichment, so it follows the transaction even if its grouping changes, and future transactions that match will inherit it.
+      operationId: corrections_v3_regularity_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3RegularityCorrectionRequest'
+            example:
+              transaction_id: f7bcefff-248e-4485-9aed-3ed45462255e
+              include_similar: true
+              frequency: biweekly
+      responses:
+        '201':
+          description: The request was successfully processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3CreateCorrectionResponse'
+              example:
+                operation_id: corrections_v3_regularity_post
+                data:
+                  rule_id: f7b27dc2-fd30-4dd4-9f50-1d1713733811
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: corrections_v3_regularity_post
+                code_id: validation_error
+                message: Bad request payload
+                errors:
+                  transaction_id: This value should not be blank
+        '401':
+          description: Unauthorized request
+        '405':
+          description: An unexpected HTTP method was used
+        5XX:
+          description: An unexpected error occurred on the server side
+  /corrections/v3/regularity/end:
+    post:
+      tags:
+        - Correct Financial Data
+      summary: Mark Transaction Regularity As Finished
+      description: |
+        Mark a given transaction as the end of a regular transaction. Bud will not detect similar transactions which succeed the given transaction as regular.
+      operationId: corrections_v3_regularity_end_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3RegularityEndRequest'
+            example:
+              transaction_id: f7bcefff-248e-4485-9aed-3ed45462255e
+      responses:
+        '201':
+          description: The request was successfully processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3CreateCorrectionResponse'
+              example:
+                operation_id: corrections_v3_regularity_end_post
+                data:
+                  rule_id: f7b27dc2-fd30-4dd4-9f50-1d1713733811
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: corrections_v3_regularity_end_post
+                code_id: validation_error
+                message: Bad request payload
+                errors:
+                  transaction_id: This value should not be blank
+        '401':
+          description: Unauthorized request
+        '405':
+          description: An unexpected HTTP method was used
+        5XX:
+          description: An unexpected error occurred on the server side
+  /corrections/v3/similar:
+    post:
+      tags:
+        - Correct Financial Data
+      summary: Correct Transaction Similarity Grouping
+      description: |
+        Mark a given set of transaction IDs as similar to one-another, or to a given reference transaction ID.  This improve's Bud's ability to detect regular transactions, and expands the set of transactions that  are considered similar to one-another.
+
+        This endpoint can also be used to identify a set of transactions as not similar.
+      operationId: corrections_v3_similar_post
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3SimilarityCorrectionRequest'
+            examples:
+              Form A New Group:
+                value:
+                  similar: true
+                  transaction_ids:
+                    - f7bcefff-248e-4485-9aed-3ed45462255e
+                    - 727b42bc-2e2e-4a8b-8f0e-6d0a6f5a9f1a
+                    - 46a5f30a-9b7f-4e2a-9f7d-2a3a5b6c7d8e
+              Merge Into An Existing Group:
+                value:
+                  similar: true
+                  transaction_ids:
+                    - f7bcefff-248e-4485-9aed-3ed45462255e
+                  reference_transaction_id: 4004742b-1c2d-4e3f-9a8b-7c6d5e4f3a2b
+              Remove From A Group:
+                value:
+                  similar: false
+                  transaction_ids:
+                    - f7bcefff-248e-4485-9aed-3ed45462255e
+      responses:
+        '201':
+          description: The request was successfully processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3CreateCorrectionResponse'
+              example:
+                operation_id: corrections_v3_similar_post
+                data:
+                  rule_id: f7b27dc2-fd30-4dd4-9f50-1d1713733811
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: corrections_v3_similar_post
+                code_id: validation_error
+                message: Bad request payload
+                errors:
+                  transaction_ids: This value should not be blank
+        '401':
+          description: Unauthorized request
+        '405':
+          description: An unexpected HTTP method was used
+        5XX:
+          description: An unexpected error occurred on the server side
+  /corrections/v3/rules/{rule_id}:
+    get:
+      tags:
+        - Correct Financial Data
+      summary: Retrieve Correction Rule
+      description: |
+        Retrieve a single regularity or similarity correction rule belonging to the requesting customer, by its rule id.
+        There is intentionally no endpoint to list all rules.
+      operationId: corrections_v3_rules_rule_id_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - name: rule_id
+          in: path
+          required: true
+          description: The unique identifier of the correction rule.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request was successfully processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3RuleResponse'
+              examples:
+                Regularity Correction:
+                  value:
+                    operation_id: corrections_v3_rules_rule_id_get
+                    data:
+                      rule_type: regularity_correction
+                      rule_definition:
+                        transaction_id: f7bcefff-248e-4485-9aed-3ed45462255e
+                        include_similar: true
+                        frequency: biweekly
+                Regularity End:
+                  value:
+                    operation_id: corrections_v3_rules_rule_id_get
+                    data:
+                      rule_type: regularity_end
+                      rule_definition:
+                        transaction_id: f7bcefff-248e-4485-9aed-3ed45462255e
+                Similarity Correction:
+                  value:
+                    operation_id: corrections_v3_rules_rule_id_get
+                    data:
+                      rule_type: transactions_similar
+                      rule_definition:
+                        similar: true
+                        transaction_ids:
+                          - f7bcefff-248e-4485-9aed-3ed45462255e
+                          - 727b42bc-2e2e-4a8b-8f0e-6d0a6f5a9f1a
+                          - 46a5f30a-9b7f-4e2a-9f7d-2a3a5b6c7d8e
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: corrections_v3_rules_rule_id_get
+                code_id: validation_error
+                message: Bad request payload
+                errors:
+                  rule_id: This value should not be blank
+        '401':
+          description: Unauthorized request
+        '404':
+          description: The rule was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestNotFoundResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Route or resource not found
+                errors: {}
+        '405':
+          description: An unexpected HTTP method was used
+        5XX:
+          description: An unexpected error occurred on the server side
+    delete:
+      tags:
+        - Correct Financial Data
+      summary: Delete Correction Rule
+      description: |
+        Delete a regularity or similarity correction rule. This reverts the correction and triggers re-enrichment of the affected transactions back to Bud's model value, which may take up to ~60 seconds to complete.
+      operationId: corrections_v3_rules_rule_id_delete
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - name: rule_id
+          in: path
+          required: true
+          description: The unique identifier of the correction rule.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: The rule was successfully deleted.
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: corrections_v3_rules_rule_id_delete
+                code_id: validation_error
+                message: Bad request payload
+                errors:
+                  rule_id: This value should not be blank
+        '401':
+          description: Unauthorized request
+        '404':
+          description: The rule was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestNotFoundResponse'
+              example:
+                operation_id: unknown
+                code_id: unknown
+                message: Route or resource not found
+                errors: {}
+        '405':
+          description: An unexpected HTTP method was used
         5XX:
           description: An unexpected error occurred on the server side
   /search/beta/transactions:
@@ -11753,6 +12101,8 @@ components:
           $ref: '#/components/schemas/Processor'
         regularity:
           $ref: '#/components/schemas/Regularity'
+        corrections:
+          $ref: '#/components/schemas/Corrections'
         location:
           $ref: '#/components/schemas/Location'
         transaction_types:
@@ -11873,6 +12223,17 @@ components:
         group_label:
           type: string
           description: Unique label applied to multiple transactions in the same group.
+    Corrections:
+      title: Corrections
+      type: object
+      description: |
+        Identifiers for correction rules that were applied to this transaction during enrichment. Returned only when correction-rule surfacing is enabled for your organization.
+      properties:
+        applied_rule_ids:
+          type: array
+          description: IDs of correction rules that were applied to this transaction.
+          items:
+            type: string
     Location:
       title: Location
       type: object
@@ -17295,6 +17656,106 @@ components:
           type: string
         suggested_url:
           type: string
+    V3RegularityCorrectionRequest:
+      title: V3 Regularity Correction Request
+      type: object
+      description: Expected request structure for the regularity correction endpoint
+      required:
+        - transaction_id
+        - frequency
+      properties:
+        transaction_id:
+          type: string
+          description: The unique identifier for the transaction
+        frequency:
+          type: string
+          description: The frequency to assign. `unknown` marks the transaction (or group) as not regular.
+          enum:
+            - unknown
+            - daily
+            - weekly
+            - biweekly
+            - monthly
+            - quarterly
+        include_similar:
+          type: boolean
+          description: Apply the correction to the whole group of transactions similar to the specified transaction, rather than just the transaction itself
+          default: false
+    V3CreateCorrectionResponse:
+      title: V3 Create Correction Response
+      type: object
+      description: Expected response structure for the v3 correction endpoints
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: object
+          required:
+            - rule_id
+          properties:
+            rule_id:
+              type: string
+              description: Unique identifier for the created correction rule
+    V3RegularityEndRequest:
+      title: V3 Regularity End Request
+      type: object
+      description: Expected request structure for the regularity end endpoint
+      required:
+        - transaction_id
+      properties:
+        transaction_id:
+          type: string
+          description: The unique identifier of the last valid occurrence in the group. Any transactions in the group dated after this one become non-regular.
+    V3SimilarityCorrectionRequest:
+      title: V3 Similarity Correction Request
+      type: object
+      description: Expected request structure for the similarity correction endpoint
+      required:
+        - transaction_ids
+      properties:
+        transaction_ids:
+          type: array
+          description: The transactions the rule applies to
+          items:
+            type: string
+        similar:
+          type: boolean
+          description: Whether the specified transactions are similar to each other (or to `reference_transaction_id`, if supplied)
+          default: false
+        reference_transaction_id:
+          type: string
+          description: The transaction whose group the specified transactions should join or leave. If omitted, the rule applies to the group formed by `transaction_ids` themselves.
+    V3RuleResponse:
+      title: V3 Rule Response
+      type: object
+      description: Expected response structure for the get rule endpoint
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: object
+          required:
+            - rule_type
+            - rule_definition
+          properties:
+            rule_type:
+              type: string
+              description: The type of correction rule
+              enum:
+                - regularity_correction
+                - regularity_end
+                - transactions_relative_similar
+                - transactions_similar
+                - transactions_unsimilar
+            rule_definition:
+              type: object
+              description: The definition of the rule, mirroring the request body that created it.
     schemas-Regularity:
       title: Regularity
       type: object
@@ -17319,6 +17780,17 @@ components:
         group_label:
           type: string
           description: Unique label applied to multiple transactions in the same group.
+    schemas-Corrections:
+      title: Corrections
+      type: object
+      description: |
+        Identifiers for correction rules that were applied to this transaction during enrichment. Returned only when correction-rule surfacing is enabled for your organisation.
+      properties:
+        applied_rule_ids:
+          type: array
+          description: IDs of correction rules that were applied to this transaction.
+          items:
+            type: string
     schemas-Enrichments:
       title: Enrichments
       type: object
@@ -17332,6 +17804,8 @@ components:
           $ref: '#/components/schemas/schemas-Processor'
         regularity:
           $ref: '#/components/schemas/schemas-Regularity'
+        corrections:
+          $ref: '#/components/schemas/schemas-Corrections'
         location:
           $ref: '#/components/schemas/schemas-Location'
         transaction_types:
