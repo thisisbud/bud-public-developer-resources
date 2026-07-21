@@ -308,6 +308,12 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+<<<<<<< HEAD
+=======
+    **Version 5.2.1: 20/07/2026**
+    >- Correct the __Retrieve OB Providers__ response example to include the required `maintenance_window` field (set to `null`) for providers not currently in maintenance.
+
+>>>>>>> origin/main
     **Version 5.2.0: 10/07/2026**
     >- Add __Correct Transaction Regularity__, __Mark Transaction Regularity As Finished__, __Correct Transaction Similarity Grouping__, __Retrieve Correction Rule__, and __Delete Correction Rule__ endpoints under __Correct Financial Data__.
     >- Add `corrections` field to the transaction `Enrichments` response object.
@@ -1631,6 +1637,7 @@ paths:
                       mobile_only: false
                     - provider: halifax
                       display_name: Halifax
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1638,6 +1645,7 @@ paths:
                       mobile_only: false
                     - provider: hbos
                       display_name: Bank of Scotland
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1645,6 +1653,7 @@ paths:
                       mobile_only: false
                     - provider: hsbc
                       display_name: HSBC
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1652,6 +1661,7 @@ paths:
                       mobile_only: false
                     - provider: lloyds
                       display_name: Lloyds
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1659,6 +1669,7 @@ paths:
                       mobile_only: false
                     - provider: mns
                       display_name: Marks & Spencer
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1666,6 +1677,7 @@ paths:
                       mobile_only: false
                     - provider: nationwide
                       display_name: Nationwide
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1673,6 +1685,7 @@ paths:
                       mobile_only: false
                     - provider: natwest
                       display_name: Natwest
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1680,6 +1693,7 @@ paths:
                       mobile_only: false
                     - provider: rbs
                       display_name: Royal Bank of Scotland
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
@@ -1687,6 +1701,7 @@ paths:
                       mobile_only: false
                     - provider: santander
                       display_name: Santander
+                      maintenance_window: null
                       maintenance_status: inactive
                       icon: https://assets.thisisbud.com/example-icon
                       regions:
