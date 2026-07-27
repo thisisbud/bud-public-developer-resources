@@ -225,6 +225,13 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 5.3.0: 23/07/2026**
+    >- Add __Create Client Secret__, __List Client Secrets__, and __Delete Client Secret__ endpoints under __Client Secrets__.
+
+    **Version 5.2.2: 20/07/2026**
+    >- Add additional `account_sub_type` values to __Ingest Accounts__ request.
+    >- Add additional `account_type` values to __Retrieve Accounts V3__ response.
+
     **Version 5.2.1: 20/07/2026**
     >- Correct the __Retrieve OB Providers__ response example to include the required `maintenance_window` field (set to `null`) for providers not currently in maintenance.
 
@@ -615,6 +622,10 @@ tags:
     x-displayName: OAuth2
     description: |
       Retrieve and manage access and refresh tokens to authenticate to the Bud platform via OAuth2 protocol.
+  - name: Client Secrets
+    x-displayName: Client Secrets
+    description: |
+      Create, list, and revoke Client Secrets used, alongside the `client_id`, to authenticate to the Bud platform via OAuth2.
   - name: Customers API
     description: |
 
@@ -920,6 +931,194 @@ paths:
                 operation_id: unknown
                 code_id: unknown
                 message: 'An error occurred while processing your request. Get in touch with us and provide us your request id: 7ef63242-ba6d-4661-8014-f9eaa9cb2ad8'
+  /v1/client-secrets:
+    get:
+      security:
+        - OAuth2: []
+      tags:
+        - Client Secrets
+      summary: List Client Secrets
+      description: |
+        This endpoint is used to retrieve the list of Client Secrets associated with a given set of API Credentials.
+
+        Note that the `client_secret` value itself is never returned by this endpoint - it is only available in the response to the __Create Client Secret__ request at the time it is created.
+      operationId: v1_client_secrets_get
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 0
+          description: Page number (zero based) to be retrieved.
+        - in: query
+          name: page_size
+          required: false
+          schema:
+            type: integer
+            default: 50
+            maximum: 50
+          description: Number of elements per page to be retrieved. Maximum 50.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListClientSecretsResponse'
+              example:
+                operation_id: v1_client_secrets_get
+                data:
+                  - client_secret_id: 58d1a10d-840d-48b8-bb87-c2bf6a30be92
+                    label: Production 1 secret
+                    created_at: 2023-01-21T06:11:57+0000
+                  - client_secret_id: fd3ca55e-0b17-482d-8866-6505cb2c5faf
+                    label: Production 2 secret
+                    created_at: 2023-01-24T08:12:57+0000
+                metadata:
+                  page: 0
+                  page_size: 50
+                  results: 2
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: v1_client_secrets_get
+                code_id: unauthorised
+                message: Unauthorised.
+        '405':
+          description: The request uses an unexpected HTTP method.
+        5XX:
+          description: An unexpected error occurred on the server side.
+    post:
+      security:
+        - OAuth2: []
+      tags:
+        - Client Secrets
+      summary: Create Client Secret
+      description: |
+        This endpoint is used to create a new Client Secret for a given set of API Credentials.
+
+        The `client_secret` value is only ever returned in the response to this request. Make sure to store it securely, as it cannot be retrieved again - if it is lost, a new Client Secret must be created.
+
+        The returned `client_secret`, together with the existing `client_id` (`X-Client-Id`), can be used to authenticate via the `/v1/oauth/token` endpoint.
+
+        A single `client_id` can have multiple active Client Secrets at once, allowing clients to rotate secrets without downtime. The `client_secret_id` returned alongside the `client_secret` is used only to manage (list or revoke) that specific secret - it is not itself used to authenticate.
+
+        > 📘 Note:
+
+        > For guidance on rotating Client Secrets, please refer to our [guide](https://docs.thisisbud.com/docs/authentication).
+      operationId: v1_client_secrets_post
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClientSecretRequest'
+            example:
+              label: Secret 1
+      responses:
+        '201':
+          description: The resource has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateClientSecretResponse'
+              example:
+                operation_id: v1_client_secrets_post
+                data:
+                  client_secret_id: 1e7c54d0-b996-4dff-9e46-f579de3018cb
+                  client_secret: 04291d4aa16a455ca74b4ad492b3b52e
+        '400':
+          description: The request contains an invalid payload, or is missing/invalid required headers such as `client_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: v1_client_secrets_post
+                code_id: failed_validation
+                message: Failed validation.
+                errors:
+                  client_id: client_id is a required field
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: v1_client_secrets_post
+                code_id: unauthorised
+                message: Unauthorised.
+        '404':
+          description: The request contains a `client_id` which could not be found.
+        '405':
+          description: The request uses an unexpected HTTP method.
+        5XX:
+          description: An unexpected error occurred on the server side.
+  /v1/client-secrets/{secret_id}:
+    delete:
+      security:
+        - OAuth2: []
+      tags:
+        - Client Secrets
+      summary: Revoke Client Secret
+      description: |
+        This endpoint is used to revoke a single Client Secret associated with a given set of API Credentials.
+
+        Once revoked, the `client_secret` can no longer be used to authenticate via the `/v1/oauth/token` endpoint.
+
+        > 📘 Note:
+
+        > For guidance on rotating Client Secrets, please refer to our [guide](https://docs.thisisbud.com/docs/authentication).
+      operationId: v1_client_secret_revoke
+      parameters:
+        - in: path
+          name: secret_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The `client_secret_id` of the Client Secret to revoke, as returned by the __List Client Secrets__ and __Create Client Secret__ endpoints.
+        - $ref: '#/components/parameters/ClientId'
+      responses:
+        '204':
+          description: The request was successfully processed and no content is returned.
+        '400':
+          description: The request contains an invalid `secret_id`, or is missing/invalid required headers such as `client_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: v1_client_secret_revoke
+                code_id: failed_validation
+                message: Failed validation.
+                errors:
+                  client_id: Invalid client secret Id, must be UUID.
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+              example:
+                operation_id: v1_client_secret_revoke
+                code_id: unauthorised
+                message: Unauthorised.
+        '404':
+          description: The resource was not found.
+        '405':
+          description: The request uses an unexpected HTTP method.
+        5XX:
+          description: An unexpected error occurred on the server side.
   /platform/v3/customers:
     post:
       security:
@@ -4086,10 +4285,12 @@ paths:
               - `checking_account`
               - `credit_card`
               - `current_account`
+              - `debit_card`
               - `disability_insurance`
               - `e_money`
               - `health_insurance`
               - `home_equity_loan`
+              - `insurance`
               - `investment`
               - `ira`
               - `liability_insurance`
@@ -4104,10 +4305,12 @@ paths:
               - `property_insurance`
               - `roth`
               - `rv_loan`
+              - `safe_deposit_box`
               - `savings`
               - `student_loan`
               - `travel_insurance`
               - `vehicle_insurance`
+              - `wealth_account`
         - in: query
           name: usage_type
           schema:
@@ -11404,6 +11607,85 @@ components:
             refresh_token:
               type: string
               description: A long-lived token that can be used to obtain a new `access_token` when the current `access_token` expires.
+    CreateClientSecretRequest:
+      title: Create Client Secret Request
+      type: object
+      required:
+        - label
+      properties:
+        label:
+          type: string
+          description: Descriptive label used to recognise the Client Secret.
+    CreateClientSecretResponse:
+      title: Create Client Secret Response
+      type: object
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - v1_client_secrets_post
+        data:
+          type: object
+          properties:
+            client_secret_id:
+              type: string
+              format: uuid
+              description: The unique identifier of the Client Secret.
+            client_secret:
+              type: string
+              description: The Client Secret value. This is only ever returned once, at the time of creation.
+    ListClientSecretsResponse:
+      title: List Client Secrets Response
+      type: object
+      required:
+        - operation_id
+        - data
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - v1_client_secrets_get
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientSecretListItem'
+        metadata:
+          type: object
+          required:
+            - page
+            - page_size
+            - results
+          properties:
+            page:
+              type: integer
+              description: Requested page number (zero based).
+            page_size:
+              type: integer
+              description: Requested number of elements per page.
+            results:
+              type: integer
+              description: Total number of results returned in this page.
+    ClientSecretListItem:
+      title: Client Secret List Item
+      type: object
+      required:
+        - client_secret_id
+        - label
+        - created_at
+      properties:
+        client_secret_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the Client Secret.
+        label:
+          type: string
+          description: Descriptive label used to recognise the Client Secret.
+        created_at:
+          type: string
+          description: Date and time at which the Client Secret was created (ISO 8601).
     IngestPlaidAccountsRequest:
       title: Plaid V1 Accounts Request
       type: array
@@ -13011,6 +13293,27 @@ components:
           anyOf:
             - $ref: '#/components/schemas/Error'
             - $ref: '#/components/schemas/Errors'
+    BadRequestResponse:
+      title: Bad Request Response
+      type: object
+      description: Expected response structure
+      required:
+        - operation_id
+        - code_id
+        - message
+        - errors
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+          description: A descriptive enough string that is linked to the reason for the error.
+        message:
+          type: string
+        errors:
+          anyOf:
+            - $ref: '#/components/schemas/Error'
+            - $ref: '#/components/schemas/Errors'
     CustomersGetAllV3DataItem:
       type: object
       description: Representation of a Customer.
@@ -13055,27 +13358,6 @@ components:
             $ref: '#/components/schemas/CustomersGetAllV3DataItem'
         metadata:
           $ref: '#/components/schemas/CustomersGetAllV3ResponseMetadata'
-    BadRequestResponse:
-      title: Bad Request Response
-      type: object
-      description: Expected response structure
-      required:
-        - operation_id
-        - code_id
-        - message
-        - errors
-      properties:
-        operation_id:
-          $ref: '#/components/schemas/OperationId'
-        code_id:
-          type: string
-          description: A descriptive enough string that is linked to the reason for the error.
-        message:
-          type: string
-        errors:
-          anyOf:
-            - $ref: '#/components/schemas/Error'
-            - $ref: '#/components/schemas/Errors'
     CustomerContextType:
       title: Customer Context Type
       type: string
@@ -14665,10 +14947,12 @@ components:
             - CheckingAccount
             - CreditCard
             - CurrentAccount
+            - DebitCard
             - DisabilityInsurance
             - EMoney
             - HealthInsurance
             - HomeEquityLoan
+            - Insurance
             - Investment
             - Ira
             - LiabilityInsurance
@@ -14684,9 +14968,11 @@ components:
             - Roth
             - RvLoan
             - Savings
+            - SafeDepositBox
             - StudentLoan
             - TravelInsurance
             - VehicleInsurance
+            - WealthAccount
         holder_name:
           type: string
           description: The name of the account holder
@@ -16054,10 +16340,12 @@ components:
               - `checking_account`
               - `credit_card`
               - `current_account`
+              - `debit_card`
               - `disability_insurance`
               - `e_money`
               - `health_insurance`
               - `home_equity_loan`
+              - `insurance`
               - `investment`
               - `ira`
               - `liability_insurance`
@@ -16072,10 +16360,12 @@ components:
               - `property_insurance`
               - `roth`
               - `rv_loan`
+              - `safe_deposit_box`
               - `savings`
               - `student_loan`
               - `travel_insurance`
               - `vehicle_insurance`
+              - `wealth_account`
 
             Not present if empty.
         usage_type:
@@ -22373,6 +22663,7 @@ x-tagGroups:
   - name: ''
     tags:
       - OAuth2
+      - Client Secrets
       - Authentication
   - name: ''
     tags:
