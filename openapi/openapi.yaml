@@ -308,6 +308,9 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 5.4.0 31/07/2026**
+    >- Add __Generate Net Worth Widget URL__ endpoint.
+
     **Version 5.3.0: 23/07/2026**
     >- Add __Create Client Secret__, __List Client Secrets__, and __Delete Client Secret__ endpoints under __Client Secrets__.
 
@@ -17165,6 +17168,36 @@ paths:
           description: Bad Request
         5XX:
           description: An unexpected error occurred on the server side
+  /widget/v1/net-worth/url:
+    post:
+      tags:
+        - Frontend Widgets
+      security:
+        - OAuth2: []
+      operationId: insights_v1_net_worth_url_post
+      summary: Generate Net Worth Summary URL
+      description: Generates a URL to access the customer's net worth analysis.
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      responses:
+        '201':
+          description: Successful response containing a Net Worth Analysis URL and metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateNetWorthURLResponse'
+              example:
+                operation_id: insights_v1_net_worth_url_post
+                data:
+                  url: https://widgets.thisisbud.com/net-worth/current?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+                metadata:
+                  sufficient_data: true
+        '400':
+          description: Bad Request
+        5XX:
+          description: An unexpected error occurred on the server side
 components:
   securitySchemes:
     Basic:
@@ -29763,6 +29796,24 @@ components:
           type: string
           enum:
             - insights_v1_accounts_url_post
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+        metadata:
+          type: object
+          properties:
+            sufficient_data:
+              type: boolean
+    GenerateNetWorthURLResponse:
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_net_worth_url_post
         data:
           type: object
           properties:
