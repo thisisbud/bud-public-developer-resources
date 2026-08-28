@@ -308,6 +308,11 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 5.5.0: 04/08/2026**
+    >- Add `restriction` field to __Ingest Accounts__ request.
+    >- Add `restriction` field to __Retrieve Accounts V2__ and __Retrieve Accounts V3__ responses.
+    >- Add `exclude_restricted` filter to __Retrieve Accounts V2__ and __Retrieve Accounts V3__ endpoints.
+
     **Version 5.4.0 31/07/2026**
     >- Add __Generate Net Worth Widget URL__ endpoint.
 
@@ -6172,7 +6177,13 @@ paths:
             type: boolean
           example: true
           description: |
-            Use this parameter to include all balances associated with each account.  If this parameter is not provided then only the pending and booked balance will be returned where available.
+            Use this parameter to include all balances associated with each account. If this parameter is not provided then only the pending and booked balance will be returned where available.
+        - in: query
+          name: exclude_restricted
+          schema:
+            type: boolean
+          example: true
+          description: Exclude accounts with a `restriction` of `restricted`.
       responses:
         '200':
           description: OK
@@ -7670,6 +7681,12 @@ paths:
               - `joint`
               - `delegate`
               - `unknown`
+        - in: query
+          name: exclude_restricted
+          schema:
+            type: boolean
+          example: true
+          description: Exclude accounts with a `restriction` of `restricted`.
       responses:
         '200':
           description: OK
@@ -17181,6 +17198,12 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateNetWorthURLRequest'
       responses:
         '201':
           description: Successful response containing a Net Worth Analysis URL and metadata.
@@ -21005,6 +21028,12 @@ components:
         holder_name:
           type: string
           description: The name of the account holder
+        restriction:
+          type: string
+          description: The restriction on the account, if any.
+          enum:
+            - ViewOnly
+            - Restricted
         details:
           deprecated: true
           type: array
@@ -23081,6 +23110,10 @@ components:
             The datetime the account was closed in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
 
             If the account is not closed, this field will not be present.
+        restriction:
+          type: string
+          description: |
+            The restriction on the account, if any. Supported values: `view_only`, `restricted`.
         provider:
           type: string
           description: |
@@ -23905,6 +23938,10 @@ components:
             The datetime the account was closed in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
 
             If the account is not closed, this field will not be present.
+        restriction:
+          type: string
+          description: |
+            The restriction on the account, if any. Supported values: `view_only`, `restricted`.
         provider:
           type: string
           description: |
@@ -29807,6 +29844,11 @@ components:
           properties:
             sufficient_data:
               type: boolean
+    GenerateNetWorthURLRequest:
+      type: object
+      properties:
+        additional_query_params:
+          $ref: '#/components/schemas/FinancialCalendarQueryParams'
     GenerateNetWorthURLResponse:
       type: object
       properties:
