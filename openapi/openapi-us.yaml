@@ -225,6 +225,14 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 5.6.0: 18/08/2026**
+    >- Add __Generate Action Cards URL__ endpoint.
+
+    **Version 5.5.0: 04/08/2026**
+    >- Add `restriction` field to __Ingest Accounts__ request.
+    >- Add `restriction` field to __Retrieve Accounts V2__ and __Retrieve Accounts V3__ responses.
+    >- Add `exclude_restricted` filter to __Retrieve Accounts V2__ and __Retrieve Accounts V3__ endpoints.
+
     **Version 5.4.0 31/07/2026**
     >- Add __Generate Net Worth Widget URL__ endpoint.
 
@@ -4342,7 +4350,13 @@ paths:
             type: boolean
           example: true
           description: |
-            Use this parameter to include all balances associated with each account.  If this parameter is not provided then only the pending and booked balance will be returned where available.
+            Use this parameter to include all balances associated with each account. If this parameter is not provided then only the pending and booked balance will be returned where available.
+        - in: query
+          name: exclude_restricted
+          schema:
+            type: boolean
+          example: true
+          description: Exclude accounts with a `restriction` of `restricted`.
       responses:
         '200':
           description: OK
@@ -5650,6 +5664,12 @@ paths:
               - `joint`
               - `delegate`
               - `unknown`
+        - in: query
+          name: exclude_restricted
+          schema:
+            type: boolean
+          example: true
+          description: Exclude accounts with a `restriction` of `restricted`.
       responses:
         '200':
           description: OK
@@ -7670,8 +7690,8 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/CategoryTotalsQueryFromTimestamp'
-        - $ref: '#/components/parameters/CategoryTotalsQueryToTimestamp'
+        - $ref: '#/components/parameters/TotalsQueryFromTimestamp'
+        - $ref: '#/components/parameters/TotalsQueryToTimestamp'
         - $ref: '#/components/parameters/QueryAccountID'
         - $ref: '#/components/parameters/QueryBudCategory'
         - $ref: '#/components/parameters/QueryExcludeBudCategory'
@@ -7682,7 +7702,7 @@ paths:
             type: boolean
           example: true
           description: Whether to include the L2 categories in result. Defaults to false.
-        - $ref: '#/components/parameters/CategoryTotalsQueryCategoryFilter'
+        - $ref: '#/components/parameters/TotalsQueryCategoryFilter'
       responses:
         '200':
           description: OK
@@ -7757,8 +7777,8 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/CategoryTotalsQueryFromTimestamp'
-        - $ref: '#/components/parameters/CategoryTotalsQueryToTimestamp'
+        - $ref: '#/components/parameters/TotalsQueryFromTimestamp'
+        - $ref: '#/components/parameters/TotalsQueryToTimestamp'
         - $ref: '#/components/parameters/QueryAccountID'
         - $ref: '#/components/parameters/QueryCurrency'
         - $ref: '#/components/parameters/QueryBudCategory'
@@ -7787,7 +7807,7 @@ paths:
               - `annually`
 
               Defaults to `monthly`.
-        - $ref: '#/components/parameters/CategoryTotalsQueryCategoryFilter'
+        - $ref: '#/components/parameters/TotalsQueryCategoryFilter'
       responses:
         '200':
           description: OK
@@ -7847,8 +7867,9 @@ paths:
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
         - $ref: '#/components/parameters/CustomerSecret'
-        - $ref: '#/components/parameters/CategoryTotalsQueryFromTimestamp'
-        - $ref: '#/components/parameters/CategoryTotalsQueryToTimestamp'
+        - $ref: '#/components/parameters/QueryAccountID'
+        - $ref: '#/components/parameters/TotalsQueryFromTimestamp'
+        - $ref: '#/components/parameters/TotalsQueryToTimestamp'
       responses:
         '200':
           description: OK
@@ -7974,6 +7995,109 @@ paths:
                       amount:
                         currency: USD
                         value: '370.46'
+        '204':
+          description: No transactions found
+        '400':
+          description: The request contains an invalid payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: v2_merchants_totals_get
+                code_id: failed_validation
+                message: Failed validation
+                errors:
+                  client_id: This value should not be blank
+        '401':
+          description: Unauthorised request
+        '405':
+          description: An unexpected HTTP method was used
+        5XX:
+          description: An unexpected error occurred on the server side
+  /aggregations/v2/totals/merchants/trends:
+    get:
+      tags:
+        - Enrichment Totals
+      summary: Retrieve Merchant Totals Trends
+      description: |
+        Provides merchant totals for desired merchants over a given time period of time with a given granularity.
+
+        Can be used for producing graphs of merchant totals over time.
+      operationId: v2_merchants_totals_trends_get
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/CustomerSecret'
+        - $ref: '#/components/parameters/TotalsQueryFromTimestamp'
+        - $ref: '#/components/parameters/TotalsQueryToTimestamp'
+        - $ref: '#/components/parameters/QueryAccountID'
+        - $ref: '#/components/parameters/QueryCurrency'
+        - $ref: '#/components/parameters/QueryIncludeMerchant'
+        - $ref: '#/components/parameters/QueryExcludeMerchant'
+        - $ref: '#/components/parameters/QueryBudCategory'
+        - $ref: '#/components/parameters/QueryExcludeBudCategory'
+        - in: query
+          name: granularity
+          schema:
+            type: string
+          example: monthly
+          description: |
+            Specifies in what interval the balance over time should be retrieved.
+
+            Currently supported values include (but are not necessarily limited to):
+              - `daily`
+              - `weekly`
+              - `biweekly`
+              - `monthly`
+              - `quarterly`
+              - `six_monthly`
+              - `annually`
+
+              Defaults to `monthly`.
+        - $ref: '#/components/parameters/TotalsQueryCategoryFilter'
+      responses:
+        '200':
+          description: The request was successfully processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantTotalTrendsV2Response'
+              example:
+                operation_id: v2_merchants_totals_get
+                data:
+                  - from: '2023-05-21T07:20:50.52Z'
+                    to: '2023-05-21T07:20:50.52Z'
+                    data:
+                      - merchant:
+                          id: walmart
+                          logo: https://thisisbud.com/merchants/walmart.png
+                          name: Walmart
+                        total_debit:
+                          value: '130.23'
+                          currency: USD
+                        total_credit:
+                          value: '12.21'
+                          currency: USD
+                        transaction_count: 8
+                        credit_transaction_count: 1
+                        debit_transaction_count: 7
+                      - merchant:
+                          id: target
+                          logo: https://thisisbud.com/merchants/target.png
+                          name: Target
+                        total_debit:
+                          value: '240.23'
+                          currency: USD
+                        total_credit:
+                          value: '6.56'
+                          currency: USD
+                        transaction_count: 10
+                        credit_transaction_count: 1
+                        debit_transaction_count: 9
         '204':
           description: No transactions found
         '400':
@@ -11252,6 +11376,43 @@ paths:
           description: Bad Request
         5XX:
           description: An unexpected error occurred on the server side
+  /widget/v1/action-cards/url:
+    post:
+      tags:
+        - Frontend Widgets
+      summary: Generate Action Cards URL
+      description: Generates a URL to access the customer's action cards, a prioritized set of personalized prompts generated from their financial data.
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: insights_v1_action_cards_url_post
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateActionCardsURLRequest'
+      responses:
+        '201':
+          description: Successful response containing the Action Cards URL and metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateActionCardsURLResponse'
+              example:
+                operation_id: insights_v1_action_cards_url_post
+                data:
+                  url: https://widgets.thisisbud.com/action-cards?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+                metadata:
+                  sufficient_data: true
+        '400':
+          description: Bad Request
+        5XX:
+          description: An unexpected error occurred on the server side
   /widget/v1/net-worth/url:
     post:
       tags:
@@ -11265,6 +11426,12 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateNetWorthURLRequest'
       responses:
         '201':
           description: Successful response containing a Net Worth Analysis URL and metadata.
@@ -14161,13 +14328,13 @@ components:
         from:
           type: string
           description: |
-            The datetime (ISO 8601) that defines the time since when the Customer's data needs to be collected. 
-            Defaults to the datetime of the last pull of transactions less seven days to account for any potential changes to the most recent set of transactions. 
+            The datetime (ISO 8601) that defines the time since when the Customer's data needs to be collected.
+            Defaults to the datetime of the last pull of transactions less seven days to account for any potential changes to the most recent set of transactions.
             Refreshes can only go back to a maximum of 90 days from the current date.
         to:
           type: string
           description: |
-            The datetime (ISO 8601) that defines the time up to which the Customer's data needs to be collected. Defaults to the current datetime. 
+            The datetime (ISO 8601) that defines the time up to which the Customer's data needs to be collected. Defaults to the current datetime.
         resources:
           type: array
           description: Optional list of resources that should be refreshed. Default behaviour is to refresh all resources defined on the customers consent
@@ -15009,6 +15176,12 @@ components:
         holder_name:
           type: string
           description: The name of the account holder
+        restriction:
+          type: string
+          description: The restriction on the account, if any.
+          enum:
+            - ViewOnly
+            - Restricted
         details:
           deprecated: true
           type: array
@@ -15506,7 +15679,7 @@ components:
         merchant_category_code:
           type: string
           description: |
-            A Merchant Category Code (MCC) is a four-digit number listed in ISO 18245. 
+            A Merchant Category Code (MCC) is a four-digit number listed in ISO 18245.
             An MCC is used to classify a business by the types of goods or services it provides.
         merchant_name:
           type: string
@@ -15524,10 +15697,10 @@ components:
           description: |
             The country where the transaction occurred, specified using either:
             - A 2-letter ISO 3166-1 alpha-2 code (e.g., "US", "GB")
-            - A 3-letter ISO 3166-1 alpha-3 code (e.g., "USA", "GBR") 
+            - A 3-letter ISO 3166-1 alpha-3 code (e.g., "USA", "GBR")
             - A UN M.49 numeric code (e.g., "840" for United States)
 
-            This field enhances merchant identification accuracy and enables automatic travel detection. 
+            This field enhances merchant identification accuracy and enables automatic travel detection.
             When the country_code differs from the `region` in the customer-context, the transaction is assigned appropriate l1 and l2 travel categories.
             The value is also used to populate the `country` field in location enrichment data. However, it is converted to a 2-letter ISO 3166-1 alpha-2 code when displayed.
         transaction_type:
@@ -15559,7 +15732,7 @@ components:
       type: object
       title: Transaction Window
       description: |
-        The transaction window is used to describe the entire period for which you have provided full coverage for the transactions within the request. 
+        The transaction window is used to describe the entire period for which you have provided full coverage for the transactions within the request.
 
         It is used by Bud to ascertain periods of inactivity on the account(s) in question to ensure accurate data can be provided across downstream endpoints (e.g. Retrieve Balances Over Time).
       required:
@@ -16005,7 +16178,7 @@ components:
               description: |
                 The task_id of the async settlement task.
 
-                This can be used to check the status and errors of the task using the __Retrieve Ingestion Task Status V3__ endpoint. 
+                This can be used to check the status and errors of the task using the __Retrieve Ingestion Task Status V3__ endpoint.
             next_url:
               type: string
               description: The path to call to obtain the current status of the task.
@@ -16053,7 +16226,7 @@ components:
               description: |
                 The task_id of the settlement task that completed.
 
-                This can be used to check full status and errors of the task using the __Retrieve Ingestion Task Status V3__ endpoint. 
+                This can be used to check full status and errors of the task using the __Retrieve Ingestion Task Status V3__ endpoint.
               type: string
     IngestTaskResult:
       title: Ingestion Task Result
@@ -16429,6 +16602,10 @@ components:
             The datetime the account was closed in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
 
             If the account is not closed, this field will not be present.
+        restriction:
+          type: string
+          description: |
+            The restriction on the account, if any. Supported values: `view_only`, `restricted`.
         provider:
           type: string
           description: |
@@ -16469,7 +16646,7 @@ components:
             us_account_number:
               type: string
               description: |
-                The account number associated with this account 
+                The account number associated with this account
 
                 Example: `...3750`
             uk_sort_code:
@@ -16512,7 +16689,7 @@ components:
           properties:
             booked:
               description: |
-                The booked balance for the account at the given date. 
+                The booked balance for the account at the given date.
                 This field is not guaranteed to be present. It will only exist if a booked balance was found from ingested balances.
               allOf:
                 - $ref: '#/components/schemas/AccountV3Balance'
@@ -16533,7 +16710,7 @@ components:
           type: object
           title: Credit Lines
           description: |
-            The latest credit limit available for the account. 
+            The latest credit limit available for the account.
             This field will only be present if the credit limit was found from ingested balances.
           properties:
             limit:
@@ -17107,6 +17284,10 @@ components:
             The datetime the account was closed in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
 
             If the account is not closed, this field will not be present.
+        restriction:
+          type: string
+          description: |
+            The restriction on the account, if any. Supported values: `view_only`, `restricted`.
         provider:
           type: string
           description: |
@@ -17410,6 +17591,10 @@ components:
             The datetime the account was closed in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
 
             If the account is not closed, this field will not be present.
+        restriction:
+          type: string
+          description: |
+            The restriction on the account, if any. Supported values: `view_only`, `restricted`.
         provider:
           type: string
           description: |
@@ -18590,6 +18775,32 @@ components:
             $ref: '#/components/schemas/MerchantTotalV2'
         metadata:
           $ref: '#/components/schemas/MerchantTotalsMetadataV2'
+    MerchantTotalTrendsV2Response:
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - data
+              - to
+              - from
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MerchantTotalV2'
+              to:
+                type: string
+                example: '2023-05-21T07:20:50.52Z'
+                description: RFC 3339 Compliant date stamp indicating the beginning of the transaction window used in this calculation
+              from:
+                type: string
+                example: '2023-05-21T07:20:50.52Z'
+                description: RFC 3339 Compliant date stamp indicating the end of the transaction window used in this calculation
     CategorisationModel:
       title: Categorisation Model
       type: object
@@ -21282,6 +21493,37 @@ components:
           properties:
             sufficient_data:
               type: boolean
+    ActionCardsQueryParams:
+      allOf:
+        - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
+    GenerateActionCardsURLRequest:
+      type: object
+      properties:
+        additional_query_params:
+          $ref: '#/components/schemas/ActionCardsQueryParams'
+    GenerateActionCardsURLResponse:
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_action_cards_url_post
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+        metadata:
+          type: object
+          properties:
+            sufficient_data:
+              type: boolean
+    GenerateNetWorthURLRequest:
+      type: object
+      properties:
+        additional_query_params:
+          $ref: '#/components/schemas/FinancialCalendarQueryParams'
     GenerateNetWorthURLResponse:
       type: object
       properties:
@@ -21861,7 +22103,7 @@ components:
         type: boolean
       required: false
       description: Toggle whether the endpoint returns the transaction used as part of the request
-    CategoryTotalsQueryFromTimestamp:
+    TotalsQueryFromTimestamp:
       in: query
       name: from
       schema:
@@ -21875,7 +22117,7 @@ components:
         Examples:
           - `2023-01-17T17:29:51Z`
           - `2023-01-17T17:29:51-08:00`
-    CategoryTotalsQueryToTimestamp:
+    TotalsQueryToTimestamp:
       in: query
       name: to
       schema:
@@ -21926,14 +22168,14 @@ components:
         Examples:
           - `shopping` - Filters the result set to exclude data where the l1 category is `shopping`.
           - `shopping.groceries` - Filters the result set to only exclude data where the l1 category is `shopping` and the l2 category is `groceries`.
-    CategoryTotalsQueryCategoryFilter:
+    TotalsQueryCategoryFilter:
       in: query
       name: category_label
       schema:
         type: string
       example: essential
       description: |
-        Filters the categories included in the category totals to just those with the label(s) specified by this parameter.
+        Filters the categories included in the totals to just those with the label(s) specified by this parameter.
         For the SOT on which categories have which filters see the Retrieve Categories endpoint.
     MerchantsTotalsIncludeCategories:
       in: header
@@ -21949,6 +22191,20 @@ components:
         type: string
       example: bills,finances
       description: Comma-separated list of transaction categories to exclude from the total
+    QueryIncludeMerchant:
+      in: query
+      name: include_merchant
+      schema:
+        type: string
+      example: subway
+      description: The merchants to include, comma separated. Defaults to include all.
+    QueryExcludeMerchant:
+      in: query
+      name: exclude_merchant
+      schema:
+        type: string
+      example: subway
+      description: The merchants to exclude, comma separated. Defaults to exclude none.
     FutureTransactionsMonthsProjection:
       in: query
       name: months
