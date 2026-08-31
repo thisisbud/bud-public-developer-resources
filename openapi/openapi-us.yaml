@@ -8021,7 +8021,7 @@ paths:
         - Enrichment Totals
       summary: Retrieve Merchant Totals Trends
       description: |
-        Provides merchant totals for desired merchants over a given time period of time with a given granularity.
+        Provides merchant totals for desired merchants over a given time period with a given granularity.
 
         Can be used for producing graphs of merchant totals over time.
       operationId: v2_merchants_totals_trends_get
@@ -8067,7 +8067,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/MerchantTotalTrendsV2Response'
               example:
-                operation_id: v2_merchants_totals_get
+                operation_id: v2_merchants_totals_trends_get
                 data:
                   - from: '2023-05-21T07:20:50.52Z'
                     to: '2023-05-21T07:20:50.52Z'
@@ -18576,11 +18576,11 @@ components:
               to:
                 type: string
                 example: '2023-05-21T07:20:50.52Z'
-                description: RFC 3339 Compliant date stamp indicating the beginning of the transaction window used in this calculation
+                description: RFC 3339 Compliant date stamp indicating the end of the transaction window used in this calculation
               from:
                 type: string
                 example: '2023-05-21T07:20:50.52Z'
-                description: RFC 3339 Compliant date stamp indicating the end of the transaction window used in this calculation
+                description: RFC 3339 Compliant date stamp indicating the beginning of the transaction window used in this calculation
     PercentageCurrency:
       type: object
       title: Percentage with relevant currency
@@ -18796,11 +18796,11 @@ components:
               to:
                 type: string
                 example: '2023-05-21T07:20:50.52Z'
-                description: RFC 3339 Compliant date stamp indicating the beginning of the transaction window used in this calculation
+                description: RFC 3339 Compliant date stamp indicating the end of the transaction window used in this calculation
               from:
                 type: string
                 example: '2023-05-21T07:20:50.52Z'
-                description: RFC 3339 Compliant date stamp indicating the end of the transaction window used in this calculation
+                description: RFC 3339 Compliant date stamp indicating the beginning of the transaction window used in this calculation
     CategorisationModel:
       title: Categorisation Model
       type: object
