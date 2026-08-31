@@ -308,6 +308,15 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 5.6.0: 18/08/2026**
+    >- Add __Generate Action Cards URL__ endpoint.
+
+
+    **Version 5.5.0: 04/08/2026**
+    >- Add `restriction` field to __Ingest Accounts__ request.
+    >- Add `restriction` field to __Retrieve Accounts V2__ and __Retrieve Accounts V3__ responses.
+    >- Add `exclude_restricted` filter to __Retrieve Accounts V2__ and __Retrieve Accounts V3__ endpoints.
+
     **Version 5.4.0 31/07/2026**
     >- Add __Generate Net Worth Widget URL__ endpoint.
 
@@ -6172,7 +6181,13 @@ paths:
             type: boolean
           example: true
           description: |
-            Use this parameter to include all balances associated with each account.  If this parameter is not provided then only the pending and booked balance will be returned where available.
+            Use this parameter to include all balances associated with each account. If this parameter is not provided then only the pending and booked balance will be returned where available.
+        - in: query
+          name: exclude_restricted
+          schema:
+            type: boolean
+          example: true
+          description: Exclude accounts with a `restriction` of `restricted`.
       responses:
         '200':
           description: OK
@@ -7670,6 +7685,12 @@ paths:
               - `joint`
               - `delegate`
               - `unknown`
+        - in: query
+          name: exclude_restricted
+          schema:
+            type: boolean
+          example: true
+          description: Exclude accounts with a `restriction` of `restricted`.
       responses:
         '200':
           description: OK
@@ -17168,6 +17189,43 @@ paths:
           description: Bad Request
         5XX:
           description: An unexpected error occurred on the server side
+  /widget/v1/action-cards/url:
+    post:
+      tags:
+        - Frontend Widgets
+      summary: Generate Action Cards URL
+      description: Generates a URL to access the customer's action cards, a prioritised set of personalised prompts generated from their financial data.
+      deprecated: false
+      security:
+        - OAuth2: []
+      operationId: insights_v1_action_cards_url_post
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateActionCardsURLRequest'
+      responses:
+        '201':
+          description: Successful response containing the Action Cards URL and metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateActionCardsURLResponse'
+              example:
+                operation_id: insights_v1_action_cards_url_post
+                data:
+                  url: https://widgets.thisisbud.com/action-cards?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI5MWQ5ZmRjZC03MjI3LTQyMTAtYWNiYi0xY2VhNDY0OTA0NzAiLCJhdWQiOlsiaHR0cHM6Ly93aWRnZXQtcHJveHkudGhpc2lzYnVkLmNvbSJdLCJjdXN0b21lcl9pZCI6IjY5Yjg4YmM3LTI5OGYtNDY2NC04NWQ5LWM5YWJiZTM5NDg1NiIsImV4cCI6MTczMjY1MTIwMCwic3ViIjoiMTIzNDU2Nzg5MCIsIm9yZ19pZCI6IjdmMDU5OTUwLWNjYTctNGZiMS1hZTQyLTc1NzdkNzA5N2NmNyIsIm9yZ19zbHVnIjoiYnVkIn0.0ufJFC16yNps0npeOp60dC97GP6er2t1zuQcQ11IHp8
+                metadata:
+                  sufficient_data: true
+        '400':
+          description: Bad Request
+        5XX:
+          description: An unexpected error occurred on the server side
   /widget/v1/net-worth/url:
     post:
       tags:
@@ -17181,6 +17239,12 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateNetWorthURLRequest'
       responses:
         '201':
           description: Successful response containing a Net Worth Analysis URL and metadata.
@@ -21005,6 +21069,12 @@ components:
         holder_name:
           type: string
           description: The name of the account holder
+        restriction:
+          type: string
+          description: The restriction on the account, if any.
+          enum:
+            - ViewOnly
+            - Restricted
         details:
           deprecated: true
           type: array
@@ -23081,6 +23151,10 @@ components:
             The datetime the account was closed in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
 
             If the account is not closed, this field will not be present.
+        restriction:
+          type: string
+          description: |
+            The restriction on the account, if any. Supported values: `view_only`, `restricted`.
         provider:
           type: string
           description: |
@@ -23905,6 +23979,10 @@ components:
             The datetime the account was closed in the format [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339).
 
             If the account is not closed, this field will not be present.
+        restriction:
+          type: string
+          description: |
+            The restriction on the account, if any. Supported values: `view_only`, `restricted`.
         provider:
           type: string
           description: |
@@ -29807,6 +29885,37 @@ components:
           properties:
             sufficient_data:
               type: boolean
+    ActionCardsQueryParams:
+      allOf:
+        - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
+    GenerateActionCardsURLRequest:
+      type: object
+      properties:
+        additional_query_params:
+          $ref: '#/components/schemas/ActionCardsQueryParams'
+    GenerateActionCardsURLResponse:
+      type: object
+      properties:
+        operation_id:
+          type: string
+          enum:
+            - insights_v1_action_cards_url_post
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+        metadata:
+          type: object
+          properties:
+            sufficient_data:
+              type: boolean
+    GenerateNetWorthURLRequest:
+      type: object
+      properties:
+        additional_query_params:
+          $ref: '#/components/schemas/FinancialCalendarQueryParams'
     GenerateNetWorthURLResponse:
       type: object
       properties:
