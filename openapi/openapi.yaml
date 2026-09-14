@@ -6188,7 +6188,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
               example:
-                operation_id: v2_merchants_totals_get
+                operation_id: v2_merchants_totals_trends_get
                 code_id: failed_validation
                 message: Failed validation
                 errors:
