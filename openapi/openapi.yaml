@@ -17329,6 +17329,16 @@ paths:
                   sufficient_data: true
         '400':
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: insights_v1_action_cards_url_post
+                code_id: failed_validation
+                message: Failed validation.
+                errors:
+                  customer_id: customer_id is a required field
         5XX:
           description: An unexpected error occurred on the server side
   /widget/v1/net-worth/url:
