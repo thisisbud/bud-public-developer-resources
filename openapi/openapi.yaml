@@ -310,6 +310,8 @@ info:
 
     **Version 5.6.0: 18/08/2026**
     >- Add __Generate Action Cards URL__ endpoint.
+    >- Add an optional request body to the __Generate Net Worth Widget URL__ endpoint.
+
 
     **Version 5.5.0: 04/08/2026**
     >- Add `restriction` field to __Ingest Accounts__ request.
