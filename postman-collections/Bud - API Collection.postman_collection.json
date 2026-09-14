@@ -4636,7 +4636,7 @@
                 "url": {
                   "raw": "{{proxy_url}}aggregations/v2/totals/merchants/trends",
                   "host": [
-                    "{{proxy_url}}merchants"
+                    "{{proxy_url}}aggregations"
                   ],
                   "path": [
                     "v2",
@@ -9811,7 +9811,7 @@
                     }
                   ]
                 },
-                "description": "Lists your segments. Not yet deployed as of this writing — confirmed direction per review, but included here ahead of release."
+                "description": "Lists your existing segments. Supports optional pagination and search query parameters."
               },
               "response": []
             },
@@ -10333,7 +10333,7 @@
                     "segment-name"
                   ]
                 },
-                "description": "Suggests a name and description for a segment, generated from its criteria. Exists to reduce friction in the dashboard UI (pre-fills a name when the user hits create) — genuinely undecided for API clients; if kept, would need stricter rate limiting since it hits Bud's LLM Orchestrator."
+                "description": "Suggests a segment name and description from the supplied criteria definition."
               },
               "response": []
             }
