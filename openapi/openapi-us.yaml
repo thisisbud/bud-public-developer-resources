@@ -11391,6 +11391,7 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/CustomerSecret'
       requestBody:
         required: false
         content:
