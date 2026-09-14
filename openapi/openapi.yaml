@@ -310,7 +310,7 @@ info:
 
     **Version 5.6.0: 18/08/2026**
     >- Add __Generate Action Cards URL__ endpoint.
-
+    >- Add an optional request body to the __Generate Net Worth Widget URL__ endpoint.
 
     **Version 5.5.0: 04/08/2026**
     >- Add `restriction` field to __Ingest Accounts__ request.
@@ -6099,7 +6099,7 @@ paths:
         - Enrichment Totals
       summary: Retrieve Merchant Totals Trends
       description: |
-        Provides merchant totals for desired merchants over a given time period of time with a given granularity.
+        Provides merchant totals for desired merchants over a given time period with a given granularity.
 
         Can be used for producing graphs of merchant totals over time.
       operationId: v2_merchants_totals_trends_get
@@ -6145,7 +6145,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/MerchantTotalTrendsV2Response'
               example:
-                operation_id: v2_merchants_totals_get
+                operation_id: v2_merchants_totals_trends_get
                 data:
                   - from: '2023-05-21T07:20:50.52Z'
                     to: '2023-05-21T07:20:50.52Z'
@@ -17307,6 +17307,7 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
+        - $ref: '#/components/parameters/CustomerSecret'
       requestBody:
         required: false
         content:
@@ -17328,6 +17329,16 @@ paths:
                   sufficient_data: true
         '400':
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+              example:
+                operation_id: insights_v1_action_cards_url_post
+                code_id: failed_validation
+                message: Failed validation.
+                errors:
+                  customer_id: customer_id is a required field
         5XX:
           description: An unexpected error occurred on the server side
   /widget/v1/net-worth/url:
@@ -22807,11 +22818,11 @@ components:
               to:
                 type: string
                 example: '2023-05-21T07:20:50.52Z'
-                description: RFC 3339 Compliant date stamp indicating the beginning of the transaction window used in this calculation
+                description: RFC 3339 Compliant date stamp indicating the end of the transaction window used in this calculation
               from:
                 type: string
                 example: '2023-05-21T07:20:50.52Z'
-                description: RFC 3339 Compliant date stamp indicating the end of the transaction window used in this calculation
+                description: RFC 3339 Compliant date stamp indicating the beginning of the transaction window used in this calculation
     PercentageCurrency:
       type: object
       title: Percentage with relevant currency
@@ -23027,11 +23038,11 @@ components:
               to:
                 type: string
                 example: '2023-05-21T07:20:50.52Z'
-                description: RFC 3339 Compliant date stamp indicating the beginning of the transaction window used in this calculation
+                description: RFC 3339 Compliant date stamp indicating the end of the transaction window used in this calculation
               from:
                 type: string
                 example: '2023-05-21T07:20:50.52Z'
-                description: RFC 3339 Compliant date stamp indicating the end of the transaction window used in this calculation
+                description: RFC 3339 Compliant date stamp indicating the beginning of the transaction window used in this calculation
     AccountV3Balance:
       type: object
       title: Balance
