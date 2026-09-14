@@ -4403,13 +4403,13 @@
                     {
                       "key": "category",
                       "value": "bills.utilities,general",
-                      "description": "If set, will filter result to include only the l1 categories specified, comma seperated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be aggregated in the total for the l1 category. Defaults to include all.",
+                      "description": "If set, will filter result to include only the l1 categories specified, comma separated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be aggregated in the total for the l1 category. Defaults to include all.",
                       "disabled": true
                     },
                     {
                       "key": "exclude_category",
                       "value": "bills.utilities,general",
-                      "description": "If set, will filter result to exclude the l1 categories specified, comma seperated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be excluded from the total for the l1 category.",
+                      "description": "If set, will filter result to exclude the l1 categories specified, comma separated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be excluded from the total for the l1 category.",
                       "disabled": true
                     },
                     {
@@ -4501,13 +4501,13 @@
                     {
                       "key": "category",
                       "value": "bills.utilities,general",
-                      "description": "If set, will filter result to include only the l1 categories specified, comma seperated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be aggregated in the total for the l1 category. Defaults to include all.",
+                      "description": "If set, will filter result to include only the l1 categories specified, comma separated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be aggregated in the total for the l1 category. Defaults to include all.",
                       "disabled": true
                     },
                     {
                       "key": "exclude_category",
                       "value": "bills.utilities,general",
-                      "description": "If set, will filter result to exclude the l1 categories specified, comma seperated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be excluded from the total for the l1 category.",
+                      "description": "If set, will filter result to exclude the l1 categories specified, comma separated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be excluded from the total for the l1 category.",
                       "disabled": true
                     },
                     {
@@ -4636,7 +4636,7 @@
                 "url": {
                   "raw": "{{proxy_url}}aggregations/v2/totals/merchants/trends",
                   "host": [
-                    "{{proxy_url}}merchants"
+                    "{{proxy_url}}aggregations"
                   ],
                   "path": [
                     "v2",
@@ -4666,13 +4666,13 @@
                     {
                       "key": "category",
                       "value": "bills.utilities,general",
-                      "description": "If set, will filter result to include only the l1 categories specified, comma seperated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be aggregated in the total for the l1 category. Defaults to include all.",
+                      "description": "If set, will filter result to include only the l1 categories specified, comma separated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be aggregated in the total for the l1 category. Defaults to include all.",
                       "disabled": true
                     },
                     {
                       "key": "exclude_category",
                       "value": "bills.utilities,general",
-                      "description": "If set, will filter result to exclude the l1 categories specified, comma seperated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be excluded from the total for the l1 category.",
+                      "description": "If set, will filter result to exclude the l1 categories specified, comma separated.  If needed, filtering can be done on an l2 category using the syntax `l1.l2`. Where an l2 category filter is applied, only those l2s will be excluded from the total for the l1 category.",
                       "disabled": true
                     },
                     {
@@ -9411,7 +9411,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n\t\"name\": \"January 2024: High Credit Utilisation Customers\",\n\t\"description\": \"January 2024: Customers with more than 1 credit card & a mortgage\",\n\t\"criteria_from\": \"b8b612a4-c1b0-4c8c-b105-991ed5870ee2\",\n\t\"fixed_customer_list\": true,\n\t\"tags\": [\n\t\t\"January Campaign\"\n\t]\n}"
+                  "raw": "{\n\t\"name\": \"January 2024: High Credit Utilisation Customers\",\n\t\"description\": \"January 2024: Customers with more than 1 credit card & a mortgage\",\n\t\"criteria_from\": \"{{criteria_id}}\",\n\t\"fixed_customer_list\": true,\n\t\"tags\": [\n\t\t\"January Campaign\"\n\t]\n}"
                 },
                 "url": {
                   "raw": "{{proxy_url}}drive-api/v1/segments/from-existing/criteria",
@@ -9811,7 +9811,7 @@
                     }
                   ]
                 },
-                "description": "Lists your segments. Not yet deployed as of this writing — confirmed direction per review, but included here ahead of release."
+                "description": "Lists your existing segments. Supports optional pagination and search query parameters."
               },
               "response": []
             },
@@ -10333,7 +10333,7 @@
                     "segment-name"
                   ]
                 },
-                "description": "Suggests a name and description for a segment, generated from its criteria. Exists to reduce friction in the dashboard UI (pre-fills a name when the user hits create) — genuinely undecided for API clients; if kept, would need stricter rate limiting since it hits Bud's LLM Orchestrator."
+                "description": "Suggests a segment name and description from the supplied criteria definition."
               },
               "response": []
             }
