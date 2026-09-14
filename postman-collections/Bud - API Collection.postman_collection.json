@@ -4627,6 +4627,11 @@
                     "key": "X-Customer-Id",
                     "value": "{{customer_id}}",
                     "type": "text"
+                  },
+                  {
+                    "key": "X-Customer-Secret",
+                    "value": "{{customer_secret}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -4835,6 +4840,11 @@
                     "key": "X-Customer-Id",
                     "value": "{{customer_id}}",
                     "type": "text"
+                  },
+                  {
+                    "key": "X-Customer-Secret",
+                    "value": "{{customer_secret}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -4861,6 +4871,12 @@
                       "key": "to",
                       "value": "2023-01-01T00:00:00Z",
                       "description": "RFC3339 Timestamp indicating the end of the window of transactions to include."
+                    },
+                    {
+                      "key": "account_id",
+                      "value": "",
+                      "description": "The account ID to retrieve data for (repeatable query param for filtering by multiple accounts).",
+                      "disabled": true
                     }
                   ]
                 }
@@ -6867,6 +6883,66 @@
                   "path": [
                     "v1",
                     "spending-budgets",
+                    "url"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Generate Action Cards URL",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Customer-Id",
+                    "value": "{{customer_id}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Customer-Secret",
+                    "value": "{{customer_secret}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"additional_query_params\": {\n    \"base_heading_level\": 1,\n    \"color_mode\": \"light\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{proxy_url}}widget/v1/action-cards/url",
+                  "host": [
+                    "{{proxy_url}}"
+                  ],
+                  "path": [
+                    "widget",
+                    "v1",
+                    "action-cards",
                     "url"
                   ]
                 }
@@ -9324,9 +9400,10 @@
                 "url": {
                   "raw": "{{proxy_url}}drive-api/v1/tags",
                   "host": [
-                    "{{proxy_url}}drive-api"
+                    "{{proxy_url}}"
                   ],
                   "path": [
+                    "drive-api",
                     "v1",
                     "tags"
                   ]
@@ -9358,7 +9435,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n\t\"name\": \"January 2024: High Credit Utilisation Customers\",\n\t\"description\": \"January 2024: Customers with more than 1 credit card & a mortgage\",\n\t\"customers_from\": \"{{segment_id}}\",\n\t\"tags\": [\n\t\t\"January Campaign\"\n\t]\n}"
+                  "raw": "{\n\t\"name\": \"January 2024: High Credit Utilisation Customers\",\n\t\"description\": \"January 2024: Customers with more than 1 credit card & a mortgage\",\n\t\"segment_from\": \"{{segment_id}}\",\n\t\"tags\": [\n\t\t\"January Campaign\"\n\t]\n}"
                 },
                 "url": {
                   "raw": "{{proxy_url}}drive-api/v1/segments/from-existing/fixed-customers",
@@ -9381,7 +9458,7 @@
                   "script": {
                     "exec": [
                       "var jsonData = JSON.parse(responseBody);",
-                      "pm.environment.set(\"segment_id\", jsonData.data.id);"
+                      "pm.environment.set(\"other_segment_id\", jsonData.data.id);"
                     ],
                     "type": "text/javascript"
                   }
@@ -9434,7 +9511,7 @@
                   "script": {
                     "exec": [
                       "var jsonData = JSON.parse(responseBody);",
-                      "pm.environment.set(\"segment_id\", jsonData.data.id);"
+                      "pm.environment.set(\"other_segment_id\", jsonData.data.id);"
                     ],
                     "type": "text/javascript"
                   }
@@ -9486,7 +9563,7 @@
                   "script": {
                     "exec": [
                       "var jsonData = JSON.parse(responseBody);",
-                      "pm.environment.set(\"segment_id\", jsonData.data.id);"
+                      "pm.environment.set(\"other_segment_id\", jsonData.data.id);"
                     ],
                     "type": "text/javascript"
                   }
@@ -9859,7 +9936,7 @@
                   "script": {
                     "exec": [
                       "var jsonData = JSON.parse(responseBody);",
-                      "pm.environment.set(\"segment_id\", jsonData.metadata.resource_id);"
+                      "pm.environment.set(\"segment_id\", jsonData.data.id);"
                     ],
                     "type": "text/javascript"
                   }
@@ -10125,7 +10202,7 @@
                   "script": {
                     "exec": [
                       "var jsonData = JSON.parse(responseBody);",
-                      "pm.environment.set(\"criteria_id\", jsonData.metadata.resource_id);"
+                      "pm.environment.set(\"criteria_id\", jsonData.data.id);"
                     ],
                     "type": "text/javascript"
                   }
@@ -10640,7 +10717,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n\t\"name\": \"This is a new campaign - updated!\",\n\t\"description\": \"Here is the description\",\n\t\"audience\": \"{{segment_id}}\",\n\t\"channels\": {\n\t\t\"web\": {\n\t\t\t\"headline\": \"This is your new headline\",\n\t\t\t\"message\": \"Welcome to this campaign\",\n\t\t\t\"primary_button\": {\n\t\t\t\t\"text\": \"Click Here!\",\n\t\t\t\t\"url\": \"https://thisisbud.com\"\n\t\t\t},\n\t\t\t\"image_url\": \"https://thisisbud.com/campaign.png\",\n\t\t\t\"styling\": {\n\t\t\t\t\"type\": \"custom\",\n\t\t\t\t\"accent_color\": \"#cccccc\",\n\t\t\t\t\"text_color\": \"#ffffff\",\n\t\t\t\t\"font\": \"Arial\"\n\t\t\t},\n\t\t\t\"priority_order\": 0\n\t\t}\n\t},\n\t\"schedule\": {\n\t\t\"type\": \"when_published\"\n\t},\n\t\"duration\": {\n\t\t\"intervals\": 90,\n\t\t\"interval_type\": \"DAY\"\n\t}\n}"
+                  "raw": "{\n\t\"name\": \"This is a new campaign - updated!\",\n\t\"description\": \"Here is the description\",\n\t\"channels\": {\n\t\t\"web\": {\n\t\t\t\"headline\": \"This is your new headline\",\n\t\t\t\"message\": \"Welcome to this campaign\",\n\t\t\t\"primary_button\": {\n\t\t\t\t\"text\": \"Click Here!\",\n\t\t\t\t\"url\": \"https://thisisbud.com\"\n\t\t\t},\n\t\t\t\"image_url\": \"https://thisisbud.com/campaign.png\",\n\t\t\t\"styling\": {\n\t\t\t\t\"type\": \"custom\",\n\t\t\t\t\"accent_color\": \"#cccccc\",\n\t\t\t\t\"text_color\": \"#ffffff\",\n\t\t\t\t\"font\": \"Arial\"\n\t\t\t},\n\t\t\t\"priority_order\": 0\n\t\t}\n\t},\n\t\"schedule\": {\n\t\t\"type\": \"when_published\"\n\t},\n\t\"duration\": {\n\t\t\"intervals\": 90,\n\t\t\"interval_type\": \"DAY\"\n\t}\n}"
                 },
                 "url": {
                   "raw": "{{proxy_url}}drive-api/v1/campaigns/{{campaign_id}}/content",
@@ -10724,7 +10801,7 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{proxy_url}}drive-api/v1/campaigns/{{campaign_id}}/insights/performance/trends?metrics=campaign_audience&metrics=primary_button_unique_clicks",
+                  "raw": "{{proxy_url}}drive-api/v1/campaigns/{{campaign_id}}/insights/performance/trends",
                   "host": [
                     "{{proxy_url}}drive-api"
                   ],
