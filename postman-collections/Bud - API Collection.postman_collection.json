@@ -9289,6 +9289,1629 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Drive API",
+      "item": [
+        {
+          "name": "Drive Segments API",
+          "item": [
+            {
+              "name": "Get Segment Tags",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/tags",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "tags"
+                  ]
+                },
+                "description": "Retrieves every segment tag used across your organisation."
+              },
+              "response": []
+            },
+            {
+              "name": "Create Segment From Existing (Fixed Customers)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\": \"January 2024: High Credit Utilisation Customers\",\n\t\"description\": \"January 2024: Customers with more than 1 credit card & a mortgage\",\n\t\"customers_from\": \"{{segment_id}}\",\n\t\"tags\": [\n\t\t\"January Campaign\"\n\t]\n}"
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/segments/from-existing/fixed-customers",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "segments",
+                    "from-existing",
+                    "fixed-customers"
+                  ]
+                },
+                "description": "Creates a new segment from another segment's current members, fixed at the point of creation."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = JSON.parse(responseBody);",
+                      "pm.environment.set(\"segment_id\", jsonData.data.id);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Create Segment From Existing (Criteria)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\": \"January 2024: High Credit Utilisation Customers\",\n\t\"description\": \"January 2024: Customers with more than 1 credit card & a mortgage\",\n\t\"criteria_from\": \"b8b612a4-c1b0-4c8c-b105-991ed5870ee2\",\n\t\"fixed_customer_list\": true,\n\t\"tags\": [\n\t\t\"January Campaign\"\n\t]\n}"
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/segments/from-existing/criteria",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "segments",
+                    "from-existing",
+                    "criteria"
+                  ]
+                },
+                "description": "Creates a new segment by copying the criteria from an existing segment."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = JSON.parse(responseBody);",
+                      "pm.environment.set(\"segment_id\", jsonData.data.id);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Upload Segment",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\": \"High Risk Customers\",\n\t\"description\": \"High Risk Customers\",\n\t\"customers\": [\n\t\t\"{{customer_id}}\"\n\t],\n\t\"tags\": [\n\t\t\"January Campaign\"\n\t]\n}"
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/segments/upload",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "segments",
+                    "upload"
+                  ]
+                },
+                "description": "Creates a fixed customer-list segment from an uploaded list of customer IDs."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = JSON.parse(responseBody);",
+                      "pm.environment.set(\"segment_id\", jsonData.data.id);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Get Segment",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/segments/{{segment_id}}",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "segments",
+                    "{{segment_id}}"
+                  ]
+                },
+                "description": "Retrieves a segment."
+              },
+              "response": []
+            },
+            {
+              "name": "Patch Segment",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\": \"New segment name\",\n\t\"description\": \"Updated description\",\n\t\"tags\": [\n\t\t\"September Campaign\"\n\t]\n}"
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/segments/{{segment_id}}",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "segments",
+                    "{{segment_id}}"
+                  ]
+                },
+                "description": "Partially updates a segment."
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Segment",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/segments/{{segment_id}}",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "segments",
+                    "{{segment_id}}"
+                  ]
+                },
+                "description": "Deletes a segment."
+              },
+              "response": []
+            },
+            {
+              "name": "Compare Segments (Similarity)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/segments/{{segment_id}}/similarity/{{other_segment_id}}",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "segments",
+                    "{{segment_id}}",
+                    "similarity",
+                    "{{other_segment_id}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "refresh",
+                      "value": "true",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "Compares two segments and returns how much their customers overlap."
+              },
+              "response": []
+            },
+            {
+              "name": "Query Segment Customers",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/segments/{{segment_id}}/query",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "segments",
+                    "{{segment_id}}",
+                    "query"
+                  ]
+                },
+                "description": "Creates an export of every customer matching a segment and returns a link to download it."
+              },
+              "response": []
+            },
+            {
+              "name": "Get Segment Statistics Overview",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/segments/{{segment_id}}/statistics/overview",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "segments",
+                    "{{segment_id}}",
+                    "statistics",
+                    "overview"
+                  ],
+                  "query": [
+                    {
+                      "key": "significant_date",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Optional significant-date label to compute statistics relative to."
+                    },
+                    {
+                      "key": "date_to",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Optional end date to compute statistics up to."
+                    }
+                  ]
+                },
+                "description": "Retrieves a segment's current statistics, such as total customers and category spend."
+              },
+              "response": []
+            },
+            {
+              "name": "Get Segments",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v2/segments",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v2",
+                    "segments"
+                  ],
+                  "query": [
+                    {
+                      "key": "max_per_page",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "Lists your segments. Not yet deployed as of this writing — confirmed direction per review, but included here ahead of release."
+              },
+              "response": []
+            },
+            {
+              "name": "Create Segment",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\": \"New manual segment\",\n\t\"description\": \"A new manual segment (with an empty criteria)\",\n\t\"tags\": [\n\t\t\"tag_1\",\n\t\t\"tag_2\"\n\t]\n}"
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v2/segments",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v2",
+                    "segments"
+                  ]
+                },
+                "description": "Creates a new segment — empty, seeded from existing criteria, or from an uploaded customer list."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = JSON.parse(responseBody);",
+                      "pm.environment.set(\"segment_id\", jsonData.metadata.resource_id);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Get Segment Criteria",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v2/segments/{{segment_id}}/criteria",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v2",
+                    "segments",
+                    "{{segment_id}}",
+                    "criteria"
+                  ]
+                },
+                "description": "Retrieves a segment's current criteria."
+              },
+              "response": []
+            },
+            {
+              "name": "Save Segment Criteria",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v2/segments/{{segment_id}}/criteria/{{criteria_id}}",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v2",
+                    "segments",
+                    "{{segment_id}}",
+                    "criteria",
+                    "{{criteria_id}}"
+                  ]
+                },
+                "description": "Attaches a draft criteria to a segment."
+              },
+              "response": []
+            },
+            {
+              "name": "Get Segment Criteria Active Options",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v2/segments/{{segment_id}}/criteria/active-options",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v2",
+                    "segments",
+                    "{{segment_id}}",
+                    "criteria",
+                    "active-options"
+                  ]
+                },
+                "description": "Lists the criteria options currently applied to a segment."
+              },
+              "response": []
+            },
+            {
+              "name": "Run Segment Criteria",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v2/segments/{{segment_id}}/criteria/run",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v2",
+                    "segments",
+                    "{{segment_id}}",
+                    "criteria",
+                    "run"
+                  ]
+                },
+                "description": "Runs a segment's current criteria and returns the number of matching customers."
+              },
+              "response": []
+            },
+            {
+              "name": "Get Criteria Options",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v2/criteria/options",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v2",
+                    "criteria",
+                    "options"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "flags",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "Lists the flags, segments, and custom criteria available to build a new criteria from."
+              },
+              "response": []
+            },
+            {
+              "name": "Create Draft Criteria",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v2/criteria/drafts",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v2",
+                    "criteria",
+                    "drafts"
+                  ]
+                },
+                "description": "Creates a new, empty draft criteria to build up before saving it to a segment."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = JSON.parse(responseBody);",
+                      "pm.environment.set(\"criteria_id\", jsonData.metadata.resource_id);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Get Draft Criteria",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v2/criteria/drafts/{{criteria_id}}",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v2",
+                    "criteria",
+                    "drafts",
+                    "{{criteria_id}}"
+                  ]
+                },
+                "description": "Retrieves the definition of a draft criteria."
+              },
+              "response": []
+            },
+            {
+              "name": "Update Draft Criteria",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"criteria\": \"flag\",\n\t\"name\": \"renter\"\n}"
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v2/criteria/drafts/{{criteria_id}}",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v2",
+                    "criteria",
+                    "drafts",
+                    "{{criteria_id}}"
+                  ]
+                },
+                "description": "Updates the definition of a draft criteria."
+              },
+              "response": []
+            },
+            {
+              "name": "Run Draft Criteria",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v2/criteria/drafts/{{criteria_id}}/run",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v2",
+                    "criteria",
+                    "drafts",
+                    "{{criteria_id}}",
+                    "run"
+                  ]
+                },
+                "description": "Runs a draft criteria and returns the number of matching customers."
+              },
+              "response": []
+            },
+            {
+              "name": "Run Ad-hoc Criteria",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"criteria\": \"flag\",\n\t\"name\": \"renter\"\n}"
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v2/criteria/run",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v2",
+                    "criteria",
+                    "run"
+                  ]
+                },
+                "description": "Runs a criteria definition directly, without saving it as a draft first."
+              },
+              "response": []
+            },
+            {
+              "name": "Suggest Segment Name",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"criteria\": {\n\t\t\"criteria\": \"flag\",\n\t\t\"name\": \"renter\"\n\t}\n}"
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v2/criteria/suggestions/segment-name",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v2",
+                    "criteria",
+                    "suggestions",
+                    "segment-name"
+                  ]
+                },
+                "description": "Suggests a name and description for a segment, generated from its criteria. Exists to reduce friction in the dashboard UI (pre-fills a name when the user hits create) — genuinely undecided for API clients; if kept, would need stricter rate limiting since it hits Bud's LLM Orchestrator."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Drive Campaigns API",
+          "item": [
+            {
+              "name": "Get Campaigns",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/campaigns",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "campaigns"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "live",
+                      "disabled": true
+                    },
+                    {
+                      "key": "created_by",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "items_per_page",
+                      "value": "100",
+                      "disabled": true,
+                      "description": "Max 1000, default 100."
+                    },
+                    {
+                      "key": "page_token",
+                      "value": "",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "Lists and searches your campaigns."
+              },
+              "response": []
+            },
+            {
+              "name": "Create Campaign",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\": \"This is a new campaign\",\n\t\"description\": \"Here is the description\",\n\t\"audience\": \"{{segment_id}}\",\n\t\"channels\": {\n\t\t\"web\": {\n\t\t\t\"headline\": \"This is your headline\",\n\t\t\t\"message\": \"Welcome to this campaign\",\n\t\t\t\"primary_button\": {\n\t\t\t\t\"text\": \"Click Here!\",\n\t\t\t\t\"url\": \"https://thisisbud.com\"\n\t\t\t},\n\t\t\t\"image_url\": \"https://thisisbud.com/campaign.png\",\n\t\t\t\"styling\": {\n\t\t\t\t\"type\": \"custom\",\n\t\t\t\t\"accent_color\": \"#cccccc\",\n\t\t\t\t\"text_color\": \"#ffffff\",\n\t\t\t\t\"font\": \"Arial\"\n\t\t\t},\n\t\t\t\"priority_order\": 0\n\t\t}\n\t},\n\t\"schedule\": {\n\t\t\"type\": \"when_published\"\n\t},\n\t\"duration\": {\n\t\t\"intervals\": 1,\n\t\t\"interval_type\": \"DAY\"\n\t}\n}"
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/campaigns",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "campaigns"
+                  ]
+                },
+                "description": "Creates a new campaign. Triggers aren't a separate endpoint — they're expressed as BudQL inside the campaign's `schedule`; see https://docs.thisisbud.com/docs/custom-insights."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = JSON.parse(responseBody);",
+                      "pm.environment.set(\"campaign_id\", jsonData.data.campaign_id);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Get Campaign",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/campaigns/{{campaign_id}}",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "campaigns",
+                    "{{campaign_id}}"
+                  ]
+                },
+                "description": "Retrieves a campaign."
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Campaign",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/campaigns/{{campaign_id}}",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "campaigns",
+                    "{{campaign_id}}"
+                  ]
+                },
+                "description": "Permanently deletes a campaign."
+              },
+              "response": []
+            },
+            {
+              "name": "Update Campaign Status",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"status\": \"paused\"\n}"
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/campaigns/{{campaign_id}}/status",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "campaigns",
+                    "{{campaign_id}}",
+                    "status"
+                  ]
+                },
+                "description": "Sets a campaign live, paused, or ended."
+              },
+              "response": []
+            },
+            {
+              "name": "Get Campaign Content",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/campaigns/{{campaign_id}}/content",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "campaigns",
+                    "{{campaign_id}}",
+                    "content"
+                  ]
+                },
+                "description": "Retrieves a campaign's live and draft content."
+              },
+              "response": []
+            },
+            {
+              "name": "Update Campaign Content",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\": \"This is a new campaign - updated!\",\n\t\"description\": \"Here is the description\",\n\t\"audience\": \"{{segment_id}}\",\n\t\"channels\": {\n\t\t\"web\": {\n\t\t\t\"headline\": \"This is your new headline\",\n\t\t\t\"message\": \"Welcome to this campaign\",\n\t\t\t\"primary_button\": {\n\t\t\t\t\"text\": \"Click Here!\",\n\t\t\t\t\"url\": \"https://thisisbud.com\"\n\t\t\t},\n\t\t\t\"image_url\": \"https://thisisbud.com/campaign.png\",\n\t\t\t\"styling\": {\n\t\t\t\t\"type\": \"custom\",\n\t\t\t\t\"accent_color\": \"#cccccc\",\n\t\t\t\t\"text_color\": \"#ffffff\",\n\t\t\t\t\"font\": \"Arial\"\n\t\t\t},\n\t\t\t\"priority_order\": 0\n\t\t}\n\t},\n\t\"schedule\": {\n\t\t\"type\": \"when_published\"\n\t},\n\t\"duration\": {\n\t\t\"intervals\": 90,\n\t\t\"interval_type\": \"DAY\"\n\t}\n}"
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/campaigns/{{campaign_id}}/content",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "campaigns",
+                    "{{campaign_id}}",
+                    "content"
+                  ]
+                },
+                "description": "Updates a campaign's draft content. Triggers aren't a separate endpoint — they're expressed as BudQL inside the campaign's `schedule`; see https://docs.thisisbud.com/docs/custom-insights."
+              },
+              "response": []
+            },
+            {
+              "name": "Get Campaign Content Variables",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/campaigns/content-variables",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "campaigns",
+                    "content-variables"
+                  ]
+                },
+                "description": "Lists the personalization variables available for use in campaign content."
+              },
+              "response": []
+            },
+            {
+              "name": "Get Campaign Performance Trends",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/campaigns/{{campaign_id}}/insights/performance/trends?metrics=campaign_audience&metrics=primary_button_unique_clicks",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "campaigns",
+                    "{{campaign_id}}",
+                    "insights",
+                    "performance",
+                    "trends"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2026-01-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2026-12-31",
+                      "disabled": true
+                    },
+                    {
+                      "key": "aggregation_type",
+                      "value": "daily",
+                      "disabled": true
+                    },
+                    {
+                      "key": "metrics",
+                      "value": "campaign_audience",
+                      "description": "One or more of: campaign_audience, customers_triggered, impressions_total, impressions_unique, impression_rate, primary_button_total_clicks, primary_button_unique_clicks, primary_button_click_efficiency, secondary_button_total_clicks, secondary_button_unique_clicks, secondary_button_click_efficiency, secondary_button_no_primary_button_unique_clicks."
+                    },
+                    {
+                      "key": "metrics",
+                      "value": "primary_button_unique_clicks",
+                      "description": "One or more of: campaign_audience, customers_triggered, impressions_total, impressions_unique, impression_rate, primary_button_total_clicks, primary_button_unique_clicks, primary_button_click_efficiency, secondary_button_total_clicks, secondary_button_unique_clicks, secondary_button_click_efficiency, secondary_button_no_primary_button_unique_clicks."
+                    }
+                  ]
+                },
+                "description": "Retrieves performance metrics and trends for a campaign."
+              },
+              "response": []
+            },
+            {
+              "name": "Get Banner Widgets",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-Customer-Id",
+                    "value": "{{customer_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/campaigns/banner-widgets",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "campaigns",
+                    "banner-widgets"
+                  ],
+                  "query": [
+                    {
+                      "key": "channel",
+                      "value": "action_card",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "Retrieves the active campaign banners a specific customer is eligible to see."
+              },
+              "response": []
+            },
+            {
+              "name": "Get Compiled Campaign Templates",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/campaign-templates/compiled-templates",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "campaign-templates",
+                    "compiled-templates"
+                  ],
+                  "query": [
+                    {
+                      "key": "source_type",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Optional filter to return only templates with the specified source type."
+                    }
+                  ]
+                },
+                "description": "Retrieves the campaign templates available to your organisation. Bud manages template creation and updates internally, manually and agentically — clients were never meant to write templates via API, hence no POST/PUT here."
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Campaign Template",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{auth_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "X-Client-Id",
+                    "value": "{{api_credentials_id}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{proxy_url}}drive-api/v1/campaign-templates/templates/{{template_id}}",
+                  "host": [
+                    "{{proxy_url}}drive-api"
+                  ],
+                  "path": [
+                    "v1",
+                    "campaign-templates",
+                    "templates",
+                    "{{template_id}}"
+                  ]
+                },
+                "description": "Removes your organisation's own customisation of a campaign template."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
     }
   ],
   "event": [
