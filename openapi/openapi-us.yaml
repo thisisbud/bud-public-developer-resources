@@ -227,6 +227,7 @@ info:
 
     **Version 5.6.0: 18/08/2026**
     >- Add __Generate Action Cards URL__ endpoint.
+    >- Add an optional request body to the __Generate Action Cards URL__ endpoint.
     >- Add an optional request body to the __Generate Net Worth Widget URL__ endpoint.
 
     **Version 5.5.0: 04/08/2026**
@@ -7946,6 +7947,8 @@ paths:
             Example: `2022-01-28`
         - $ref: '#/components/parameters/MerchantsTotalsIncludeCategories'
         - $ref: '#/components/parameters/MerchantsTotalsExcludeCategories'
+        - $ref: '#/components/parameters/QueryIncludeMerchant'
+        - $ref: '#/components/parameters/QueryExcludeMerchant'
       responses:
         '200':
           description: The request was successfully processed
@@ -8020,7 +8023,7 @@ paths:
     get:
       tags:
         - Enrichment Totals
-      summary: Retrieve Merchant Totals Trends
+      summary: Retrieve Merchant Totals Trends V2
       description: |
         Provides merchant totals for desired merchants over a given time period with a given granularity.
 
@@ -22046,7 +22049,7 @@ components:
       schema:
         type: string
       required: true
-      description: The account ID to retrieve data for.
+      description: The account ID to retrieve data for. Repeat this query parameter to filter by multiple accounts.
     QueryFromBudDate:
       in: query
       name: from
@@ -22150,7 +22153,7 @@ components:
       schema:
         type: string
       required: false
-      description: The account ID to retrieve data for.
+      description: The account ID to retrieve data for. Repeat this query parameter to filter by multiple accounts.
     QueryBudCategory:
       in: query
       name: category
