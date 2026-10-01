@@ -20,6 +20,8 @@ info:
     | Ingest & Enrich API | Ingest & Enrich first party transactional data using Bud's core enrichment services, gain access to enrichment resource, and submit customer recategorisation corrections |
     | Insights API | Obtain a deeper understanding of your customers transactional data and use these endpoints to help build personal financial management tools and more |
     | Signal API | Contextual, relevant triggers and notifications that drive action from customers. |
+    | Drive Segments API | Build and manage customer segments from your organization's data and the flags Drive compiles from it. |
+    | Drive Campaigns API | Create and manage targeted campaigns — by hand or via Drive's campaign agent — against your segments. |
 
     ## Environments and API Base URIs
 
@@ -225,11 +227,24 @@ info:
 
     This changelog represents a list of all changes that have been made to Bud’s API documentation. This includes both backward-compatible and backward-incompatible changes.
 
+    **Version 5.8.3: 01/10/2026**
+    >- Add `account_category` query parameter to  __Retrieve Accounts V3__ endpoint request.
+
+    **Version 5.8.2: 25/09/2026**
+    >- Moved __Assign Transaction Label__ and __Unassign Transaction Label__ endpoints from __Manage Financial Data__ to __Manage Transaction Labels__ for improved discoverability.
+
+    **Version 5.8.1: 22/09/2026**
+    >- Clarify how to authenticate an MCP client in the __Drive MCP API__ section.
+
+    **Version 5.8.0: 17/09/2026**
+    >- Add the new __Drive MCP API__ section, covering connection URL endpoints for the Drive copilot, segments, and campaigns MCP servers.
+
+    **Version 5.7.0: 09/09/2026**
+    >- Add the new __Drive API__ section, covering __Drive Segments API__ and __Drive Campaigns API__ endpoints.
+    >- Add __Build Campaign From Business Goal__ and __Get Campaign Agent Run__ endpoints.
+
     **Version 5.6.0: 18/08/2026**
     >- Add __Generate Action Cards URL__ endpoint.
-    >- Add `X-Customer-Secret` header to the __Generate Action Cards URL__ endpoint.
-    >- Add an optional request body to the __Generate Action Cards URL__ endpoint.
-    >- Add an optional request body to the __Generate Net Worth Widget URL__ endpoint.
 
     **Version 5.5.0: 04/08/2026**
     >- Add `restriction` field to __Ingest Accounts__ request.
@@ -693,15 +708,15 @@ tags:
     x-displayName: Retrieve Financial Data
     description: |
       Retrieve a customer's financial data from a range of sources.
-  - name: Manage Financial Data
-    x-displayName: Manage Financial Data
-    description: |
-      Manipulate Transactions held on the Bud platform by removing data, submitting corrections, or adding tags through different rulesets.
   - name: Manage Transaction Labels
     x-displayName: Manage Transaction Labels
     description: |
       Create, list, rename, and delete customer-authored labels that can be attached to transactions.
-      Labels are customer-defined strings used to group transactions in ways that are meaningful to the customer (for example a trip, work expenses, or a renovation project). They are distinct from `tags`, which are produced by Bud's enrichment pipeline. Labels are scoped to the authenticated customer and can be applied to transactions via the __Assign Transaction Label__ and __Unassign Transaction Label__ endpoints under __Manage Financial Data__.
+      Labels are customer-defined strings used to group transactions in ways that are meaningful to the customer (for example a trip, work expenses, or a renovation project). They are distinct from `tags`, which are produced by Bud's enrichment pipeline. Labels are scoped to the authenticated customer and can be applied to transactions via the __Assign Transaction Label__ and __Unassign Transaction Label__ endpoints under __Manage Transaction Labels__.
+  - name: Manage Financial Data
+    x-displayName: Manage Financial Data
+    description: |
+      Manipulate Transactions held on the Bud platform by removing data, submitting corrections, or adding tags through different rulesets.
   - name: Correct Financial Data
     x-displayName: Correct Financial Data
     description: |
@@ -805,6 +820,44 @@ tags:
     x-displayName: Retrieve Customer Characteristics
     description: |
       Retrieve Characteristics associated with an individual Customer based on their financial data.
+  - name: Drive API
+    description: |
+      Drive lets you understand your customers using the flags it compiles from data across every
+      source you bring in — not just transactions — build segments from those flags, and run
+      personalized campaigns against them. Drive works in a loop: **understand** your customers (via
+      the flags that make up Drive's criteria), **segment** them (Drive Segments API), and **engage**
+      them (Drive Campaigns API). Measuring a campaign's performance feeds back into segmentation, so
+      the next audience is sharper than the last.
+
+      Campaigns don't have to be built step by step, either: describe the outcome you want in plain
+      language and Drive's campaign agent finds the matching audience, writes the copy, generates the
+      artwork, and estimates the opportunity for you.
+
+      Segments V2 endpoints return non-standard vendor content types
+      (`application/vnd.bud.drive.notification+json`, `.criteria+json`, `.visualisation+json`,
+      `.criteria-options+json`) rather than plain `application/json` — check the `Content-Type` of
+      these responses rather than assuming JSON.
+    x-displayName: Drive API
+    x-traitTag: true
+  - name: Drive Segments API
+    x-displayName: Drive Segments API
+    description: |
+      Create and manage customer segments — Drive's V1 model (fixed customer lists, criteria
+      copied from an existing segment) and V2 model (a recursive criteria tree of flags, segment
+      dependencies, and logical combinations). `Get Criteria Options` is the single source of
+      truth for what's available to build a criteria from.
+  - name: Drive Campaigns API
+    x-displayName: Drive Campaigns API
+    description: |
+      Create and manage campaigns — by hand, or by describing a business goal for Drive's campaign
+      agent to build one from — track their performance, and retrieve the customer-facing banner
+      widgets and templates that back them.
+  - name: Drive MCP API
+    x-displayName: Drive MCP API
+    description: |
+      Connection URLs for Drive's remote Model Context Protocol servers, for use with AI/LLM driven agents — the general Drive copilot, and dedicated servers for segments and campaigns. They authenticate the same way as the rest of the Drive API.
+
+      **Connecting a client**: these endpoints are the MCP servers themselves, not a URL-minting step — point your MCP client directly at the endpoint's URL, configuring it to send an OAuth2 access token (see Authentication) as a bearer token and `X-Client-Id` as a static header on every request, the same as any other Drive API call.
 paths:
   /v1/oauth/token:
     post:
@@ -4326,6 +4379,20 @@ paths:
               - `vehicle_insurance`
               - `wealth_account`
         - in: query
+          name: account_category
+          schema:
+            type: string
+          example: credit
+          description: |
+            The account category that the account type is a part of Currently supported values include (but are not necessarily limited to):
+              - `credit`
+              - `depository`
+              - `insurance`
+              - `investment`
+              - `loan`
+              - `savings`
+              - `other`  
+        - in: query
           name: usage_type
           schema:
             type: string
@@ -5376,7 +5443,7 @@ paths:
   /financial/v2/transactions/{transaction_id}/labels:
     post:
       tags:
-        - Manage Financial Data
+        - Manage Transaction Labels
       summary: Assign Transaction Label
       description: |
         Attach a customer-defined label to a transaction. The label must already exist for the customer (create one with __Create Transaction Label__).
@@ -5409,7 +5476,7 @@ paths:
   /financial/v2/transactions/{transaction_id}/labels/{label_id}:
     delete:
       tags:
-        - Manage Financial Data
+        - Manage Transaction Labels
       summary: Unassign Transaction Label
       description: |
         Remove a customer-defined label from a transaction. The label itself is not deleted; use __Delete Transaction Label__ to remove the label entirely.
@@ -7948,8 +8015,6 @@ paths:
             Example: `2022-01-28`
         - $ref: '#/components/parameters/MerchantsTotalsIncludeCategories'
         - $ref: '#/components/parameters/MerchantsTotalsExcludeCategories'
-        - $ref: '#/components/parameters/QueryIncludeMerchant'
-        - $ref: '#/components/parameters/QueryExcludeMerchant'
       responses:
         '200':
           description: The request was successfully processed
@@ -8024,9 +8089,9 @@ paths:
     get:
       tags:
         - Enrichment Totals
-      summary: Retrieve Merchant Totals Trends V2
+      summary: Retrieve Merchant Totals Trends
       description: |
-        Provides merchant totals for desired merchants over a given time period with a given granularity.
+        Provides merchant totals for desired merchants over a given time period of time with a given granularity.
 
         Can be used for producing graphs of merchant totals over time.
       operationId: v2_merchants_totals_trends_get
@@ -8072,7 +8137,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/MerchantTotalTrendsV2Response'
               example:
-                operation_id: v2_merchants_totals_trends_get
+                operation_id: v2_merchants_totals_get
                 data:
                   - from: '2023-05-21T07:20:50.52Z'
                     to: '2023-05-21T07:20:50.52Z'
@@ -8112,7 +8177,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
               example:
-                operation_id: v2_merchants_totals_trends_get
+                operation_id: v2_merchants_totals_get
                 code_id: failed_validation
                 message: Failed validation
                 errors:
@@ -11395,7 +11460,6 @@ paths:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/CustomerId'
         - $ref: '#/components/parameters/CustomerIdempotentIdentifier'
-        - $ref: '#/components/parameters/CustomerSecret'
       requestBody:
         required: false
         content:
@@ -11417,16 +11481,6 @@ paths:
                   sufficient_data: true
         '400':
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-              example:
-                operation_id: insights_v1_action_cards_url_post
-                code_id: failed_validation
-                message: Failed validation.
-                errors:
-                  customer_id: customer_id is a required field
         5XX:
           description: An unexpected error occurred on the server side
   /widget/v1/net-worth/url:
@@ -11727,6 +11781,1570 @@ paths:
           description: Unauthorised request
         5XX:
           description: An unexpected error occurred on the server side
+  /drive-api/v1/tags:
+    get:
+      tags:
+        - Drive Segments API
+      summary: Retrieve Segment Tags
+      operationId: v1_segment_tags_get
+      description: Retrieves every segment tag used across your organization.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveSegmentTagsResponse'
+              example:
+                operation_id: v1_segment_tags_get
+                data:
+                  - tag: January Campaign
+                    created_at: '2023-11-06T00:00:00Z'
+                    created_by: 70a7a98b-805a-43cc-a9a3-f07e88c84025
+                metadata:
+                  results: 1
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/segments/from-existing/fixed-customers:
+    post:
+      tags:
+        - Drive Segments API
+      summary: Create Segment From Existing (Fixed Customers)
+      operationId: v1_segment_from_existing_fixed_customers_post
+      description: Creates a new segment from another segment's current members, fixed at the point of creation.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSegmentFromFixedCustomersRequest'
+            example:
+              name: 'January 2024: High Credit Utilisation Customers'
+              description: 'January 2024: Customers with more than 1 credit card & a mortgage'
+              customers_from: b8b612a4-c1b0-4c8c-b105-991ed5870ee2
+              tags:
+                - January Campaign
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSegmentFromExistingResponse'
+              example:
+                operation_id: v1_segment_from_existing_fixed_customers_post
+                data:
+                  id: dd926ab0-1a9b-4c9d-acf1-b54219898878
+                  name: 'January 2024: High Credit Utilisation Customers'
+                  fixed_customer_list: true
+                  fixed_customer_list_size: 1000
+                  source: manual
+                  tags:
+                    - January Campaign
+        4XX:
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/segments/from-existing/criteria:
+    post:
+      tags:
+        - Drive Segments API
+      summary: Create Segment From Existing (Criteria)
+      operationId: v1_segment_from_existing_criteria_post
+      description: Creates a new segment by copying the criteria from an existing segment.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSegmentFromCriteriaRequest'
+            example:
+              name: 'January 2024: High Credit Utilisation Customers'
+              description: 'January 2024: Customers with more than 1 credit card & a mortgage'
+              criteria_from: b8b612a4-c1b0-4c8c-b105-991ed5870ee2
+              fixed_customer_list: true
+              tags:
+                - January Campaign
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSegmentFromExistingResponse'
+              example:
+                operation_id: v1_segment_from_existing_criteria_post
+                data:
+                  id: dd926ab0-1a9b-4c9d-acf1-b54219898878
+                  name: 'January 2024: High Credit Utilisation Customers'
+                  fixed_customer_list: true
+                  fixed_customer_list_size: 1000
+                  source: manual
+                  tags:
+                    - January Campaign
+        4XX:
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/segments/upload:
+    post:
+      tags:
+        - Drive Segments API
+      summary: Upload Segment
+      operationId: v1_segments_upload
+      description: Creates a fixed customer-list segment from an uploaded list of customer IDs.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadSegmentRequest'
+            example:
+              name: High Risk Customers
+              description: High Risk Customers
+              customers:
+                - b8b612a4-c1b0-4c8c-b105-991ed5870ee2
+                - 0d1e7001-1349-44a4-b970-30d4d2a30a5e
+              tags:
+                - January Campaign
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadSegmentResponse'
+              example:
+                operation_id: v1_segments_upload
+                data:
+                  id: dd926ab0-1a9b-4c9d-acf1-b54219898878
+                  name: High Risk Customers
+                  source: uploaded_list
+                  fixed_customer_list: true
+                  fixed_customer_list_size: 1000
+                  tags:
+                    - January Campaign
+        4XX:
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/segments/{segment_id}:
+    get:
+      tags:
+        - Drive Segments API
+      summary: Retrieve Segment
+      operationId: v1_segment_get
+      description: Retrieves a segment.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathSegmentID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveSegmentResponse'
+              example:
+                operation_id: v1_segment_get
+                data:
+                  id: 23303f83-a790-4ee9-95b6-d5cdeaf36fa2
+                  name: High Credit Utilisation
+                  source: manual
+        '404':
+          description: Segment not found
+        5XX:
+          $ref: '#/components/responses/ServerError'
+    patch:
+      tags:
+        - Drive Segments API
+      summary: Patch Segment
+      operationId: v1_segment_patch
+      description: Partially updates a segment.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathSegmentID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchSegmentRequest'
+            example:
+              name: New segment name
+              description: Updated description
+              tags:
+                - September Campaign
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatchSegmentResponse'
+              example:
+                operation_id: v1_segment_patch
+                data:
+                  id: 23303f83-a790-4ee9-95b6-d5cdeaf36fa2
+                  name: New segment name
+                  description: Updated description
+                  tags:
+                    - September Campaign
+        4XX:
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+    delete:
+      tags:
+        - Drive Segments API
+      summary: Delete Segment
+      operationId: v1_segment_delete
+      description: Deletes a segment.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathSegmentID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteSegmentResponse'
+              example:
+                operation_id: v1_segment_delete
+                metadata:
+                  segment_id: 23303f83-a790-4ee9-95b6-d5cdeaf36fa2
+        '422':
+          description: Segment cannot be deleted — it is in use as a dependency of other segments
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/segments/{segment_id}/similarity/{other_segment_id}:
+    get:
+      tags:
+        - Drive Segments API
+      summary: Compare Segments (Similarity)
+      operationId: v1_compare_segments_get
+      description: Compares two segments and returns how much their customers overlap.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathSegmentID'
+        - $ref: '#/components/parameters/PathOtherSegmentID'
+        - $ref: '#/components/parameters/QueryRefresh'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompareSegmentsResponse'
+              example:
+                operation_id: v1_compare_segments_get
+                data:
+                  jaccard_index: 0.25
+                  intersection_count: 10
+                  union_count: 40
+        '400':
+          description: Invalid segment
+        '404':
+          description: Segment does not exist
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/segments/{segment_id}/query:
+    post:
+      tags:
+        - Drive Segments API
+      summary: Query Segment Customers
+      operationId: v1_segment_query_post
+      description: Creates an export of every customer matching a segment and returns a link to download it.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathSegmentID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuerySegmentCustomersResponse'
+              example:
+                operation_id: v1_segment_query_post
+                data:
+                  total_rows: 1
+                  _links:
+                    full:
+                      - https://gcs.com/bucket/id/results-123.csv
+        '400':
+          description: Invalid segment
+        '404':
+          description: Segment does not exist
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/segments/{segment_id}/statistics/overview:
+    get:
+      tags:
+        - Drive Segments API
+      summary: Get Segment Statistics Overview
+      operationId: v1_segment_statistics_overview_get
+      description: Retrieves a segment's current statistics, such as total customers and category spend.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathSegmentID'
+        - $ref: '#/components/parameters/QuerySignificantDate'
+        - $ref: '#/components/parameters/QueryStatisticsDateTo'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SegmentStatisticsResponse'
+              example:
+                operation_id: v1_segment_statistics_overview_get
+                data:
+                  - name: total_customers
+                    type: aggregate
+                    values:
+                      - total: 163
+                  - statistics_id: 8ac57892-cb04-487e-8323-2a2a9d08b392
+                    name: category_l1_spending
+                    type: aggregate
+                    parameters:
+                      category_l1s:
+                        - gambling_and_lotteries
+                    values:
+                      - mean: 267.67
+                        percentile_50: 250
+        '404':
+          description: Segment does not exist
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v2/segments:
+    get:
+      tags:
+        - Drive Segments API
+      summary: Get Segments
+      operationId: v2_segments_get
+      description: Lists your segments.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/QueryMaxPerPage'
+        - $ref: '#/components/parameters/QueryPage'
+        - $ref: '#/components/parameters/QuerySearch'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSegmentsV2Response'
+              example:
+                operation_id: v2_segments_get
+                data:
+                  - id: 23303f83-a790-4ee9-95b6-d5cdeaf36fa2
+                    name: High Credit Utilisation
+                    tags:
+                      - January Campaign
+                metadata:
+                  results: 1
+                  max_per_page: 25
+                  page: 1
+        5XX:
+          $ref: '#/components/responses/ServerError'
+    post:
+      tags:
+        - Drive Segments API
+      summary: Create Segment
+      operationId: v2_segments_post
+      description: Creates a new segment — empty, seeded from existing criteria, or from an uploaded customer list.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSegmentV2Request'
+            examples:
+              Create empty manual segment:
+                value:
+                  name: New manual segment
+                  description: A new manual segment (with an empty criteria)
+                  tags:
+                    - tag_1
+                    - tag_2
+              Create manual segment from draft criteria:
+                value:
+                  name: New manual segment from criteria
+                  description: Segment will have criteria from an existing draft
+                  tags:
+                    - tag_criteria
+                  from_criteria_id: 0ba9049e-25e9-43f2-8ea8-1fcf9dde581e
+              Uploaded list of customers:
+                value:
+                  name: Uploaded list of customers
+                  description: List of customers from a campaign
+                  tags:
+                    - campaign_1
+                  upload:
+                    filename: campaign_customers.csv
+                    customers:
+                      - c1
+                      - c2
+                      - c3
+      responses:
+        '201':
+          description: Created. Response uses the `application/vnd.bud.drive.notification+json` media type.
+          content:
+            application/vnd.bud.drive.notification+json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+              example:
+                operation_id: v2_segments_post
+                code_id: segment_created
+                status: success
+                metadata:
+                  resource_id: 23303f83-a790-4ee9-95b6-d5cdeaf36fa2
+        4XX:
+          description: Request error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+        5XX:
+          description: Internal error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+  /drive-api/v2/segments/{segment_id}/criteria:
+    get:
+      tags:
+        - Drive Segments API
+      summary: Get Segment Criteria
+      operationId: v2_segments_criteria_get
+      description: Retrieves a segment's current criteria.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathSegmentID'
+      responses:
+        '200':
+          description: OK. Response uses the `application/vnd.bud.drive.criteria+json` media type.
+          content:
+            application/vnd.bud.drive.criteria+json:
+              schema:
+                $ref: '#/components/schemas/CriteriaResponse'
+              example:
+                operation_id: v2_segments_criteria_get
+                data:
+                  id: 0ba9049e-25e9-43f2-8ea8-1fcf9dde581e
+                  criteria: flag
+                  name: renter
+                metadata:
+                  criteria_id: 0ba9049e-25e9-43f2-8ea8-1fcf9dde581e
+        4XX:
+          description: Request error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+        5XX:
+          description: Internal error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+  /drive-api/v2/segments/{segment_id}/criteria/{criteria_id}:
+    put:
+      tags:
+        - Drive Segments API
+      summary: Save Segment Criteria
+      operationId: v2_segments_criteria_put
+      description: Attaches a draft criteria to a segment.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathSegmentID'
+        - $ref: '#/components/parameters/PathCriteriaID'
+      responses:
+        '200':
+          description: OK. Response uses the `application/vnd.bud.drive.notification+json` media type.
+          content:
+            application/vnd.bud.drive.notification+json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+              example:
+                operation_id: v2_segments_criteria_put
+                code_id: segment_criteria_updated
+                status: success
+        4XX:
+          description: Request error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+        5XX:
+          description: Internal error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+  /drive-api/v2/segments/{segment_id}/criteria/active-options:
+    get:
+      tags:
+        - Drive Segments API
+      summary: Get Segment Criteria Active Options
+      operationId: v2_segment_criteria_active_options_get
+      description: Lists the criteria options currently applied to a segment.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathSegmentID'
+      responses:
+        '200':
+          description: OK. Response uses the `application/vnd.bud.drive.criteria-options+json` media type.
+          content:
+            application/vnd.bud.drive.criteria-options+json:
+              schema:
+                $ref: '#/components/schemas/CriteriaOptionsResponse'
+              example:
+                operation_id: v2_segment_criteria_active_options_get
+                data:
+                  - id: employed
+                    category: Lifetime
+                    hierarchy:
+                      - Employment
+                      - Employment status
+                    title: Employed
+                    short_title: Employed
+                    description: Customers that are receiving employment income
+                    tags: []
+                metadata:
+                  _links: {}
+        4XX:
+          description: Request error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+        5XX:
+          description: Internal error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+  /drive-api/v2/segments/{segment_id}/criteria/run:
+    post:
+      tags:
+        - Drive Segments API
+      summary: Run Segment Criteria
+      operationId: v2_segments_criteria_run_post
+      description: Runs a segment's current criteria and returns the number of matching customers.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathSegmentID'
+      responses:
+        '200':
+          description: OK. Response uses the `application/vnd.bud.drive.visualisation+json` media type.
+          content:
+            application/vnd.bud.drive.visualisation+json:
+              schema:
+                $ref: '#/components/schemas/VisualisationResponse'
+              example:
+                operation_id: v2_segments_criteria_run_post
+                data:
+                  visualisation_type: counter
+                  name: total_customers
+                  value: 163
+                metadata:
+                  run_id: 48c675f4-4fc7-43f3-80fd-114ec632f4f7
+                  run_type: expiring
+        4XX:
+          description: Request error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+        5XX:
+          description: Internal error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+  /drive-api/v2/criteria/options:
+    get:
+      tags:
+        - Drive Segments API
+      summary: Get Criteria Options
+      operationId: v2_criteria_options_get
+      description: Lists the flags, segments, and custom criteria available to build a new criteria from.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/QueryCriteriaFilter'
+      responses:
+        '200':
+          description: OK. Response uses the `application/vnd.bud.drive.criteria-options+json` media type.
+          content:
+            application/vnd.bud.drive.criteria-options+json:
+              schema:
+                $ref: '#/components/schemas/CriteriaOptionsResponse'
+              example:
+                operation_id: v2_criteria_options_get
+                data:
+                  - id: employed
+                    category: Lifetime
+                    hierarchy:
+                      - Employment
+                      - Employment status
+                    title: Employed
+                    short_title: Employed
+                    description: Customers that are receiving employment income
+                    tags: []
+                    _template:
+                      value:
+                        criteria: flag
+                        name: employed
+                  - id: segment_1a164dda-0462-4135-bb79-e6032e1a7528
+                    category: Segment Dependency
+                    hierarchy:
+                      - Segments
+                      - Segments
+                    title: Customers in Campaign 1
+                    short_title: Customers in Campaign 1
+                    description: Customers who took part in the first campaign
+                    tags: []
+                    _template:
+                      value:
+                        criteria: segment_dependency
+                        segment_id: 1a164dda-0462-4135-bb79-e6032e1a7528
+                metadata:
+                  _links: {}
+        4XX:
+          description: Request error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+        5XX:
+          description: Internal error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+  /drive-api/v2/criteria/drafts:
+    post:
+      tags:
+        - Drive Segments API
+      summary: Create Draft Criteria
+      operationId: v2_criteria_drafts_post
+      description: Creates a new, empty draft criteria to build up before saving it to a segment.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      responses:
+        '201':
+          description: Created. Response uses the `application/vnd.bud.drive.notification+json` media type.
+          content:
+            application/vnd.bud.drive.notification+json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+              example:
+                operation_id: v2_criteria_drafts_post
+                code_id: draft_criteria_created
+                status: success
+                metadata:
+                  resource_id: 0ba9049e-25e9-43f2-8ea8-1fcf9dde581e
+        4XX:
+          description: Request error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+        5XX:
+          description: Internal error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+  /drive-api/v2/criteria/drafts/{criteria_id}:
+    get:
+      tags:
+        - Drive Segments API
+      summary: Get Draft Criteria
+      operationId: v2_criteria_draft_get
+      description: Retrieves the definition of a draft criteria.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathCriteriaID'
+      responses:
+        '200':
+          description: OK. Response uses the `application/vnd.bud.drive.criteria+json` media type.
+          content:
+            application/vnd.bud.drive.criteria+json:
+              schema:
+                $ref: '#/components/schemas/CriteriaResponse'
+              example:
+                operation_id: v2_criteria_draft_get
+                data:
+                  id: 0ba9049e-25e9-43f2-8ea8-1fcf9dde581e
+                  criteria: flag
+                  name: renter
+                metadata:
+                  criteria_id: 0ba9049e-25e9-43f2-8ea8-1fcf9dde581e
+        4XX:
+          description: Request error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+        5XX:
+          description: Internal error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+    put:
+      tags:
+        - Drive Segments API
+      summary: Update Draft Criteria
+      operationId: v2_criteria_draft_put
+      description: Updates the definition of a draft criteria.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathCriteriaID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SegmentCriteria'
+            examples:
+              Flag (e.g. renter):
+                value:
+                  criteria: flag
+                  name: renter
+              Segment dependency:
+                value:
+                  criteria: segment_dependency
+                  segment_id: 7e8aedf9-6be5-4807-afe0-aa292fb2cde2
+              Conjunction of multiple criteria (renters who are parents with stable income):
+                value:
+                  operator: logical_and
+                  operands:
+                    - criteria: flag
+                      name: renter
+                    - criteria: flag
+                      name: parent
+                    - criteria: flag
+                      name: stable_income
+              Complex nested criteria:
+                value:
+                  operator: logical_and
+                  operands:
+                    - operator: logical_not
+                      operands:
+                        - criteria: segment_dependency
+                          segment_id: 65324d52-1dbe-4f5a-80fd-9de785be586b
+                    - criteria: flag
+                      name: top_25pct_spenders_on_mortgage
+                    - operator: logical_or
+                      operands:
+                        - criteria: flag
+                          name: pays_tv_phone_or_broadband_bill
+                        - criteria: flag
+                          name: pays_energy_bill
+      responses:
+        '200':
+          description: OK. Response uses the `application/vnd.bud.drive.visualisation+json` media type — updating a draft re-runs it and returns the resulting count.
+          content:
+            application/vnd.bud.drive.visualisation+json:
+              schema:
+                $ref: '#/components/schemas/VisualisationResponse'
+              example:
+                operation_id: v2_criteria_draft_put
+                data:
+                  visualisation_type: counter
+                  name: total_customers
+                  value: 87421
+                metadata:
+                  run_id: 48c675f4-4fc7-43f3-80fd-114ec632f4f7
+                  run_type: expiring
+        4XX:
+          description: Request error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+        5XX:
+          description: Internal error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+  /drive-api/v2/criteria/drafts/{criteria_id}/run:
+    post:
+      tags:
+        - Drive Segments API
+      summary: Run Draft Criteria
+      operationId: v2_criteria_draft_run_post
+      description: Runs a draft criteria and returns the number of matching customers.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathCriteriaID'
+      responses:
+        '200':
+          description: OK. Response uses the `application/vnd.bud.drive.visualisation+json` media type.
+          content:
+            application/vnd.bud.drive.visualisation+json:
+              schema:
+                $ref: '#/components/schemas/VisualisationResponse'
+              example:
+                operation_id: v2_criteria_draft_run_post
+                data:
+                  visualisation_type: counter
+                  name: total_customers
+                  value: 163
+                metadata:
+                  run_id: 48c675f4-4fc7-43f3-80fd-114ec632f4f7
+                  run_type: expiring
+        4XX:
+          description: Request error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+        5XX:
+          description: Internal error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+  /drive-api/v2/criteria/run:
+    post:
+      tags:
+        - Drive Segments API
+      summary: Run Ad-hoc Criteria
+      operationId: v2_criteria_run_post
+      description: Runs a criteria definition directly, without saving it as a draft first.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SegmentCriteria'
+            example:
+              criteria: flag
+              name: renter
+      responses:
+        '200':
+          description: OK. Response uses the `application/vnd.bud.drive.visualisation+json` media type.
+          content:
+            application/vnd.bud.drive.visualisation+json:
+              schema:
+                $ref: '#/components/schemas/VisualisationResponse'
+              example:
+                operation_id: v2_criteria_run_post
+                data:
+                  visualisation_type: counter
+                  name: total_customers
+                  value: 163
+                metadata:
+                  run_id: 48c675f4-4fc7-43f3-80fd-114ec632f4f7
+                  run_type: expiring
+        4XX:
+          description: Request error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+        5XX:
+          description: Internal error. Response uses the `application/vnd.bud.drive.notification+json` media type.
+  /drive-api/v2/criteria/suggestions/segment-name:
+    post:
+      tags:
+        - Drive Segments API
+      summary: Suggest Segment Name
+      operationId: v2_criteria_suggestions_segment_name_post
+      description: |
+        Suggests a name and description for a segment, generated from its criteria. Exists to reduce friction in the dashboard UI (pre-fills a name when the user hits create) — kept as an opt-in convenience for API clients too, so use is optional.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuggestSegmentNameRequest'
+            example:
+              criteria:
+                criteria: flag
+                name: renter
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuggestSegmentNameResponse'
+              example:
+                operation_id: v2_criteria_suggestions_segment_name_post
+                data:
+                  suggestion:
+                    name: Renters
+                    description: Customers who rent their home.
+        4XX:
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/campaigns:
+    get:
+      tags:
+        - Drive Campaigns API
+      summary: Get Campaigns
+      operationId: drive_v1_campaigns_get
+      description: Lists and searches your campaigns.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/QueryCampaignStatus'
+        - $ref: '#/components/parameters/QueryCampaignCreatedBy'
+        - $ref: '#/components/parameters/QueryCampaignItemsPerPage'
+        - $ref: '#/components/parameters/QueryCampaignPageToken'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCampaignsResponse'
+              example:
+                operation_id: drive_v1_campaigns_get
+                data:
+                  - campaign_id: b28efd2c-5a58-42cd-bed7-5564eb877ca7
+                    template_id: 0fdb0218-eaae-4b3f-9ce2-694404b3399c
+                    name: This is a new campaign
+                    description: Here is the description
+                    audience: 08bb7126-cbdb-4e92-b27d-2fabc72ea21a
+                    status: live
+                    created_at: '2026-07-07T00:30:00Z'
+                    created_by: auth0|65423dc3277ae1aa42014e01
+                metadata:
+                  next_page_token: ...
+                  items_per_page: 100
+        5XX:
+          $ref: '#/components/responses/ServerError'
+    post:
+      tags:
+        - Drive Campaigns API
+      summary: Create Campaign
+      operationId: drive_v1_campaigns_post
+      description: |
+        Creates a new campaign. Triggers aren't a separate endpoint — they're expressed as BudQL inside the campaign's `schedule`; see [docs.thisisbud.com/docs/custom-insights](https://docs.thisisbud.com/docs/custom-insights).
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCampaignRequest'
+            example:
+              template_id: 0fdb0218-eaae-4b3f-9ce2-694404b3399c
+              name: This is a new campaign
+              description: Here is the description
+              audience: 08bb7126-cbdb-4e92-b27d-2fabc72ea21a
+              channels:
+                action_card:
+                  headline: This is your headline
+                  message: Welcome to this campaign
+                  primary_button:
+                    text: Click Here!
+                    url: https://thisisbud.com
+                  image_url: https://thisisbud.com/campaign.png
+                  styling:
+                    type: custom
+                    accent_color: '#cccccc'
+                    text_color: '#ffffff'
+                    font: Arial
+                  priority_order: 0
+              schedule:
+                type: when_published
+              duration:
+                intervals: 30
+                interval_type: DAY
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCampaignResponse'
+              example:
+                operation_id: drive_v1_campaigns_post
+                data:
+                  campaign_id: b28efd2c-5a58-42cd-bed7-5564eb877ca7
+        4XX:
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/campaigns/{campaign_id}:
+    get:
+      tags:
+        - Drive Campaigns API
+      summary: Get Campaign
+      operationId: drive_v1_campaign_get
+      description: Retrieves a campaign.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathCampaignID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveCampaignResponse'
+              example:
+                operation_id: drive_v1_campaign_get
+                data:
+                  campaign_id: b28efd2c-5a58-42cd-bed7-5564eb877ca7
+                  template_id: 0fdb0218-eaae-4b3f-9ce2-694404b3399c
+                  name: This is a new campaign
+                  description: Here is the description
+                  audience: 08bb7126-cbdb-4e92-b27d-2fabc72ea21a
+                  status: live
+                  created_at: '2026-07-07T00:30:00Z'
+                  created_by: auth0|65423dc3277ae1aa42014e01
+        '404':
+          description: Campaign not found
+        5XX:
+          $ref: '#/components/responses/ServerError'
+    delete:
+      tags:
+        - Drive Campaigns API
+      summary: Delete Campaign
+      operationId: drive_v1_campaign_delete
+      description: Permanently deletes a campaign.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathCampaignID'
+      responses:
+        '204':
+          description: Deleted
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/campaigns/{campaign_id}/status:
+    put:
+      tags:
+        - Drive Campaigns API
+      summary: Update Campaign Status
+      operationId: drive_v1_campaign_status_put
+      description: Sets a campaign live, paused, or ended.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathCampaignID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCampaignStatusRequest'
+            example:
+              status: paused
+      responses:
+        '204':
+          description: Status Updated
+        4XX:
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/campaigns/{campaign_id}/content:
+    get:
+      tags:
+        - Drive Campaigns API
+      summary: Get Campaign Content
+      operationId: drive_v1_campaign_content_get
+      description: Retrieves a campaign's live and draft content.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathCampaignID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveCampaignContentResponse'
+              example:
+                operation_id: drive_v1_campaign_content_get
+                data:
+                  current:
+                    name: This is a new campaign
+                    description: Here is the description
+                    audience: 08bb7126-cbdb-4e92-b27d-2fabc72ea21a
+                    channels:
+                      action_card:
+                        headline: This is your headline
+                        message: Welcome to this campaign
+                  draft:
+                    name: This is a new campaign - updated!
+                    description: Here is the description
+                    audience: b308ce11-50ff-4a85-aa49-5124d04bdb30
+                    channels:
+                      action_card:
+                        headline: This is your new headline
+                        message: Welcome to this campaign
+        '404':
+          description: Campaign not found
+        5XX:
+          $ref: '#/components/responses/ServerError'
+    put:
+      tags:
+        - Drive Campaigns API
+      summary: Update Campaign Content
+      operationId: drive_v1_campaign_content_put
+      description: |
+        Updates a campaign's draft content. Triggers aren't a separate endpoint — they're expressed as BudQL inside the campaign's `schedule`; see [docs.thisisbud.com/docs/custom-insights](https://docs.thisisbud.com/docs/custom-insights).
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathCampaignID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignContent'
+            example:
+              name: This is a new campaign - updated!
+              description: Here is the description
+              audience: b308ce11-50ff-4a85-aa49-5124d04bdb30
+              channels:
+                action_card:
+                  headline: This is your new headline
+                  message: Welcome to this campaign
+                  primary_button:
+                    text: Click Here!
+                    url: https://thisisbud.com
+                  image_url: https://thisisbud.com/campaign.png
+                  styling:
+                    type: custom
+                    accent_color: '#cccccc'
+                    text_color: '#ffffff'
+                    font: Arial
+                  priority_order: 0
+              schedule:
+                type: when_published
+              duration:
+                intervals: 90
+                interval_type: DAY
+      responses:
+        '204':
+          description: Updated
+        4XX:
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/campaigns/{campaign_id}/insights/performance/trends:
+    get:
+      tags:
+        - Drive Campaigns API
+      summary: Get Campaign Performance Trends
+      operationId: drive_campaign_insights_performance_trends_get
+      description: Retrieves performance metrics and trends for a campaign.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathCampaignID'
+        - $ref: '#/components/parameters/QueryPerformanceStartDate'
+        - $ref: '#/components/parameters/QueryPerformanceEndDate'
+        - $ref: '#/components/parameters/QueryPerformanceAggregationType'
+        - $ref: '#/components/parameters/QueryPerformanceMetrics'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerformanceTrendsResponse'
+              example:
+                operation_id: drive_campaign_insights_performance_trends_get
+                data:
+                  campaign_audience:
+                    headline:
+                      format: counter
+                      value: 12000
+                    trend:
+                      format: trend
+                      value:
+                        - date: '2026-07-01'
+                          value: 12000
+                  primary_button_unique_clicks:
+                    headline:
+                      format: counter
+                      value: 340
+                    trend:
+                      format: trend
+                      value:
+                        - date: '2026-07-01'
+                          value: 340
+        4XX:
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/campaigns/content-variables:
+    get:
+      tags:
+        - Drive Campaigns API
+      summary: Get Campaign Content Variables
+      operationId: drive_v1_campaigns_content_variables_get
+      description: Lists the personalization variables available for use in campaign content.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentVariablesResponse'
+              example:
+                operation_id: drive_v1_campaigns_content_variables_get
+                data:
+                  - name: total_spending_per_category
+                    label: Total Spending Per Category
+                    description: The customer's total spend in a given category over a time window.
+                    type: currency
+                    examples:
+                      - currency: USD
+                        value: '100.00'
+                    parameters:
+                      - name: category
+                        type: category_l2
+                        label: Category
+                      - name: intervals
+                        type: integer
+                        label: Intervals
+                      - name: interval_type
+                        type: interval_type
+                        label: Interval Type
+                    group: Spending
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/campaigns/banner-widgets:
+    get:
+      tags:
+        - Drive Campaigns API
+      summary: Get Banner Widgets
+      operationId: drive_v1_campaigns_banner_widgets_get
+      description: |
+        Retrieves the active campaign banners a specific customer is eligible to see. **Note**: unlike every other Drive Campaigns API endpoint, this one authenticates as an end customer rather than as a dashboard user.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/QueryBannerChannel'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BannerWidgetsResponse'
+              example:
+                operation_id: drive_v1_campaigns_banner_widgets_get
+                data:
+                  - campaign_id: b28efd2c-5a58-42cd-bed7-5564eb877ca7
+                    created_at: '2026-07-07T00:30:00Z'
+                    headline: Hello {{ customer_name }} - want better insurance?
+                    message: You earn {{ mean_income }} - we can get you some better insurance!
+                    template_variables:
+                      customer_name: Jim
+                      mean_income: '10000'
+                    primary_button:
+                      text: Click here!
+                      url: https://thisisbud.com/click-here
+                    image_url: https://thisisbud.com/campaign.png
+                    styling:
+                      type: brand
+                    priority_order: 0
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/campaigns/agent:
+    post:
+      tags:
+        - Drive Campaigns API
+      summary: Build Campaign From Business Goal
+      operationId: drive_v1_campaigns_agent_post
+      description: |
+        Starts a campaign agent run and returns immediately. You describe the outcome you want in plain language, and the agent finds the audience that matches it, writes the campaign copy, generates the artwork and estimates the value of the opportunity.
+
+        Runs take minutes rather than seconds, so poll `GET /drive-api/v1/campaigns/agent/{generation_id}` every 10-15 seconds until the status is `completed`; that response then carries the campaign under `result`.
+
+        What the agent knows about your organization — its context, tone of voice, branding and image style — is configured by Bud on your behalf, so most requests send nothing but the goal. Any of those can be overridden for a single run by sending it in the body; overrides apply to that run only and are never saved.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCampaignAgentRunRequest'
+            example:
+              campaign_goal: find people who earn more than 2200 USD a month and are renters
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCampaignAgentRunResponse'
+              example:
+                operation_id: drive_v1_campaigns_agent_post
+                data:
+                  id: ceca9875e4674c6699fc404b76f1786f
+                  status: pending
+        4XX:
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/campaigns/agent/{generation_id}:
+    get:
+      tags:
+        - Drive Campaigns API
+      summary: Get Campaign Agent Run
+      operationId: drive_v1_campaigns_agent_get
+      description: |
+        Reports where a run has got to, and carries the finished campaign once it is done. `result` is null until the status is `completed`, so you poll this one endpoint throughout rather than switching to another when the run finishes.
+
+        A run belongs to the organization that created it; another organization's run is reported as not found rather than forbidden.
+
+        Once a run completes, pass `result.template_id` to Create Campaign as `template_id` to turn the drafted campaign into a live one.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathGenerationID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignAgentRunResponse'
+              example:
+                operation_id: drive_v1_campaigns_agent_get
+                data:
+                  id: ceca9875e4674c6699fc404b76f1786f
+                  status: completed
+                  created_at: '2026-09-08T09:12:04Z'
+                  started_at: '2026-09-08T09:12:05Z'
+                  completed_at: '2026-09-08T09:26:41Z'
+                  result:
+                    template_id: ceca9875e4674c6699fc404b76f1786f
+                    audience:
+                      segment_id: 23303f83-a790-4ee9-95b6-d5cdeaf36fa2
+                      name: High-earning renters
+                      description: Customers earning over 2,200 USD a month who rent their home.
+                      size: 4213
+                    campaign:
+                      label: High-earning renters
+                      rationale: Targets renters with strong income who hold no lending product.
+                      title: Ready to stop renting?
+                      description: You're earning well. See how much you could borrow towards a first home.
+                      primary_cta: Check eligibility
+                      secondary_cta: Learn more
+                      objective: Acquisition
+                      product: Mortgage
+                      insight: 28% of renters in this income band hold no lending product with us.
+                    estimated_value:
+                      tier: high
+                      label: High
+        4XX:
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/campaign-templates/compiled-templates:
+    get:
+      tags:
+        - Drive Campaigns API
+      summary: Get Compiled Campaign Templates
+      operationId: v1_compiled_templates_get
+      description: |
+        Retrieves the campaign templates available to your organization. Bud manages template creation and updates internally — clients can read and delete templates, but not create or update them.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/QueryTemplateSourceType'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompiledTemplatesResponse'
+              example:
+                operation_id: v1_compiled_templates_get
+                data:
+                  templates:
+                    - template_id: 89d133a9-02f8-4217-adb8-1d341fc91101
+                      source:
+                        type: manual
+                        metadata: {}
+                      campaign_fields:
+                        name: Campaign Name
+                        description: A description of the purpose of the campaign
+                      criteria:
+                        operator: logical_and
+                        operands:
+                          - criteria: flag
+                            name: insight_name
+                          - operator: logical_not
+                            operands:
+                              - criteria: flag
+                                name: other_insight
+                      channels: {}
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-api/v1/campaign-templates/templates/{template_id}:
+    delete:
+      tags:
+        - Drive Campaigns API
+      summary: Delete Campaign Template
+      operationId: v1_client_campaign_templates_delete
+      description: Removes your organization's own customization of a campaign template.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/PathTemplateID'
+      responses:
+        '204':
+          description: No Content
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-mcp/v1/copilot:
+    post:
+      tags:
+        - Drive MCP API
+      summary: Copilot MCP Server
+      operationId: v1_drive_mcp_copilot_post
+      description: |
+        The connection URL for Drive's general copilot Model Context Protocol server.
+
+        **Connecting a client**: this endpoint is the MCP server itself, not a URL-minting step — point your MCP client directly at it, configuring it to send an OAuth2 access token (see Authentication) as a bearer token and `X-Client-Id` as a static header on every request, the same as any other Drive API call. Many MCP clients accept a config file for this, for example:
+
+          ```json
+          {
+            "mcpServers": {
+              "drive-copilot": {
+                "url": "https://api-sandbox.thisisbud.com/drive-mcp/v1/copilot",
+                "headers": {
+                  "Authorization": "Bearer <access_token>",
+                  "X-Client-Id": "<client_id>"
+                }
+              }
+            }
+          }
+          ```
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MCPJSONRPCRequest'
+      responses:
+        '200':
+          description: A JSON-RPC response from the MCP server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPJSONRPCResponse'
+        '401':
+          description: An unauthenticated request was received.
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-mcp/v1/segments:
+    post:
+      tags:
+        - Drive MCP API
+      summary: Segments MCP Server
+      operationId: v1_drive_mcp_segments_post
+      description: |
+        The connection URL for Drive's Segments Model Context Protocol server.
+
+        **Connecting a client**: this endpoint is the MCP server itself, not a URL-minting step — point your MCP client directly at it, configuring it to send an OAuth2 access token (see Authentication) as a bearer token and `X-Client-Id` as a static header on every request, the same as any other Drive API call. Many MCP clients accept a config file for this, for example:
+
+          ```json
+          {
+            "mcpServers": {
+              "drive-segments": {
+                "url": "https://api-sandbox.thisisbud.com/drive-mcp/v1/segments",
+                "headers": {
+                  "Authorization": "Bearer <access_token>",
+                  "X-Client-Id": "<client_id>"
+                }
+              }
+            }
+          }
+          ```
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MCPJSONRPCRequest'
+      responses:
+        '200':
+          description: A JSON-RPC response from the MCP server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPJSONRPCResponse'
+        '401':
+          description: An unauthenticated request was received.
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /drive-mcp/v1/campaigns:
+    post:
+      tags:
+        - Drive MCP API
+      summary: Campaigns MCP Server
+      operationId: v1_drive_mcp_campaigns_post
+      description: |
+        The connection URL for Drive's Campaigns Model Context Protocol server.
+
+        **Connecting a client**: this endpoint is the MCP server itself, not a URL-minting step — point your MCP client directly at it, configuring it to send an OAuth2 access token (see Authentication) as a bearer token and `X-Client-Id` as a static header on every request, the same as any other Drive API call. Many MCP clients accept a config file for this, for example:
+
+          ```json
+          {
+            "mcpServers": {
+              "drive-campaigns": {
+                "url": "https://api-sandbox.thisisbud.com/drive-mcp/v1/campaigns",
+                "headers": {
+                  "Authorization": "Bearer <access_token>",
+                  "X-Client-Id": "<client_id>"
+                }
+              }
+            }
+          }
+          ```
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MCPJSONRPCRequest'
+      responses:
+        '200':
+          description: A JSON-RPC response from the MCP server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPJSONRPCResponse'
+        '401':
+          description: An unauthenticated request was received.
+        5XX:
+          $ref: '#/components/responses/ServerError'
 components:
   securitySchemes:
     Basic:
@@ -16811,6 +18429,21 @@ components:
                   type: array
                   items:
                     type: string
+                account_categories:
+                  description: |
+                    The account category that the account type is a part of
+
+                    Currently supported values include (but are not necessarily limited to):
+                      - `credit`
+                      - `depository`
+                      - `insurance`
+                      - `investment`
+                      - `loan`
+                      - `savings`
+                      - `other`
+                  type: array
+                  items:
+                    type: string
                 usage_types:
                   description: |
                     The Usage Type values supplied in the request to generate the given result set.
@@ -18592,11 +20225,11 @@ components:
               to:
                 type: string
                 example: '2023-05-21T07:20:50.52Z'
-                description: RFC 3339 Compliant date stamp indicating the end of the transaction window used in this calculation
+                description: RFC 3339 Compliant date stamp indicating the beginning of the transaction window used in this calculation
               from:
                 type: string
                 example: '2023-05-21T07:20:50.52Z'
-                description: RFC 3339 Compliant date stamp indicating the beginning of the transaction window used in this calculation
+                description: RFC 3339 Compliant date stamp indicating the end of the transaction window used in this calculation
     PercentageCurrency:
       type: object
       title: Percentage with relevant currency
@@ -18812,11 +20445,11 @@ components:
               to:
                 type: string
                 example: '2023-05-21T07:20:50.52Z'
-                description: RFC 3339 Compliant date stamp indicating the end of the transaction window used in this calculation
+                description: RFC 3339 Compliant date stamp indicating the beginning of the transaction window used in this calculation
               from:
                 type: string
                 example: '2023-05-21T07:20:50.52Z'
-                description: RFC 3339 Compliant date stamp indicating the beginning of the transaction window used in this calculation
+                description: RFC 3339 Compliant date stamp indicating the end of the transaction window used in this calculation
     CategorisationModel:
       title: Categorisation Model
       type: object
@@ -21509,7 +23142,6 @@ components:
           properties:
             sufficient_data:
               type: boolean
-
     ActionCardsQueryParams:
       allOf:
         - $ref: '#/components/schemas/GlobalWidgetURLQueryParams'
@@ -21757,6 +23389,1124 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/TransactionTotal'
+    SegmentTag:
+      title: Segment Tag
+      type: object
+      properties:
+        tag:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        created_by:
+          type: string
+    RetrieveSegmentTagsResponse:
+      title: Retrieve Segment Tags Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentTag'
+        metadata:
+          type: object
+          properties:
+            results:
+              type: integer
+    CreateSegmentFromFixedCustomersRequest:
+      title: Create Segment From Fixed Customers Request
+      type: object
+      required:
+        - name
+        - customers_from
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        customers_from:
+          type: string
+          format: uuid
+          description: The ID of the segment whose current members should be copied.
+        tags:
+          type: array
+          items:
+            type: string
+    Segment:
+      title: Segment
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        source:
+          type: string
+          description: |
+            How the segment was created. Potential values are subject to change and may be
+            converted to enums at a future unspecified date.
+
+            | Value           | Description                                    |
+            |-----------------|-------------------------------------------------|
+            | `manual`        | Built from criteria/groups                     |
+            | `uploaded_list` | A fixed customer list from an uploaded file    |
+        fixed_customer_list:
+          type: boolean
+        fixed_customer_list_size:
+          type: integer
+        tags:
+          type: array
+          items:
+            type: string
+    CreateSegmentFromExistingResponse:
+      title: Create Segment From Existing Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/Segment'
+    CreateSegmentFromCriteriaRequest:
+      title: Create Segment From Criteria Request
+      type: object
+      required:
+        - name
+        - criteria_from
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        criteria_from:
+          type: string
+          format: uuid
+          description: The ID of the segment whose criteria should be copied.
+        fixed_customer_list:
+          type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+    UploadSegmentRequest:
+      title: Upload Segment Request
+      type: object
+      required:
+        - name
+        - customers
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        customers:
+          type: array
+          items:
+            type: string
+          description: Customer IDs to include in the fixed customer list.
+        tags:
+          type: array
+          items:
+            type: string
+    UploadSegmentResponse:
+      title: Upload Segment Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/Segment'
+    RetrieveSegmentResponse:
+      title: Retrieve Segment Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/Segment'
+    DeleteSegmentResponse:
+      title: Delete Segment Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        metadata:
+          type: object
+          properties:
+            segment_id:
+              type: string
+              format: uuid
+    PatchSegmentRequest:
+      title: Patch Segment Request
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+    PatchSegmentResponse:
+      title: Patch Segment Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/Segment'
+    SegmentSimilarity:
+      title: Segment Similarity
+      type: object
+      properties:
+        jaccard_index:
+          type: number
+        intersection_count:
+          type: integer
+        union_count:
+          type: integer
+    CompareSegmentsResponse:
+      title: Compare Segments Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/SegmentSimilarity'
+    SegmentExport:
+      title: Segment Export
+      type: object
+      properties:
+        total_rows:
+          type: integer
+        _links:
+          type: object
+          properties:
+            full:
+              type: array
+              items:
+                type: string
+                format: uri
+    QuerySegmentCustomersResponse:
+      title: Query Segment Customers Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/SegmentExport'
+    SegmentStatistic:
+      title: Segment Statistic
+      type: object
+      properties:
+        statistics_id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          description: |
+            The shape of the statistic's values. Potential values are subject to change and may
+            be converted to enums at a future unspecified date.
+
+            | Value         | Description                          |
+            |---------------|---------------------------------------|
+            | `aggregate`   | A single summary value               |
+            | `time_series` | A series of values over time         |
+        parameters:
+          type: object
+        values:
+          type: array
+          items:
+            type: object
+    SegmentStatisticsResponse:
+      title: Segment Statistics Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentStatistic'
+    ListSegmentsV2Response:
+      title: List Segments (V2) Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Segment'
+        metadata:
+          type: object
+          properties:
+            results:
+              type: integer
+            max_per_page:
+              type: integer
+            page:
+              type: integer
+    CreateSegmentV2Request:
+      title: Create Segment (V2) Request
+      type: object
+      required:
+        - name
+      description: |
+        Determines which kind of segment is created based on which optional fields are present:
+        an empty manual segment, a manual segment seeded from an existing draft criteria (via
+        `from_criteria_id`), or a fixed customer-list segment from an uploaded list (via `upload`).
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        from_criteria_id:
+          type: string
+          format: uuid
+        upload:
+          type: object
+          properties:
+            filename:
+              type: string
+            customers:
+              type: array
+              items:
+                type: string
+    NotificationResponse:
+      title: Notification Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        code_id:
+          type: string
+        status:
+          type: string
+          description: |
+            The outcome of the operation. Potential values are subject to change and may be
+            converted to enums at a future unspecified date.
+
+            | Value     | Description                                |
+            |-----------|---------------------------------------------|
+            | `success` | The operation completed successfully       |
+        metadata:
+          type: object
+          properties:
+            resource_id:
+              type: string
+    FlagCriteria:
+      title: Flag Criteria
+      type: object
+      required:
+        - criteria
+        - name
+      properties:
+        criteria:
+          type: string
+          enum:
+            - flag
+        name:
+          type: string
+    SegmentDependencyCriteria:
+      title: Segment Dependency Criteria
+      type: object
+      required:
+        - criteria
+        - segment_id
+      properties:
+        criteria:
+          type: string
+          enum:
+            - segment_dependency
+        segment_id:
+          type: string
+          format: uuid
+    SegmentCriteria:
+      title: Segment Criteria
+      oneOf:
+        - $ref: '#/components/schemas/FlagCriteria'
+        - $ref: '#/components/schemas/SegmentDependencyCriteria'
+        - $ref: '#/components/schemas/LogicalCriteria'
+    LogicalCriteria:
+      title: Logical Criteria
+      type: object
+      required:
+        - operator
+        - operands
+      properties:
+        operator:
+          type: string
+          enum:
+            - logical_and
+            - logical_or
+            - logical_not
+        operands:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentCriteria'
+    SegmentCriteriaWithID:
+      title: Segment Criteria (Saved)
+      allOf:
+        - $ref: '#/components/schemas/SegmentCriteria'
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+    CriteriaResponse:
+      title: Criteria Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/SegmentCriteriaWithID'
+        metadata:
+          type: object
+          properties:
+            criteria_id:
+              type: string
+              format: uuid
+    CriteriaOption:
+      title: Criteria Option
+      type: object
+      properties:
+        id:
+          type: string
+        category:
+          type: string
+        hierarchy:
+          type: array
+          items:
+            type: string
+        title:
+          type: string
+        short_title:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        _template:
+          type: object
+    CriteriaOptionsResponse:
+      title: Criteria Options Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CriteriaOption'
+        metadata:
+          type: object
+          properties:
+            _links:
+              type: object
+    VisualisationResponse:
+      title: Visualisation Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: object
+          properties:
+            visualisation_type:
+              type: string
+              description: |
+                The shape of the visualisation. Potential values are subject to change and may
+                be converted to enums at a future unspecified date.
+
+                | Value     | Description                                    |
+                |-----------|--------------------------------------------------|
+                | `counter` | A single numeric value visualisation           |
+            name:
+              type: string
+            value:
+              type: number
+        metadata:
+          type: object
+          properties:
+            run_id:
+              type: string
+            run_type:
+              type: string
+    SuggestSegmentNameRequest:
+      title: Suggest Segment Name Request
+      type: object
+      required:
+        - criteria
+      properties:
+        criteria:
+          $ref: '#/components/schemas/SegmentCriteria'
+    SuggestSegmentNameResponse:
+      title: Suggest Segment Name Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: object
+          properties:
+            suggestion:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+    CampaignButton:
+      title: Campaign Button
+      type: object
+      properties:
+        text:
+          type: string
+        url:
+          type: string
+          format: uri
+    CampaignStyling:
+      title: Campaign Styling
+      type: object
+      properties:
+        type:
+          type: string
+          description: |
+            Where the styling values come from. Potential values are subject to change and may
+            be converted to enums at a future unspecified date.
+
+            | Value    | Description                                              |
+            |----------|-------------------------------------------------------------|
+            | `custom` | Styling is set explicitly on the campaign                  |
+            | `brand`  | Styling inherits the organisation's brand defaults         |
+        accent_color:
+          type: string
+        text_color:
+          type: string
+        font:
+          type: string
+    CampaignChannelActionCard:
+      title: Campaign Action Card Channel
+      type: object
+      properties:
+        headline:
+          type: string
+        message:
+          type: string
+        primary_button:
+          $ref: '#/components/schemas/CampaignButton'
+        image_url:
+          type: string
+          format: uri
+        styling:
+          $ref: '#/components/schemas/CampaignStyling'
+        priority_order:
+          type: integer
+    CampaignChannels:
+      title: Campaign Channels
+      type: object
+      properties:
+        action_card:
+          $ref: '#/components/schemas/CampaignChannelActionCard'
+    CampaignSchedule:
+      title: Campaign Schedule
+      type: object
+      description: |
+        When the campaign is published. `type: when_published` starts immediately; trigger-based
+        schedules are expressed as BudQL — see
+        [docs.thisisbud.com/docs/custom-insights](https://docs.thisisbud.com/docs/custom-insights).
+      properties:
+        type:
+          type: string
+    CampaignDuration:
+      title: Campaign Duration
+      type: object
+      properties:
+        intervals:
+          type: integer
+        interval_type:
+          type: string
+          description: |
+            The unit `intervals` is measured in. Potential values are subject to change and may
+            be converted to enums at a future unspecified date.
+
+            | Value   | Description                    |
+            |---------|-----------------------------------|
+            | `DAY`   | Duration measured in days      |
+            | `WEEK`  | Duration measured in weeks     |
+            | `MONTH` | Duration measured in months    |
+    Campaign:
+      title: Campaign
+      type: object
+      required:
+        - campaign_id
+      properties:
+        campaign_id:
+          type: string
+          format: uuid
+        template_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        audience:
+          type: string
+          format: uuid
+          description: The ID of the segment this campaign targets.
+        status:
+          type: string
+          description: |
+            The campaign's current status. Potential values are subject to change and may be
+            converted to enums at a future unspecified date.
+
+            | Value     | Description                                                    |
+            |-----------|------------------------------------------------------------------|
+            | `live`    | Currently running                                              |
+            | `paused`  | Temporarily paused                                             |
+            | `ended`   | Finished                                                       |
+            | `pending` | Scheduled but not yet live (derived, not settable directly)   |
+        created_at:
+          type: string
+          format: date-time
+        created_by:
+          type: string
+        channels:
+          $ref: '#/components/schemas/CampaignChannels'
+        schedule:
+          $ref: '#/components/schemas/CampaignSchedule'
+        duration:
+          $ref: '#/components/schemas/CampaignDuration'
+    ListCampaignsResponse:
+      title: List Campaigns Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Campaign'
+        metadata:
+          type: object
+          properties:
+            next_page_token:
+              type: string
+            items_per_page:
+              type: integer
+    CreateCampaignRequest:
+      title: Create Campaign Request
+      type: object
+      required:
+        - name
+        - audience
+      properties:
+        template_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        audience:
+          type: string
+          format: uuid
+          description: The ID of the segment this campaign targets.
+        channels:
+          $ref: '#/components/schemas/CampaignChannels'
+        schedule:
+          $ref: '#/components/schemas/CampaignSchedule'
+        duration:
+          $ref: '#/components/schemas/CampaignDuration'
+    CreateCampaignResponse:
+      title: Create Campaign Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: object
+          properties:
+            campaign_id:
+              type: string
+              format: uuid
+    RetrieveCampaignResponse:
+      title: Retrieve Campaign Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/Campaign'
+    UpdateCampaignStatusRequest:
+      title: Update Campaign Status Request
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          description: |
+            The status to set. `pending`/`scheduled` states are derived, not settable directly.
+            Potential values are subject to change and may be converted to enums at a future
+            unspecified date.
+
+            | Value    | Description         |
+            |----------|-----------------------|
+            | `live`   | Currently running   |
+            | `paused` | Temporarily paused  |
+            | `ended`  | Finished            |
+    CampaignContent:
+      title: Campaign Content
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        audience:
+          type: string
+          format: uuid
+        channels:
+          $ref: '#/components/schemas/CampaignChannels'
+        schedule:
+          $ref: '#/components/schemas/CampaignSchedule'
+        duration:
+          $ref: '#/components/schemas/CampaignDuration'
+    RetrieveCampaignContentResponse:
+      title: Retrieve Campaign Content Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: object
+          properties:
+            current:
+              $ref: '#/components/schemas/CampaignContent'
+            draft:
+              $ref: '#/components/schemas/CampaignContent'
+    PerformanceTrendPoint:
+      title: Performance Trend Point
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        value:
+          type: number
+    PerformanceTrendMetric:
+      title: Performance Trend Metric
+      type: object
+      properties:
+        headline:
+          type: object
+          properties:
+            format:
+              type: string
+              description: |
+                How to render the headline value. Potential values are subject to change and
+                may be converted to enums at a future unspecified date.
+
+                | Value     | Description                                |
+                |-----------|-----------------------------------------------|
+                | `counter` | A single running-total value               |
+            value:
+              type: number
+        trend:
+          type: object
+          properties:
+            format:
+              type: string
+              description: |
+                How to render the trend value. Potential values are subject to change and may
+                be converted to enums at a future unspecified date.
+
+                | Value   | Description                                  |
+                |---------|-------------------------------------------------|
+                | `trend` | A time series of points                      |
+            value:
+              type: array
+              items:
+                $ref: '#/components/schemas/PerformanceTrendPoint'
+    PerformanceTrendsResponse:
+      title: Performance Trends Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PerformanceTrendMetric'
+    ContentVariableParameter:
+      title: Content Variable Parameter
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        label:
+          type: string
+    ContentVariable:
+      title: Content Variable
+      type: object
+      properties:
+        name:
+          type: string
+        label:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        examples:
+          type: array
+          items:
+            type: object
+            properties:
+              currency:
+                type: string
+              value:
+                type: string
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentVariableParameter'
+        group:
+          type: string
+    ContentVariablesResponse:
+      title: Content Variables Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentVariable'
+    BannerWidget:
+      title: Banner Widget
+      type: object
+      properties:
+        campaign_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        headline:
+          type: string
+        message:
+          type: string
+        template_variables:
+          type: object
+        primary_button:
+          $ref: '#/components/schemas/CampaignButton'
+        image_url:
+          type: string
+          format: uri
+        styling:
+          $ref: '#/components/schemas/CampaignStyling'
+        priority_order:
+          type: integer
+    BannerWidgetsResponse:
+      title: Banner Widgets Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BannerWidget'
+    CampaignAgentOverride:
+      title: Campaign Agent Override
+      type: string
+      nullable: true
+      maxLength: 4000
+      description: |
+        Overrides your configured value for this run only. Leave it out to use what Bud has configured for you, or send an empty string to drop it for this run. Nothing sent here is saved against your organisation.
+    CreateCampaignAgentRunRequest:
+      title: Create Campaign Agent Run Request
+      type: object
+      additionalProperties: false
+      required:
+        - campaign_goal
+      properties:
+        campaign_goal:
+          type: string
+          minLength: 1
+          description: The business goal the campaign should serve, in plain language.
+        context:
+          $ref: '#/components/schemas/CampaignAgentOverride'
+        tone_of_voice:
+          $ref: '#/components/schemas/CampaignAgentOverride'
+        branding:
+          $ref: '#/components/schemas/CampaignAgentOverride'
+        image_style:
+          $ref: '#/components/schemas/CampaignAgentOverride'
+        extra_context:
+          $ref: '#/components/schemas/CampaignAgentOverride'
+    CreateCampaignAgentRunResponse:
+      title: Create Campaign Agent Run Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The ID to poll for progress.
+            status:
+              type: string
+              enum:
+                - pending
+                - running
+                - completed
+                - failed
+    CampaignAgentAudience:
+      title: Campaign Agent Audience
+      type: object
+      description: Who the campaign targets, delivered as a Drive segment.
+      properties:
+        segment_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The segment holding the audience. Usable anywhere segments are.
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        size:
+          type: integer
+          nullable: true
+          description: How many customers matched when the run completed.
+    CampaignAgentCampaign:
+      title: Campaign Agent Campaign
+      type: object
+      description: The campaign the agent built for this audience.
+      properties:
+        label:
+          type: string
+          nullable: true
+          description: A short internal label for whoever manages the campaign. Not shown to customers.
+        rationale:
+          type: string
+          nullable: true
+          description: Why this audience and this campaign. Not shown to customers.
+        title:
+          type: string
+          nullable: true
+          description: Customer-facing headline.
+        description:
+          type: string
+          nullable: true
+          description: Customer-facing body copy.
+        primary_cta:
+          type: string
+          nullable: true
+        secondary_cta:
+          type: string
+          nullable: true
+        objective:
+          type: string
+          nullable: true
+          description: The campaign's business goal, such as Acquisition, Upsell or Reduce Churn.
+        product:
+          type: string
+          nullable: true
+          description: The financial product being promoted.
+        insight:
+          type: string
+          nullable: true
+          description: The data-driven insight about the audience that motivates the campaign.
+    CampaignAgentEstimatedValue:
+      title: Campaign Agent Estimated Value
+      type: object
+      nullable: true
+      description: The agent's estimate of how valuable this opportunity is.
+      properties:
+        tier:
+          type: string
+        label:
+          type: string
+    CampaignAgentResult:
+      title: Campaign Agent Result
+      type: object
+      nullable: true
+      description: The campaign a completed run produced. Null until the run reports `completed`.
+      properties:
+        template_id:
+          type: string
+          description: |
+            The campaign template this run saved. Pass it as `template_id` to Create Campaign to turn the drafted campaign into a live one.
+        audience:
+          $ref: '#/components/schemas/CampaignAgentAudience'
+        campaign:
+          $ref: '#/components/schemas/CampaignAgentCampaign'
+        estimated_value:
+          $ref: '#/components/schemas/CampaignAgentEstimatedValue'
+    CampaignAgentRun:
+      title: Campaign Agent Run
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          description: |
+            Where the run has got to. `failed` is not final — a failed run may be retried automatically, so a later poll can return `running`.
+          enum:
+            - pending
+            - running
+            - completed
+            - failed
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        result:
+          $ref: '#/components/schemas/CampaignAgentResult'
+    CampaignAgentRunResponse:
+      title: Campaign Agent Run Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          $ref: '#/components/schemas/CampaignAgentRun'
+    CampaignTemplateSource:
+      title: Campaign Template Source
+      type: object
+      properties:
+        type:
+          type: string
+          description: |
+            Where the template originates from. Potential values are subject to change and may
+            be converted to enums at a future unspecified date.
+
+            | Value    | Description                                                       |
+            |----------|----------------------------------------------------------------------|
+            | `manual` | Bud's internal creation process (only source type today; agentic template creation is expected to add more) |
+        metadata:
+          type: object
+    CampaignTemplateFields:
+      title: Campaign Template Fields
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    CampaignTemplate:
+      title: Campaign Template
+      type: object
+      properties:
+        template_id:
+          type: string
+        source:
+          $ref: '#/components/schemas/CampaignTemplateSource'
+        campaign_fields:
+          $ref: '#/components/schemas/CampaignTemplateFields'
+        criteria:
+          $ref: '#/components/schemas/SegmentCriteria'
+        channels:
+          type: object
+    CompiledTemplatesResponse:
+      title: Compiled Templates Response
+      type: object
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/OperationId'
+        data:
+          type: object
+          properties:
+            templates:
+              type: array
+              items:
+                $ref: '#/components/schemas/CampaignTemplate'
+    MCPJSONRPCRequest:
+      title: MCP JSON-RPC Request
+      description: A [JSON-RPC 2.0](https://www.jsonrpc.org/specification) request, per the Model Context Protocol specification.
+      type: object
+      required:
+        - jsonrpc
+        - method
+      properties:
+        jsonrpc:
+          type: string
+          enum:
+            - '2.0'
+        id:
+          oneOf:
+            - type: string
+            - type: integer
+        method:
+          type: string
+        params:
+          type: object
+      example:
+        jsonrpc: '2.0'
+        id: 1
+        method: tools/list
+    MCPJSONRPCResponse:
+      title: MCP JSON-RPC Response
+      description: A [JSON-RPC 2.0](https://www.jsonrpc.org/specification) response, per the Model Context Protocol specification.
+      type: object
+      required:
+        - jsonrpc
+        - id
+      properties:
+        jsonrpc:
+          type: string
+          enum:
+            - '2.0'
+        id:
+          oneOf:
+            - type: string
+            - type: integer
+        result:
+          type: object
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+            message:
+              type: string
   parameters:
     IngestAccountsContentType:
       in: header
@@ -22050,7 +24800,7 @@ components:
       schema:
         type: string
       required: true
-      description: The account ID to retrieve data for. Repeat this query parameter to filter by multiple accounts.
+      description: The account ID to retrieve data for.
     QueryFromBudDate:
       in: query
       name: from
@@ -22154,7 +24904,7 @@ components:
       schema:
         type: string
       required: false
-      description: The account ID to retrieve data for. Repeat this query parameter to filter by multiple accounts.
+      description: The account ID to retrieve data for.
     QueryBudCategory:
       in: query
       name: category
@@ -22555,6 +25305,202 @@ components:
       schema:
         type: string
         format: uuid
+    PathSegmentID:
+      name: segment_id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+      description: The ID of the segment.
+      example: 23303f83-a790-4ee9-95b6-d5cdeaf36fa2
+    PathOtherSegmentID:
+      name: other_segment_id
+      in: path
+      schema:
+        type: string
+      required: true
+      description: The ID of the segment to compare against.
+      example: 7e8aedf9-6be5-4807-afe0-aa292fb2cde2
+    QueryRefresh:
+      name: refresh
+      in: query
+      schema:
+        type: boolean
+      description: If true, re-runs both segments instead of using cached results.
+    QuerySignificantDate:
+      name: significant_date
+      in: query
+      schema:
+        type: string
+      description: Optional significant-date label to compute statistics relative to.
+    QueryStatisticsDateTo:
+      name: date_to
+      in: query
+      schema:
+        type: string
+        format: date
+      description: Optional end date to compute statistics up to.
+    QueryMaxPerPage:
+      name: max_per_page
+      in: query
+      schema:
+        type: integer
+      description: Maximum number of segments to return per page.
+    QueryPage:
+      name: page
+      in: query
+      schema:
+        type: integer
+      description: The page of results to retrieve.
+    QuerySearch:
+      name: search
+      in: query
+      schema:
+        type: string
+      description: Filter segments by name.
+    PathCriteriaID:
+      name: criteria_id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+      description: The ID of the criteria.
+      example: 0ba9049e-25e9-43f2-8ea8-1fcf9dde581e
+    QueryCriteriaFilter:
+      name: filter
+      in: query
+      schema:
+        type: string
+      description: |
+        Narrow the set of returned criteria options to a single category. Potential values are
+        subject to change and may be converted to enums at a future unspecified date.
+
+        | Value            | Description                            |
+        |-------------------|-----------------------------------------|
+        | `flags`           | Flag-based criteria options            |
+        | `segments`        | Segment-dependency criteria options    |
+        | `custom_criteria` | Custom criteria options                |
+    QueryCampaignStatus:
+      name: status
+      in: query
+      schema:
+        type: string
+      description: |
+        Filter campaigns by status. Potential values are subject to change and may be converted
+        to enums at a future unspecified date.
+
+        | Value     | Description                                                    |
+        |-----------|------------------------------------------------------------------|
+        | `live`    | Currently running                                              |
+        | `paused`  | Temporarily paused                                             |
+        | `ended`   | Finished                                                       |
+        | `pending` | Scheduled but not yet live (derived, not settable directly)   |
+    QueryCampaignCreatedBy:
+      name: created_by
+      in: query
+      schema:
+        type: string
+      description: Filter campaigns by the identifier of the user who created them.
+    QueryCampaignItemsPerPage:
+      name: items_per_page
+      in: query
+      schema:
+        type: integer
+      description: Maximum number of campaigns to return per page. Max 1000, default 100.
+    QueryCampaignPageToken:
+      name: page_token
+      in: query
+      schema:
+        type: string
+      description: Pagination token from a previous request's `metadata.next_page_token`.
+    PathCampaignID:
+      name: campaign_id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+      description: The ID of the campaign.
+      example: b28efd2c-5a58-42cd-bed7-5564eb877ca7
+    QueryPerformanceStartDate:
+      name: start_date
+      in: query
+      schema:
+        type: string
+        format: date
+      description: Start of the date range to retrieve performance trends for.
+    QueryPerformanceEndDate:
+      name: end_date
+      in: query
+      schema:
+        type: string
+        format: date
+      description: End of the date range to retrieve performance trends for.
+    QueryPerformanceAggregationType:
+      name: aggregation_type
+      in: query
+      schema:
+        type: string
+        default: daily
+      description: |
+        Whether trend values are aggregated daily or cumulatively. Potential values are subject
+        to change and may be converted to enums at a future unspecified date.
+
+        | Value        | Description                          |
+        |--------------|----------------------------------------|
+        | `daily`      | Per-day values                       |
+        | `cumulative` | A running total over the period      |
+    QueryPerformanceMetrics:
+      name: metrics
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+      description: |
+        One or more of: `campaign_audience`, `customers_triggered`, `impressions_total`,
+        `impressions_unique`, `impression_rate`, `primary_button_total_clicks`,
+        `primary_button_unique_clicks`, `primary_button_click_efficiency`,
+        `secondary_button_total_clicks`, `secondary_button_unique_clicks`,
+        `secondary_button_click_efficiency`, `secondary_button_no_primary_button_unique_clicks`.
+    QueryBannerChannel:
+      name: channel
+      in: query
+      schema:
+        type: string
+        default: action_card
+      description: |
+        The channel to retrieve eligible banner widgets for. Potential values are subject to
+        change and may be converted to enums at a future unspecified date.
+
+        | Value         | Description                                              |
+        |---------------|-------------------------------------------------------------|
+        | `action_card` | The only currently supported customer-facing channel      |
+    PathGenerationID:
+      name: generation_id
+      in: path
+      schema:
+        type: string
+      required: true
+      description: The ID returned when the campaign agent run was created.
+      example: ceca9875e4674c6699fc404b76f1786f
+    QueryTemplateSourceType:
+      name: source_type
+      in: query
+      schema:
+        type: string
+      description: Optional filter to return only templates with the specified source type.
+    PathTemplateID:
+      name: template_id
+      in: path
+      schema:
+        type: string
+      required: true
+      description: The ID of the campaign template.
+      example: 89d133a9-02f8-4217-adb8-1d341fc91101
   responses:
     SearchTransactionsResponse:
       description: OK
@@ -22983,6 +25929,18 @@ components:
                 to: '2025-02-01T00:00:00Z'
               next_page_token: eyJoZWxsbyI6ICJ3b3JsZCJ9Cg==
               expires_in: 60
+    BadRequest:
+      description: The request contains an invalid payload.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequestResponse'
+    ServerError:
+      description: An unexpected error occurred on the server side.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServerErrorResponse'
 x-tagGroups:
   - name: ''
     tags:
@@ -23002,8 +25960,8 @@ x-tagGroups:
   - name: ''
     tags:
       - Retrieve Financial Data
-      - Manage Financial Data
       - Manage Transaction Labels
+      - Manage Financial Data
       - Correct Financial Data
       - Financial Data API
   - name: ''
@@ -23039,3 +25997,9 @@ x-tagGroups:
     tags:
       - Retrieve Customer Characteristics
       - Characteristics API
+  - name: ''
+    tags:
+      - Drive Segments API
+      - Drive Campaigns API
+      - Drive MCP API
+      - Drive API
